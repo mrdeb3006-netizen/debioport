@@ -55,24 +55,24 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
             : 'bg-transparent border-b border-transparent shadow-none backdrop-blur-none'
         }`}
       >
-        <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-3 sm:gap-4 md:gap-6">
+        <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-2 sm:gap-4 md:gap-6">
           
-          {/* Brand Logo Lockup */}
+          {/* Brand Logo Lockup (Compact for Mobile) */}
           <a
             href="#home"
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('home');
             }}
-            className="flex items-center gap-2.5 sm:gap-3 no-underline text-white group shrink-0 min-w-0"
+            className="flex items-center gap-1.5 sm:gap-2.5 md:gap-3 no-underline text-white group shrink-0 min-w-0"
             aria-label="Debendranath Bera Portfolio Home"
           >
             <img
               src="/db-logo.jpg"
               alt="DB Monogram Logo"
-              className="h-8 sm:h-9 md:h-10 w-auto object-contain mix-blend-screen select-none transition-all duration-300 filter contrast-125 brightness-125 drop-shadow-[0_0_12px_rgba(249,115,22,0.5)] group-hover:scale-105"
+              className="h-7 sm:h-8 md:h-10 w-auto object-contain mix-blend-screen select-none transition-all duration-300 filter contrast-125 brightness-125 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)] group-hover:scale-105"
             />
-            <span className="font-cinzel text-[0.80rem] sm:text-[0.92rem] md:text-[1.05rem] font-bold tracking-[0.08em] sm:tracking-[0.12em] text-white uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-accent-orange">
+            <span className="font-cinzel text-[0.72rem] sm:text-[0.84rem] md:text-[1.05rem] font-bold tracking-[0.06em] sm:tracking-[0.12em] text-white uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-accent-orange">
               DEBENDRANATH <span className="text-accent-orange font-extrabold">BERA</span>
             </span>
           </a>
@@ -117,22 +117,36 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
             </a>
           </nav>
 
-          {/* Mobile Hamburger Button (Visible on Mobile & Tablet < 1024px) */}
-          <button
-            type="button"
-            className={`mobile-hamburger-btn flex lg:hidden relative flex-col justify-center items-center gap-1.5 w-10 h-10 sm:w-11 sm:h-11 rounded-xl border active:scale-95 transition-all duration-200 cursor-pointer ml-auto z-[99999] shrink-0 ${
-              mobileMenuOpen
-                ? 'bg-accent-orange/20 border-accent-orange shadow-[0_0_15px_rgba(249,115,22,0.4)]'
-                : 'bg-[#141419] border-accent-orange/40 hover:border-accent-orange hover:bg-[#1c1c24] shadow-[0_0_10px_rgba(249,115,22,0.2)]'
-            }`}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-            aria-expanded={mobileMenuOpen}
-          >
-            <span className={`w-4 sm:w-5 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
-            <span className={`w-4 sm:w-5 h-[2px] bg-white rounded-full transition-all duration-200 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
-            <span className={`w-4 sm:w-5 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
-          </button>
+          {/* Mobile Right Controls: Let's Connect + Hamburger Button (< 1024px) */}
+          <div className="flex lg:hidden items-center gap-2 sm:gap-2.5 ml-auto shrink-0">
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('contact');
+              }}
+              className="inline-flex items-center gap-1 py-1.5 px-2.5 sm:px-3 rounded-lg bg-accent-orange text-bg-dark font-display font-extrabold text-[0.68rem] sm:text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 active:scale-95 transition-all shadow-[0_0_10px_rgba(249,115,22,0.3)] shrink-0"
+            >
+              <span>Let's connect</span>
+              <span className="text-xs font-bold">→</span>
+            </a>
+
+            <button
+              type="button"
+              className={`mobile-hamburger-btn relative flex flex-col justify-center items-center gap-1 w-9 h-9 sm:w-10 sm:h-10 rounded-lg border active:scale-95 transition-all duration-200 cursor-pointer z-[99999] shrink-0 ${
+                mobileMenuOpen
+                  ? 'bg-accent-orange/20 border-accent-orange shadow-[0_0_12px_rgba(249,115,22,0.4)]'
+                  : 'bg-[#141419] border-accent-orange/40 hover:border-accent-orange hover:bg-[#1c1c24] shadow-[0_0_8px_rgba(249,115,22,0.2)]'
+              }`}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              <span className={`w-4 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? 'rotate-45 translate-y-[3.5px]' : ''}`} />
+              <span className={`w-4 h-[2px] bg-white rounded-full transition-all duration-200 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+              <span className={`w-4 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? '-rotate-45 -translate-y-[3.5px]' : ''}`} />
+            </button>
+          </div>
 
         </div>
       </header>
@@ -150,20 +164,20 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
 
             {/* Compact Floating Dropdown Panel (Upper Part of Screen) */}
             <div
-              className="fixed top-[70px] sm:top-[78px] right-3 sm:right-6 w-[250px] sm:w-[270px] z-[9999999] bg-[#0c0d14]/95 backdrop-blur-2xl border border-accent-orange/40 rounded-2xl p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_25px_rgba(249,115,22,0.2)] animate-in fade-in slide-in-from-top-3 zoom-in-95 duration-200"
+              className="fixed top-[66px] sm:top-[74px] right-2.5 sm:right-6 w-[230px] sm:w-[250px] z-[9999999] bg-[#0c0d14]/95 backdrop-blur-2xl border border-accent-orange/40 rounded-2xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_25px_rgba(249,115,22,0.2)] animate-in fade-in slide-in-from-top-3 zoom-in-95 duration-150"
               role="dialog"
               aria-modal="true"
               aria-label="Mobile Navigation Menu"
             >
               {/* Header Label inside small panel */}
-              <div className="flex items-center justify-between px-2 py-1 mb-1.5 border-b border-white/[0.08]">
-                <span className="font-mono text-[0.70rem] font-bold text-accent-orange tracking-widest uppercase">
-                  Navigation
+              <div className="flex items-center justify-between px-2 py-1 mb-1 border-b border-white/[0.08]">
+                <span className="font-mono text-[0.66rem] font-bold text-accent-orange tracking-widest uppercase">
+                  Menu
                 </span>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-slate-400 hover:text-white text-sm px-1 py-0.5 rounded cursor-pointer"
+                  className="text-slate-400 hover:text-white text-xs px-1 py-0.5 rounded cursor-pointer"
                   aria-label="Close menu"
                 >
                   ✕
@@ -171,7 +185,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
               </div>
 
               {/* Compact Menu Links */}
-              <ul className="list-none flex flex-col gap-1 p-0 m-0">
+              <ul className="list-none flex flex-col gap-0.5 p-0 m-0">
                 {navItems.map((item, idx) => {
                   const isActive = activeSection === item.id;
                   return (
@@ -179,19 +193,19 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                       <button
                         type="button"
                         onClick={() => handleNavClick(item.id)}
-                        className={`w-full flex items-center justify-between py-2 px-2.5 rounded-lg transition-all duration-150 cursor-pointer ${
+                        className={`w-full flex items-center justify-between py-1.5 px-2 rounded-lg transition-all duration-150 cursor-pointer ${
                           isActive
-                            ? 'bg-accent-orange/15 border border-accent-orange/40 text-accent-orange shadow-[0_0_12px_rgba(249,115,22,0.2)] font-black'
+                            ? 'bg-accent-orange/15 border border-accent-orange/40 text-accent-orange shadow-[0_0_10px_rgba(249,115,22,0.2)] font-black'
                             : 'text-slate-200 hover:text-white hover:bg-white/[0.06] border border-transparent font-semibold'
                         }`}
                       >
-                        <div className="flex items-center gap-2.5 text-left">
-                          <span className={`font-mono text-[0.70rem] ${
+                        <div className="flex items-center gap-2 text-left">
+                          <span className={`font-mono text-[0.68rem] ${
                             isActive ? 'text-accent-orange font-bold' : 'text-slate-500'
                           }`}>
                             0{idx + 1}.
                           </span>
-                          <span className="font-display text-[0.88rem] sm:text-[0.92rem] uppercase tracking-wide">
+                          <span className="font-display text-[0.84rem] sm:text-[0.88rem] uppercase tracking-wide">
                             {item.label}
                           </span>
                         </div>
@@ -204,18 +218,6 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                   );
                 })}
               </ul>
-
-              {/* Compact Bottom Action */}
-              <div className="mt-2 pt-2 border-t border-white/[0.08]">
-                <button
-                  type="button"
-                  onClick={() => handleNavClick('contact')}
-                  className="btn-primary w-full justify-center py-2 px-3 rounded-lg text-[0.78rem] font-bold text-white shadow-[0_0_14px_rgba(249,115,22,0.3)] flex items-center gap-1.5 cursor-pointer"
-                >
-                  <span>Let's connect</span>
-                  <span className="text-sm">→</span>
-                </button>
-              </div>
             </div>
           </>,
           document.body
