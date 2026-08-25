@@ -5,6 +5,7 @@ import { About } from './components/About';
 import { Work } from './components/Work';
 import { Experience } from './components/Experience';
 import { Skills } from './components/Skills';
+import { OtherWorks } from './components/OtherWorks';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ScrollProgress } from './components/ScrollProgress';
@@ -81,6 +82,7 @@ export const App: React.FC = () => {
           activeFilter={activeFilter}
           onSelectFilter={(filterKey) => setActiveFilter(filterKey)}
         />
+        <OtherWorks />
         <Contact onOpenCvModal={() => setCvModalOpen(true)} />
       </main>
 
