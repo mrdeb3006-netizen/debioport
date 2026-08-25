@@ -9,8 +9,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
-  Play,
-  Pause,
   MapPin,
   Calendar
 } from 'lucide-react';
@@ -30,8 +28,6 @@ interface PhotoItem {
 export const OtherWorks: React.FC = () => {
   const [activePhoto, setActivePhoto] = useState<PhotoItem | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
   const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // 5 Authentic User Photographs
@@ -93,19 +89,19 @@ export const OtherWorks: React.FC = () => {
     }
   ];
 
-  // Automatic Side-Wise Slide Show Interval (Every 3.8s)
+  // Continuous cycle slideshow: runs non-stop, only pausing when user taps a photo (activePhoto open)
   useEffect(() => {
-    if (isAutoPlaying && !isHovered && !activePhoto) {
+    if (!activePhoto) {
       autoPlayTimerRef.current = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length);
-      }, 3800);
+      }, 3500);
     }
     return () => {
       if (autoPlayTimerRef.current) {
         clearInterval(autoPlayTimerRef.current);
       }
     };
-  }, [isAutoPlaying, isHovered, activePhoto, photos.length]);
+  }, [activePhoto, photos.length]);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
@@ -173,17 +169,11 @@ export const OtherWorks: React.FC = () => {
               </div>
             </div>
 
-            {/* Slideshow Controls Bar */}
+            {/* Slideshow Navigation Arrows */}
             <div className="flex items-center gap-2 self-start sm:self-auto">
-              <button
-                type="button"
-                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                className="p-2 rounded-xl bg-white border border-[#e7e5e4] hover:bg-[#18181b] hover:text-white text-[#57534e] transition-all cursor-pointer shadow-xs text-[0.75rem] font-mono flex items-center gap-1.5"
-                title={isAutoPlaying ? 'Pause Slideshow' : 'Resume Auto Slideshow'}
-              >
-                {isAutoPlaying ? <Pause size={14} /> : <Play size={14} />}
-                <span className="hidden sm:inline font-bold">{isAutoPlaying ? 'AUTOPLAY ON' : 'PAUSED'}</span>
-              </button>
+              <span className="font-mono text-[0.75rem] font-bold text-[#78716c] mr-1 hidden sm:inline">
+                AUTO-SLIDE • 0{currentIndex + 1}/0{photos.length}
+              </span>
 
               <button
                 type="button"
@@ -205,11 +195,9 @@ export const OtherWorks: React.FC = () => {
             </div>
           </div>
 
-          {/* Side-Wise Automatic Slideshow Viewport */}
+          {/* Side-Wise Continuous Cycle Slideshow Viewport */}
           <div
             className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden bg-[#f5f5f4] border-2 border-[#e7e5e4] shadow-[0_8px_30px_rgba(0,0,0,0.06)] group"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
           >
             {/* Horizontal Slide Carousel Track */}
             <div
