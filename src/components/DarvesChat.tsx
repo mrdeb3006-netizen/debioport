@@ -297,9 +297,9 @@ export const DarvesChat: React.FC = () => {
           }`}
           title="Drag to reposition • Click to chat with DARVES"
         >
-          {/* Glowing Label Pill (Always clearly visible) */}
+          {/* Label Pill (Always clearly visible) */}
           <div className="hidden sm:flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-[#0d0f1f]/95 border border-accent-cyan/40 backdrop-blur-md shadow-[0_4px_20px_rgba(56,189,248,0.25)] text-white text-[0.82rem] font-bold tracking-wide pointer-events-none">
-            <span className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse shadow-[0_0_8px_rgba(56,189,248,0.6)]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan" />
             <span className="font-display tracking-wider text-accent-cyan">DARVES</span>
             <span className="text-white/80 font-normal text-[0.75rem]">AI Chat</span>
           </div>
@@ -321,10 +321,6 @@ export const DarvesChat: React.FC = () => {
               
               {/* Icon */}
               <Bot size={26} className="relative z-10 text-white drop-shadow-[0_0_8px_rgba(56,189,248,0.6)]" />
-
-              {/* Pulsing Status Dot */}
-              <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-accent-cyan border-2 border-[#0a0b16] shadow-[0_0_6px_rgba(56,189,248,0.8)] animate-ping" />
-              <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-accent-cyan border-2 border-[#0a0b16]" />
             </button>
           </div>
         </div>
