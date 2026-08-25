@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Milestone } from '../types';
-import { Award, Globe2, BookOpen, CheckCircle2, Sparkles, MapPin } from 'lucide-react';
+import { Award, Globe2, BookOpen, CheckCircle2, Sparkles, MapPin, Trophy, Medal, Shield, Star } from 'lucide-react';
 
 export const Experience: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -14,8 +14,8 @@ export const Experience: React.FC = () => {
         }
       },
       {
-        threshold: 0.12,
-        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.08,
+        rootMargin: '0px 0px -40px 0px',
       }
     );
 
@@ -28,8 +28,8 @@ export const Experience: React.FC = () => {
 
   const getSlideUpStyle = (delay: number) => ({
     opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0px)' : 'translateY(40px)',
-    transition: `opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s, transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
+    transform: isVisible ? 'translateY(0px)' : 'translateY(35px)',
+    transition: `opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
     willChange: 'opacity, transform',
   });
 
@@ -92,6 +92,45 @@ export const Experience: React.FC = () => {
     },
   ];
 
+  const otherAchievements = [
+    {
+      id: 'iit',
+      category: 'ACADEMIC EXCELLENCE',
+      badge: 'IIT KGP HONOUR',
+      title: 'Awarded by IIT Kharagpur Professor',
+      subtitle: 'Exceptional Result & Class 10th School Topper',
+      description: 'Felicitated and awarded by an esteemed professor from Indian Institute of Technology (IIT) Kharagpur in recognition of exceptional academic performance and ranking as the School Topper in Class 10.',
+      icon: Trophy,
+      accentGlow: 'from-amber-500/20 via-orange-500/10 to-transparent',
+      borderColor: 'border-accent-orange/40 hover:border-accent-orange',
+      badgeColor: 'text-amber-300 bg-amber-500/15 border-amber-500/30',
+    },
+    {
+      id: 'medals',
+      category: 'NATIONAL SPORTS',
+      badge: '2X BRONZE MEDALIST',
+      title: '2x Bronze Medalist • All India Championship',
+      subtitle: 'All India Level Club Championship',
+      description: 'Secured two Bronze Medals at the prestigious All India Level Club Championship, demonstrating elite competitive martial arts discipline, reflexes, and tactical ring composure against top athletes nationwide.',
+      icon: Medal,
+      accentGlow: 'from-amber-600/20 via-yellow-600/10 to-transparent',
+      borderColor: 'border-yellow-500/30 hover:border-yellow-500/60',
+      badgeColor: 'text-yellow-300 bg-yellow-500/15 border-yellow-500/30',
+    },
+    {
+      id: 'karate',
+      category: 'MARTIAL ARTS',
+      badge: 'BROWN BELT',
+      title: 'Karate Brown Belt',
+      subtitle: 'Senior Grade Martial Arts Mastery',
+      description: 'Earned the senior Karate Brown Belt grade following years of rigorous traditional martial arts training, advanced Kata technical mastery, physical conditioning, and full-contact Kumite sparring.',
+      icon: Shield,
+      accentGlow: 'from-orange-600/20 via-red-600/10 to-transparent',
+      borderColor: 'border-orange-500/30 hover:border-orange-500/60',
+      badgeColor: 'text-orange-300 bg-orange-500/15 border-orange-500/30',
+    },
+  ];
+
   const learningHighlights = [
     'Pursuing Computer Science & Engineering with focus on core algorithms & practical development',
     'Coding actively in Python & automating workflows',
@@ -125,12 +164,12 @@ export const Experience: React.FC = () => {
             MY JOURNEY<span className="text-accent-orange">.</span>
           </h2>
           <p className="text-[1.05rem] text-text-secondary max-w-[680px] leading-[1.6]">
-            Academic milestones, distinctions, and technical foundations from school to Computer Science Engineering.
+            Academic milestones, national achievements, distinctions, and technical foundations from school to Computer Science Engineering.
           </p>
         </div>
 
-        {/* Compact 2-Column Responsive Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr] gap-8 lg:gap-10 items-start">
+        {/* Compact 2-Column Responsive Layout: Education & Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr] gap-8 lg:gap-10 items-start mb-12">
           
           {/* Left Column: Education Milestones Timeline */}
           <div className="flex flex-col gap-5">
@@ -138,7 +177,7 @@ export const Experience: React.FC = () => {
               <div
                 key={idx}
                 className="specular-card backdrop-blur-[16px] border border-white/[0.08] rounded-2xl p-6 md:p-7 relative overflow-hidden transition-all duration-300 hover:border-accent-orange/50 hover:translate-x-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_20px_rgba(249,115,22,0.15)] group"
-                style={getSlideUpStyle(0.25 + idx * 0.15)}
+                style={getSlideUpStyle(0.25 + idx * 0.12)}
               >
                 {/* Top Badge & Number */}
                 <div className="flex items-center justify-between gap-3 mb-2.5">
@@ -227,7 +266,7 @@ export const Experience: React.FC = () => {
             {/* 2. Core Learning & Technical Highlights */}
             <div
               className="specular-card backdrop-blur-[16px] border border-white/[0.08] rounded-2xl p-6 md:p-7 transition-all duration-300 hover:border-accent-orange/40"
-              style={getSlideUpStyle(0.50)}
+              style={getSlideUpStyle(0.48)}
             >
               <div className="flex items-center gap-2 mb-3">
                 <BookOpen className="text-accent-orange" size={18} />
@@ -251,7 +290,7 @@ export const Experience: React.FC = () => {
             {/* 3. Spoken Languages */}
             <div
               className="specular-card backdrop-blur-[16px] border border-white/[0.08] rounded-2xl p-6 transition-all duration-300 hover:border-accent-orange/40"
-              style={getSlideUpStyle(0.65)}
+              style={getSlideUpStyle(0.60)}
             >
               <div className="flex items-center gap-2 mb-3">
                 <Globe2 className="text-accent-orange" size={18} />
@@ -279,6 +318,69 @@ export const Experience: React.FC = () => {
 
           </div>
 
+        </div>
+
+        {/* ========================================================================= */}
+        {/* OTHER ACHIEVEMENTS: Sports, Martial Arts & Academic Honors Grid          */}
+        {/* ========================================================================= */}
+        <div style={getSlideUpStyle(0.70)}>
+          <div className="flex items-center gap-3 mb-6 pt-4 border-t border-white/[0.08]">
+            <Trophy className="text-accent-orange" size={22} />
+            <div>
+              <h3 className="font-display text-[1.4rem] md:text-[1.65rem] font-black text-white uppercase tracking-wide">
+                OTHER ACHIEVEMENTS &amp; HONORS
+              </h3>
+              <p className="text-[0.88rem] text-text-muted">
+                National-level competitive sports, martial arts excellence, and premier institutional recognitions.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {otherAchievements.map((ach, aIdx) => {
+              const IconComponent = ach.icon;
+              return (
+                <div
+                  key={ach.id}
+                  className={`specular-card backdrop-blur-[16px] border ${ach.borderColor} bg-gradient-to-b ${ach.accentGlow} rounded-2xl p-6 md:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.7),0_0_25px_rgba(249,115,22,0.2)] group`}
+                  style={getSlideUpStyle(0.75 + aIdx * 0.12)}
+                >
+                  <div>
+                    {/* Header Pill & Icon */}
+                    <div className="flex items-center justify-between gap-2 mb-3.5">
+                      <span className={`font-mono text-[0.72rem] font-bold px-2.5 py-0.5 rounded-full border ${ach.badgeColor} uppercase tracking-wider`}>
+                        {ach.badge}
+                      </span>
+                      <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-accent-orange group-hover:scale-110 group-hover:border-accent-orange/40 transition-transform">
+                        <IconComponent size={18} />
+                      </div>
+                    </div>
+
+                    {/* Achievement Title */}
+                    <h4 className="font-display text-[1.15rem] font-bold text-white leading-snug mb-1">
+                      {ach.title}
+                    </h4>
+
+                    {/* Subtitle */}
+                    <div className="text-[0.82rem] text-accent-orange font-mono font-medium mb-3">
+                      {ach.subtitle}
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-[0.88rem] text-text-secondary leading-relaxed">
+                      {ach.description}
+                    </p>
+                  </div>
+
+                  {/* Footnote Indicator */}
+                  <div className="pt-3 mt-4 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.7rem] text-text-muted">
+                    <span>{ach.category}</span>
+                    <Star size={12} className="text-accent-orange" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
       </div>
