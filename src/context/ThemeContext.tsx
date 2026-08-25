@@ -11,32 +11,40 @@ export const DEFAULT_THEME: ThemeConfig = {
 };
 
 export const ACCENT_PRESETS = [
-  { name: 'Ember Orange', color: '#f97316' },
-  { name: 'Electric Cyan', color: '#06b6d4' },
+  { name: 'Ember Orange (Default)', color: '#f97316' },
+  { name: 'Deep Blue', color: '#1d4ed8' },
+  { name: 'Electric Blue', color: '#2563eb' },
+  { name: 'Cyan Wave', color: '#06b6d4' },
+  { name: 'Burgundy Wine', color: '#881337' },
   { name: 'Matrix Emerald', color: '#10b981' },
   { name: 'Royal Violet', color: '#a855f7' },
   { name: 'Rose Crimson', color: '#f43f5e' },
   { name: 'Solar Gold', color: '#eab308' },
-  { name: 'Cobalt Blue', color: '#3b82f6' },
-  { name: 'Pure Titanium', color: '#ffffff' },
+  { name: 'Pure White', color: '#ffffff' },
 ];
 
 export const BG_PRESETS = [
-  { name: 'Deep Obsidian', color: '#09090b' },
-  { name: 'AMOLED Black', color: '#000000' },
-  { name: 'Midnight Navy', color: '#070b19' },
+  { name: 'Deep Obsidian (Default)', color: '#09090b' },
+  { name: 'Pure AMOLED Black', color: '#000000' },
+  { name: 'Dark Navy Blue', color: '#050c1e' },
+  { name: 'Deep Burgundy', color: '#1a050b' },
   { name: 'Dark Charcoal', color: '#121216' },
-  { name: 'Deep Forest', color: '#05110a' },
-  { name: 'Espresso Dark', color: '#110c0a' },
+  { name: 'Crisp White', color: '#f8fafc' },
+  { name: 'Pure White', color: '#ffffff' },
+  { name: 'Warm Alabaster', color: '#faf8f6' },
 ];
 
 export const THEME_COMBOS = [
   { name: 'Ember & Obsidian (Default)', accent: '#f97316', bgDark: '#09090b' },
+  { name: 'White & Deep Blue', accent: '#1d4ed8', bgDark: '#f8fafc' },
+  { name: 'White & Cyan', accent: '#0891b2', bgDark: '#f8fafc' },
+  { name: 'White & Burgundy', accent: '#881337', bgDark: '#faf8f7' },
+  { name: 'White & Electric Blue', accent: '#2563eb', bgDark: '#ffffff' },
+  { name: 'Dark Navy Blue', accent: '#38bdf8', bgDark: '#050c1e' },
   { name: 'Cyber Cyan & AMOLED', accent: '#06b6d4', bgDark: '#000000' },
   { name: 'Matrix Emerald & Forest', accent: '#10b981', bgDark: '#05110a' },
   { name: 'Royal Violet & Navy', accent: '#a855f7', bgDark: '#070b19' },
-  { name: 'Crimson & Charcoal', accent: '#f43f5e', bgDark: '#121216' },
-  { name: 'Solar Gold & Obsidian', accent: '#eab308', bgDark: '#09090b' },
+  { name: 'Deep Burgundy & White', accent: '#ffffff', bgDark: '#1a050b' },
 ];
 
 interface ThemeContextType {
@@ -46,6 +54,7 @@ interface ThemeContextType {
   setThemeCombo: (accent: string, bgDark: string) => void;
   resetToDefault: () => void;
   isDefault: boolean;
+  isLightMode: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -67,7 +76,13 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
   };
 }
 
-// Adjust brightness for surface/cards
+// Calculate luminance to auto-detect light vs dark mode
+function getLuminance(hex: string): number {
+  const { r, g, b } = hexToRgb(hex);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+}
+
+// Adjust brightness
 function adjustBrightness(hex: string, percent: number): string {
   const { r, g, b } = hexToRgb(hex);
   const adjust = (val: number) => Math.min(255, Math.max(0, Math.round(val + (255 * percent) / 100)));
@@ -91,23 +106,40 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   });
 
+  const isLightMode = getLuminance(theme.bgDark) > 0.6;
+
   // Apply theme variables dynamically to the document
   useEffect(() => {
     const root = document.documentElement;
     const { accent, bgDark } = theme;
+    const isLight = getLuminance(bgDark) > 0.6;
 
-    // Derived background tones
-    const bgSurface = adjustBrightness(bgDark, 4);
-    const { r: br, g: bg, b: bb } = hexToRgb(bgDark);
-    const bgCard = `rgba(${Math.min(255, br + 7)}, ${Math.min(255, bg + 7)}, ${Math.min(255, bb + 11)}, 0.88)`;
-    const bgGlass = `rgba(${Math.min(255, br + 9)}, ${Math.min(255, bg + 9)}, ${Math.min(255, bb + 15)}, 0.7)`;
+    if (isLight) {
+      // Light Mode dynamic tokens
+      root.style.setProperty('--bg-dark', bgDark);
+      root.style.setProperty('--bg-surface', '#ffffff');
+      root.style.setProperty('--bg-card', 'rgba(255, 255, 255, 0.94)');
+      root.style.setProperty('--bg-glass', 'rgba(244, 244, 248, 0.85)');
+      root.style.setProperty('--text-primary', '#09090b');
+      root.style.setProperty('--text-secondary', '#3f3f46');
+      root.style.setProperty('--text-muted', '#71717a');
+    } else {
+      // Dark Mode dynamic tokens
+      const bgSurface = adjustBrightness(bgDark, 4);
+      const { r: br, g: bg, b: bb } = hexToRgb(bgDark);
+      const bgCard = `rgba(${Math.min(255, br + 7)}, ${Math.min(255, bg + 7)}, ${Math.min(255, bb + 11)}, 0.88)`;
+      const bgGlass = `rgba(${Math.min(255, br + 9)}, ${Math.min(255, bg + 9)}, ${Math.min(255, bb + 15)}, 0.7)`;
 
-    // Apply to CSS variables
-    root.style.setProperty('--bg-dark', bgDark);
-    root.style.setProperty('--bg-surface', bgSurface);
-    root.style.setProperty('--bg-card', bgCard);
-    root.style.setProperty('--bg-glass', bgGlass);
+      root.style.setProperty('--bg-dark', bgDark);
+      root.style.setProperty('--bg-surface', bgSurface);
+      root.style.setProperty('--bg-card', bgCard);
+      root.style.setProperty('--bg-glass', bgGlass);
+      root.style.setProperty('--text-primary', '#ffffff');
+      root.style.setProperty('--text-secondary', '#a1a1aa');
+      root.style.setProperty('--text-muted', '#71717a');
+    }
 
+    // Set accent colors
     root.style.setProperty('--accent-orange', accent);
     root.style.setProperty('--accent-cyan', accent);
     root.style.setProperty('--accent-blue', accent);
@@ -157,6 +189,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setThemeCombo,
         resetToDefault,
         isDefault,
+        isLightMode,
       }}
     >
       {children}
