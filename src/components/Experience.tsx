@@ -34,19 +34,19 @@ export const Experience: React.FC = () => {
   ];
 
   return (
-    <section className="py-28 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="education">
+    <section className="py-28 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="journey">
       <div className="max-w-[1400px] mx-auto">
         
         {/* Section Header */}
         <div className="mb-14">
-          <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-cyan font-semibold mb-3 inline-block">
-            // 04. /EDUCATION
+          <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-orange font-semibold mb-3 inline-block uppercase">
+            // 03. /JOURNEY
           </div>
           <h2 className="font-display text-[clamp(2.4rem,4.5vw,3.8rem)] font-black text-white leading-[1.15] mb-3 uppercase tracking-[0.02em]">
-            EDUCATION &<br />ACADEMICS
+            MY<br />JOURNEY.
           </h2>
           <p className="text-[1.1rem] text-text-secondary max-w-[640px] leading-[1.65]">
-            My academic foundation, coursework, and specialized technical milestones in Computer Science & Engineering.
+            A timeline of academic foundations, continuous learning, and self-directed software development milestones.
           </p>
         </div>
 
@@ -55,20 +55,20 @@ export const Experience: React.FC = () => {
           {milestones.map((item, idx) => (
             <div
               key={idx}
-              className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-7 md:p-10 grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 md:gap-8 items-start transition-all duration-300 hover:border-accent-cyan/40 hover:translate-x-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)]"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-7 md:p-10 grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 md:gap-8 items-start transition-all duration-300 hover:border-accent-orange/40 hover:translate-x-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)]"
             >
               <div className="font-display text-4xl font-black text-white/20 [-webkit-text-stroke:1px_rgba(249,115,22,0.4)] leading-none">
                 {item.number}
               </div>
 
               <div className="flex flex-col">
-                <span className="font-mono text-[0.78rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
+                <span className="font-mono text-[0.78rem] font-semibold text-accent-orange tracking-[0.16em] mb-1 uppercase">
                   {item.tag}
                 </span>
                 <h3 className="font-display text-[1.4rem] font-extrabold text-white mb-1">
                   {item.title}
                 </h3>
-                <div className="text-[0.92rem] text-accent-purple font-semibold mb-3.5">
+                <div className="text-[0.92rem] text-accent-orange/80 font-semibold mb-3.5 font-mono">
                   {item.period}
                 </div>
                 <p className="text-[1.02rem] text-text-secondary leading-[1.7]">

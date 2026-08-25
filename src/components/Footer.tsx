@@ -26,7 +26,7 @@ export const Footer: React.FC = () => {
           <a href="#home" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/home</a>
           <a href="#about" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/about</a>
           <a href="#work" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/projects</a>
-          <a href="#education" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/education</a>
+          <a href="#journey" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/journey</a>
           <a href="#skills" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/skills</a>
           <a href="#contact" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/contact</a>
         </div>

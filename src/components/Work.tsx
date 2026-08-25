@@ -530,7 +530,7 @@ except KeyboardInterrupt:
             <div className="flex items-center gap-3 font-mono text-[0.75rem] text-text-muted">
               <span className="hidden sm:inline text-slate-400">
                 {activeSlide === projects.length - 1
-                  ? 'Project 03/03 • Scroll down to continue to Education →'
+                  ? 'Project 03/03 • Scroll down to continue to Journey →'
                   : 'Scroll down to slide sideways →'}
               </span>
               <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">

@@ -12,7 +12,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
     { id: 'home', label: 'home' },
     { id: 'about', label: 'about' },
     { id: 'work', label: 'projects' },
-    { id: 'education', label: 'education' },
+    { id: 'journey', label: 'journey' },
     { id: 'skills', label: 'skills' },
     { id: 'contact', label: 'contact' },
   ];
