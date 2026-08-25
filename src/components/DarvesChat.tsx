@@ -19,7 +19,7 @@ Key Information About Debendra:
 - Role: First-year Computer Science and Engineering student
 - Focus: Programming, Data Structures & Algorithms using Java, exploring different fields of development and Artificial Intelligence, and strengthening computer science fundamentals.
 - Other Languages/Tools: Python (basic/intermediate), JavaScript, Canvas 2D, HTML5, CSS3, Tailwind CSS, Git, GitHub, VS Code, Linux/Bash.
-- Life Motto: "Be humble, keep smiling, keep learning, keep growing"
+- Life Motto: "Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth"
 - Interests: Technology, Entrepreneurship, Tennis, Philosophy, Coffee, Building Useful Software.
 - Personality: A coffee lover with a keen interest in philosophy and deep intellectual curiosity.
 - Key Projects:
@@ -145,8 +145,8 @@ export const DarvesChat: React.FC = () => {
       return "Debendra is located in Kolkata, West Bengal, India 📍.";
     }
 
-    if (q.includes('motto') || q.includes('quote') || q.includes('philosophy') || q.includes('humble')) {
-      return 'Debendra lives by the motto: "Be humble, keep smiling, keep learning, keep growing." ✨';
+    if (q.includes('motto') || q.includes('quote') || q.includes('philosophy') || q.includes('humble') || q.includes('life')) {
+      return 'Debendra lives by the motto: "Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth." ✨';
     }
 
     if (q.includes('project') || q.includes('portfolio') || q.includes('built') || q.includes('work')) {
@@ -169,7 +169,7 @@ export const DarvesChat: React.FC = () => {
       return "Hello! I am DARVES, Debendra's personal AI agent. How can I assist you in exploring his portfolio, background, or projects today?";
     }
 
-    return "Debendra is a 19-year-old Computer Science & Engineering student from Kolkata, dedicated to mastering Data Structures and Algorithms with Java, exploring AI, and living by his motto: 'Be humble, keep smiling, keep learning, keep growing'. Feel free to ask about his projects, skills, or background!";
+    return "Debendra is a 19-year-old Computer Science & Engineering student from Kolkata, dedicated to mastering Data Structures and Algorithms with Java, exploring AI, and living by his motto: 'Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth'. Feel free to ask about his projects, skills, or background!";
   };
 
   // Gemini API integration

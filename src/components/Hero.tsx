@@ -199,9 +199,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
               I build clean, efficient and impactful solutions for the web.
             </p>
             
-            <div className="border-l-2 border-accent-orange/60 pl-3.5 py-1 max-w-[560px] bg-gradient-to-r from-accent-orange/[0.05] to-transparent rounded-r-lg">
-              <p className="text-[0.88rem] md:text-[0.92rem] text-slate-300 italic font-medium tracking-wide leading-relaxed">
-                “Be humble, keep smiling, keep learning, keep growing”
+            <div className="border-l-2 border-accent-orange/60 pl-3.5 py-1.5 max-w-[580px] bg-gradient-to-r from-accent-orange/[0.05] to-transparent rounded-r-lg">
+              <p className="text-[0.86rem] md:text-[0.9rem] text-slate-300 italic font-medium tracking-wide leading-relaxed">
+                “Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth”
               </p>
             </div>
           </div>
