@@ -83,11 +83,6 @@ export const About: React.FC = () => {
                     AVAILABLE TO BUILD
                   </span>
                 </div>
-
-                {/* Cyber HUD Badge */}
-                <div className="absolute top-4 right-4 font-mono text-[0.68rem] text-accent-orange font-bold tracking-widest uppercase bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm border border-accent-orange/30 shadow-md">
-                  // CSE '27
-                </div>
               </div>
 
               {/* Bottom Caption Inside Card */}
