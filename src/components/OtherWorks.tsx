@@ -215,13 +215,9 @@ export const OtherWorks: React.FC = () => {
               <span>// 05. /CREATIVE ODYSSEY</span>
             </div>
             
-            <h2 className="font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08] mb-3">
+            <h2 className="font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08]">
               MY OTHER WORKS.
             </h2>
-            
-            <p className="text-[0.98rem] md:text-[1.06rem] text-[#57534e] font-normal leading-relaxed">
-              Beyond code and algorithms lies the realm of observation and inquiry. A curated showcase of visual framing through the camera lens, alongside philosophical essays on growth, learning, and life.
-            </p>
           </div>
 
           {/* Minimal Metric Tags */}
