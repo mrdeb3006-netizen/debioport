@@ -102,6 +102,9 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
+  const lettersSolid = ['D', 'E', 'B', 'E', 'N', 'D'];
+  const lettersOutline = ['R', 'A'];
+
   return (
     <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden bg-bg-dark" id="home">
       {/* Background Portrait Image (The First Photo) */}
@@ -120,49 +123,40 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         {/* Left Content Column */}
         <div className="w-full max-w-[760px] flex flex-col justify-center">
           
-          {/* Eyebrow Badge Pill */}
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-accent-orange/[0.08] border border-accent-orange/30 backdrop-blur-md mb-3.5 w-max animate-item" style={{ ['--delay' as any]: '0.1s' }}>
-            <span className="w-2 h-2 rounded-full bg-accent-orange animate-ping" />
-            <span className="font-mono text-[0.74rem] font-bold tracking-[0.2em] text-accent-orange uppercase">
-              // 01. /PORTFOLIO • CREATIVE ENGINEER
-            </span>
+          {/* Cursive Signature Greeting Line */}
+          <div className="mb-2 flex items-center overflow-visible">
+            <div className="signature-cursive-wrapper">
+              <span className="signature-cursive-text select-none">
+                Hey, I am
+              </span>
+              <div className="signature-pen-stroke" aria-hidden="true" />
+            </div>
           </div>
 
-          {/* Master Name Lockup: DEBENDRA (Metallic Chrome) + BERA (Electric Amber Flare) */}
-          <div className="mb-5 select-none overflow-visible">
-            {/* Line 1: DEBENDRA */}
-            <div className="overflow-hidden pb-1">
-              <h1 className="font-display text-[clamp(2.8rem,6.2vw,5.6rem)] font-black tracking-tight leading-[0.98] uppercase text-white drop-shadow-[0_4px_35px_rgba(0,0,0,0.9)] flex items-center gap-[0.03em] flex-wrap">
-                {['D', 'E', 'B', 'E', 'N', 'D', 'R', 'A'].map((char, idx) => (
-                  <span
-                    key={`d-${idx}`}
-                    className="inline-block animate-cinematic-reveal text-white transition-all duration-300 hover:text-accent-orange hover:scale-105 hover:-translate-y-1 cursor-default"
-                    style={{ animationDelay: `${0.15 + idx * 0.05}s` }}
-                  >
-                    {char}
-                  </span>
-                ))}
-              </h1>
-            </div>
-
-            {/* Line 2: BERA (Luminous Amber Gradient) */}
-            <div className="overflow-hidden pt-0.5 pb-2 flex items-baseline gap-3">
-              <span className="font-display text-[clamp(2.8rem,6.2vw,5.6rem)] font-black tracking-tight leading-[0.98] uppercase flex items-center gap-[0.03em]">
-                {['B', 'E', 'R', 'A'].map((char, idx) => (
-                  <span
-                    key={`b-${idx}`}
-                    className="inline-block animate-cinematic-reveal bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent filter drop-shadow-[0_0_25px_rgba(249,115,22,0.65)] transition-all duration-300 hover:scale-110 hover:-translate-y-1 cursor-default"
-                    style={{ animationDelay: `${0.55 + idx * 0.07}s` }}
-                  >
-                    {char}
-                  </span>
-                ))}
-              </span>
-              <span
-                className="w-3.5 h-3.5 rounded-full bg-accent-orange shadow-[0_0_15px_rgba(249,115,22,0.95)] animate-pulse inline-block self-end mb-3"
-                aria-hidden="true"
-              />
-            </div>
+          {/* Main Huge Display Title: DEBEND (Solid Chrome White) + RA (Orange Hollow Wireframe) */}
+          <div className="mb-5 overflow-visible">
+            <h1 className="font-display text-[clamp(3.2rem,7vw,6.4rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase select-none">
+              {/* Solid White Letters: D E B E N D */}
+              {lettersSolid.map((letter, idx) => (
+                <span
+                  key={`solid-${idx}`}
+                  className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                  style={{ animationDelay: `${0.35 + idx * 0.1}s` }}
+                >
+                  {letter}
+                </span>
+              ))}
+              {/* Orange Hollow Wireframe Letters: R A */}
+              {lettersOutline.map((letter, idx) => (
+                <span
+                  key={`outline-${idx}`}
+                  className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                  style={{ animationDelay: `${0.35 + (lettersSolid.length + idx) * 0.1}s` }}
+                >
+                  {letter}
+                </span>
+              ))}
+            </h1>
           </div>
 
           {/* Tagline Bar: — DEVELOPER • PROBLEM SOLVER • DREAMER */}
