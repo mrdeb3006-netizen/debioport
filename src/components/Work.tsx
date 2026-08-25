@@ -347,7 +347,7 @@ except KeyboardInterrupt:
                           : 'hover:border-accent-orange hover:shadow-[0_25px_70px_rgba(0,0,0,0.4),0_0_25px_rgba(249,115,22,0.2)]'
                       }`}
                     >
-                      <div className="grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 lg:gap-12 items-center h-full min-h-0">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[45%_55%] gap-6 md:gap-6 lg:gap-12 items-center h-full min-h-0">
                         
                         {/* LEFT COLUMN: Clean High-Contrast Project Intel (White, Orange & Burgundy) */}
                         <div className="flex flex-col justify-between h-full min-h-0 py-1">

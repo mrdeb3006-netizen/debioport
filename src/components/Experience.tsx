@@ -169,7 +169,7 @@ export const Experience: React.FC = () => {
         </div>
 
         {/* Compact 2-Column Responsive Layout: Education & Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr] gap-8 lg:gap-10 items-start mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.3fr_0.9fr] gap-6 lg:gap-10 items-start mb-12">
           
           {/* Left Column: Education Milestones Timeline */}
           <div className="flex flex-col gap-5">

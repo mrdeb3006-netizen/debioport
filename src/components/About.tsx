@@ -53,11 +53,11 @@ export const About: React.FC = () => {
         </div>
 
         {/* Split Layout: Portrait Card + Story & Info Blocks */}
-        <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] xl:grid-cols-[440px_1fr] gap-12 lg:gap-14 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] lg:grid-cols-[400px_1fr] xl:grid-cols-[440px_1fr] gap-8 md:gap-10 lg:gap-14 items-start">
           
           {/* Left Column: Cyber-Editorial Portrait Card */}
           <div
-            className="relative w-full max-w-[420px] mx-auto lg:mx-0 group"
+            className="relative w-full max-w-[360px] md:max-w-full mx-auto md:mx-0 group"
             style={getSlideUpStyle(0.3)}
           >
             {/* Ambient Minimal Glow Behind Photo */}
