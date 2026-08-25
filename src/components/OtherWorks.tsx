@@ -30,7 +30,7 @@ export const OtherWorks: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // 5 Authentic User Photographs
+  // 10 Authentic User Photographs
   const photos: PhotoItem[] = [
     {
       id: 'photo-1',
@@ -86,6 +86,61 @@ export const OtherWorks: React.FC = () => {
       imageSrc: '/photography/photo5_sunflower.jpg',
       downloadFileName: 'debendra_golden_sunflower.jpg',
       aspectRatio: 'aspect-[3/4]'
+    },
+    {
+      id: 'photo-6',
+      title: 'Delicate Pink Rose in Bloom',
+      category: 'Macro & Florals',
+      location: 'Botanical Flora Garden',
+      year: '2026',
+      description: 'Delicate layers of soft pink rose petals opening in full bloom, capturing subtle petal texture and delicate stamen details.',
+      imageSrc: '/photography/photo6_pink_rose.jpg',
+      downloadFileName: 'debendra_pink_rose_bloom.jpg',
+      aspectRatio: 'aspect-[3/4]'
+    },
+    {
+      id: 'photo-7',
+      title: 'Full Moon Through Night Branches',
+      category: 'Nightscape & Atmosphere',
+      location: 'Nocturnal Sky & Silhouettes',
+      year: '2025',
+      description: 'The luminous glow of a full moon veiled behind atmospheric clouds, silhouetted sharply against organic tree branches.',
+      imageSrc: '/photography/photo7_moon_branches.jpg',
+      downloadFileName: 'debendra_moon_branches.jpg',
+      aspectRatio: 'aspect-[4/3]'
+    },
+    {
+      id: 'photo-8',
+      title: 'Childhood Joy • Traditional Elegance',
+      category: 'Portrait & Culture',
+      location: 'Celebration of Innocence',
+      year: '2026',
+      description: 'A radiant portrait capturing pure childhood delight dressed in vibrant traditional yellow saree, bangles, and a captivating smile.',
+      imageSrc: '/photography/photo8_child_traditional_dress.jpg',
+      downloadFileName: 'debendra_childhood_joy.jpg',
+      aspectRatio: 'aspect-[3/4]'
+    },
+    {
+      id: 'photo-9',
+      title: 'Peach Blossom • Velvet Rose Petals',
+      category: 'Botanical & Macro',
+      location: 'Sunlit Plant Nursery',
+      year: '2026',
+      description: 'Warm peach-toned rose blossom glowing softly against rich green foliage, emphasizing gentle organic curvature.',
+      imageSrc: '/photography/photo9_peach_rose.jpg',
+      downloadFileName: 'debendra_peach_rose_blossom.jpg',
+      aspectRatio: 'aspect-[3/4]'
+    },
+    {
+      id: 'photo-10',
+      title: 'Yellow Butterfly on Wildflowers',
+      category: 'Wildlife & Nature',
+      location: 'Wildflower Meadow',
+      year: '2026',
+      description: 'A vibrant yellow butterfly resting gracefully atop delicate pink wildflower blossoms amidst lush green leaves.',
+      imageSrc: '/photography/photo10_yellow_butterfly.jpg',
+      downloadFileName: 'debendra_yellow_butterfly_wildflower.jpg',
+      aspectRatio: 'aspect-[4/3]'
     }
   ];
 
@@ -139,7 +194,7 @@ export const OtherWorks: React.FC = () => {
           {/* Minimal Telemetry Tag */}
           <div className="flex items-center gap-6 self-start md:self-end pt-1">
             <div className="border-l-2 border-[#d6d3d1] pl-4">
-              <span className="block font-serifDisplay text-2xl font-black text-[#18181b]">05</span>
+              <span className="block font-serifDisplay text-2xl font-black text-[#18181b]">{String(photos.length).padStart(2, '0')}</span>
               <span className="font-mono text-[0.75rem] font-semibold text-[#78716c] uppercase tracking-wider">Original Captures</span>
             </div>
             <div className="border-l-2 border-[#d6d3d1] pl-4">
@@ -172,7 +227,7 @@ export const OtherWorks: React.FC = () => {
             {/* Slideshow Navigation Arrows */}
             <div className="flex items-center gap-2 self-start sm:self-auto">
               <span className="font-mono text-[0.75rem] font-bold text-[#78716c] mr-1 hidden sm:inline">
-                AUTO-SLIDE • 0{currentIndex + 1}/0{photos.length}
+                AUTO-SLIDE • {String(currentIndex + 1).padStart(2, '0')} / {String(photos.length).padStart(2, '0')}
               </span>
 
               <button
@@ -229,7 +284,7 @@ export const OtherWorks: React.FC = () => {
 
                     {/* Badge on Photo */}
                     <div className="absolute top-4 left-4 font-mono text-[0.72rem] font-bold px-3 py-1 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20">
-                      0{pIdx + 1} / 0{photos.length}
+                      {String(pIdx + 1).padStart(2, '0')} / {String(photos.length).padStart(2, '0')}
                     </div>
                   </div>
 
@@ -291,7 +346,7 @@ export const OtherWorks: React.FC = () => {
             </div>
 
             {/* Slide Navigation Dots */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-[#e7e5e4] shadow-sm z-20">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-[#e7e5e4] shadow-sm z-20">
               {photos.map((_, dotIdx) => (
                 <button
                   key={dotIdx}
@@ -299,8 +354,8 @@ export const OtherWorks: React.FC = () => {
                   onClick={() => setCurrentIndex(dotIdx)}
                   className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                     currentIndex === dotIdx
-                      ? 'w-7 bg-[#18181b]'
-                      : 'w-2.5 bg-[#d6d3d1] hover:bg-[#78716c]'
+                      ? 'w-6 bg-[#18181b]'
+                      : 'w-2 bg-[#d6d3d1] hover:bg-[#78716c]'
                   }`}
                   aria-label={`Go to photo ${dotIdx + 1}`}
                 />
