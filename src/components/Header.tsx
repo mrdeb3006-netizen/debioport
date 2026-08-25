@@ -118,17 +118,17 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
           </nav>
 
           {/* Mobile Right Controls: Let's Connect + Hamburger Button (< 1024px) */}
-          <div className="flex lg:hidden items-center gap-2 sm:gap-2.5 ml-auto shrink-0">
+          <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 ml-auto shrink-0">
             <a
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('contact');
               }}
-              className="inline-flex items-center gap-1 py-1.5 px-2.5 sm:px-3 rounded-lg bg-accent-orange text-bg-dark font-display font-extrabold text-[0.68rem] sm:text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 active:scale-95 transition-all shadow-[0_0_10px_rgba(249,115,22,0.3)] shrink-0"
+              className="inline-flex items-center gap-0.5 py-1 px-2 sm:px-2.5 rounded-md bg-accent-orange text-bg-dark font-display font-black text-[0.60rem] sm:text-[0.66rem] tracking-wide uppercase hover:bg-orange-600 active:scale-95 transition-all shadow-xs shrink-0"
             >
-              <span>Let's connect</span>
-              <span className="text-xs font-bold">→</span>
+              <span>Connect</span>
+              <span className="text-[0.65rem] font-bold">→</span>
             </a>
 
             <button
