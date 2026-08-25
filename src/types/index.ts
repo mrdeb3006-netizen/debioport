@@ -22,8 +22,12 @@ export interface Milestone {
   number: string;
   tag: string;
   title: string;
+  institution?: string;
   period: string;
+  score?: string;
+  badge?: string;
   description: string;
+  highlights?: string[];
 }
 
 export interface SkillCategory {
