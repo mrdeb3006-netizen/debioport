@@ -120,54 +120,58 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
           {/* Mobile Hamburger Button (Visible on Mobile & Tablet < 1024px) */}
           <button
             type="button"
-            className="mobile-hamburger-btn flex lg:hidden relative flex-col justify-center items-center gap-1.5 w-11 h-11 rounded-xl bg-[#141419] border border-accent-orange/50 hover:border-accent-orange hover:bg-[#1c1c24] active:scale-95 transition-all duration-200 cursor-pointer ml-auto z-[99999] shadow-[0_0_12px_rgba(249,115,22,0.25)] shrink-0"
-            onClick={() => setMobileMenuOpen(true)}
-            aria-label="Open navigation menu"
+            className={`mobile-hamburger-btn flex lg:hidden relative flex-col justify-center items-center gap-1.5 w-10 h-10 sm:w-11 sm:h-11 rounded-xl border active:scale-95 transition-all duration-200 cursor-pointer ml-auto z-[99999] shrink-0 ${
+              mobileMenuOpen
+                ? 'bg-accent-orange/20 border-accent-orange shadow-[0_0_15px_rgba(249,115,22,0.4)]'
+                : 'bg-[#141419] border-accent-orange/40 hover:border-accent-orange hover:bg-[#1c1c24] shadow-[0_0_10px_rgba(249,115,22,0.2)]'
+            }`}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileMenuOpen}
           >
-            <span className="w-5 h-[2.5px] bg-accent-orange rounded-full" />
-            <span className="w-5 h-[2.5px] bg-white rounded-full" />
-            <span className="w-5 h-[2.5px] bg-accent-orange rounded-full" />
+            <span className={`w-4 sm:w-5 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
+            <span className={`w-4 sm:w-5 h-[2px] bg-white rounded-full transition-all duration-200 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+            <span className={`w-4 sm:w-5 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
           </button>
 
         </div>
       </header>
 
-      {/* Fullscreen Mobile Drawer Portal (Mounts directly on document.body with max z-index) */}
+      {/* Compact Upper Floating Mobile Menu */}
       {mobileMenuOpen &&
         createPortal(
-          <div
-            className="fixed inset-0 w-screen h-screen z-[9999999] bg-[#050508]/98 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-8 overflow-y-auto animate-in fade-in zoom-in-95 duration-200"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile Navigation Menu"
-          >
-            {/* Top Bar with Brand & Close Button */}
-            <div className="flex items-center justify-between pb-5 border-b border-white/[0.1] shrink-0">
-              <div className="flex items-center gap-2.5">
-                <img
-                  src="/db-logo.jpg"
-                  alt="DB Monogram"
-                  className="h-8 w-auto object-contain mix-blend-screen filter contrast-125 brightness-125 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]"
-                />
-                <span className="font-cinzel text-[0.88rem] sm:text-[0.95rem] font-bold text-white tracking-wider">
-                  DEBENDRANATH <span className="text-accent-orange font-extrabold">BERA</span>
+          <>
+            {/* Click-outside transparent backdrop */}
+            <div
+              className="fixed inset-0 z-[9999998] bg-black/30 backdrop-blur-[2px] animate-in fade-in duration-150"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
+
+            {/* Compact Floating Dropdown Panel (Upper Part of Screen) */}
+            <div
+              className="fixed top-[70px] sm:top-[78px] right-3 sm:right-6 w-[250px] sm:w-[270px] z-[9999999] bg-[#0c0d14]/95 backdrop-blur-2xl border border-accent-orange/40 rounded-2xl p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_25px_rgba(249,115,22,0.2)] animate-in fade-in slide-in-from-top-3 zoom-in-95 duration-200"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile Navigation Menu"
+            >
+              {/* Header Label inside small panel */}
+              <div className="flex items-center justify-between px-2 py-1 mb-1.5 border-b border-white/[0.08]">
+                <span className="font-mono text-[0.70rem] font-bold text-accent-orange tracking-widest uppercase">
+                  Navigation
                 </span>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-slate-400 hover:text-white text-sm px-1 py-0.5 rounded cursor-pointer"
+                  aria-label="Close menu"
+                >
+                  ✕
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-11 h-11 rounded-xl bg-white/[0.08] border border-white/20 flex items-center justify-center text-white text-xl hover:text-accent-orange hover:border-accent-orange active:scale-95 transition-all cursor-pointer shadow-md"
-                aria-label="Close navigation menu"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Navigation Links (Crystal Clear, Numbered, High Contrast) */}
-            <div className="py-6 my-auto shrink-0">
-              <ul className="list-none flex flex-col gap-2 max-w-[360px] mx-auto p-0 m-0">
+              {/* Compact Menu Links */}
+              <ul className="list-none flex flex-col gap-1 p-0 m-0">
                 {navItems.map((item, idx) => {
                   const isActive = activeSection === item.id;
                   return (
@@ -175,72 +179,45 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                       <button
                         type="button"
                         onClick={() => handleNavClick(item.id)}
-                        className={`w-full flex items-center justify-between py-3.5 px-4 rounded-xl transition-all duration-200 cursor-pointer ${
+                        className={`w-full flex items-center justify-between py-2 px-2.5 rounded-lg transition-all duration-150 cursor-pointer ${
                           isActive
-                            ? 'bg-accent-orange/15 border border-accent-orange/50 text-accent-orange shadow-[0_0_18px_rgba(249,115,22,0.25)] font-black'
-                            : 'text-slate-100 hover:text-white hover:bg-white/[0.06] border border-transparent font-bold'
+                            ? 'bg-accent-orange/15 border border-accent-orange/40 text-accent-orange shadow-[0_0_12px_rgba(249,115,22,0.2)] font-black'
+                            : 'text-slate-200 hover:text-white hover:bg-white/[0.06] border border-transparent font-semibold'
                         }`}
                       >
-                        <div className="flex items-center gap-3.5 text-left">
-                          <span className={`font-mono text-[0.80rem] ${
-                            isActive ? 'text-accent-orange font-bold' : 'text-slate-400 font-semibold'
+                        <div className="flex items-center gap-2.5 text-left">
+                          <span className={`font-mono text-[0.70rem] ${
+                            isActive ? 'text-accent-orange font-bold' : 'text-slate-500'
                           }`}>
                             0{idx + 1}.
                           </span>
-                          <span className="font-display text-[1.35rem] sm:text-[1.5rem] uppercase tracking-wide">
+                          <span className="font-display text-[0.88rem] sm:text-[0.92rem] uppercase tracking-wide">
                             {item.label}
                           </span>
                         </div>
 
                         {isActive && (
-                          <span className="w-2.5 h-2.5 rounded-full bg-accent-orange shadow-[0_0_10px_#f97316]" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent-orange shadow-[0_0_6px_#f97316]" />
                         )}
                       </button>
                     </li>
                   );
                 })}
               </ul>
-            </div>
 
-            {/* Bottom Actions & Contact Links */}
-            <div className="pt-5 border-t border-white/[0.1] flex flex-col gap-4 max-w-[360px] mx-auto w-full shrink-0">
-              <button
-                type="button"
-                onClick={() => handleNavClick('contact')}
-                className="btn-primary w-full justify-center py-4 rounded-xl text-[0.98rem] font-bold text-white shadow-[0_0_22px_rgba(249,115,22,0.4)] flex items-center gap-2 cursor-pointer"
-              >
-                <span>Let's connect</span>
-                <span className="text-lg">→</span>
-              </button>
-
-              <div className="flex items-center justify-center gap-4 text-[0.82rem] font-mono text-slate-300">
-                <a
-                  href="https://github.com/mrdeb3006-netizen"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-accent-orange transition-colors"
+              {/* Compact Bottom Action */}
+              <div className="mt-2 pt-2 border-t border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => handleNavClick('contact')}
+                  className="btn-primary w-full justify-center py-2 px-3 rounded-lg text-[0.78rem] font-bold text-white shadow-[0_0_14px_rgba(249,115,22,0.3)] flex items-center gap-1.5 cursor-pointer"
                 >
-                  GitHub ↗
-                </a>
-                <span className="text-slate-600">•</span>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-accent-orange transition-colors"
-                >
-                  LinkedIn ↗
-                </a>
-                <span className="text-slate-600">•</span>
-                <a
-                  href="mailto:mrdeb3006@gmail.com"
-                  className="hover:text-accent-orange transition-colors"
-                >
-                  Email ↗
-                </a>
+                  <span>Let's connect</span>
+                  <span className="text-sm">→</span>
+                </button>
               </div>
             </div>
-          </div>,
+          </>,
           document.body
         )}
     </>
