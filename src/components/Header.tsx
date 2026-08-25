@@ -64,17 +64,15 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
               e.preventDefault();
               handleNavClick('home');
             }}
-            className="flex items-center gap-2 sm:gap-2.5 md:gap-3 no-underline text-white group shrink-0 min-w-0"
+            className="flex items-center gap-2.5 sm:gap-3 no-underline text-white group shrink-0 min-w-0"
             aria-label="Debendranath Bera Portfolio Home"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg bg-black border border-white/20 p-1 flex items-center justify-center shadow-sm shrink-0">
-              <img
-                src="/db-logo.jpg"
-                alt="DB Monogram Logo"
-                className="w-full h-full object-contain mix-blend-screen select-none filter contrast-125 brightness-125 drop-shadow-[0_0_8px_rgba(249,115,22,0.5)] group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <span className="font-cinzel text-[0.78rem] sm:text-[0.88rem] md:text-[1.05rem] font-bold tracking-[0.06em] sm:tracking-[0.10em] text-white uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-accent-orange">
+            <img
+              src="/db-logo.jpg"
+              alt="DB Monogram Logo"
+              className="h-8 sm:h-9 md:h-10 w-auto object-contain mix-blend-screen select-none transition-all duration-300 filter contrast-125 brightness-125 drop-shadow-[0_0_12px_rgba(249,115,22,0.5)] group-hover:scale-105"
+            />
+            <span className="font-cinzel text-[0.82rem] sm:text-[0.92rem] md:text-[1.05rem] font-bold tracking-[0.08em] sm:tracking-[0.12em] text-white uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-accent-orange">
               DEBENDRANATH <span className="text-accent-orange font-extrabold">BERA</span>
             </span>
           </a>
