@@ -121,15 +121,15 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         <div className="absolute inset-0 bg-radial from-transparent via-transparent to-bg-dark/70 z-[2]" />
       </div>
 
-      <div className="max-w-[1600px] w-full mx-auto px-6 md:px-12 lg:px-16 py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
+      <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-8 sm:py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
         {/* Left Content Column */}
         <div className="w-full max-w-[800px] flex flex-col justify-center">
 
           {/* Main Huge Display Title: DEBENDRANATH (Line 1) + BERA (Line 2) in Previous Letter Drop & Wireframe Style */}
-          <div className="mb-6 -mt-3 select-none overflow-visible">
+          <div className="mb-4 sm:mb-6 -mt-2 sm:-mt-3 select-none overflow-visible">
             {/* Line 1: DEBENDRANATH */}
-            <div className="overflow-visible pb-1">
-              <h1 className="font-display text-[clamp(2.3rem,4.8vw,4.6rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+            <div className="overflow-visible pb-0.5 sm:pb-1">
+              <h1 className="font-display text-[clamp(1.45rem,6.8vw,4.6rem)] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
                 {/* Solid White Letters: D E B E N D R A */}
                 {debendranathSolid.map((letter, idx) => (
                   <span
@@ -144,7 +144,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 {debendranathOutline.map((letter, idx) => (
                   <span
                     key={`dn-outline-${idx}`}
-                    className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
                     style={{ animationDelay: `${0.2 + (debendranathSolid.length + idx) * 0.06}s` }}
                   >
                     {letter}
@@ -155,7 +155,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
             {/* Line 2: BERA */}
             <div className="overflow-visible pt-0.5">
-              <h2 className="font-display text-[clamp(2.3rem,4.8vw,4.6rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+              <h2 className="font-display text-[clamp(1.45rem,6.8vw,4.6rem)] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
                 {/* Solid White Letters: B E */}
                 {beraSolid.map((letter, idx) => (
                   <span
@@ -170,7 +170,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 {beraOutline.map((letter, idx) => (
                   <span
                     key={`b-outline-${idx}`}
-                    className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
                     style={{ animationDelay: `${0.95 + (beraSolid.length + idx) * 0.08}s` }}
                   >
                     {letter}
