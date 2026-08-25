@@ -331,17 +331,29 @@ export const OtherWorks: React.FC = () => {
                   className="w-full shrink-0 p-4 sm:p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 md:gap-10 cursor-pointer"
                   onClick={() => setActivePhoto(photo)}
                 >
-                  {/* Photo Display Card */}
-                  <div className="w-full lg:w-[58%] h-[320px] sm:h-[400px] md:h-[460px] relative rounded-2xl overflow-hidden shadow-[0_12px_35px_rgba(0,0,0,0.18)] bg-[#18181b] group/img">
+                  {/* Photo Display Card with Adaptive Frame Architecture (Zero Cropping) */}
+                  <div className="w-full lg:w-[58%] h-[360px] sm:h-[440px] md:h-[500px] lg:h-[530px] relative rounded-2xl overflow-hidden shadow-[0_14px_40px_rgba(0,0,0,0.18)] bg-[#09090b] group/img flex items-center justify-center">
+                    {/* Ambient Blurred Background matching natural photo colors */}
+                    <img
+                      src={photo.imageSrc}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none"
+                    />
+
+                    {/* Subtle Vignette & Frame Contrast Overlay */}
+                    <div className="absolute inset-0 bg-black/25 pointer-events-none z-[5]" />
+
+                    {/* Uncropped True-Frame Photograph */}
                     <img
                       src={photo.imageSrc}
                       alt={photo.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+                      className="w-full h-full object-contain relative z-10 p-2 sm:p-4 drop-shadow-[0_12px_28px_rgba(0,0,0,0.45)] transition-transform duration-500 group-hover/img:scale-[1.02]"
                       loading="lazy"
                     />
                     
                     {/* Hover Inspect Pill */}
-                    <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
                       <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#18181b] font-mono text-[0.82rem] font-bold shadow-2xl transform translate-y-3 group-hover/img:translate-y-0 transition-transform duration-300">
                         <Maximize2 size={16} />
                         <span>TAP TO OPEN &amp; DOWNLOAD</span>
@@ -349,7 +361,7 @@ export const OtherWorks: React.FC = () => {
                     </div>
 
                     {/* Badge on Photo */}
-                    <div className="absolute top-4 left-4 font-mono text-[0.72rem] font-bold px-3 py-1 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20">
+                    <div className="absolute top-4 left-4 font-mono text-[0.72rem] font-bold px-3 py-1 rounded-full bg-black/70 text-white backdrop-blur-md border border-white/20 z-20">
                       {String(pIdx + 1).padStart(2, '0')} / {String(photos.length).padStart(2, '0')}
                     </div>
                   </div>
@@ -521,12 +533,20 @@ export const OtherWorks: React.FC = () => {
               </div>
             </div>
 
-            {/* High-Resolution Pop-Up Image Stage */}
-            <div className="w-full bg-[#0c0d14] flex items-center justify-center p-2 sm:p-4 min-h-[300px] max-h-[580px] overflow-hidden">
+            {/* High-Resolution Pop-Up Image Stage with Adaptive True-Frame Backdrop */}
+            <div className="w-full bg-[#0c0d14] relative flex items-center justify-center p-3 sm:p-6 min-h-[340px] max-h-[72vh] overflow-hidden">
+              {/* Ambient Glow matching the photo */}
+              <img
+                src={activePhoto.imageSrc}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-25 scale-110 pointer-events-none"
+              />
+
               <img
                 src={activePhoto.imageSrc}
                 alt={activePhoto.title}
-                className="max-h-[560px] w-auto max-w-full object-contain rounded-xl shadow-2xl"
+                className="max-h-[66vh] w-auto max-w-full object-contain rounded-xl shadow-2xl relative z-10 drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
               />
             </div>
 
