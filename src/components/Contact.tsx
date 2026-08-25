@@ -50,41 +50,65 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
         {/* Content Layout */}
         <div className="flex flex-col gap-14 mt-10">
           
-          {/* Direct Channel Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Direct Channel Cards (5 Channels: Email, WhatsApp, GitHub, LinkedIn, X) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
             
             {/* Copyable Email Card */}
             <div
               role="button"
               tabIndex={0}
               onClick={handleCopyEmail}
-              className={`specular-card backdrop-blur-[14px] border rounded-2xl p-6 flex flex-col relative transition-all duration-300 cursor-pointer ${
+              className={`specular-card backdrop-blur-[14px] border rounded-2xl p-5 flex flex-col relative transition-all duration-300 cursor-pointer ${
                 copied
                   ? 'border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.35)]'
                   : 'border-white/[0.08] hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1'
               }`}
             >
-              <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
+              <span className="font-mono text-[0.72rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
                 {copied ? '✓ COPIED' : 'EMAIL'}
               </span>
-              <span className="text-[0.98rem] font-bold text-white truncate">mrdeb3006@gmail.com</span>
-              <span className="absolute top-5 right-6 text-lg text-accent-cyan">
+              <span className="text-[0.92rem] font-bold text-white truncate">mrdeb3006@gmail.com</span>
+              <span className="absolute top-4 right-5 text-base text-accent-cyan">
                 {copied ? '✓' : '📋'}
               </span>
             </div>
+
+            {/* Direct WhatsApp Card with No-Spam Disclaimer */}
+            <a
+              href="https://wa.me/919876543210?text=Hi%20Debendra,%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect%20regarding%20a%20project."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="specular-card backdrop-blur-[14px] border border-emerald-500/30 bg-emerald-500/[0.04] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500/[0.08] hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(16,185,129,0.25)] hover:-translate-y-1 group"
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-mono text-[0.72rem] font-bold text-emerald-400 tracking-[0.16em] uppercase flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  WHATSAPP
+                </span>
+                <span className="text-base text-emerald-400 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                  ↗
+                </span>
+              </div>
+              <span className="text-[0.92rem] font-bold text-white truncate">Chat on WhatsApp</span>
+              <div className="mt-2 pt-1.5 border-t border-emerald-500/20">
+                <span className="text-[0.66rem] font-mono text-emerald-300/80 leading-tight block">
+                  ⚠️ <span className="font-bold text-emerald-300">NO SPAM</span> • Work &amp; Project Inquiries Only
+                </span>
+              </div>
+            </a>
 
             {/* GitHub Card */}
             <a
               href="https://github.com/mrdeb3006-netizen"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
             >
-              <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
+              <span className="font-mono text-[0.72rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
                 GITHUB
               </span>
-              <span className="text-[0.98rem] font-bold text-white truncate">github.com/mrdeb3006-netizen</span>
-              <span className="absolute top-5 right-6 text-lg text-accent-cyan transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+              <span className="text-[0.92rem] font-bold text-white truncate">github.com/mrdeb3006-netizen</span>
+              <span className="absolute top-4 right-5 text-base text-accent-cyan transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 ↗
               </span>
             </a>
@@ -94,13 +118,13 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
             >
-              <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
+              <span className="font-mono text-[0.72rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
                 LINKEDIN
               </span>
-              <span className="text-[0.98rem] font-bold text-white truncate">linkedin.com/in/mrdeb</span>
-              <span className="absolute top-5 right-6 text-lg text-accent-cyan transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+              <span className="text-[0.92rem] font-bold text-white truncate">linkedin.com/in/mrdeb</span>
+              <span className="absolute top-4 right-5 text-base text-accent-cyan transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 ↗
               </span>
             </a>
@@ -110,17 +134,25 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               href="https://x.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
             >
-              <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
+              <span className="font-mono text-[0.72rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
                 X (TWITTER)
               </span>
-              <span className="text-[0.98rem] font-bold text-white truncate">x.com/mrdeb</span>
-              <span className="absolute top-5 right-6 text-lg text-accent-cyan transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+              <span className="text-[0.92rem] font-bold text-white truncate">x.com/mrdeb</span>
+              <span className="absolute top-4 right-5 text-base text-accent-cyan transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 ↗
               </span>
             </a>
 
+          </div>
+
+          {/* WhatsApp / Direct Outreach Disclaimer Notice Banner */}
+          <div className="p-3.5 rounded-xl bg-emerald-500/[0.05] border border-emerald-500/20 flex items-center gap-3 -mt-6">
+            <span className="text-emerald-400 text-lg">💬</span>
+            <p className="text-[0.80rem] font-mono text-emerald-200/90 leading-relaxed">
+              <span className="font-bold text-emerald-400 uppercase">WhatsApp Protocol:</span> Available for project development, engineering collaborations, and career opportunities. Please <span className="underline font-semibold">strictly refrain from spam</span>, promotional broadcasts, or unsolicited marketing.
+            </p>
           </div>
 
           {/* CTA Buttons */}
