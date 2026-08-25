@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { ThemeProvider } from './context/ThemeContext';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -59,51 +58,49 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <ThemeProvider>
-      <div className="min-h-screen bg-bg-dark text-text-primary relative selection:bg-accent-cyan/30 selection:text-white transition-colors duration-500">
-        {/* Top HUD Scroll Progress Bar */}
-        <ScrollProgress />
+    <div className="min-h-screen bg-bg-dark text-text-primary relative selection:bg-accent-cyan/30 selection:text-white">
+      {/* Top HUD Scroll Progress Bar */}
+      <ScrollProgress />
 
-        {/* Doctor Strange 60fps Magic Ring Canvas Cursor */}
-        <DoctorStrangeCursor />
+      {/* Doctor Strange 60fps Magic Ring Canvas Cursor */}
+      <DoctorStrangeCursor />
 
-        {/* Fixed Site Header */}
-        <Header activeSection={activeSection} />
+      {/* Fixed Site Header */}
+      <Header activeSection={activeSection} />
 
-        {/* Main Page Layout */}
-        <main className="w-full relative z-10">
-          <Hero onOpenCvModal={() => setCvModalOpen(true)} />
-          <About />
-          <Work
-            onOpenProjectModal={(id) => setSelectedProjectId(id)}
-            activeFilter={activeFilter}
-          />
-          <Experience />
-          <Skills
-            activeFilter={activeFilter}
-            onSelectFilter={(filterKey) => setActiveFilter(filterKey)}
-          />
-          <Contact onOpenCvModal={() => setCvModalOpen(true)} />
-        </main>
-
-        {/* Footer */}
-        <Footer />
-
-        {/* CV Modal */}
-        <CVModal
-          isOpen={cvModalOpen}
-          onClose={() => setCvModalOpen(false)}
+      {/* Main Page Layout */}
+      <main className="w-full relative z-10">
+        <Hero onOpenCvModal={() => setCvModalOpen(true)} />
+        <About />
+        <Work
+          onOpenProjectModal={(id) => setSelectedProjectId(id)}
+          activeFilter={activeFilter}
         />
-
-        {/* Project Deep-Dive Modal */}
-        <ProjectDetailModal
-          projectId={selectedProjectId}
-          onClose={() => setSelectedProjectId(null)}
+        <Experience />
+        <Skills
+          activeFilter={activeFilter}
+          onSelectFilter={(filterKey) => setActiveFilter(filterKey)}
         />
+        <Contact onOpenCvModal={() => setCvModalOpen(true)} />
+      </main>
 
-        {/* Movable Floating DARVES AI Assistant */}
-        <DarvesChat />
-      </div>
-    </ThemeProvider>
+      {/* Footer */}
+      <Footer />
+
+      {/* CV Modal */}
+      <CVModal
+        isOpen={cvModalOpen}
+        onClose={() => setCvModalOpen(false)}
+      />
+
+      {/* Project Deep-Dive Modal */}
+      <ProjectDetailModal
+        projectId={selectedProjectId}
+        onClose={() => setSelectedProjectId(null)}
+      />
+
+      {/* Movable Floating DARVES AI Assistant */}
+      <DarvesChat />
+    </div>
   );
 };

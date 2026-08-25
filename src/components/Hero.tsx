@@ -1,6 +1,5 @@
 import React from 'react';
 import { Github, Linkedin, Mail } from 'lucide-react';
-import { ThemeCustomizer } from './ThemeCustomizer';
 
 const XIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, className = "" }) => (
   <svg
@@ -207,8 +206,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             </div>
           </div>
 
-          {/* CTA Action Buttons & Theme Studio Tool */}
-          <div className="flex items-center gap-3.5 mb-8 flex-wrap animate-item" style={{ ['--delay' as any]: '1.65s' }}>
+          {/* CTA Action Buttons */}
+          <div className="flex items-center gap-4 mb-10 flex-wrap animate-item" style={{ ['--delay' as any]: '1.65s' }}>
             <button
               type="button"
               onClick={onOpenCvModal}
@@ -225,9 +224,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
               <span>VIEW WORK</span>
               <span className="text-base font-black ml-1 transition-transform duration-300 group-hover:translate-x-1">→</span>
             </a>
-
-            {/* Inbuilt Live Theme Studio Tool */}
-            <ThemeCustomizer />
           </div>
 
           {/* Social Icons Bar */}

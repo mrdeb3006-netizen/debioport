@@ -340,24 +340,25 @@ except KeyboardInterrupt:
                         transform: `scale(${slideScale})`,
                         opacity: slideOpacity,
                       }}
-                      className={`w-full max-w-[1360px] h-[calc(100vh-190px)] min-h-[440px] max-h-[580px] specular-card backdrop-blur-[20px] border border-white/[0.09] rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 transition-all duration-300 relative overflow-hidden flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.85)] ${
+                      className={`w-full max-w-[1360px] h-[calc(100vh-190px)] min-h-[440px] max-h-[580px] specular-card backdrop-blur-[20px] border border-[#881337]/35 bg-[#0e0609]/90 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 transition-all duration-300 relative overflow-hidden flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.85)] ${
                         isMatch
-                          ? 'border-accent-orange/60 shadow-[0_0_30px_rgba(249,115,22,0.3)]'
-                          : 'hover:border-accent-orange/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_25px_rgba(249,115,22,0.15)]'
+                          ? 'border-accent-orange/70 shadow-[0_0_30px_rgba(249,115,22,0.3)]'
+                          : 'hover:border-accent-orange/50 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_25px_rgba(136,19,55,0.2)]'
                       }`}
                     >
                       <div className="grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 lg:gap-12 items-center h-full min-h-0">
                         
-                        {/* LEFT COLUMN: Minimal Project Intel */}
+                        {/* LEFT COLUMN: Minimal Project Intel (White, Orange & Burgundy) */}
                         <div className="flex flex-col justify-between h-full min-h-0 py-1">
                           
                           <div>
                             {/* Top Category Badge & Big Minimal Number */}
                             <div className="flex items-center justify-between mb-2">
-                              <span className="font-mono text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 text-accent-orange border border-accent-orange/30 tracking-wider">
+                              <span className="font-mono text-[0.74rem] font-bold px-3 py-1 rounded-full bg-[#881337]/30 text-white border border-[#9f1239]/50 tracking-wider inline-flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-accent-orange" />
                                 {proj.category || 'PYTHON ENGINEERING'}
                               </span>
-                              <div className="font-display text-4xl lg:text-5xl font-black text-white/15 [-webkit-text-stroke:1px_rgba(249,115,22,0.3)] leading-none">
+                              <div className="font-display text-4xl lg:text-5xl font-black text-white/15 [-webkit-text-stroke:1px_rgba(249,115,22,0.35)] leading-none">
                                 {proj.number}
                               </div>
                             </div>
@@ -369,13 +370,13 @@ except KeyboardInterrupt:
 
                             {/* Tagline */}
                             {proj.tagline && (
-                              <p className="text-[0.9rem] text-accent-orange/95 font-medium mb-3">
+                              <p className="text-[0.9rem] text-accent-orange font-semibold mb-3">
                                 {proj.tagline}
                               </p>
                             )}
 
                             {/* Minimal Clean Description */}
-                            <p className="text-[0.92rem] md:text-[0.96rem] text-text-secondary leading-relaxed line-clamp-3 md:line-clamp-4 mb-4">
+                            <p className="text-[0.92rem] md:text-[0.96rem] text-slate-200 leading-relaxed line-clamp-3 md:line-clamp-4 mb-4">
                               {proj.description}
                             </p>
                           </div>
@@ -387,7 +388,7 @@ except KeyboardInterrupt:
                                 {proj.tech.map((t, pIdx) => (
                                   <span
                                     key={pIdx}
-                                    className="font-mono text-[0.72rem] font-semibold py-1 px-3 rounded-lg bg-white/[0.04] border border-white/10 text-slate-300 transition-all hover:border-accent-orange hover:text-accent-orange"
+                                    className="font-mono text-[0.72rem] font-semibold py-1 px-3 rounded-lg bg-white/[0.04] border border-[#881337]/40 text-slate-200 transition-all hover:border-accent-orange hover:text-white"
                                   >
                                     {t}
                                   </span>
@@ -410,7 +411,7 @@ except KeyboardInterrupt:
                                 href={proj.githubUrl || 'https://github.com/mrdeb3006-netizen'}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-white/[0.05] border border-white/15 text-slate-200 font-mono text-[0.8rem] font-semibold hover:border-accent-orange hover:text-accent-orange transition-all cursor-pointer shadow-sm"
+                                className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-white/[0.05] border border-white/15 text-white font-mono text-[0.8rem] font-semibold hover:border-accent-orange hover:text-accent-orange transition-all cursor-pointer shadow-sm"
                               >
                                 <Github size={15} />
                                 <span>SOURCE CODE</span>
@@ -421,10 +422,10 @@ except KeyboardInterrupt:
                                 href={proj.vscodeUrl || 'https://github.dev/mrdeb3006-netizen'}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 py-2.5 px-3.5 rounded-xl bg-blue-500/10 border border-blue-500/25 text-blue-300 font-mono text-[0.78rem] hover:bg-blue-500/20 hover:border-blue-400 hover:text-white transition-all cursor-pointer"
+                                className="inline-flex items-center gap-1.5 py-2.5 px-3.5 rounded-xl bg-[#881337]/20 border border-[#9f1239]/40 text-[#fecdd3] font-mono text-[0.78rem] hover:bg-[#881337]/40 hover:border-accent-orange hover:text-white transition-all cursor-pointer"
                                 title="Open in VS Code Web"
                               >
-                                <Code size={14} className="text-blue-400" />
+                                <Code size={14} className="text-accent-orange" />
                                 <span>VS CODE</span>
                               </a>
                             </div>
@@ -437,10 +438,10 @@ except KeyboardInterrupt:
                           className="w-full h-full min-h-0 flex items-center justify-center cursor-pointer group/card"
                           title="Click to view detailed case study"
                         >
-                          <div className="w-full h-full max-h-[360px] md:max-h-[400px] lg:max-h-[440px] bg-[#0c0d16] border border-white/10 rounded-2xl overflow-hidden flex flex-col shadow-[0_20px_45px_rgba(0,0,0,0.7)] transition-all duration-300 group-hover/card:border-accent-orange/50 group-hover/card:shadow-[0_20px_50px_rgba(249,115,22,0.2)]">
+                          <div className="w-full h-full max-h-[360px] md:max-h-[400px] lg:max-h-[440px] bg-[#090306] border border-[#881337]/35 rounded-2xl overflow-hidden flex flex-col shadow-[0_20px_45px_rgba(0,0,0,0.8)] transition-all duration-300 group-hover/card:border-accent-orange/60">
                             
                             {/* Terminal Window Header */}
-                            <div className="h-[38px] bg-[#141624] border-b border-white/[0.08] flex items-center px-4 gap-2 shrink-0">
+                            <div className="h-[38px] bg-[#18070d] border-b border-[#881337]/40 flex items-center px-4 gap-2 shrink-0">
                               <div className="flex items-center gap-1.5">
                                 <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                                 <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
@@ -448,33 +449,33 @@ except KeyboardInterrupt:
                               </div>
                               <div className="flex items-center gap-2 ml-3">
                                 <FileCode2 size={14} className="text-accent-orange" />
-                                <span className="font-mono text-[0.75rem] font-bold text-slate-300">
+                                <span className="font-mono text-[0.75rem] font-bold text-white">
                                   {proj.fileName || 'source.py'}
                                 </span>
                               </div>
-                              <span className="ml-auto font-mono text-[0.68rem] text-accent-orange bg-accent-orange/10 px-2 py-0.5 rounded border border-accent-orange/30">
+                              <span className="ml-auto font-mono text-[0.68rem] text-white bg-[#881337]/40 px-2 py-0.5 rounded border border-[#9f1239]/50">
                                 CASE STUDY PREVIEW
                               </span>
                             </div>
 
                             {/* Clean Syntax Highlighted Code Window */}
-                            <div className="flex-1 p-5 overflow-hidden relative bg-[#090a12] font-mono text-[0.82rem] leading-[1.65] text-slate-300">
+                            <div className="flex-1 p-5 overflow-hidden relative bg-[#090306] font-mono text-[0.82rem] leading-[1.65] text-slate-200">
                               <pre className="overflow-hidden">
                                 <code>
                                   {proj.sourceCode ? (
                                     proj.sourceCode.split('\n').slice(0, 14).map((line, lIdx) => (
                                       <div key={lIdx} className="flex gap-4">
-                                        <span className="text-white/20 select-none w-5 text-right shrink-0">
+                                        <span className="text-white/25 select-none w-5 text-right shrink-0">
                                           {lIdx + 1}
                                         </span>
                                         <span className={
                                           line.startsWith('#') || line.startsWith("'''") || line.startsWith('"""')
-                                            ? 'text-emerald-400/80 italic'
+                                            ? 'text-slate-400 italic'
                                             : line.includes('import ') || line.includes('def ') || line.includes('if ') || line.includes('elif ') || line.includes('else:')
                                             ? 'text-accent-orange font-bold'
                                             : line.includes('print(') || line.includes('input(')
-                                            ? 'text-sky-300'
-                                            : 'text-slate-300'
+                                            ? 'text-[#fecdd3]'
+                                            : 'text-white'
                                         }>
                                           {line}
                                         </span>
@@ -486,11 +487,11 @@ except KeyboardInterrupt:
                                 </code>
                               </pre>
 
-                              {/* Subtle Bottom Gradient Shade */}
-                              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#090a12] via-[#090a12]/80 to-transparent flex items-end justify-center pb-3">
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/40 text-accent-orange text-[0.72rem] font-mono font-bold backdrop-blur-sm transition-transform duration-300 group-hover/card:scale-105">
+                              {/* Subtle Bottom Shade */}
+                              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#090306] via-[#090306]/85 to-transparent flex items-end justify-center pb-3">
+                                <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#881337]/50 border border-[#9f1239]/60 text-white text-[0.72rem] font-mono font-bold backdrop-blur-sm transition-transform duration-300 group-hover/card:scale-105 shadow-sm">
                                   <span>READ FULL CASE STUDY</span>
-                                  <ArrowRight size={12} />
+                                  <ArrowRight size={12} className="text-accent-orange" />
                                 </div>
                               </div>
                             </div>
@@ -559,10 +560,11 @@ except KeyboardInterrupt:
               <article
                 key={proj.id}
                 id={`project-${proj.id}`}
-                className="specular-card backdrop-blur-[16px] border border-white/[0.09] rounded-2xl p-6 flex flex-col gap-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
+                className="specular-card backdrop-blur-[16px] border border-[#881337]/35 bg-[#0e0609]/90 rounded-2xl p-6 flex flex-col gap-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[0.7rem] font-bold px-2.5 py-0.5 rounded-full bg-accent-orange/15 text-accent-orange border border-accent-orange/30">
+                  <span className="font-mono text-[0.7rem] font-bold px-2.5 py-0.5 rounded-full bg-[#881337]/30 text-white border border-[#9f1239]/50 inline-flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent-orange" />
                     {proj.category || 'PYTHON'}
                   </span>
                   <div className="font-display text-3xl font-black text-white/20 [-webkit-text-stroke:1px_rgba(249,115,22,0.4)]">
@@ -575,11 +577,11 @@ except KeyboardInterrupt:
                 </h3>
 
                 {proj.tagline && (
-                  <p className="text-[0.84rem] text-accent-orange font-mono">
+                  <p className="text-[0.84rem] text-accent-orange font-semibold">
                     {proj.tagline}
                   </p>
                 )}
-                <p className="text-[0.92rem] text-text-secondary leading-relaxed">
+                <p className="text-[0.92rem] text-slate-200 leading-relaxed">
                   {proj.description}
                 </p>
 
@@ -587,7 +589,7 @@ except KeyboardInterrupt:
                   {proj.tech.map((t, pIdx) => (
                     <span
                       key={pIdx}
-                      className="font-mono text-[0.7rem] font-semibold py-1 px-2.5 rounded bg-white/[0.04] border border-white/10 text-slate-300"
+                      className="font-mono text-[0.7rem] font-semibold py-1 px-2.5 rounded bg-white/[0.04] border border-[#881337]/40 text-slate-200"
                     >
                       {t}
                     </span>
@@ -596,17 +598,17 @@ except KeyboardInterrupt:
 
                 <div
                   onClick={() => onOpenProjectModal(proj.id)}
-                  className="w-full bg-[#0c0d16] border border-white/10 rounded-xl overflow-hidden flex flex-col my-1 shadow-md cursor-pointer"
+                  className="w-full bg-[#090306] border border-[#881337]/35 rounded-xl overflow-hidden flex flex-col my-1 shadow-md cursor-pointer"
                 >
-                  <div className="h-[32px] bg-[#141624] border-b border-white/[0.08] flex items-center px-3 gap-2">
+                  <div className="h-[32px] bg-[#18070d] border-b border-[#881337]/40 flex items-center px-3 gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#ff5f56]" />
                     <span className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
                     <span className="w-2 h-2 rounded-full bg-[#27c93f]" />
-                    <span className="ml-2 font-mono text-[0.7rem] text-slate-300 font-bold">
+                    <span className="ml-2 font-mono text-[0.7rem] text-white font-bold">
                       {proj.fileName}
                     </span>
                   </div>
-                  <div className="p-3.5 font-mono text-[0.75rem] text-slate-400 bg-[#090a12] line-clamp-6">
+                  <div className="p-3.5 font-mono text-[0.75rem] text-slate-200 bg-[#090306] line-clamp-6">
                     <pre><code>{proj.sourceCode?.split('\n').slice(0, 7).join('\n')}</code></pre>
                   </div>
                 </div>
@@ -625,7 +627,7 @@ except KeyboardInterrupt:
                     href={proj.githubUrl || 'https://github.com/mrdeb3006-netizen'}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-3 px-4 rounded-xl bg-white/[0.05] border border-white/15 text-slate-200 font-mono text-[0.82rem] font-semibold flex items-center justify-center gap-2 hover:border-accent-orange hover:text-accent-orange"
+                    className="py-3 px-4 rounded-xl bg-white/[0.05] border border-white/15 text-white font-mono text-[0.82rem] font-semibold flex items-center justify-center gap-2 hover:border-accent-orange hover:text-accent-orange"
                   >
                     <Github size={15} />
                     <span>Source Code</span>
