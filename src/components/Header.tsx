@@ -86,13 +86,13 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
             ))}
           </ul>
 
-          {/* Top-Right Action Button: Let's talk → */}
+          {/* Top-Right Action Button: Let's connect → */}
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 py-2 px-5 rounded-lg bg-accent-orange text-bg-dark font-display font-extrabold text-[0.84rem] tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] transition-all duration-300 cursor-pointer shadow-md"
+            className="inline-flex items-center gap-1.5 py-1.5 px-3.5 rounded-md bg-accent-orange text-bg-dark font-display font-extrabold text-[0.75rem] tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_16px_rgba(249,115,22,0.4)] transition-all duration-300 cursor-pointer shadow-sm"
           >
-            <span>Let's talk</span>
-            <span className="text-base font-black">→</span>
+            <span>Let's connect</span>
+            <span className="text-sm font-bold">→</span>
           </a>
         </nav>
 
@@ -130,9 +130,9 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
             <a
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="inline-flex items-center gap-2 py-3 px-8 rounded-xl bg-accent-orange text-bg-dark font-display font-extrabold text-[1rem] tracking-wider uppercase shadow-lg"
+              className="inline-flex items-center gap-2 py-2.5 px-6 rounded-lg bg-accent-orange text-bg-dark font-display font-extrabold text-[0.88rem] tracking-wider uppercase shadow-md"
             >
-              <span>Let's talk</span>
+              <span>Let's connect</span>
               <span>→</span>
             </a>
           </li>
