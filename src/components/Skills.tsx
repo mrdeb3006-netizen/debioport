@@ -11,6 +11,8 @@ import {
   Crown,
   Users,
   HeartHandshake,
+  Database,
+  BookOpen,
   RotateCcw,
   Sparkles,
 } from 'lucide-react';
@@ -23,7 +25,7 @@ interface SkillsProps {
 export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) => {
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
 
-  // Exact 11 skills requested by user with designated Lucide icons and floating physics rhythms
+  // Exact 13 skills requested by user with designated Lucide icons and floating physics rhythms
   const skillsList = [
     { label: 'Python', filterKey: 'python', icon: Code2, floatClass: 'animate-float-slow', delay: '0s' },
     { label: 'Java', filterKey: 'java', icon: Coffee, floatClass: 'animate-float-med', delay: '0.4s' },
@@ -31,11 +33,13 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
     { label: 'Problem Solving', filterKey: 'problem solving', icon: Brain, floatClass: 'animate-float-slow', delay: '0.2s' },
     { label: 'Git', filterKey: 'git', icon: GitBranch, floatClass: 'animate-float-med', delay: '0.6s' },
     { label: 'GitHub', filterKey: 'github', icon: Github, floatClass: 'animate-float-fast', delay: '1s' },
-    { label: 'Canva', filterKey: 'canva', icon: Palette, floatClass: 'animate-float-slow', delay: '0.5s' },
-    { label: 'Photography', filterKey: 'photography', icon: Camera, floatClass: 'animate-float-med', delay: '0.9s' },
-    { label: 'Leadership', filterKey: 'leadership', icon: Crown, floatClass: 'animate-float-fast', delay: '0.3s' },
-    { label: 'Team Management', filterKey: 'team management', icon: Users, floatClass: 'animate-float-slow', delay: '0.7s' },
-    { label: 'Good Cooperator', filterKey: 'cooperator', icon: HeartHandshake, floatClass: 'animate-float-med', delay: '1.1s' },
+    { label: 'Research & Data', filterKey: 'research & data', icon: Database, floatClass: 'animate-float-slow', delay: '0.3s' },
+    { label: 'Canva', filterKey: 'canva', icon: Palette, floatClass: 'animate-float-med', delay: '0.5s' },
+    { label: 'Photography', filterKey: 'photography', icon: Camera, floatClass: 'animate-float-fast', delay: '0.9s' },
+    { label: 'Philosophy', filterKey: 'philosophy', icon: BookOpen, floatClass: 'animate-float-slow', delay: '0.7s' },
+    { label: 'Leadership', filterKey: 'leadership', icon: Crown, floatClass: 'animate-float-med', delay: '0.3s' },
+    { label: 'Team Management', filterKey: 'team management', icon: Users, floatClass: 'animate-float-fast', delay: '0.7s' },
+    { label: 'Good Cooperator', filterKey: 'cooperator', icon: HeartHandshake, floatClass: 'animate-float-slow', delay: '1.1s' },
   ];
 
   const handleTagClick = (filterKey: string) => {
@@ -79,7 +83,7 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
 
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-[0.8rem] font-mono text-text-secondary self-start md:self-auto">
             <Sparkles className="w-3.5 h-3.5 text-accent-orange animate-pulse" />
-            <span>11 CORE CAPABILITIES • INTERACTIVE FILTER</span>
+            <span>13 CORE CAPABILITIES • INTERACTIVE FILTER</span>
           </div>
         </div>
 
