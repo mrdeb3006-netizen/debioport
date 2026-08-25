@@ -489,3 +489,29 @@ body {
   margin-top: -6px;
 }
 
+/* Skills Organic Floating Keyframes */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes floatMed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-11px); }
+}
+
+@keyframes floatFast {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-9px); }
+}
+
+.animate-float-slow {
+  animation: floatSlow 5.2s ease-in-out infinite;
+}
+.animate-float-med {
+  animation: floatMed 4.4s ease-in-out infinite;
+}
+.animate-float-fast {
+  animation: floatFast 3.8s ease-in-out infinite;
+}
+

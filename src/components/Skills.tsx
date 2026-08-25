@@ -1,4 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {
+  Code2,
+  Coffee,
+  Cpu,
+  Brain,
+  GitBranch,
+  Github,
+  Palette,
+  Camera,
+  Crown,
+  Users,
+  HeartHandshake,
+  RotateCcw,
+  Sparkles,
+} from 'lucide-react';
 
 interface SkillsProps {
   activeFilter: string | null;
@@ -6,18 +21,21 @@ interface SkillsProps {
 }
 
 export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) => {
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+
+  // Exact 11 skills requested by user with designated Lucide icons and floating physics rhythms
   const skillsList = [
-    { label: 'Python', filterKey: 'python' },
-    { label: 'Java', filterKey: 'java' },
-    { label: 'DSA', filterKey: 'dsa' },
-    { label: 'Problem Solving', filterKey: 'problem solving' },
-    { label: 'Git', filterKey: 'git' },
-    { label: 'GitHub', filterKey: 'github' },
-    { label: 'Canva', filterKey: 'canva' },
-    { label: 'Photography', filterKey: 'photography' },
-    { label: 'Leadership', filterKey: 'leadership' },
-    { label: 'Team Management', filterKey: 'team management' },
-    { label: 'Good Cooperator', filterKey: 'cooperator' },
+    { label: 'Python', filterKey: 'python', icon: Code2, floatClass: 'animate-float-slow', delay: '0s' },
+    { label: 'Java', filterKey: 'java', icon: Coffee, floatClass: 'animate-float-med', delay: '0.4s' },
+    { label: 'DSA', filterKey: 'dsa', icon: Cpu, floatClass: 'animate-float-fast', delay: '0.8s' },
+    { label: 'Problem Solving', filterKey: 'problem solving', icon: Brain, floatClass: 'animate-float-slow', delay: '0.2s' },
+    { label: 'Git', filterKey: 'git', icon: GitBranch, floatClass: 'animate-float-med', delay: '0.6s' },
+    { label: 'GitHub', filterKey: 'github', icon: Github, floatClass: 'animate-float-fast', delay: '1s' },
+    { label: 'Canva', filterKey: 'canva', icon: Palette, floatClass: 'animate-float-slow', delay: '0.5s' },
+    { label: 'Photography', filterKey: 'photography', icon: Camera, floatClass: 'animate-float-med', delay: '0.9s' },
+    { label: 'Leadership', filterKey: 'leadership', icon: Crown, floatClass: 'animate-float-fast', delay: '0.3s' },
+    { label: 'Team Management', filterKey: 'team management', icon: Users, floatClass: 'animate-float-slow', delay: '0.7s' },
+    { label: 'Good Cooperator', filterKey: 'cooperator', icon: HeartHandshake, floatClass: 'animate-float-med', delay: '1.1s' },
   ];
 
   const handleTagClick = (filterKey: string) => {
@@ -28,40 +46,132 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
     }
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos(null);
+  };
+
+  const activeSkillObj = skillsList.find((s) => s.filterKey === activeFilter);
+
   return (
-    <section className="pt-6 md:pt-8 pb-20 md:pb-24 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="skills">
-      <div className="max-w-[1200px] mx-auto">
+    <section className="pt-6 md:pt-8 pb-20 md:pb-24 px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden" id="skills">
+      <div className="max-w-[1280px] mx-auto">
         
         {/* Section Header */}
-        <div className="mb-10 text-center md:text-left">
-          <div className="font-mono text-[0.82rem] tracking-[0.2em] text-accent-orange font-semibold mb-2 inline-block uppercase">
-            // 04. /SKILLS
+        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <div className="font-mono text-[0.82rem] tracking-[0.2em] text-accent-orange font-semibold mb-2 inline-flex items-center gap-2 uppercase">
+              <span>// 04. /SKILLS</span>
+              <span className="text-text-muted">•</span>
+              <span className="text-text-secondary text-[0.74rem]">INTERACTIVE CAPABILITY MATRIX</span>
+            </div>
+            <h2 className="font-display text-[clamp(2.2rem,4vw,3.4rem)] font-black text-white leading-[1.15] mb-2 uppercase tracking-[0.02em]">
+              SKILLS<span className="text-accent-orange">.</span>
+            </h2>
           </div>
-          <h2 className="font-display text-[clamp(2.2rem,4vw,3.4rem)] font-black text-white leading-[1.15] mb-2 uppercase tracking-[0.02em]">
-            SKILLS<span className="text-accent-orange">.</span>
-          </h2>
+
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-[0.8rem] font-mono text-text-secondary self-start md:self-auto">
+            <Sparkles className="w-3.5 h-3.5 text-accent-orange animate-pulse" />
+            <span>11 CORE CAPABILITIES • INTERACTIVE FILTER</span>
+          </div>
         </div>
 
-        {/* Floating Organic Pill Badge Cloud */}
-        <div className="flex flex-wrap items-center justify-center gap-3.5 md:gap-4 max-w-[960px] mx-auto py-4">
-          {skillsList.map((skill) => {
-            const isActive = activeFilter === skill.filterKey;
+        {/* Interactive Floating Skills Constellation Canvas */}
+        <div
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className="relative rounded-3xl p-6 md:p-12 border border-white/[0.08] bg-[#0c0d16]/70 backdrop-blur-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+        >
+          {/* Subtle Ambient Grid Watermark */}
+          <div className="absolute inset-0 bg-[radial-gradient(rgba(249,115,22,0.06)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-40" />
 
-            return (
+          {/* Interactive Proximity Spotlight */}
+          {mousePos && (
+            <div
+              className="absolute pointer-events-none transition-opacity duration-300 w-[420px] h-[420px] rounded-full blur-3xl opacity-35 bg-gradient-to-r from-accent-orange/30 via-amber-500/20 to-transparent transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                left: `${mousePos.x}px`,
+                top: `${mousePos.y}px`,
+              }}
+            />
+          )}
+
+          {/* Floating Pill Cloud */}
+          <div className="relative z-10 flex flex-wrap items-center justify-center gap-3.5 md:gap-5 max-w-[1000px] mx-auto py-4 md:py-8">
+            {skillsList.map((skill) => {
+              const isActive = activeFilter === skill.filterKey;
+              const IconComponent = skill.icon;
+
+              return (
+                <div
+                  key={skill.label}
+                  className={`${skill.floatClass}`}
+                  style={{ animationDelay: skill.delay }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => handleTagClick(skill.filterKey)}
+                    className={`group relative flex items-center gap-3 px-6 md:px-8 py-3.5 md:py-4 rounded-full font-main text-[0.95rem] md:text-[1.05rem] font-bold tracking-wide transition-all duration-300 cursor-pointer select-none border backdrop-blur-md shadow-md ${
+                      isActive
+                        ? 'bg-gradient-to-r from-accent-orange via-amber-500 to-orange-500 text-black border-accent-orange shadow-[0_0_35px_rgba(249,115,22,0.7)] scale-105 ring-2 ring-accent-orange/80 -translate-y-1'
+                        : 'bg-[#10121f]/90 border-white/[0.12] text-slate-200 hover:border-accent-orange/70 hover:text-white hover:bg-[#151728] hover:shadow-[0_0_24px_rgba(249,115,22,0.3)] hover:-translate-y-1.5 hover:scale-[1.04]'
+                    }`}
+                  >
+                    {/* Icon Glyph with Glow */}
+                    <span
+                      className={`p-1 rounded-md transition-colors duration-300 ${
+                        isActive
+                          ? 'bg-black/15 text-black'
+                          : 'bg-white/[0.06] text-accent-orange group-hover:bg-accent-orange/20 group-hover:text-amber-300'
+                      }`}
+                    >
+                      <IconComponent className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:rotate-6" />
+                    </span>
+
+                    {/* Skill Label */}
+                    <span className="relative">
+                      {skill.label}
+                    </span>
+
+                    {/* Active Check Pulse Dot */}
+                    {isActive && (
+                      <span className="w-2 h-2 rounded-full bg-black animate-ping ml-0.5" />
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Active Filter HUD Feedback Bar */}
+          {activeSkillObj && (
+            <div className="relative z-10 mt-6 pt-5 border-t border-white/[0.08] flex items-center justify-between flex-wrap gap-3 animate-fade-in">
+              <div className="flex items-center gap-2.5 text-[0.88rem] font-mono text-text-secondary">
+                <span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse" />
+                <span>FILTER ACTIVE:</span>
+                <span className="text-white font-bold bg-accent-orange/20 border border-accent-orange/30 px-2.5 py-0.5 rounded-md">
+                  {activeSkillObj.label}
+                </span>
+                <span className="text-text-muted hidden sm:inline">• Projects matching this tag are highlighted below</span>
+              </div>
+
               <button
-                key={skill.label}
                 type="button"
-                onClick={() => handleTagClick(skill.filterKey)}
-                className={`px-6 md:px-8 py-3 md:py-3.5 rounded-full font-main text-[0.95rem] md:text-[1.05rem] font-bold tracking-wide transition-all duration-300 cursor-pointer select-none shadow-md ${
-                  isActive
-                    ? 'bg-accent-orange text-black font-extrabold shadow-[0_0_25px_rgba(249,115,22,0.7)] scale-105 ring-2 ring-accent-orange/80 -translate-y-1'
-                    : 'bg-[#10121d] border border-white/15 text-white hover:border-accent-orange/60 hover:text-accent-orange hover:shadow-[0_0_20px_rgba(249,115,22,0.25)] hover:-translate-y-1 hover:scale-[1.03]'
-                }`}
+                onClick={() => onSelectFilter(null)}
+                className="inline-flex items-center gap-1.5 text-[0.82rem] font-mono text-accent-orange hover:text-white transition-colors duration-200 cursor-pointer bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3 py-1.5 rounded-lg"
               >
-                {skill.label}
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>RESET FILTER</span>
               </button>
-            );
-          })}
+            </div>
+          )}
         </div>
 
       </div>
