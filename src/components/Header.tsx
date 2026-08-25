@@ -57,22 +57,24 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
       >
         <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-2 sm:gap-4 md:gap-6">
           
-          {/* Brand Logo Lockup (Compact for Mobile) */}
+          {/* Brand Logo Lockup */}
           <a
             href="#home"
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('home');
             }}
-            className="flex items-center gap-1.5 sm:gap-2.5 md:gap-3 no-underline text-white group shrink-0 min-w-0"
+            className="flex items-center gap-2 sm:gap-2.5 md:gap-3 no-underline text-white group shrink-0 min-w-0"
             aria-label="Debendranath Bera Portfolio Home"
           >
-            <img
-              src="/db-logo.jpg"
-              alt="DB Monogram Logo"
-              className="h-7 sm:h-8 md:h-10 w-auto object-contain mix-blend-screen select-none transition-all duration-300 filter contrast-125 brightness-125 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)] group-hover:scale-105"
-            />
-            <span className="font-cinzel text-[0.72rem] sm:text-[0.84rem] md:text-[1.05rem] font-bold tracking-[0.06em] sm:tracking-[0.12em] text-white uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-accent-orange">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg bg-black border border-white/20 p-1 flex items-center justify-center shadow-sm shrink-0">
+              <img
+                src="/db-logo.jpg"
+                alt="DB Monogram Logo"
+                className="w-full h-full object-contain mix-blend-screen select-none filter contrast-125 brightness-125 drop-shadow-[0_0_8px_rgba(249,115,22,0.5)] group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <span className="font-cinzel text-[0.78rem] sm:text-[0.88rem] md:text-[1.05rem] font-bold tracking-[0.06em] sm:tracking-[0.10em] text-white uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-accent-orange">
               DEBENDRANATH <span className="text-accent-orange font-extrabold">BERA</span>
             </span>
           </a>
@@ -103,48 +105,48 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
               ))}
             </ul>
 
-            {/* Top-Right Action Button: Let's connect → */}
+            {/* Top-Right Action Button: CONNECT → */}
             <a
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('contact');
               }}
-              className="inline-flex items-center gap-1.5 py-1.5 px-3.5 rounded-md bg-accent-orange text-bg-dark font-display font-extrabold text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_16px_rgba(249,115,22,0.4)] transition-all duration-300 cursor-pointer shadow-sm ml-2 shrink-0"
+              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-lg bg-accent-orange text-bg-dark font-display font-black text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_16px_rgba(249,115,22,0.4)] transition-all duration-300 cursor-pointer shadow-sm ml-2 shrink-0"
             >
-              <span>Let's connect</span>
+              <span>CONNECT</span>
               <span className="text-sm font-bold">→</span>
             </a>
           </nav>
 
-          {/* Mobile Right Controls: Let's Connect + Hamburger Button (< 1024px) */}
-          <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 ml-auto shrink-0">
+          {/* Mobile Right Controls: CONNECT + Hamburger Button (< 1024px) */}
+          <div className="flex lg:hidden items-center gap-2 sm:gap-2.5 ml-auto shrink-0">
             <a
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('contact');
               }}
-              className="inline-flex items-center gap-0.5 py-1 px-2 sm:px-2.5 rounded-md bg-accent-orange text-bg-dark font-display font-black text-[0.60rem] sm:text-[0.66rem] tracking-wide uppercase hover:bg-orange-600 active:scale-95 transition-all shadow-xs shrink-0"
+              className="inline-flex items-center gap-1 py-1.5 px-3 sm:px-3.5 rounded-lg bg-accent-orange text-bg-dark font-display font-black text-[0.68rem] sm:text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 active:scale-95 transition-all shadow-[0_0_12px_rgba(249,115,22,0.35)] shrink-0"
             >
-              <span>Connect</span>
-              <span className="text-[0.65rem] font-bold">→</span>
+              <span>CONNECT</span>
+              <span className="text-xs font-black">→</span>
             </a>
 
             <button
               type="button"
-              className={`mobile-hamburger-btn relative flex flex-col justify-center items-center gap-1 w-9 h-9 sm:w-10 sm:h-10 rounded-lg border active:scale-95 transition-all duration-200 cursor-pointer z-[99999] shrink-0 ${
+              className={`mobile-hamburger-btn relative flex flex-col justify-center items-center gap-1.5 w-10 h-10 rounded-xl border active:scale-95 transition-all duration-200 cursor-pointer z-[99999] shrink-0 ${
                 mobileMenuOpen
                   ? 'bg-accent-orange/20 border-accent-orange shadow-[0_0_12px_rgba(249,115,22,0.4)]'
-                  : 'bg-[#141419] border-accent-orange/40 hover:border-accent-orange hover:bg-[#1c1c24] shadow-[0_0_8px_rgba(249,115,22,0.2)]'
+                  : 'bg-[#141419] border-white/20 hover:border-accent-orange hover:bg-[#1c1c24] shadow-[0_0_10px_rgba(0,0,0,0.5)]'
               }`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={mobileMenuOpen}
             >
-              <span className={`w-4 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? 'rotate-45 translate-y-[3.5px]' : ''}`} />
-              <span className={`w-4 h-[2px] bg-white rounded-full transition-all duration-200 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
-              <span className={`w-4 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? '-rotate-45 -translate-y-[3.5px]' : ''}`} />
+              <span className={`w-5 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
+              <span className={`w-5 h-[2px] bg-white rounded-full transition-all duration-200 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+              <span className={`w-5 h-[2px] bg-accent-orange rounded-full transition-all duration-200 ${mobileMenuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
             </button>
           </div>
 

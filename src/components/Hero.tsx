@@ -121,7 +121,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         <div className="absolute inset-0 bg-radial from-transparent via-transparent to-bg-dark/70 z-[2]" />
       </div>
 
-      <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-8 sm:py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
+      <div className="max-w-[1600px] w-full mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
         {/* Left Content Column */}
         <div className="w-full max-w-[800px] flex flex-col justify-center">
 
@@ -129,7 +129,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
           <div className="mb-4 sm:mb-6 -mt-2 sm:-mt-3 select-none overflow-visible w-full">
             {/* Line 1: DEBENDRANATH */}
             <div className="overflow-visible pb-0.5 sm:pb-1 w-full">
-              <h1 className="font-display text-[clamp(1.05rem,6.2vw,4.6rem)] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+              <h1 className="font-display text-[1.85rem] xs:text-[2.1rem] sm:text-[2.8rem] md:text-[3.6rem] lg:text-[4.5rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.08] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
                 {/* Solid White Letters: D E B E N D R A */}
                 {debendranathSolid.map((letter, idx) => (
                   <span
@@ -144,7 +144,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 {debendranathOutline.map((letter, idx) => (
                   <span
                     key={`dn-outline-${idx}`}
-                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.2px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
                     style={{ animationDelay: `${0.2 + (debendranathSolid.length + idx) * 0.06}s` }}
                   >
                     {letter}
@@ -155,7 +155,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
             {/* Line 2: BERA */}
             <div className="overflow-visible pt-0.5 w-full">
-              <h2 className="font-display text-[clamp(1.05rem,6.2vw,4.6rem)] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+              <h2 className="font-display text-[1.85rem] xs:text-[2.1rem] sm:text-[2.8rem] md:text-[3.6rem] lg:text-[4.5rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.08] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
                 {/* Solid White Letters: B E */}
                 {beraSolid.map((letter, idx) => (
                   <span
@@ -170,7 +170,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 {beraOutline.map((letter, idx) => (
                   <span
                     key={`b-outline-${idx}`}
-                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.2px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
                     style={{ animationDelay: `${0.95 + (beraSolid.length + idx) * 0.08}s` }}
                   >
                     {letter}
@@ -181,60 +181,59 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
           </div>
 
           {/* Tagline Bar: — DEVELOPER • PROBLEM SOLVER • DREAMER */}
-          <div className="flex items-center gap-3.5 mb-6 animate-item" style={{ ['--delay' as any]: '1.35s' }}>
-            <div className="w-8 h-[2.5px] bg-accent-orange rounded-full shadow-[0_0_10px_rgba(249,115,22,0.6)]" />
-            <div className="font-mono text-[clamp(0.75rem,0.95vw,0.88rem)] font-bold tracking-[0.18em] uppercase text-text-primary flex items-center gap-2.5 flex-wrap">
-              <span className="text-slate-200 tracking-[0.18em]">DEVELOPER</span>
-              <span className="text-text-muted text-[0.8rem]">•</span>
-              <span className="text-slate-200 tracking-[0.18em]">PROBLEM SOLVER</span>
-              <span className="text-text-muted text-[0.8rem]">•</span>
+          <div className="flex items-center gap-3 mb-5 animate-item" style={{ ['--delay' as any]: '1.35s' }}>
+            <div className="w-7 h-[2.5px] bg-accent-orange rounded-full shadow-[0_0_10px_rgba(249,115,22,0.6)]" />
+            <div className="font-mono text-[0.72rem] sm:text-[0.84rem] md:text-[0.88rem] font-bold tracking-[0.14em] sm:tracking-[0.18em] uppercase text-text-primary flex items-center gap-2 flex-wrap">
+              <span className="text-slate-200">DEVELOPER</span>
+              <span className="text-text-muted text-[0.75rem]">•</span>
+              <span className="text-slate-200">PROBLEM SOLVER</span>
+              <span className="text-text-muted text-[0.75rem]">•</span>
               <span className="text-accent-orange font-extrabold drop-shadow-[0_0_10px_rgba(249,115,22,0.4)]">DREAMER</span>
             </div>
           </div>
 
           {/* Description Paragraph */}
-          <div className="mb-8 animate-item" style={{ ['--delay' as any]: '1.5s' }}>
-            <p className="text-[clamp(0.95rem,1.15vw,1.1rem)] leading-[1.75] text-[#a1a1aa] font-normal max-w-[560px] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-4">
-              Turning ideas into digital reality.<br className="hidden sm:inline" />
-              I build clean, efficient and impactful solutions for the web.
+          <div className="mb-6 animate-item" style={{ ['--delay' as any]: '1.5s' }}>
+            <p className="text-[0.90rem] sm:text-[1.05rem] leading-[1.65] text-[#d4d4d8] font-normal max-w-[560px] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-4">
+              Turning ideas into digital reality. I build clean, efficient and impactful solutions for the web.
             </p>
             
-            <div className="border-l-2 border-accent-orange/60 pl-3.5 py-1.5 max-w-[580px] bg-gradient-to-r from-accent-orange/[0.05] to-transparent rounded-r-lg">
-              <p className="text-[0.86rem] md:text-[0.9rem] text-slate-300 italic font-medium tracking-wide leading-relaxed">
+            <div className="border-l-2 border-white/35 pl-3.5 py-1 max-w-[580px]">
+              <p className="text-[0.82rem] sm:text-[0.88rem] text-slate-300 italic font-normal leading-[1.6]">
                 “Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth”
               </p>
             </div>
           </div>
 
-          {/* CTA Action Buttons */}
-          <div className="flex items-center gap-4 mb-10 flex-wrap animate-item" style={{ ['--delay' as any]: '1.65s' }}>
+          {/* CTA Action Buttons (Stacked Full-Width on Mobile, Row on Desktop) */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-7 w-full sm:w-auto animate-item" style={{ ['--delay' as any]: '1.65s' }}>
             <button
               type="button"
               onClick={onOpenCvModal}
-              className="btn-primary group"
+              className="w-full sm:w-auto justify-center py-3.5 px-7 rounded-xl bg-accent-orange text-bg-dark font-display font-black text-[0.84rem] sm:text-[0.90rem] tracking-wider uppercase flex items-center gap-2 shadow-[0_4px_20px_rgba(249,115,22,0.45)] hover:bg-orange-600 active:scale-98 transition-all cursor-pointer"
             >
               <span>DOWNLOAD CV</span>
-              <span className="text-base font-black ml-1 transition-transform duration-300 group-hover:translate-y-0.5">↓</span>
+              <span className="text-base font-black">↓</span>
             </button>
 
             <a
               href="#work"
-              className="btn-secondary group"
+              className="w-full sm:w-auto justify-center py-3.5 px-7 rounded-xl bg-[#141419]/90 border border-white/15 text-white font-display font-bold text-[0.84rem] sm:text-[0.90rem] tracking-wider uppercase flex items-center gap-2 hover:border-accent-orange/40 hover:bg-[#1c1c24] active:scale-98 transition-all shadow-sm cursor-pointer"
             >
               <span>VIEW WORK</span>
-              <span className="text-base font-black ml-1 transition-transform duration-300 group-hover:translate-x-1">→</span>
+              <span className="text-base font-bold">→</span>
             </a>
           </div>
 
           {/* Social Icons Bar */}
-          <div className="flex items-center gap-4 animate-item" style={{ ['--delay' as any]: '1.85s' }}>
-            <div className="w-[2px] h-6 bg-accent-orange rounded-full shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
-            <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.5 animate-item mb-2" style={{ ['--delay' as any]: '1.85s' }}>
+            <div className="w-[2px] h-6 bg-accent-orange rounded-full shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+            <div className="flex items-center gap-2.5">
               <a
                 href="https://github.com/mrdeb3006-netizen"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="GitHub Profile"
               >
                 <Github size={18} />
@@ -243,7 +242,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="LinkedIn Profile"
               >
                 <Linkedin size={18} />
@@ -252,14 +251,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="X (formerly Twitter) Profile"
               >
                 <XIcon size={16} />
               </a>
               <a
                 href="mailto:mrdeb3006@gmail.com"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="Email Debendra"
               >
                 <Mail size={18} />
