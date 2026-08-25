@@ -10,41 +10,46 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
   const categories: SkillCategory[] = [
     {
       number: '01',
-      title: 'PROGRAMMING',
+      title: 'PROGRAMMING & CORE',
       tags: [
-        { label: 'Java', filterKey: 'java' },
         { label: 'Python', filterKey: 'python' },
+        { label: 'Java', filterKey: 'java' },
+        { label: 'DSA', filterKey: 'dsa' },
+        { label: 'Problem Solving', filterKey: 'problem solving' },
+        { label: 'OOP', filterKey: 'oop' },
         { label: 'C', filterKey: 'c' },
       ],
     },
     {
       number: '02',
-      title: 'COMPUTER SCIENCE',
-      tags: [
-        { label: 'Data Structures', filterKey: 'data structures' },
-        { label: 'Algorithms', filterKey: 'algorithms' },
-        { label: 'OOP', filterKey: 'oop' },
-        { label: 'Problem Solving', filterKey: 'problem solving' },
-      ],
-    },
-    {
-      number: '03',
-      title: 'WEB',
+      title: 'WEB & DEV TOOLS',
       tags: [
         { label: 'HTML', filterKey: 'html' },
         { label: 'CSS', filterKey: 'css' },
         { label: 'JavaScript', filterKey: 'javascript' },
         { label: 'Git', filterKey: 'git' },
         { label: 'GitHub', filterKey: 'github' },
+        { label: 'VS Code', filterKey: 'vscode' },
+      ],
+    },
+    {
+      number: '03',
+      title: 'CREATIVE & MEDIA',
+      tags: [
+        { label: 'Canva', filterKey: 'canva' },
+        { label: 'Photography', filterKey: 'photography' },
+        { label: 'Figma', filterKey: 'figma' },
+        { label: 'AI Tools', filterKey: 'ai' },
       ],
     },
     {
       number: '04',
-      title: 'TOOLS',
+      title: 'LEADERSHIP & SOFT SKILLS',
       tags: [
-        { label: 'VS Code', filterKey: 'vscode' },
-        { label: 'Figma', filterKey: 'figma' },
-        { label: 'AI Tools', filterKey: 'ai' },
+        { label: 'Leadership', filterKey: 'leadership' },
+        { label: 'Team Management', filterKey: 'team management' },
+        { label: 'Good Cooperator', filterKey: 'cooperation' },
+        { label: 'Communication', filterKey: 'communication' },
       ],
     },
   ];
