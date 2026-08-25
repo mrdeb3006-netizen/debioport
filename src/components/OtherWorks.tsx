@@ -198,7 +198,7 @@ export const OtherWorks: React.FC = () => {
   return (
     <section
       id="other-works"
-      className="w-full relative py-20 md:py-28 bg-[#faf9f6] text-[#18181b] border-y-2 border-[#e7e5e4] transition-colors duration-500 overflow-hidden font-main"
+      className="w-full relative py-10 md:py-14 bg-[#faf9f6] text-[#18181b] border-y-2 border-[#e7e5e4] transition-colors duration-500 overflow-hidden font-main"
     >
       {/* Editorial Watermark Texture & Subtle Grid Lines */}
       <div className="absolute inset-0 bg-[radial-gradient(#d6d3d1_1px,transparent_1px)] [background-size:28px_28px] opacity-40 pointer-events-none" />
@@ -208,24 +208,24 @@ export const OtherWorks: React.FC = () => {
         {/* =========================================================================
             SECTION HEADER: Clean Editorial Styling
             ========================================================================= */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 mb-16 border-b-2 border-[#e7e5e4]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-10 border-b-2 border-[#e7e5e4]">
           <div className="max-w-[720px]">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fef3c7] border border-[#f59e0b]/40 text-[#92400e] font-mono text-[0.74rem] font-bold tracking-[0.2em] uppercase mb-4 shadow-xs">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fef3c7] border border-[#f59e0b]/40 text-[#92400e] font-mono text-[0.74rem] font-bold tracking-[0.2em] uppercase mb-3 shadow-xs">
               <Sparkles size={13} className="text-[#d97706]" />
               <span>// 05. /CREATIVE ODYSSEY</span>
             </div>
             
-            <h2 className="font-serifDisplay text-[clamp(2.4rem,4.2vw,3.8rem)] font-black text-[#18181b] tracking-tight leading-[1.08] mb-4">
+            <h2 className="font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08] mb-3">
               MY OTHER WORKS.
             </h2>
             
-            <p className="text-[1.02rem] md:text-[1.12rem] text-[#57534e] font-normal leading-relaxed">
+            <p className="text-[0.98rem] md:text-[1.06rem] text-[#57534e] font-normal leading-relaxed">
               Beyond code and algorithms lies the realm of observation and inquiry. A curated showcase of visual framing through the camera lens, alongside philosophical essays on growth, learning, and life.
             </p>
           </div>
 
           {/* Minimal Metric Tags */}
-          <div className="flex items-center gap-6 self-start md:self-end pt-2">
+          <div className="flex items-center gap-6 self-start md:self-end pt-1">
             <div className="border-l-2 border-[#d6d3d1] pl-4">
               <span className="block font-serifDisplay text-2xl font-black text-[#18181b]">06</span>
               <span className="font-mono text-[0.75rem] font-semibold text-[#78716c] uppercase tracking-wider">Visual Captures</span>
@@ -241,7 +241,7 @@ export const OtherWorks: React.FC = () => {
         {/* =========================================================================
             SUBSECTION 1: PHOTOGRAPHY & ART
             ========================================================================= */}
-        <div className="mb-24">
+        <div className="mb-14">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">

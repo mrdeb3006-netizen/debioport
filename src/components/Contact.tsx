@@ -31,13 +31,13 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
   };
 
   return (
-    <section className="py-32 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="contact">
+    <section className="pt-10 md:pt-14 pb-20 md:pb-24 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="contact">
       <div className="max-w-[1400px] mx-auto">
         
           {/* Section Header */}
-        <div className="mb-14">
+        <div className="mb-10">
           <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-cyan font-semibold mb-3 inline-block">
-            // 05. /CONTACT
+            // 06. /CONTACT
           </div>
           <h2 className="font-display text-[clamp(3.2rem,6.8vw,6.2rem)] font-black leading-[1.08] uppercase tracking-[0.01em] bg-hero-name bg-clip-text text-transparent filter drop-shadow-[0_0_20px_rgba(249,115,22,0.2)] mb-6">
             LET'S BUILD<br />SOMETHING GREAT.
