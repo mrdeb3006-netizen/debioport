@@ -6,17 +6,18 @@ interface SkillsProps {
 }
 
 export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) => {
-  // Only the exact 9 skills requested by the user, with alternating orange and dark pill styling
   const skillsList = [
-    { label: 'Python', filterKey: 'python', isPrimary: true },
-    { label: 'Java', filterKey: 'java', isPrimary: false },
-    { label: 'DSA', filterKey: 'dsa', isPrimary: false },
-    { label: 'Problem Solving', filterKey: 'problem solving', isPrimary: true },
-    { label: 'Canva', filterKey: 'canva', isPrimary: false },
-    { label: 'Photography', filterKey: 'photography', isPrimary: true },
-    { label: 'Leadership', filterKey: 'leadership', isPrimary: false },
-    { label: 'Team Management', filterKey: 'team management', isPrimary: false },
-    { label: 'Good Cooperator', filterKey: 'cooperator', isPrimary: true },
+    { label: 'Python', filterKey: 'python' },
+    { label: 'Java', filterKey: 'java' },
+    { label: 'DSA', filterKey: 'dsa' },
+    { label: 'Problem Solving', filterKey: 'problem solving' },
+    { label: 'Git', filterKey: 'git' },
+    { label: 'GitHub', filterKey: 'github' },
+    { label: 'Canva', filterKey: 'canva' },
+    { label: 'Photography', filterKey: 'photography' },
+    { label: 'Leadership', filterKey: 'leadership' },
+    { label: 'Team Management', filterKey: 'team management' },
+    { label: 'Good Cooperator', filterKey: 'cooperator' },
   ];
 
   const handleTagClick = (filterKey: string) => {
@@ -41,7 +42,7 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
           </h2>
         </div>
 
-        {/* Floating Organic Pill Badge Cloud (Matching Reference Image) */}
+        {/* Floating Organic Pill Badge Cloud */}
         <div className="flex flex-wrap items-center justify-center gap-3.5 md:gap-4 max-w-[960px] mx-auto py-4">
           {skillsList.map((skill) => {
             const isActive = activeFilter === skill.filterKey;
@@ -53,10 +54,8 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
                 onClick={() => handleTagClick(skill.filterKey)}
                 className={`px-6 md:px-8 py-3 md:py-3.5 rounded-full font-main text-[0.95rem] md:text-[1.05rem] font-bold tracking-wide transition-all duration-300 cursor-pointer select-none shadow-md ${
                   isActive
-                    ? 'scale-105 ring-2 ring-white bg-white text-black shadow-[0_0_25px_rgba(255,255,255,0.6)]'
-                    : skill.isPrimary
-                    ? 'bg-accent-orange text-black font-extrabold shadow-[0_0_20px_rgba(249,115,22,0.35)] hover:shadow-[0_0_30px_rgba(249,115,22,0.65)] hover:-translate-y-1 hover:scale-[1.03]'
-                    : 'bg-[#10121d] border border-white/15 text-white hover:border-accent-orange/60 hover:text-accent-orange hover:shadow-[0_0_20px_rgba(249,115,22,0.2)] hover:-translate-y-1 hover:scale-[1.03]'
+                    ? 'bg-accent-orange text-black font-extrabold shadow-[0_0_25px_rgba(249,115,22,0.7)] scale-105 ring-2 ring-accent-orange/80 -translate-y-1'
+                    : 'bg-[#10121d] border border-white/15 text-white hover:border-accent-orange/60 hover:text-accent-orange hover:shadow-[0_0_20px_rgba(249,115,22,0.25)] hover:-translate-y-1 hover:scale-[1.03]'
                 }`}
               >
                 {skill.label}
