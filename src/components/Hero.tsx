@@ -1,5 +1,6 @@
 import React from 'react';
 import { Github, Linkedin, Mail } from 'lucide-react';
+import { ThemeCustomizer } from './ThemeCustomizer';
 
 const XIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, className = "" }) => (
   <svg
@@ -226,45 +227,50 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             </a>
           </div>
 
-          {/* Social Icons Bar */}
-          <div className="flex items-center gap-5 animate-item" style={{ ['--delay' as any]: '1.85s' }}>
-            <div className="w-[2px] h-6 bg-accent-orange rounded-full shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
+          {/* Social Icons Bar & Inbuilt Theme Customizer Tool */}
+          <div className="flex items-center justify-between flex-wrap gap-4 mb-2 animate-item" style={{ ['--delay' as any]: '1.85s' }}>
             <div className="flex items-center gap-4">
-              <a
-                href="https://github.com/mrdeb3006-netizen"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
-                aria-label="GitHub Profile"
-              >
-                <Github size={18} />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
-                aria-label="LinkedIn Profile"
-              >
-                <Linkedin size={18} />
-              </a>
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
-                aria-label="X (formerly Twitter) Profile"
-              >
-                <XIcon size={16} />
-              </a>
-              <a
-                href="mailto:debendra@example.com"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
-                aria-label="Email Debendra"
-              >
-                <Mail size={18} />
-              </a>
+              <div className="w-[2px] h-6 bg-accent-orange rounded-full shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://github.com/mrdeb3006-netizen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                  aria-label="GitHub Profile"
+                >
+                  <Github size={18} />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                  aria-label="LinkedIn Profile"
+                >
+                  <Linkedin size={18} />
+                </a>
+                <a
+                  href="https://x.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                  aria-label="X (formerly Twitter) Profile"
+                >
+                  <XIcon size={16} />
+                </a>
+                <a
+                  href="mailto:debendra@example.com"
+                  className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                  aria-label="Email Debendra"
+                >
+                  <Mail size={18} />
+                </a>
+              </div>
             </div>
+
+            {/* Inbuilt Live Theme Studio Tool */}
+            <ThemeCustomizer />
           </div>
 
           {/* Interactive Cursor-Reactive Dot Matrix Grid */}
