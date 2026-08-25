@@ -13,6 +13,90 @@ const XIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, cla
   </svg>
 );
 
+const InteractiveDotMatrix: React.FC = () => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = React.useState<{ x: number; y: number } | null>(null);
+
+  const rows = 3;
+  const cols = 8;
+  const dots = Array.from({ length: rows * cols }, (_, i) => ({
+    id: i,
+    row: Math.floor(i / cols),
+    col: i % cols,
+  }));
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos(null);
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="mt-8 p-3 -ml-3 grid grid-cols-8 gap-3.5 w-max cursor-pointer rounded-xl select-none relative z-20 group/matrix"
+      title="Interactive dot matrix • Hover to distort"
+      aria-label="Interactive matrix dots"
+    >
+      {dots.map((dot) => {
+        // Approximate center of each dot relative to container
+        const dotX = dot.col * 20 + 8;
+        const dotY = dot.row * 20 + 8;
+
+        let scale = 1;
+        let isNear = false;
+        let transformOffset = { x: 0, y: 0 };
+        let glowIntensity = 0;
+
+        if (mousePos) {
+          const dist = Math.hypot(mousePos.x - dotX, mousePos.y - dotY);
+          const maxDist = 70;
+          if (dist < maxDist) {
+            const proximity = 1 - dist / maxDist;
+            const factor = Math.pow(proximity, 1.3);
+            scale = 1 + factor * 2.2;
+            isNear = true;
+            glowIntensity = factor;
+            transformOffset = {
+              x: (mousePos.x - dotX) * factor * 0.25,
+              y: (mousePos.y - dotY) * factor * 0.25,
+            };
+          }
+        }
+
+        return (
+          <div
+            key={dot.id}
+            style={{
+              transform: `translate(${transformOffset.x}px, ${transformOffset.y}px) scale(${scale})`,
+              boxShadow: isNear
+                ? `0 0 ${glowIntensity * 12}px rgba(249, 115, 22, ${glowIntensity * 0.95}), 0 0 4px #fff`
+                : 'none',
+              transition: mousePos
+                ? 'transform 0.08s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.12s, box-shadow 0.12s'
+                : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s, box-shadow 0.4s',
+            }}
+            className={`w-1.5 h-1.5 rounded-full ${
+              isNear
+                ? 'bg-accent-orange'
+                : 'bg-white/20'
+            }`}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
 interface HeroProps {
   onOpenCvModal: () => void;
 }
@@ -162,12 +246,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             </div>
           </div>
 
-          {/* Decorative Dot Matrix Grid (As shown in Reference Mockup) */}
-          <div className="mt-8 grid grid-cols-6 gap-2.5 w-max opacity-20 pointer-events-none select-none" aria-hidden="true">
-            {Array.from({ length: 18 }).map((_, i) => (
-              <div key={i} className="w-1 h-1 rounded-full bg-white" />
-            ))}
-          </div>
+          {/* Interactive Cursor-Reactive Dot Matrix Grid */}
+          <InteractiveDotMatrix />
 
         </div>
       </div>
