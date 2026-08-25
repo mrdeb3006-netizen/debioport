@@ -204,21 +204,21 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
       {/* DESKTOP & TABLET: CINEMATIC STICKY HORIZONTAL SLIDE SHOWCASE               */}
       {/* ========================================================================= */}
       {!isMobile ? (
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-6 px-8 md:px-12 lg:px-16 z-10">
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between pt-16 md:pt-14 pb-3 z-10">
           
           {/* Ambient Background Glows */}
           <div className="absolute -top-40 -left-40 w-96 h-96 bg-accent-cyan/[0.03] rounded-full blur-[140px] pointer-events-none" />
           <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-accent-purple/[0.03] rounded-full blur-[140px] pointer-events-none" />
 
           {/* Section Header */}
-          <div className="max-w-[1600px] w-full mx-auto flex items-end justify-between gap-6 shrink-0 pt-16 md:pt-12 pb-3 border-b border-white/[0.06] relative z-20">
+          <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex items-end justify-between gap-4 shrink-0 pb-2.5 border-b border-white/[0.06] relative z-20">
             <div>
               <div className="font-mono text-[0.82rem] tracking-[0.2em] text-accent-cyan font-semibold mb-1 uppercase flex items-center gap-2">
                 <span>// 02. /WORK</span>
                 <span className="text-text-muted">•</span>
                 <span className="text-text-secondary text-[0.74rem]">PROJECTS REPOSITORY</span>
               </div>
-              <h2 className="font-display text-[clamp(1.8rem,3vw,2.5rem)] font-black text-white uppercase tracking-[0.02em] leading-tight">
+              <h2 className="font-display text-[clamp(1.6rem,2.4vw,2.2rem)] font-black text-white uppercase tracking-[0.02em] leading-tight">
                 SELECTED<br className="sm:hidden" /> PROJECTS
               </h2>
             </div>
@@ -255,8 +255,8 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
             </div>
           </div>
 
-          {/* Horizontal Sliding Track (100vw per slide) */}
-          <div className="flex-1 w-full flex items-center overflow-hidden my-auto py-2 relative z-10">
+          {/* Horizontal Sliding Track (100vw per slide, full screen width) */}
+          <div className="flex-1 w-full min-h-0 flex items-center overflow-hidden relative z-10 py-1 my-auto">
             <div
               ref={trackRef}
               style={{
@@ -273,13 +273,13 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
 
                 // Subtle depth relative to active slide
                 const distance = idx - (scrollProgress * (projects.length - 1));
-                const slideScale = Math.max(0.94, 1 - Math.abs(distance) * 0.06);
+                const slideScale = Math.max(0.95, 1 - Math.abs(distance) * 0.05);
                 const slideOpacity = Math.max(0.4, 1 - Math.abs(distance) * 0.6);
 
                 return (
                   <div
                     key={proj.id}
-                    className="w-screen h-full shrink-0 flex items-center justify-center px-4 md:px-8 lg:px-12"
+                    className="w-screen h-full shrink-0 flex items-center justify-center px-4 sm:px-6 md:px-10 lg:px-12"
                   >
                     <article
                       id={`project-${proj.id}`}
@@ -287,115 +287,120 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
                         transform: `scale(${slideScale})`,
                         opacity: slideOpacity,
                       }}
-                      className={`w-full max-w-[1520px] h-[72vh] min-h-[500px] max-h-[660px] specular-card backdrop-blur-[20px] border border-white/[0.09] rounded-3xl p-6 md:p-10 lg:p-12 transition-all duration-300 relative overflow-hidden flex flex-col justify-between shadow-[0_25px_60px_rgba(0,0,0,0.85)] ${
+                      className={`w-full max-w-[1400px] h-[calc(100vh-190px)] min-h-[440px] max-h-[580px] specular-card backdrop-blur-[20px] border border-white/[0.09] rounded-2xl md:rounded-3xl p-5 md:p-7 lg:p-8 transition-all duration-300 relative overflow-hidden flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.85)] ${
                         isMatch
                           ? 'border-accent-cyan/60 shadow-[0_0_30px_rgba(56,189,248,0.25)]'
                           : 'hover:border-accent-cyan/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_25px_rgba(56,189,248,0.12)]'
                       }`}
                     >
-                      <div className="grid grid-cols-1 lg:grid-cols-[38%_62%] gap-8 lg:gap-12 items-center h-full">
+                      <div className="grid grid-cols-1 lg:grid-cols-[38%_62%] gap-6 lg:gap-8 xl:gap-10 items-center h-full min-h-0">
                         
                         {/* ========================================= */}
-                        {/* LEFT COLUMN: 35-40% Width - Information   */}
+                        {/* LEFT COLUMN: 38% Width - Information      */}
                         {/* ========================================= */}
-                        <div className="flex flex-col justify-center h-full py-1">
+                        <div className="flex flex-col justify-between h-full min-h-0 py-1">
                           
-                          {/* Top Tagline & Oversized Subtle Project Number */}
-                          <div className="flex items-center justify-between mb-1">
-                            <div className="font-display text-[clamp(2.5rem,4.5vw,4.2rem)] font-black text-white/15 [-webkit-text-stroke:1px_rgba(56,189,248,0.35)] leading-none">
-                              {proj.number}
+                          <div>
+                            {/* Top Tagline & Oversized Subtle Project Number */}
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="font-display text-[clamp(2rem,3.4vw,2.8rem)] font-black text-white/15 [-webkit-text-stroke:1px_rgba(56,189,248,0.35)] leading-none">
+                                {proj.number}
+                              </div>
+                              <span className="font-mono text-[0.7rem] font-bold px-2.5 py-0.5 rounded-full bg-accent-purple/15 text-accent-purple border border-accent-purple/30">
+                                PYTHON
+                              </span>
                             </div>
-                            <span className="font-mono text-[0.72rem] font-bold px-2.5 py-0.5 rounded-full bg-accent-purple/15 text-accent-purple border border-accent-purple/30">
-                              PYTHON
-                            </span>
-                          </div>
 
-                          {/* Project Name */}
-                          <h3 className="font-display text-[clamp(1.35rem,2.1vw,2rem)] font-extrabold text-white leading-snug mb-2">
-                            {proj.title}
-                          </h3>
+                            {/* Project Name */}
+                            <h3 className="font-display text-[clamp(1.2rem,1.7vw,1.65rem)] font-extrabold text-white leading-snug mb-1.5">
+                              {proj.title}
+                            </h3>
 
-                          {/* Short Tagline */}
-                          {proj.tagline && (
-                            <p className="text-[0.88rem] text-accent-cyan/90 font-mono mb-2">
-                              {proj.tagline}
+                            {/* Short Tagline */}
+                            {proj.tagline && (
+                              <p className="text-[0.82rem] text-accent-cyan/90 font-mono mb-2">
+                                {proj.tagline}
+                              </p>
+                            )}
+
+                            {/* Short Project Description */}
+                            <p className="text-[0.86rem] md:text-[0.9rem] text-text-secondary leading-[1.55] line-clamp-3 md:line-clamp-4 mb-3">
+                              {proj.description}
                             </p>
-                          )}
-
-                          {/* Short Project Description */}
-                          <p className="text-[0.92rem] md:text-[0.98rem] text-text-secondary leading-[1.6] mb-4">
-                            {proj.description}
-                          </p>
+                          </div>
                           
-                          {/* Technologies Tags */}
-                          <div className="mb-5">
-                            <div className="font-mono text-[0.7rem] tracking-widest text-text-muted uppercase mb-2">
-                              TECHNOLOGIES & LOGIC
+                          <div>
+                            {/* Technologies Tags */}
+                            <div className="mb-4">
+                              <div className="font-mono text-[0.68rem] tracking-widest text-text-muted uppercase mb-1.5">
+                                TECHNOLOGIES & LOGIC
+                              </div>
+                              <div className="flex flex-wrap gap-1.5">
+                                {proj.tech.map((t, pIdx) => (
+                                  <span
+                                    key={pIdx}
+                                    className="font-mono text-[0.7rem] font-semibold py-1 px-2.5 rounded-md bg-accent-cyan/[0.06] border border-accent-cyan/20 text-slate-300 transition-all hover:border-accent-cyan hover:text-accent-cyan"
+                                  >
+                                    {t}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
-                            <div className="flex flex-wrap gap-2">
-                              {proj.tech.map((t, pIdx) => (
-                                <span
-                                  key={pIdx}
-                                  className="font-mono text-[0.72rem] font-semibold py-1.5 px-3 rounded-md bg-accent-cyan/[0.06] border border-accent-cyan/20 text-slate-300 transition-all hover:border-accent-cyan hover:text-accent-cyan"
-                                >
-                                  {t}
-                                </span>
-                              ))}
+
+                            {/* Action Buttons Row (Open in VS Code + View Project) */}
+                            <div className="flex flex-wrap items-center gap-2.5">
+                              <button
+                                type="button"
+                                onClick={() => onOpenProjectModal(proj.id)}
+                                className="btn-primary py-2 px-5 rounded-xl text-[0.82rem] group"
+                              >
+                                <span>VIEW PROJECT</span>
+                                <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                              </button>
+
+                              <a
+                                href={proj.vscodeUrl || 'https://github.dev/mrdeb3006-netizen'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 font-mono text-[0.78rem] font-semibold tracking-wide hover:bg-blue-500/20 hover:border-blue-400 hover:text-white transition-all cursor-pointer shadow-sm"
+                              >
+                                <Code size={13} className="text-blue-400" />
+                                <span>VS Code</span>
+                                <ExternalLink size={11} className="opacity-70" />
+                              </a>
+
+                              <a
+                                href={proj.githubUrl || 'https://github.com/mrdeb3006-netizen'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 py-2 px-3 rounded-xl bg-white/[0.04] border border-white/10 text-text-muted font-mono text-[0.78rem] hover:text-white hover:border-white/25 transition-all cursor-pointer"
+                                title="View on GitHub"
+                              >
+                                <Github size={14} />
+                              </a>
                             </div>
                           </div>
 
-                          {/* Action Buttons Row (Open in VS Code + View Project) */}
-                          <div className="flex flex-wrap items-center gap-3 mt-auto">
-                            <button
-                              type="button"
-                              onClick={() => onOpenProjectModal(proj.id)}
-                              className="btn-primary py-2.5 px-6 rounded-xl text-[0.88rem] group"
-                            >
-                              <span>VIEW PROJECT</span>
-                              <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
-                            </button>
-
-                            <a
-                              href={proj.vscodeUrl || 'https://github.dev/mrdeb3006-netizen'}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 py-2.5 px-5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 font-mono text-[0.82rem] font-semibold tracking-wide hover:bg-blue-500/20 hover:border-blue-400 hover:text-white transition-all cursor-pointer shadow-sm"
-                            >
-                              <Code size={14} className="text-blue-400" />
-                              <span>Open in VS Code</span>
-                              <ExternalLink size={12} className="opacity-70" />
-                            </a>
-
-                            <a
-                              href={proj.githubUrl || 'https://github.com/mrdeb3006-netizen'}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 py-2.5 px-4 rounded-xl bg-white/[0.04] border border-white/10 text-text-muted font-mono text-[0.8rem] hover:text-white hover:border-white/25 transition-all cursor-pointer"
-                              title="View on GitHub"
-                            >
-                              <Github size={14} />
-                            </a>
-                          </div>
                         </div>
 
                         {/* ========================================= */}
-                        {/* RIGHT COLUMN: 60-65% Width - Large Visual */}
+                        {/* RIGHT COLUMN: 62% Width - Large Visual    */}
                         {/* ========================================= */}
-                        <div className="w-full h-full flex items-center">
-                          <div className="w-full h-[320px] md:h-[400px] lg:h-[450px] bg-[#090b16]/95 border border-white/10 rounded-2xl overflow-hidden flex flex-col shadow-[0_20px_45px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-[1.005] hover:border-accent-cyan/30">
+                        <div className="w-full h-full min-h-0 flex items-center justify-center">
+                          <div className="w-full h-full max-h-[350px] md:max-h-[390px] lg:max-h-[430px] bg-[#090b16]/95 border border-white/10 rounded-2xl overflow-hidden flex flex-col shadow-[0_15px_35px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-[1.005] hover:border-accent-cyan/30">
                             
                             {/* Browser Mockup Window Header */}
-                            <div className="h-[36px] bg-[#141628]/85 border-b border-white/[0.07] flex items-center px-4 gap-2 shrink-0">
+                            <div className="h-[34px] bg-[#141628]/85 border-b border-white/[0.07] flex items-center px-4 gap-2 shrink-0">
                               <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                               <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                               <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-                              <span className="ml-auto font-mono text-[0.72rem] text-text-muted truncate max-w-[280px]">
+                              <span className="ml-auto font-mono text-[0.7rem] text-text-muted truncate max-w-[280px]">
                                 {proj.titleBar}
                               </span>
                             </div>
 
                             {/* Large Project Visual / Interactive Frame Area */}
-                            <div className="flex-1 p-4 md:p-6 flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-transparent to-black/30">
+                            <div className="flex-1 p-3 md:p-5 flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-transparent to-black/30">
                               {proj.id === '01' && <SnakeWaterGunVisualizer />}
                               {proj.id === '02' && <StonePaperScissorVisualizer />}
                               {proj.id === '03' && <YouTubeReelScrollerVisualizer />}
@@ -413,7 +418,7 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
           </div>
 
           {/* Minimal Bottom Progress Indicator */}
-          <div className="max-w-[1600px] w-full mx-auto flex items-center justify-between gap-6 shrink-0 pt-2 pb-1 border-t border-white/[0.06] relative z-20">
+          <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex items-center justify-between gap-4 shrink-0 pt-2 pb-1 border-t border-white/[0.06] relative z-20">
             {/* Minimal Dots: 01 ● ○ ○ */}
             <div className="flex items-center gap-3">
               <span className="font-mono text-[0.8rem] text-accent-cyan font-bold">
