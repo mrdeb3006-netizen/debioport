@@ -1,5 +1,4 @@
 import React from 'react';
-import { SkillCategory } from '../types';
 
 interface SkillsProps {
   activeFilter: string | null;
@@ -7,51 +6,17 @@ interface SkillsProps {
 }
 
 export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) => {
-  const categories: SkillCategory[] = [
-    {
-      number: '01',
-      title: 'PROGRAMMING & CORE',
-      tags: [
-        { label: 'Python', filterKey: 'python' },
-        { label: 'Java', filterKey: 'java' },
-        { label: 'DSA', filterKey: 'dsa' },
-        { label: 'Problem Solving', filterKey: 'problem solving' },
-        { label: 'OOP', filterKey: 'oop' },
-        { label: 'C', filterKey: 'c' },
-      ],
-    },
-    {
-      number: '02',
-      title: 'WEB & DEV TOOLS',
-      tags: [
-        { label: 'HTML', filterKey: 'html' },
-        { label: 'CSS', filterKey: 'css' },
-        { label: 'JavaScript', filterKey: 'javascript' },
-        { label: 'Git', filterKey: 'git' },
-        { label: 'GitHub', filterKey: 'github' },
-        { label: 'VS Code', filterKey: 'vscode' },
-      ],
-    },
-    {
-      number: '03',
-      title: 'CREATIVE & MEDIA',
-      tags: [
-        { label: 'Canva', filterKey: 'canva' },
-        { label: 'Photography', filterKey: 'photography' },
-        { label: 'Figma', filterKey: 'figma' },
-        { label: 'AI Tools', filterKey: 'ai' },
-      ],
-    },
-    {
-      number: '04',
-      title: 'LEADERSHIP & SOFT SKILLS',
-      tags: [
-        { label: 'Leadership', filterKey: 'leadership' },
-        { label: 'Team Management', filterKey: 'team management' },
-        { label: 'Good Cooperator', filterKey: 'cooperation' },
-        { label: 'Communication', filterKey: 'communication' },
-      ],
-    },
+  // Only the exact 9 skills requested by the user, with alternating orange and dark pill styling
+  const skillsList = [
+    { label: 'Python', filterKey: 'python', isPrimary: true },
+    { label: 'Java', filterKey: 'java', isPrimary: false },
+    { label: 'DSA', filterKey: 'dsa', isPrimary: false },
+    { label: 'Problem Solving', filterKey: 'problem solving', isPrimary: true },
+    { label: 'Canva', filterKey: 'canva', isPrimary: false },
+    { label: 'Photography', filterKey: 'photography', isPrimary: true },
+    { label: 'Leadership', filterKey: 'leadership', isPrimary: false },
+    { label: 'Team Management', filterKey: 'team management', isPrimary: false },
+    { label: 'Good Cooperator', filterKey: 'cooperator', isPrimary: true },
   ];
 
   const handleTagClick = (filterKey: string) => {
@@ -63,57 +28,41 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
   };
 
   return (
-    <section className="pt-8 md:pt-10 pb-24 md:pb-28 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="skills">
-      <div className="max-w-[1400px] mx-auto">
+    <section className="pt-6 md:pt-8 pb-20 md:pb-24 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="skills">
+      <div className="max-w-[1200px] mx-auto">
         
         {/* Section Header */}
-        <div className="mb-10">
+        <div className="mb-10 text-center md:text-left">
           <div className="font-mono text-[0.82rem] tracking-[0.2em] text-accent-orange font-semibold mb-2 inline-block uppercase">
             // 04. /SKILLS
           </div>
           <h2 className="font-display text-[clamp(2.2rem,4vw,3.4rem)] font-black text-white leading-[1.15] mb-2 uppercase tracking-[0.02em]">
             SKILLS<span className="text-accent-orange">.</span>
           </h2>
-          <p className="text-[1.05rem] text-text-secondary max-w-[640px] leading-[1.65]">
-            Core technical tools and engineering foundations I work with daily (Click any tag to filter matching projects).
-          </p>
         </div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {categories.map((cat) => (
-            <div
-              key={cat.number}
-              className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 md:p-7 flex flex-col transition-all duration-300 hover:border-accent-orange/40 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)]"
-            >
-              <div className="flex items-center gap-3 mb-5 pb-3 border-b border-white/[0.06]">
-                <span className="font-mono text-[0.8rem] text-accent-orange font-bold">{cat.number}</span>
-                <h3 className="font-display text-[1.12rem] font-extrabold text-white tracking-[0.06em]">
-                  {cat.title}
-                </h3>
-              </div>
+        {/* Floating Organic Pill Badge Cloud (Matching Reference Image) */}
+        <div className="flex flex-wrap items-center justify-center gap-3.5 md:gap-4 max-w-[960px] mx-auto py-4">
+          {skillsList.map((skill) => {
+            const isActive = activeFilter === skill.filterKey;
 
-              <div className="flex flex-wrap gap-2">
-                {cat.tags.map((t) => {
-                  const isActive = activeFilter === t.filterKey;
-                  return (
-                    <button
-                      key={t.filterKey}
-                      type="button"
-                      onClick={() => handleTagClick(t.filterKey)}
-                      className={`py-1.5 px-3.5 rounded-lg font-main text-[0.86rem] font-medium transition-all duration-300 cursor-pointer ${
-                        isActive
-                          ? 'bg-accent-orange text-white font-extrabold border border-accent-orange shadow-[0_0_14px_rgba(249,115,22,0.5)] -translate-y-0.5'
-                          : 'bg-white/[0.04] border border-white/10 text-slate-200 hover:bg-accent-orange/15 hover:border-accent-orange/40 hover:text-white hover:shadow-[0_0_12px_rgba(249,115,22,0.25)] hover:-translate-y-0.5'
-                      }`}
-                    >
-                      {t.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+            return (
+              <button
+                key={skill.label}
+                type="button"
+                onClick={() => handleTagClick(skill.filterKey)}
+                className={`px-6 md:px-8 py-3 md:py-3.5 rounded-full font-main text-[0.95rem] md:text-[1.05rem] font-bold tracking-wide transition-all duration-300 cursor-pointer select-none shadow-md ${
+                  isActive
+                    ? 'scale-105 ring-2 ring-white bg-white text-black shadow-[0_0_25px_rgba(255,255,255,0.6)]'
+                    : skill.isPrimary
+                    ? 'bg-accent-orange text-black font-extrabold shadow-[0_0_20px_rgba(249,115,22,0.35)] hover:shadow-[0_0_30px_rgba(249,115,22,0.65)] hover:-translate-y-1 hover:scale-[1.03]'
+                    : 'bg-[#10121d] border border-white/15 text-white hover:border-accent-orange/60 hover:text-accent-orange hover:shadow-[0_0_20px_rgba(249,115,22,0.2)] hover:-translate-y-1 hover:scale-[1.03]'
+                }`}
+              >
+                {skill.label}
+              </button>
+            );
+          })}
         </div>
 
       </div>
