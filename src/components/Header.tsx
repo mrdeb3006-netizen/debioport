@@ -70,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
             <img
               src="/db-logo.jpg"
               alt="DB Monogram Logo"
-              className="h-8 sm:h-9 md:h-10 w-auto rounded-xl object-contain mix-blend-screen select-none transition-transform duration-300 group-hover:scale-105"
+              className="h-8 sm:h-9 md:h-10 w-auto rounded-xl object-contain border border-white/15 select-none transition-all duration-300 group-hover:scale-105 group-hover:border-white/30"
             />
             <span className="font-cinzel text-[0.82rem] sm:text-[0.92rem] md:text-[1.05rem] font-bold tracking-[0.08em] sm:tracking-[0.12em] text-white uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-accent-orange">
               DEBENDRANATH <span className="text-accent-orange font-extrabold">BERA</span>
