@@ -48,7 +48,7 @@ export const NexusAiStreamer: React.FC = () => {
           type="button"
           onClick={() => handlePromptClick('dsa')}
           disabled={isTyping}
-          className="font-mono text-[0.74rem] bg-accent-purple/10 border border-accent-purple/30 text-slate-100 py-1 px-3 rounded-full transition-all duration-300 hover:bg-accent-purple/25 hover:border-accent-purple hover:-translate-y-0.5 hover:shadow-[0_0_10px_rgba(99,102,241,0.35)]"
+          className="font-mono text-[0.74rem] bg-accent-purple/10 border border-accent-purple/30 text-slate-100 py-1 px-3 rounded-full transition-all duration-300 hover:bg-accent-purple/25 hover:border-accent-purple hover:-translate-y-0.5"
         >
           ⚡ Explain DSA in 1 sentence
         </button>
@@ -57,7 +57,7 @@ export const NexusAiStreamer: React.FC = () => {
           type="button"
           onClick={() => handlePromptClick('clean-code')}
           disabled={isTyping}
-          className="font-mono text-[0.74rem] bg-accent-purple/10 border border-accent-purple/30 text-slate-100 py-1 px-3 rounded-full transition-all duration-300 hover:bg-accent-purple/25 hover:border-accent-purple hover:-translate-y-0.5 hover:shadow-[0_0_10px_rgba(99,102,241,0.35)]"
+          className="font-mono text-[0.74rem] bg-accent-purple/10 border border-accent-purple/30 text-slate-100 py-1 px-3 rounded-full transition-all duration-300 hover:bg-accent-purple/25 hover:border-accent-purple hover:-translate-y-0.5"
         >
           ✨ Clean Code Rule #1
         </button>
@@ -66,7 +66,7 @@ export const NexusAiStreamer: React.FC = () => {
           type="button"
           onClick={() => handlePromptClick('future')}
           disabled={isTyping}
-          className="font-mono text-[0.74rem] bg-accent-purple/10 border border-accent-purple/30 text-slate-100 py-1 px-3 rounded-full transition-all duration-300 hover:bg-accent-purple/25 hover:border-accent-purple hover:-translate-y-0.5 hover:shadow-[0_0_10px_rgba(99,102,241,0.35)]"
+          className="font-mono text-[0.74rem] bg-accent-purple/10 border border-accent-purple/30 text-slate-100 py-1 px-3 rounded-full transition-all duration-300 hover:bg-accent-purple/25 hover:border-accent-purple hover:-translate-y-0.5"
         >
           🚀 Future of Software
         </button>

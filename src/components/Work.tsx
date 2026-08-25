@@ -341,10 +341,10 @@ except KeyboardInterrupt:
                         transform: `scale(${slideScale})`,
                         opacity: slideOpacity,
                       }}
-                      className={`w-full max-w-[1360px] h-[calc(100vh-190px)] min-h-[440px] max-h-[580px] specular-card backdrop-blur-[24px] border-2 border-[#881337]/25 bg-[#ffffff] rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 transition-all duration-300 relative overflow-hidden flex flex-col justify-between shadow-[0_20px_60px_rgba(0,0,0,0.35)] ${
+                      className={`w-full max-w-[1360px] h-[calc(100vh-190px)] min-h-[440px] max-h-[580px] specular-card backdrop-blur-[24px] border-2 border-[#881337]/25 bg-[#ffffff] rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 transition-all duration-300 relative overflow-hidden flex flex-col justify-between shadow-xl ${
                         isMatch
-                          ? 'border-accent-orange shadow-[0_0_35px_rgba(249,115,22,0.4)]'
-                          : 'hover:border-accent-orange hover:shadow-[0_25px_70px_rgba(0,0,0,0.4),0_0_25px_rgba(249,115,22,0.2)]'
+                          ? 'border-accent-orange'
+                          : 'hover:border-accent-orange hover:shadow-2xl'
                       }`}
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[45%_55%] gap-6 md:gap-6 lg:gap-12 items-center h-full min-h-0">
@@ -365,7 +365,7 @@ except KeyboardInterrupt:
                             </div>
 
                             {/* Project Name */}
-                            <h3 className="font-display text-[clamp(1.4rem,2.2vw,2.1rem)] font-black text-[#0891b2] hover:text-[#06b6d4] leading-tight mb-2 uppercase tracking-wide transition-colors drop-shadow-sm">
+                            <h3 className="font-display text-[clamp(1.4rem,2.2vw,2.1rem)] font-black text-[#0891b2] hover:text-[#06b6d4] leading-tight mb-2 uppercase tracking-wide transition-colors">
                               {proj.title}
                             </h3>
 
@@ -402,7 +402,7 @@ except KeyboardInterrupt:
                               <button
                                 type="button"
                                 onClick={() => onOpenProjectModal(proj.id)}
-                                className="btn-primary py-2.5 px-6 rounded-xl text-[0.85rem] font-bold group shadow-[0_4px_14px_rgba(249,115,22,0.4)] hover:shadow-[0_6px_20px_rgba(249,115,22,0.6)] cursor-pointer text-white"
+                                className="btn-primary py-2.5 px-6 rounded-xl text-[0.85rem] font-bold group cursor-pointer text-white shadow-md"
                               >
                                 <span>VIEW CASE STUDY</span>
                                 <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -439,7 +439,7 @@ except KeyboardInterrupt:
                           className="w-full h-full min-h-0 flex items-center justify-center cursor-pointer group/card"
                           title="Click to view detailed case study"
                         >
-                          <div className="w-full h-full max-h-[360px] md:max-h-[400px] lg:max-h-[440px] bg-[#ffffff] border-2 border-[#881337]/25 rounded-2xl overflow-hidden flex flex-col shadow-[0_15px_35px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover/card:border-accent-orange group-hover/card:shadow-[0_20px_45px_rgba(249,115,22,0.2)]">
+                          <div className="w-full h-full max-h-[360px] md:max-h-[400px] lg:max-h-[440px] bg-[#ffffff] border-2 border-[#881337]/25 rounded-2xl overflow-hidden flex flex-col shadow-lg transition-all duration-300 group-hover/card:border-accent-orange">
                             
                             {/* Terminal Window Header */}
                             <div className="h-[40px] bg-[#f8fafc] border-b border-[#e2e8f0] flex items-center px-4 gap-2 shrink-0">
@@ -522,7 +522,7 @@ except KeyboardInterrupt:
                     onClick={() => scrollToSlide(i)}
                     className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                       activeSlide === i
-                        ? 'w-7 bg-accent-orange shadow-[0_0_6px_rgba(249,115,22,0.4)]'
+                        ? 'w-7 bg-accent-orange'
                         : 'w-2 bg-white/20 hover:bg-white/40'
                     }`}
                     aria-label={`Go to project 0${i + 1}`}
@@ -540,7 +540,7 @@ except KeyboardInterrupt:
               <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   style={{ width: `${Math.max(10, scrollProgress * 100)}%` }}
-                  className="h-full bg-accent-orange rounded-full shadow-[0_0_6px_rgba(249,115,22,0.4)] transition-all duration-75"
+                  className="h-full bg-accent-orange rounded-full transition-all duration-75"
                 />
               </div>
             </div>

@@ -124,8 +124,8 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
                     onClick={() => handleTagClick(skill.filterKey)}
                     className={`group relative flex items-center gap-3 px-6 md:px-8 py-3.5 md:py-4 rounded-full font-main text-[0.95rem] md:text-[1.05rem] font-bold tracking-wide transition-all duration-300 cursor-pointer select-none border backdrop-blur-md shadow-md ${
                       isActive
-                        ? 'bg-accent-orange text-black font-extrabold border-accent-orange shadow-[0_0_20px_rgba(249,115,22,0.5)] scale-105 -translate-y-1'
-                        : 'bg-[#10121d] border-white/[0.1] text-slate-200 hover:border-accent-orange/50 hover:text-white hover:bg-[#141624] hover:-translate-y-1 hover:scale-[1.02]'
+                        ? 'bg-accent-orange text-black font-extrabold border-accent-orange shadow-lg scale-105 -translate-y-1'
+                        : 'bg-[#10121d] border-white/[0.1] text-slate-200 hover:border-white/30 hover:text-white hover:bg-[#141624] hover:-translate-y-1 hover:scale-[1.02]'
                     }`}
                   >
                     {/* Icon Glyph */}

@@ -82,7 +82,7 @@ export const Footer: React.FC = () => {
 
           {/* Inspirational Philosophy Quote */}
           <div className="max-w-[760px] mx-auto px-4">
-            <p className="font-serifDisplay italic text-[0.92rem] sm:text-[1.02rem] text-accent-orange/90 leading-relaxed drop-shadow-[0_0_12px_rgba(249,115,22,0.25)]">
+            <p className="font-serifDisplay italic text-[0.92rem] sm:text-[1.02rem] text-accent-orange/90 leading-relaxed">
               “Yesterday is history, tomorrow is a mystery, and today is a gift — that's why it is called the present.”
             </p>
           </div>

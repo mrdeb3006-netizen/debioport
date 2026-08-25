@@ -55,7 +55,6 @@ const InteractiveDotMatrix: React.FC = () => {
         let scale = 1;
         let isNear = false;
         let transformOffset = { x: 0, y: 0 };
-        let glowIntensity = 0;
 
         if (mousePos) {
           const dist = Math.hypot(mousePos.x - dotX, mousePos.y - dotY);
@@ -65,7 +64,6 @@ const InteractiveDotMatrix: React.FC = () => {
             const factor = Math.pow(proximity, 1.3);
             scale = 1 + factor * 2.2;
             isNear = true;
-            glowIntensity = factor;
             transformOffset = {
               x: (mousePos.x - dotX) * factor * 0.25,
               y: (mousePos.y - dotY) * factor * 0.25,
@@ -78,14 +76,11 @@ const InteractiveDotMatrix: React.FC = () => {
             key={dot.id}
             style={{
               transform: `translate(${transformOffset.x}px, ${transformOffset.y}px) scale(${scale})`,
-              boxShadow: isNear
-                ? `0 0 ${glowIntensity * 12}px rgba(249, 115, 22, ${glowIntensity * 0.95}), 0 0 4px #fff`
-                : 'none',
               transition: mousePos
-                ? 'transform 0.08s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.12s, box-shadow 0.12s'
-                : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s, box-shadow 0.4s',
+                ? 'transform 0.08s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.12s'
+                : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s',
             }}
-            className={`w-1.5 h-1.5 rounded-full ${
+            className={`w-1.5 h-1.5 rounded-full transition-colors ${
               isNear
                 ? 'bg-accent-orange'
                 : 'bg-white/20'
@@ -134,7 +129,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 {debendranathSolid.map((letter, idx) => (
                   <span
                     key={`dn-solid-${idx}`}
-                    className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    className="animate-letter-drop text-white inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
                     style={{ animationDelay: `${0.2 + idx * 0.06}s` }}
                   >
                     {letter}
@@ -144,7 +139,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 {debendranathOutline.map((letter, idx) => (
                   <span
                     key={`dn-outline-${idx}`}
-                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
                     style={{ animationDelay: `${0.2 + (debendranathSolid.length + idx) * 0.06}s` }}
                   >
                     {letter}
@@ -160,7 +155,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 {beraSolid.map((letter, idx) => (
                   <span
                     key={`b-solid-${idx}`}
-                    className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    className="animate-letter-drop text-white inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
                     style={{ animationDelay: `${0.95 + idx * 0.08}s` }}
                   >
                     {letter}
@@ -170,7 +165,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 {beraOutline.map((letter, idx) => (
                   <span
                     key={`b-outline-${idx}`}
-                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
                     style={{ animationDelay: `${0.95 + (beraSolid.length + idx) * 0.08}s` }}
                   >
                     {letter}
@@ -182,19 +177,19 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
           {/* Tagline Bar: — DEVELOPER • PROBLEM SOLVER • DREAMER */}
           <div className="flex items-center gap-3 mb-5 animate-item" style={{ ['--delay' as any]: '1.35s' }}>
-            <div className="w-7 h-[2.5px] bg-accent-orange rounded-full shadow-[0_0_10px_rgba(249,115,22,0.6)]" />
+            <div className="w-7 h-[2.5px] bg-accent-orange rounded-full" />
             <div className="font-mono text-[0.72rem] sm:text-[0.84rem] md:text-[0.88rem] font-bold tracking-[0.14em] sm:tracking-[0.18em] uppercase text-text-primary flex items-center gap-2 flex-wrap">
               <span className="text-slate-200">DEVELOPER</span>
               <span className="text-text-muted text-[0.75rem]">•</span>
               <span className="text-slate-200">PROBLEM SOLVER</span>
               <span className="text-text-muted text-[0.75rem]">•</span>
-              <span className="text-accent-orange font-extrabold drop-shadow-[0_0_10px_rgba(249,115,22,0.4)]">DREAMER</span>
+              <span className="text-accent-orange font-extrabold">DREAMER</span>
             </div>
           </div>
 
           {/* Description Paragraph */}
           <div className="mb-6 animate-item" style={{ ['--delay' as any]: '1.5s' }}>
-            <p className="text-[0.90rem] sm:text-[1.05rem] leading-[1.65] text-[#d4d4d8] font-normal max-w-[560px] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-4">
+            <p className="text-[0.90rem] sm:text-[1.05rem] leading-[1.65] text-[#d4d4d8] font-normal max-w-[560px] mb-4">
               Turning ideas into digital reality. I build clean, efficient and impactful solutions for the web.
             </p>
             
@@ -210,7 +205,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             <button
               type="button"
               onClick={onOpenCvModal}
-              className="w-full sm:w-auto justify-center py-3.5 px-7 rounded-xl bg-accent-orange text-bg-dark font-display font-black text-[0.84rem] sm:text-[0.90rem] tracking-wider uppercase flex items-center gap-2 shadow-[0_4px_20px_rgba(249,115,22,0.45)] hover:bg-orange-600 active:scale-98 transition-all cursor-pointer"
+              className="w-full sm:w-auto justify-center py-3.5 px-7 rounded-xl bg-accent-orange text-bg-dark font-display font-black text-[0.84rem] sm:text-[0.90rem] tracking-wider uppercase flex items-center gap-2 shadow-md hover:bg-orange-600 active:scale-98 transition-all cursor-pointer"
             >
               <span>DOWNLOAD CV</span>
               <span className="text-base font-black">↓</span>
@@ -218,7 +213,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
             <a
               href="#work"
-              className="w-full sm:w-auto justify-center py-3.5 px-7 rounded-xl bg-[#141419]/90 border border-white/15 text-white font-display font-bold text-[0.84rem] sm:text-[0.90rem] tracking-wider uppercase flex items-center gap-2 hover:border-accent-orange/40 hover:bg-[#1c1c24] active:scale-98 transition-all shadow-sm cursor-pointer"
+              className="w-full sm:w-auto justify-center py-3.5 px-7 rounded-xl bg-[#141419]/90 border border-white/15 text-white font-display font-bold text-[0.84rem] sm:text-[0.90rem] tracking-wider uppercase flex items-center gap-2 hover:border-white/30 hover:bg-[#1c1c24] active:scale-98 transition-all shadow-sm cursor-pointer"
             >
               <span>VIEW WORK</span>
               <span className="text-base font-bold">→</span>
@@ -227,13 +222,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
           {/* Social Icons Bar */}
           <div className="flex items-center gap-3.5 animate-item mb-2" style={{ ['--delay' as any]: '1.85s' }}>
-            <div className="w-[2px] h-6 bg-accent-orange rounded-full shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+            <div className="w-[2px] h-6 bg-accent-orange rounded-full" />
             <div className="flex items-center gap-2.5">
               <a
                 href="https://github.com/mrdeb3006-netizen"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
                 aria-label="GitHub Profile"
               >
                 <Github size={18} />
@@ -242,7 +237,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
                 aria-label="LinkedIn Profile"
               >
                 <Linkedin size={18} />
@@ -251,14 +246,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
                 aria-label="X (formerly Twitter) Profile"
               >
                 <XIcon size={16} />
               </a>
               <a
                 href="mailto:mrdeb3006@gmail.com"
-                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
+                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
                 aria-label="Email Debendra"
               >
                 <Mail size={18} />

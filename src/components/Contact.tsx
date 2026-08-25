@@ -70,7 +70,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
           <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-cyan font-semibold mb-3 inline-block">
             // 06. /CONTACT
           </div>
-          <h2 className="font-display text-[clamp(3.2rem,6.8vw,6.2rem)] font-black leading-[1.08] uppercase tracking-[0.01em] bg-hero-name bg-clip-text text-transparent filter drop-shadow-[0_0_20px_rgba(249,115,22,0.2)] mb-6">
+          <h2 className="font-display text-[clamp(3.2rem,6.8vw,6.2rem)] font-black leading-[1.08] uppercase tracking-[0.01em] bg-hero-name bg-clip-text text-transparent mb-6">
             LET'S BUILD<br />SOMETHING GREAT.
           </h2>
           <p className="text-[clamp(1.15rem,1.6vw,1.45rem)] text-text-secondary leading-relaxed">
@@ -91,8 +91,8 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               onClick={handleCopyEmail}
               className={`specular-card backdrop-blur-[14px] border rounded-2xl p-5 flex flex-col relative transition-all duration-300 cursor-pointer ${
                 copied
-                  ? 'border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.35)]'
-                  : 'border-white/[0.08] hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1'
+                  ? 'border-emerald-400 shadow-md'
+                  : 'border-white/[0.08] hover:border-white/30 hover:shadow-lg hover:-translate-y-1'
               }`}
             >
               <span className="font-mono text-[0.72rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
@@ -109,11 +109,11 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               href="https://wa.me/916289214258?text=Hi%20Debendra,%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect%20regarding%20a%20project."
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-emerald-500/30 bg-emerald-500/[0.04] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500/[0.08] hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(16,185,129,0.25)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-emerald-500/30 bg-emerald-500/[0.04] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500/[0.08] hover:shadow-lg hover:-translate-y-1 group"
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-mono text-[0.72rem] font-bold text-emerald-400 tracking-[0.16em] uppercase flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   WHATSAPP
                 </span>
                 <span className="text-base text-emerald-400 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
@@ -133,7 +133,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               href="https://github.com/mrdeb3006-netizen"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-white/30 hover:shadow-lg hover:-translate-y-1 group"
             >
               <span className="font-mono text-[0.72rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
                 GITHUB
@@ -149,7 +149,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-white/30 hover:shadow-lg hover:-translate-y-1 group"
             >
               <span className="font-mono text-[0.72rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
                 LINKEDIN
@@ -165,7 +165,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               href="https://x.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-white/30 hover:shadow-lg hover:-translate-y-1 group"
             >
               <span className="font-mono text-[0.72rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1 uppercase">
                 X (TWITTER)
@@ -222,7 +222,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                     onChange={handleChange}
                     required
                     placeholder="John Doe"
-                    className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
+                    className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-white/40 focus:bg-[#18181b]/95"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -237,7 +237,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                     onChange={handleChange}
                     required
                     placeholder="john@example.com"
-                    className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
+                    className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-white/40 focus:bg-[#18181b]/95"
                   />
                 </div>
               </div>
@@ -253,7 +253,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder="Project collaboration or discussion"
-                  className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
+                  className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-white/40 focus:bg-[#18181b]/95"
                 />
               </div>
 
@@ -269,14 +269,14 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                   rows={4}
                   required
                   placeholder="Tell me about your idea or project..."
-                  className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95 resize-none"
+                  className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-white/40 focus:bg-[#18181b]/95 resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-2 btn-primary py-4 px-10 text-[0.92rem] justify-center flex items-center gap-2.5 shadow-[0_4px_20px_rgba(249,115,22,0.45)] hover:shadow-[0_6px_25px_rgba(249,115,22,0.6)] cursor-pointer"
+                className="mt-2 btn-primary py-4 px-10 text-[0.92rem] justify-center flex items-center gap-2.5 cursor-pointer shadow-md"
               >
                 <span>{isSubmitting ? 'Formatting Message...' : 'SEND MESSAGE VIA WHATSAPP'}</span>
                 <span className="text-lg font-black">→</span>

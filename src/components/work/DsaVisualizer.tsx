@@ -161,7 +161,7 @@ export const DsaVisualizer: React.FC = () => {
           disabled={isSorting}
           className={`font-mono text-[0.76rem] py-1.5 px-3.5 rounded-md border transition-all duration-300 ${
             activeAlgo === 'quick'
-              ? 'bg-accent-cyan text-bg-dark font-bold border-accent-cyan shadow-[0_0_10px_rgba(56,189,248,0.35)]'
+              ? 'bg-accent-cyan text-bg-dark font-bold border-accent-cyan shadow-sm'
               : 'border-accent-cyan/30 bg-accent-cyan/10 text-slate-100 hover:bg-accent-cyan/20'
           }`}
         >
@@ -174,7 +174,7 @@ export const DsaVisualizer: React.FC = () => {
           disabled={isSorting}
           className={`font-mono text-[0.76rem] py-1.5 px-3.5 rounded-md border transition-all duration-300 ${
             activeAlgo === 'bubble'
-              ? 'bg-accent-cyan text-bg-dark font-bold border-accent-cyan shadow-[0_0_10px_rgba(56,189,248,0.35)]'
+              ? 'bg-accent-cyan text-bg-dark font-bold border-accent-cyan shadow-sm'
               : 'border-accent-cyan/30 bg-accent-cyan/10 text-slate-100 hover:bg-accent-cyan/20'
           }`}
         >
@@ -185,7 +185,7 @@ export const DsaVisualizer: React.FC = () => {
           type="button"
           onClick={initArray}
           disabled={isSorting}
-          className="font-mono text-[0.76rem] py-1.5 px-3.5 rounded-md border border-accent-purple/40 bg-accent-purple/10 text-slate-100 transition-all duration-300 hover:bg-accent-purple hover:text-white hover:shadow-[0_0_10px_rgba(99,102,241,0.35)]"
+          className="font-mono text-[0.76rem] py-1.5 px-3.5 rounded-md border border-accent-purple/40 bg-accent-purple/10 text-slate-100 transition-all duration-300 hover:bg-accent-purple hover:text-white"
         >
           ⚡ Shuffle
         </button>
@@ -196,11 +196,11 @@ export const DsaVisualizer: React.FC = () => {
         {bars.map((bar, idx) => {
           let bgClass = 'bg-gradient-to-t from-accent-violet to-accent-purple';
           if (bar.status === 'comparing') {
-            bgClass = 'bg-gradient-to-t from-violet-600 to-accent-purple shadow-[0_0_8px_rgba(129,140,248,0.4)] scale-y-105';
+            bgClass = 'bg-gradient-to-t from-violet-600 to-accent-purple scale-y-105';
           } else if (bar.status === 'swapping') {
-            bgClass = 'bg-gradient-to-t from-accent-cyan to-sky-300 shadow-[0_0_8px_rgba(56,189,248,0.4)]';
+            bgClass = 'bg-gradient-to-t from-accent-cyan to-sky-300';
           } else if (bar.status === 'sorted') {
-            bgClass = 'bg-gradient-to-t from-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.4)]';
+            bgClass = 'bg-gradient-to-t from-emerald-500 to-teal-400';
           }
 
           return (

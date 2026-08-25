@@ -88,7 +88,7 @@ export const ConstellationCanvas: React.FC = () => {
         <div className="font-mono text-[0.75rem] text-accent-cyan py-1 px-3 bg-accent-cyan/10 border border-accent-cyan/30 rounded-full">
           ✨ LIVE CANVAS PARTICLES
         </div>
-        <div className="font-display text-4xl md:text-5xl font-black text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.6)]">
+        <div className="font-display text-4xl md:text-5xl font-black text-white">
           DEBENDRA
         </div>
         <div className="flex gap-3 font-mono text-[0.75rem] text-text-secondary flex-wrap justify-center">

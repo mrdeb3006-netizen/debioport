@@ -144,7 +144,7 @@ export const About: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               
               <div
-                className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-accent-orange/40 hover:translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[0_10px_25px_rgba(0,0,0,0.4),0_0_20px_rgba(249,115,22,0.15)]"
+                className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-white/30 hover:translate-x-0.5 hover:-translate-y-0.5 hover:shadow-xl"
                 style={getSlideUpStyle(0.40)}
               >
                 <span className="font-mono text-[0.76rem] font-semibold text-accent-orange tracking-[0.16em] block mb-1.5 uppercase">
@@ -158,7 +158,7 @@ export const About: React.FC = () => {
               </div>
 
               <div
-                className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-accent-orange/40 hover:translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[0_10px_25px_rgba(0,0,0,0.4),0_0_20px_rgba(249,115,22,0.15)]"
+                className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-white/30 hover:translate-x-0.5 hover:-translate-y-0.5 hover:shadow-xl"
                 style={getSlideUpStyle(0.55)}
               >
                 <span className="font-mono text-[0.76rem] font-semibold text-accent-orange tracking-[0.16em] block mb-1.5 uppercase">
@@ -170,7 +170,7 @@ export const About: React.FC = () => {
               </div>
 
               <div
-                className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-accent-orange/40 hover:translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[0_10px_25px_rgba(0,0,0,0.4),0_0_20px_rgba(249,115,22,0.15)]"
+                className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-white/30 hover:translate-x-0.5 hover:-translate-y-0.5 hover:shadow-xl"
                 style={getSlideUpStyle(0.70)}
               >
                 <span className="font-mono text-[0.76rem] font-semibold text-accent-orange tracking-[0.16em] block mb-1.5 uppercase">
@@ -182,7 +182,7 @@ export const About: React.FC = () => {
               </div>
 
               <div
-                className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-accent-orange/40 hover:translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[0_10px_25px_rgba(0,0,0,0.4),0_0_20px_rgba(249,115,22,0.15)]"
+                className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-white/30 hover:translate-x-0.5 hover:-translate-y-0.5 hover:shadow-xl"
                 style={getSlideUpStyle(0.85)}
               >
                 <span className="font-mono text-[0.76rem] font-semibold text-accent-orange tracking-[0.16em] block mb-1.5 uppercase">

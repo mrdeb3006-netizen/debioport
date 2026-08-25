@@ -90,13 +90,13 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                     }}
                     className={`relative text-[0.88rem] lg:text-[0.92rem] font-medium py-1 px-1 inline-flex items-center capitalize transition-all duration-300 ${
                       activeSection === item.id
-                        ? 'text-accent-orange font-bold drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]'
+                        ? 'text-accent-orange font-bold'
                         : 'text-text-secondary hover:text-white'
                     }`}
                   >
                     {item.label}
                     {activeSection === item.id && (
-                      <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-accent-orange rounded shadow-[0_0_6px_rgba(249,115,22,0.5)]" />
+                      <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-accent-orange rounded" />
                     )}
                   </a>
                 </li>
@@ -110,7 +110,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                 e.preventDefault();
                 handleNavClick('contact');
               }}
-              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-lg bg-accent-orange text-bg-dark font-display font-black text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_16px_rgba(249,115,22,0.4)] transition-all duration-300 cursor-pointer shadow-sm ml-2 shrink-0"
+              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-lg bg-accent-orange text-bg-dark font-display font-black text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 transition-all duration-300 cursor-pointer shadow-sm ml-2 shrink-0"
             >
               <span>CONNECT</span>
               <span className="text-sm font-bold">→</span>
@@ -125,7 +125,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                 e.preventDefault();
                 handleNavClick('contact');
               }}
-              className="inline-flex items-center gap-1 py-1.5 px-3 sm:px-3.5 rounded-lg bg-accent-orange text-bg-dark font-display font-black text-[0.68rem] sm:text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 active:scale-95 transition-all shadow-[0_0_12px_rgba(249,115,22,0.35)] shrink-0"
+              className="inline-flex items-center gap-1 py-1.5 px-3 sm:px-3.5 rounded-lg bg-accent-orange text-bg-dark font-display font-black text-[0.68rem] sm:text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 active:scale-95 transition-all shadow-sm shrink-0"
             >
               <span>CONNECT</span>
               <span className="text-xs font-black">→</span>
@@ -135,8 +135,8 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
               type="button"
               className={`mobile-hamburger-btn relative flex flex-col justify-center items-center gap-1.5 w-10 h-10 rounded-xl border active:scale-95 transition-all duration-200 cursor-pointer z-[99999] shrink-0 ${
                 mobileMenuOpen
-                  ? 'bg-accent-orange/20 border-accent-orange shadow-[0_0_12px_rgba(249,115,22,0.4)]'
-                  : 'bg-[#141419] border-white/20 hover:border-accent-orange hover:bg-[#1c1c24] shadow-[0_0_10px_rgba(0,0,0,0.5)]'
+                  ? 'bg-accent-orange/20 border-accent-orange'
+                  : 'bg-[#141419] border-white/20 hover:border-white/40 hover:bg-[#1c1c24] shadow-sm'
               }`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
@@ -164,7 +164,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
 
             {/* Compact Floating Dropdown Panel (Upper Part of Screen) */}
             <div
-              className="fixed top-[66px] sm:top-[74px] right-2.5 sm:right-6 w-[230px] sm:w-[250px] z-[9999999] bg-[#0c0d14]/95 backdrop-blur-2xl border border-accent-orange/40 rounded-2xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_25px_rgba(249,115,22,0.2)] animate-in fade-in slide-in-from-top-3 zoom-in-95 duration-150"
+              className="fixed top-[66px] sm:top-[74px] right-2.5 sm:right-6 w-[230px] sm:w-[250px] z-[9999999] bg-[#0c0d14]/95 backdrop-blur-2xl border border-white/15 rounded-2xl p-2 shadow-2xl animate-in fade-in slide-in-from-top-3 zoom-in-95 duration-150"
               role="dialog"
               aria-modal="true"
               aria-label="Mobile Navigation Menu"
@@ -195,7 +195,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                         onClick={() => handleNavClick(item.id)}
                         className={`w-full flex items-center justify-between py-1.5 px-2 rounded-lg transition-all duration-150 cursor-pointer ${
                           isActive
-                            ? 'bg-accent-orange/15 border border-accent-orange/40 text-accent-orange shadow-[0_0_10px_rgba(249,115,22,0.2)] font-black'
+                            ? 'bg-accent-orange/15 border border-accent-orange/40 text-accent-orange font-black'
                             : 'text-slate-200 hover:text-white hover:bg-white/[0.06] border border-transparent font-semibold'
                         }`}
                       >
@@ -211,7 +211,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                         </div>
 
                         {isActive && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-accent-orange shadow-[0_0_6px_#f97316]" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent-orange" />
                         )}
                       </button>
                     </li>

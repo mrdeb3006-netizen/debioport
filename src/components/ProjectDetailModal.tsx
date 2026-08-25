@@ -350,7 +350,7 @@ except KeyboardInterrupt:
               href={project?.githubUrl || 'https://github.com/mrdeb3006-netizen'}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary py-2.5 px-5 rounded-xl text-[0.84rem] font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(249,115,22,0.3)]"
+              className="btn-primary py-2.5 px-5 rounded-xl text-[0.84rem] font-bold flex items-center gap-2 shadow-md"
             >
               <Github size={16} />
               <span>SOURCE CODE ON GITHUB</span>

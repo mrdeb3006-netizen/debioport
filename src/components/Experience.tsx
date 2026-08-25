@@ -176,7 +176,7 @@ export const Experience: React.FC = () => {
             {educationMilestones.map((item, idx) => (
               <div
                 key={idx}
-                className="specular-card backdrop-blur-[16px] border border-white/[0.08] rounded-2xl p-6 md:p-7 relative overflow-hidden transition-all duration-300 hover:border-accent-orange/50 hover:translate-x-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_20px_rgba(249,115,22,0.15)] group"
+                className="specular-card backdrop-blur-[16px] border border-white/[0.08] rounded-2xl p-6 md:p-7 relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:translate-x-1 hover:shadow-2xl group"
                 style={getSlideUpStyle(0.25 + idx * 0.12)}
               >
                 {/* Top Badge & Number */}

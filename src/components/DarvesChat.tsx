@@ -299,26 +299,20 @@ export const DarvesChat: React.FC = () => {
           title="Drag to reposition • Click to chat with DARVES"
         >
           {/* Label Pill (Always clearly visible) */}
-          <div className="hidden sm:flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-[#18181b]/95 border border-accent-cyan/40 backdrop-blur-md shadow-[0_4px_20px_rgba(249,115,22,0.3)] text-white text-[0.82rem] font-bold tracking-wide pointer-events-none">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan" />
-            <span className="font-display tracking-wider text-accent-cyan">DARVES</span>
+          <div className="hidden sm:flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-[#18181b]/95 border border-white/20 backdrop-blur-md shadow-md text-white text-[0.82rem] font-bold tracking-wide pointer-events-none">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-orange" />
+            <span className="font-display tracking-wider text-accent-orange">DARVES</span>
             <span className="text-white/80 font-normal text-[0.75rem]">AI Chat</span>
           </div>
 
           {/* Main Floating Orb */}
           <div className="relative">
-            <div className="absolute -inset-1 rounded-full bg-accent-orange/20 blur-sm" />
-
             <button
               type="button"
-              className="relative w-14 h-14 rounded-full bg-[#121216] border border-accent-orange/60 flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.6)] text-accent-orange overflow-hidden focus:outline-none hover:scale-105 transition-transform"
+              className="relative w-14 h-14 rounded-full bg-[#121216] border border-accent-orange/60 flex items-center justify-center shadow-lg text-accent-orange overflow-hidden focus:outline-none hover:scale-105 transition-transform"
               aria-label="Open DARVES AI Assistant"
             >
-              {/* Subtle Core Glow */}
-              <div className="absolute inset-0 bg-accent-orange/[0.08]" />
-              
-              {/* Icon */}
-              <Bot size={24} className="relative z-10 text-accent-orange drop-shadow-sm" />
+              <Bot size={24} className="relative z-10 text-accent-orange" />
             </button>
           </div>
         </div>
@@ -332,14 +326,14 @@ export const DarvesChat: React.FC = () => {
             isMinimized
               ? 'bottom-28 right-8 w-72 h-14 rounded-2xl overflow-hidden'
               : 'bottom-20 md:bottom-28 right-4 md:right-8 w-[calc(100vw-2rem)] md:w-[410px] h-[550px] max-h-[85vh] rounded-3xl'
-          } bg-[#121216]/95 backdrop-blur-[24px] border border-accent-cyan/30 shadow-[0_20px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(249,115,22,0.2)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200`}
+          } bg-[#121216]/95 backdrop-blur-[24px] border border-white/15 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200`}
         >
           {/* Chat Window Header */}
           <div className="h-16 bg-[#1c1c22]/90 border-b border-white/[0.08] px-4 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="relative w-9 h-9 rounded-full bg-accent-cyan/15 border border-accent-cyan/40 flex items-center justify-center shadow-[0_0_10px_rgba(249,115,22,0.35)]">
+              <div className="relative w-9 h-9 rounded-full bg-accent-cyan/15 border border-accent-cyan/40 flex items-center justify-center shadow-sm">
                 <Bot size={18} className="text-accent-cyan" />
-                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-400 border border-[#0b0d18] shadow-[0_0_6px_#22c55e]" />
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-400 border border-[#0b0d18]" />
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
@@ -531,7 +525,7 @@ export const DarvesChat: React.FC = () => {
               <button
                 type="button"
                 onClick={handleSaveApiKey}
-                className="px-5 py-2 rounded-xl bg-btn-primary text-white text-sm font-bold shadow-[0_0_15px_rgba(0,240,255,0.4)] hover:shadow-[0_0_25px_rgba(0,240,255,0.7)]"
+                className="px-5 py-2 rounded-xl bg-accent-orange text-black text-sm font-bold shadow-md hover:bg-orange-600 cursor-pointer"
               >
                 Save &amp; Connect
               </button>
