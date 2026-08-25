@@ -18,21 +18,29 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
+  const lettersSolid = ['D', 'E', 'B', 'E', 'N', 'D'];
+  const lettersOutline = ['R', 'A'];
+
   return (
-    <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden" id="home">
-      {/* Background Portrait treatment (Exact Master Design System) */}
+    <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden bg-bg-dark" id="home">
+      {/* Background Portrait Image (The First Photo) */}
       <div
-        className="absolute inset-0 w-full h-full bg-no-repeat bg-[right_top] bg-cover bg-bg-dark z-[1] pointer-events-none [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)]"
+        className="absolute inset-0 w-full h-full bg-no-repeat bg-[center_right] md:bg-[80%_center] lg:bg-[85%_center] bg-cover z-[1] pointer-events-none"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         aria-hidden="true"
-      />
+      >
+        {/* Cinematic smooth gradient masks for flawless dark mode integration */}
+        <div className="absolute inset-0 bg-gradient-to-r from-bg-dark via-bg-dark/85 sm:via-bg-dark/60 md:via-bg-dark/40 to-transparent z-[2]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/40 z-[2]" />
+        <div className="absolute inset-0 bg-radial from-transparent via-transparent to-bg-dark/70 z-[2]" />
+      </div>
 
-      <div className="max-w-[1600px] w-full mx-auto px-6 md:px-12 lg:px-16 py-8 relative z-10 flex items-center">
+      <div className="max-w-[1600px] w-full mx-auto px-6 md:px-12 lg:px-16 py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
         {/* Left Content Column */}
-        <div className="w-full max-w-[720px] flex flex-col justify-center">
+        <div className="w-full max-w-[760px] flex flex-col justify-center">
           
-          {/* Cursive Signature Line: hey, I am */}
-          <div className="mb-2.5 flex items-center overflow-visible">
+          {/* Cursive Signature Greeting Line */}
+          <div className="mb-2 flex items-center overflow-visible">
             <div className="signature-cursive-wrapper">
               <span className="signature-cursive-text select-none">
                 Hey, I am
@@ -41,14 +49,25 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             </div>
           </div>
 
-          {/* Main Huge Title: DEBENDRA - Dropping letter by letter */}
+          {/* Main Huge Display Title: DEBEND (Solid Chrome White) + RA (Orange Hollow Wireframe) */}
           <div className="mb-5 overflow-visible">
-            <h1 className="font-display text-[clamp(2.8rem,5.2vw,4.6rem)] font-black tracking-[0.02em] leading-[1.1] whitespace-nowrap inline-flex overflow-visible pb-[0.08em] uppercase">
-              {['D', 'E', 'B', 'E', 'N', 'D', 'R', 'A'].map((letter, idx) => (
+            <h1 className="font-display text-[clamp(3.2rem,7vw,6.4rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase select-none">
+              {/* Solid White Letters: D E B E N D */}
+              {lettersSolid.map((letter, idx) => (
                 <span
-                  key={idx}
-                  className="animate-letter-drop bg-hero-name bg-clip-text text-transparent inline-block transition-transform duration-300 hover:scale-110 hover:-translate-y-2 cursor-default"
-                  style={{ animationDelay: `${0.45 + idx * 0.12}s` }}
+                  key={`solid-${idx}`}
+                  className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                  style={{ animationDelay: `${0.35 + idx * 0.1}s` }}
+                >
+                  {letter}
+                </span>
+              ))}
+              {/* Orange Hollow Wireframe Letters: R A */}
+              {lettersOutline.map((letter, idx) => (
+                <span
+                  key={`outline-${idx}`}
+                  className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                  style={{ animationDelay: `${0.35 + (lettersSolid.length + idx) * 0.1}s` }}
                 >
                   {letter}
                 </span>
@@ -56,90 +75,98 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             </h1>
           </div>
 
-          {/* Tagline */}
-          <div className="flex items-center gap-5 mb-7 animate-item" style={{ ['--delay' as any]: '1.55s' }}>
-            <div className="w-7 h-[2px] bg-gradient-to-r from-accent-cyan to-accent-purple rounded shadow-[0_0_8px_rgba(56,189,248,0.4)]" />
-            <div className="font-main text-[clamp(0.78rem,1.05vw,0.92rem)] font-semibold tracking-[0.2em] uppercase text-text-primary flex items-center gap-3 flex-wrap">
-              <span className="text-slate-200 tracking-[0.2em] hover:text-accent-cyan hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.5)] transition-all">DEVELOPER</span>
-              <span className="text-accent-purple text-[0.85rem] opacity-80">•</span>
-              <span className="text-slate-200 tracking-[0.2em] hover:text-accent-cyan hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.5)] transition-all">PROBLEM SOLVER</span>
-              <span className="text-accent-purple text-[0.85rem] opacity-80">•</span>
-              <span className="text-accent-purple font-bold">DREAMER</span>
+          {/* Tagline Bar: — DEVELOPER • PROBLEM SOLVER • DREAMER */}
+          <div className="flex items-center gap-3.5 mb-6 animate-item" style={{ ['--delay' as any]: '1.35s' }}>
+            <div className="w-8 h-[2.5px] bg-accent-orange rounded-full shadow-[0_0_10px_rgba(249,115,22,0.6)]" />
+            <div className="font-mono text-[clamp(0.75rem,0.95vw,0.88rem)] font-bold tracking-[0.18em] uppercase text-text-primary flex items-center gap-2.5 flex-wrap">
+              <span className="text-slate-200 tracking-[0.18em]">DEVELOPER</span>
+              <span className="text-text-muted text-[0.8rem]">•</span>
+              <span className="text-slate-200 tracking-[0.18em]">PROBLEM SOLVER</span>
+              <span className="text-text-muted text-[0.8rem]">•</span>
+              <span className="text-accent-orange font-extrabold drop-shadow-[0_0_10px_rgba(249,115,22,0.4)]">DREAMER</span>
             </div>
           </div>
 
-          {/* Description & Motto Block */}
-          <div className="mb-9 animate-item" style={{ ['--delay' as any]: '1.7s' }}>
-            <p className="text-[clamp(1rem,1.2vw,1.15rem)] leading-[1.75] text-[#94a3b8] font-normal max-w-[540px] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-4">
-              Turning ideas into digital reality. I build clean, efficient, and impactful solutions for the web.
+          {/* Description Paragraph */}
+          <div className="mb-8 animate-item" style={{ ['--delay' as any]: '1.5s' }}>
+            <p className="text-[clamp(0.95rem,1.15vw,1.1rem)] leading-[1.75] text-[#a1a1aa] font-normal max-w-[560px] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-4">
+              Turning ideas into digital reality.<br className="hidden sm:inline" />
+              I build clean, efficient and impactful solutions for the web.
             </p>
             
-            <div className="border-l-2 border-accent-cyan/60 pl-3.5 py-1 max-w-[540px] bg-gradient-to-r from-accent-cyan/[0.04] to-transparent rounded-r-lg">
-              <p className="text-[0.92rem] md:text-[0.96rem] text-slate-200/95 italic font-medium tracking-wide leading-relaxed">
+            <div className="border-l-2 border-accent-orange/60 pl-3.5 py-1 max-w-[560px] bg-gradient-to-r from-accent-orange/[0.05] to-transparent rounded-r-lg">
+              <p className="text-[0.88rem] md:text-[0.92rem] text-slate-300 italic font-medium tracking-wide leading-relaxed">
                 “Be humble, keep smiling, keep learning, keep growing”
               </p>
             </div>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex items-center gap-6 mb-12 flex-wrap animate-item" style={{ ['--delay' as any]: '1.85s' }}>
-            <a
-              href="#work"
-              className="btn-primary group"
-            >
-              <span>VIEW WORK</span>
-              <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">→</span>
-            </a>
-
+          {/* CTA Action Buttons */}
+          <div className="flex items-center gap-4 mb-10 flex-wrap animate-item" style={{ ['--delay' as any]: '1.65s' }}>
             <button
               type="button"
               onClick={onOpenCvModal}
-              className="btn-secondary"
+              className="btn-primary group"
             >
               <span>DOWNLOAD CV</span>
-              <span className="text-lg ml-2">↓</span>
+              <span className="text-base font-black ml-1 transition-transform duration-300 group-hover:translate-y-0.5">↓</span>
             </button>
+
+            <a
+              href="#work"
+              className="btn-secondary group"
+            >
+              <span>VIEW WORK</span>
+              <span className="text-base font-black ml-1 transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </a>
           </div>
 
           {/* Social Icons Bar */}
-          <div className="flex items-center gap-5 animate-item" style={{ ['--delay' as any]: '2.1s' }}>
-            <div className="w-[2px] h-7 bg-gradient-to-b from-accent-cyan to-accent-purple rounded shadow-[0_0_8px_rgba(56,189,248,0.4)]" />
-            <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5 animate-item" style={{ ['--delay' as any]: '1.85s' }}>
+            <div className="w-[2px] h-6 bg-accent-orange rounded-full shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
+            <div className="flex items-center gap-4">
               <a
-                href="https://github.com"
+                href="https://github.com/mrdeb3006-netizen"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8b92ab] flex items-center justify-center transition-all duration-300 hover:text-accent-cyan hover:-translate-y-0.5 hover:scale-115 hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.6)]"
+                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="GitHub Profile"
               >
-                <Github size={20} />
+                <Github size={18} />
               </a>
               <a
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8b92ab] flex items-center justify-center transition-all duration-300 hover:text-accent-cyan hover:-translate-y-0.5 hover:scale-115 hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.6)]"
+                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="LinkedIn Profile"
               >
-                <Linkedin size={20} />
+                <Linkedin size={18} />
               </a>
               <a
                 href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8b92ab] flex items-center justify-center transition-all duration-300 hover:text-accent-cyan hover:-translate-y-0.5 hover:scale-115 hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.6)]"
+                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="X (formerly Twitter) Profile"
               >
-                <XIcon size={18} />
+                <XIcon size={16} />
               </a>
               <a
                 href="mailto:debendra@example.com"
-                className="text-[#8b92ab] flex items-center justify-center transition-all duration-300 hover:text-accent-cyan hover:-translate-y-0.5 hover:scale-115 hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.6)]"
+                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="Email Debendra"
               >
-                <Mail size={20} />
+                <Mail size={18} />
               </a>
             </div>
+          </div>
+
+          {/* Decorative Dot Matrix Grid (As shown in Reference Mockup) */}
+          <div className="mt-8 grid grid-cols-6 gap-2.5 w-max opacity-20 pointer-events-none select-none" aria-hidden="true">
+            {Array.from({ length: 18 }).map((_, i) => (
+              <div key={i} className="w-1 h-1 rounded-full bg-white" />
+            ))}
           </div>
 
         </div>
@@ -147,12 +174,12 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
       {/* Slide Down Hint */}
       <a
-        href="#about"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-[#94a3b8] no-underline font-mono text-[0.75rem] tracking-[0.2em] z-20 transition-all duration-300 hover:text-accent-cyan hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.5)] animate-bounce-hint"
+        href="#work"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#a1a1aa] no-underline font-mono text-[0.72rem] tracking-[0.2em] z-20 transition-all duration-300 hover:text-accent-orange animate-bounce-hint"
         aria-label="Slide down to see more"
       >
         <span>SLIDE DOWN</span>
-        <span className="text-accent-cyan text-lg">↓</span>
+        <span className="text-accent-orange text-base">↓</span>
       </a>
     </section>
   );

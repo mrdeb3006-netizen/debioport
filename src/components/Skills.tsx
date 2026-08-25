@@ -79,7 +79,7 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
           {categories.map((cat) => (
             <div
               key={cat.number}
-              className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-7 flex flex-col transition-all duration-300 hover:border-accent-cyan/40 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(56,189,248,0.12)]"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-7 flex flex-col transition-all duration-300 hover:border-accent-cyan/40 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)]"
             >
               <div className="flex items-center gap-3 mb-6 pb-3 border-b border-white/[0.06]">
                 <span className="font-mono text-[0.8rem] text-accent-cyan font-bold">{cat.number}</span>
@@ -98,8 +98,8 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
                       onClick={() => handleTagClick(t.filterKey)}
                       className={`py-2 px-4 rounded-lg font-main text-[0.9rem] font-medium transition-all duration-300 cursor-pointer ${
                         isActive
-                          ? 'bg-accent-cyan text-slate-950 font-bold border border-accent-cyan shadow-[0_0_14px_rgba(56,189,248,0.4)] -translate-y-0.5'
-                          : 'bg-white/[0.04] border border-white/10 text-slate-200 hover:bg-accent-cyan/15 hover:border-accent-cyan/40 hover:text-white hover:shadow-[0_0_12px_rgba(56,189,248,0.25)] hover:-translate-y-0.5'
+                          ? 'bg-accent-cyan text-bg-dark font-extrabold border border-accent-cyan shadow-[0_0_14px_rgba(249,115,22,0.45)] -translate-y-0.5'
+                          : 'bg-white/[0.04] border border-white/10 text-slate-200 hover:bg-accent-cyan/15 hover:border-accent-cyan/40 hover:text-white hover:shadow-[0_0_12px_rgba(249,115,22,0.25)] hover:-translate-y-0.5'
                       }`}
                     >
                       {t.label}

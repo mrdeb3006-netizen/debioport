@@ -10,9 +10,9 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
 
   const navItems = [
     { id: 'home', label: 'home' },
-    { id: 'about', label: 'about' },
     { id: 'work', label: 'work' },
     { id: 'experience', label: 'experience' },
+    { id: 'about', label: 'about' },
     { id: 'contact', label: 'contact' },
   ];
 
@@ -36,64 +36,64 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
     <header
       className={`fixed top-0 left-0 w-full h-[84px] z-[1000] px-4 md:px-10 lg:px-16 transition-all duration-300 slide-down ${
         isScrolled
-          ? 'bg-bg-dark/85 backdrop-blur-[16px] border-b border-white/[0.06] shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
+          ? 'bg-bg-dark/90 backdrop-blur-[16px] border-b border-white/[0.06] shadow-[0_10px_30px_rgba(0,0,0,0.6)]'
           : 'bg-transparent border-b border-transparent shadow-none backdrop-blur-none'
       }`}
     >
-      <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between">
+      <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-6">
         
-        {/* Brand Logo Lockup: DB Logo + MR DEB Text */}
-        <a href="#home" className="flex items-center gap-3.5 no-underline text-white group" aria-label="DB MR DEB Home">
-          <div className="w-[42px] h-[32px] flex items-center justify-center filter drop-shadow-[0_0_8px_rgba(56,189,248,0.45)] drop-shadow-[0_0_14px_rgba(99,102,241,0.25)] transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-0.5">
-            <svg viewBox="0 0 46 34" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-              <defs>
-                <linearGradient id="db-grad-1" x1="2" y1="2" x2="24" y2="32" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#38bdf8"/>
-                  <stop offset="100%" stopColor="#6366f1"/>
-                </linearGradient>
-                <linearGradient id="db-grad-2" x1="16" y1="2" x2="44" y2="32" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#6366f1"/>
-                  <stop offset="100%" stopColor="#818cf8"/>
-                </linearGradient>
-              </defs>
-              {/* D Glyph */}
-              <path d="M4 5H15C21.5 5 25.5 9 25.5 17C25.5 25 21.5 29 15 29H4V5Z" stroke="url(#db-grad-1)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M10 11V23" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" opacity="0.85"/>
-              {/* B Glyph */}
-              <path d="M25.5 5H35.5C39 5 41.5 7.2 41.5 11C41.5 14.2 39.2 16.5 35.5 17C39.8 17.5 42.5 20 42.5 23.5C42.5 27.5 39.5 29 35.5 29H25.5" stroke="url(#db-grad-2)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="25.5" y1="17" x2="35.5" y2="17" stroke="url(#db-grad-2)" strokeWidth="2.5" strokeLinecap="round"/>
-              <circle cx="25.5" cy="17" r="2.2" fill="#38bdf8"/>
+        {/* Brand Logo Lockup (Reference Mockup Style) */}
+        <a href="#home" className="flex items-center gap-3 no-underline text-white group" aria-label="Debendra Portfolio Home">
+          <div className="w-[32px] h-[32px] flex items-center justify-center filter drop-shadow-[0_0_10px_rgba(249,115,22,0.6)] transition-all duration-300 group-hover:scale-110">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+              {/* Outer Ring */}
+              <circle cx="18" cy="18" r="15" stroke="#f97316" strokeWidth="2.2" strokeOpacity="0.95" />
+              {/* Central Vertical Line */}
+              <line x1="18" y1="3" x2="18" y2="33" stroke="#f97316" strokeWidth="2.2" strokeLinecap="round" />
+              {/* Crossed Diagonal Branch */}
+              <path d="M7 25L18 14L29 25" stroke="#f97316" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <span className="font-display text-[1.3rem] font-black tracking-[0.14em] text-white uppercase">MR DEB</span>
+          <span className="font-display text-[1.15rem] md:text-[1.25rem] font-black tracking-[0.16em] text-white uppercase">
+            DEBENDRA
+          </span>
         </a>
 
-        {/* Desktop Navigation - Shifted Right */}
-        <nav className="hidden md:flex items-center ml-auto" aria-label="Main Navigation">
-          <ul className="flex items-center gap-9 list-none m-0 p-0">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center ml-auto gap-8" aria-label="Main Navigation">
+          <ul className="flex items-center gap-8 list-none m-0 p-0">
             {navItems.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
-                  className={`relative text-[0.95rem] font-medium tracking-[0.04em] py-1.5 px-1 inline-flex items-center transition-all duration-300 ${
+                  className={`relative text-[0.92rem] font-medium tracking-[0.04em] py-1 px-1 inline-flex items-center transition-all duration-300 ${
                     activeSection === item.id
-                      ? 'text-accent-cyan font-semibold drop-shadow-[0_0_10px_rgba(56,189,248,0.4)]'
+                      ? 'text-accent-orange font-semibold drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]'
                       : 'text-text-secondary hover:text-white'
                   }`}
                 >
                   <span className={`font-semibold mr-0.5 transition-all duration-300 ${
-                    activeSection === item.id ? 'text-accent-purple opacity-100' : 'text-accent-purple/70 group-hover:text-accent-cyan'
+                    activeSection === item.id ? 'text-accent-orange opacity-100' : 'text-text-muted group-hover:text-accent-orange'
                   }`}>
                     /
                   </span>
                   {item.label}
                   {activeSection === item.id && (
-                    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-nav-active rounded shadow-[0_0_8px_rgba(56,189,248,0.5)]" />
+                    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-accent-orange to-accent-purple rounded shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
                   )}
                 </a>
               </li>
             ))}
           </ul>
+
+          {/* Top-Right Action Button: Let's talk → */}
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 py-2 px-5 rounded-lg bg-accent-orange text-bg-dark font-display font-extrabold text-[0.84rem] tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] transition-all duration-300 cursor-pointer shadow-md"
+          >
+            <span>Let's talk</span>
+            <span className="text-base font-black">→</span>
+          </a>
         </nav>
 
         {/* Mobile Toggle */}
@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
               <a
                 href={`#${item.id}`}
                 className={`text-[1.8rem] font-bold no-underline font-display transition-all duration-300 ${
-                  activeSection === item.id ? 'text-accent-cyan drop-shadow-[0_0_12px_rgba(56,189,248,0.5)]' : 'text-slate-300 hover:text-accent-cyan'
+                  activeSection === item.id ? 'text-accent-orange drop-shadow-[0_0_12px_rgba(249,115,22,0.6)]' : 'text-slate-300 hover:text-accent-orange'
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -126,6 +126,16 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
               </a>
             </li>
           ))}
+          <li className="pt-4">
+            <a
+              href="#contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="inline-flex items-center gap-2 py-3 px-8 rounded-xl bg-accent-orange text-bg-dark font-display font-extrabold text-[1rem] tracking-wider uppercase shadow-lg"
+            >
+              <span>Let's talk</span>
+              <span>→</span>
+            </a>
+          </li>
         </ul>
       </div>
     </header>

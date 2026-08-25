@@ -289,8 +289,8 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
                       }}
                       className={`w-full max-w-[1400px] h-[calc(100vh-190px)] min-h-[440px] max-h-[580px] specular-card backdrop-blur-[20px] border border-white/[0.09] rounded-2xl md:rounded-3xl p-5 md:p-7 lg:p-8 transition-all duration-300 relative overflow-hidden flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.85)] ${
                         isMatch
-                          ? 'border-accent-cyan/60 shadow-[0_0_30px_rgba(56,189,248,0.25)]'
-                          : 'hover:border-accent-cyan/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_25px_rgba(56,189,248,0.12)]'
+                          ? 'border-accent-cyan/60 shadow-[0_0_30px_rgba(249,115,22,0.3)]'
+                          : 'hover:border-accent-cyan/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_25px_rgba(249,115,22,0.15)]'
                       }`}
                     >
                       <div className="grid grid-cols-1 lg:grid-cols-[38%_62%] gap-6 lg:gap-8 xl:gap-10 items-center h-full min-h-0">
@@ -303,7 +303,7 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
                           <div>
                             {/* Top Tagline & Oversized Subtle Project Number */}
                             <div className="flex items-center justify-between mb-1">
-                              <div className="font-display text-[clamp(2rem,3.4vw,2.8rem)] font-black text-white/15 [-webkit-text-stroke:1px_rgba(56,189,248,0.35)] leading-none">
+                              <div className="font-display text-[clamp(2rem,3.4vw,2.8rem)] font-black text-white/15 [-webkit-text-stroke:1px_rgba(249,115,22,0.4)] leading-none">
                                 {proj.number}
                               </div>
                               <span className="font-mono text-[0.7rem] font-bold px-2.5 py-0.5 rounded-full bg-accent-purple/15 text-accent-purple border border-accent-purple/30">
@@ -432,7 +432,7 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
                     onClick={() => scrollToSlide(i)}
                     className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                       activeSlide === i
-                        ? 'w-8 bg-gradient-to-r from-accent-cyan to-accent-purple shadow-[0_0_8px_rgba(56,189,248,0.4)]'
+                        ? 'w-8 bg-gradient-to-r from-accent-cyan to-accent-purple shadow-[0_0_8px_rgba(249,115,22,0.5)]'
                         : 'w-2.5 bg-white/20 hover:bg-white/40'
                     }`}
                     aria-label={`Go to project 0${i + 1}`}
@@ -451,7 +451,7 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
               <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   style={{ width: `${Math.max(10, scrollProgress * 100)}%` }}
-                  className="h-full bg-gradient-to-r from-accent-cyan via-accent-violet to-accent-purple rounded-full shadow-[0_0_8px_rgba(56,189,248,0.4)] transition-all duration-75"
+                  className="h-full bg-gradient-to-r from-accent-cyan via-accent-violet to-accent-purple rounded-full shadow-[0_0_8px_rgba(249,115,22,0.5)] transition-all duration-75"
                 />
               </div>
             </div>
@@ -483,7 +483,7 @@ export const Work: React.FC<WorkProps> = ({ onOpenProjectModal, activeFilter }) 
               >
                 {/* Project Number & Language */}
                 <div className="flex items-center justify-between">
-                  <div className="font-display text-3xl font-black text-white/20 [-webkit-text-stroke:1px_rgba(56,189,248,0.35)]">
+                  <div className="font-display text-3xl font-black text-white/20 [-webkit-text-stroke:1px_rgba(249,115,22,0.4)]">
                     {proj.number}
                   </div>
                   <span className="font-mono text-[0.7rem] font-bold px-2 py-0.5 rounded bg-accent-purple/15 text-accent-purple border border-accent-purple/30">

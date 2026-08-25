@@ -39,7 +39,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
           <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-cyan font-semibold mb-3 inline-block">
             // 05. /CONTACT
           </div>
-          <h2 className="font-display text-[clamp(3.2rem,6.8vw,6.2rem)] font-black leading-[1.08] uppercase tracking-[0.01em] bg-hero-name bg-clip-text text-transparent filter drop-shadow-[0_0_20px_rgba(56,189,248,0.2)] mb-6">
+          <h2 className="font-display text-[clamp(3.2rem,6.8vw,6.2rem)] font-black leading-[1.08] uppercase tracking-[0.01em] bg-hero-name bg-clip-text text-transparent filter drop-shadow-[0_0_20px_rgba(249,115,22,0.2)] mb-6">
             LET'S BUILD<br />SOMETHING GREAT.
           </h2>
           <p className="text-[clamp(1.15rem,1.6vw,1.45rem)] text-text-secondary leading-relaxed">
@@ -61,7 +61,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               className={`specular-card backdrop-blur-[14px] border rounded-2xl p-6 flex flex-col relative transition-all duration-300 cursor-pointer ${
                 copied
                   ? 'border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.35)]'
-                  : 'border-white/[0.08] hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(56,189,248,0.12)] hover:-translate-y-1'
+                  : 'border-white/[0.08] hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1'
               }`}
             >
               <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
@@ -75,15 +75,15 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
 
             {/* GitHub Card */}
             <a
-              href="https://github.com"
+              href="https://github.com/mrdeb3006-netizen"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(56,189,248,0.12)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
             >
               <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
                 GITHUB
               </span>
-              <span className="text-[0.98rem] font-bold text-white truncate">github.com/mrdeb</span>
+              <span className="text-[0.98rem] font-bold text-white truncate">github.com/mrdeb3006-netizen</span>
               <span className="absolute top-5 right-6 text-lg text-accent-cyan transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 ↗
               </span>
@@ -94,7 +94,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(56,189,248,0.12)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
             >
               <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
                 LINKEDIN
@@ -110,7 +110,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               href="https://x.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(56,189,248,0.12)] hover:-translate-y-1 group"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.08] rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:border-accent-cyan/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)] hover:-translate-y-1 group"
             >
               <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
                 X (TWITTER)
@@ -157,7 +157,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                     name="name"
                     required
                     placeholder="John Doe"
-                    className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(56,189,248,0.25)] focus:bg-[#101424]/95"
+                    className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -170,7 +170,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                     name="email"
                     required
                     placeholder="john@example.com"
-                    className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(56,189,248,0.25)] focus:bg-[#101424]/95"
+                    className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
                   />
                 </div>
               </div>
@@ -184,7 +184,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                   id="contact-subject"
                   name="subject"
                   placeholder="Project collaboration or discussion"
-                  className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(56,189,248,0.25)] focus:bg-[#101424]/95"
+                  className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
                 />
               </div>
 
@@ -198,7 +198,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                   rows={4}
                   required
                   placeholder="Tell me about your idea or project..."
-                  className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(56,189,248,0.25)] focus:bg-[#101424]/95 resize-none"
+                  className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95 resize-none"
                 />
               </div>
 

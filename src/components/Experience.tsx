@@ -55,9 +55,9 @@ export const Experience: React.FC = () => {
           {milestones.map((item, idx) => (
             <div
               key={idx}
-              className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-7 md:p-10 grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 md:gap-8 items-start transition-all duration-300 hover:border-accent-cyan/40 hover:translate-x-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(56,189,248,0.1)]"
+              className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-7 md:p-10 grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 md:gap-8 items-start transition-all duration-300 hover:border-accent-cyan/40 hover:translate-x-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(249,115,22,0.15)]"
             >
-              <div className="font-display text-4xl font-black text-white/20 [-webkit-text-stroke:1px_rgba(56,189,248,0.35)] leading-none">
+              <div className="font-display text-4xl font-black text-white/20 [-webkit-text-stroke:1px_rgba(249,115,22,0.4)] leading-none">
                 {item.number}
               </div>
 

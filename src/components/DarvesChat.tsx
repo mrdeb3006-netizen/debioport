@@ -298,7 +298,7 @@ export const DarvesChat: React.FC = () => {
           title="Drag to reposition • Click to chat with DARVES"
         >
           {/* Label Pill (Always clearly visible) */}
-          <div className="hidden sm:flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-[#0d0f1f]/95 border border-accent-cyan/40 backdrop-blur-md shadow-[0_4px_20px_rgba(56,189,248,0.25)] text-white text-[0.82rem] font-bold tracking-wide pointer-events-none">
+          <div className="hidden sm:flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-[#18181b]/95 border border-accent-cyan/40 backdrop-blur-md shadow-[0_4px_20px_rgba(249,115,22,0.3)] text-white text-[0.82rem] font-bold tracking-wide pointer-events-none">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan" />
             <span className="font-display tracking-wider text-accent-cyan">DARVES</span>
             <span className="text-white/80 font-normal text-[0.75rem]">AI Chat</span>
@@ -313,14 +313,14 @@ export const DarvesChat: React.FC = () => {
 
             <button
               type="button"
-              className="relative w-14 h-14 rounded-full bg-[#0a0b16] border-2 border-accent-cyan/80 flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.4),0_0_30px_rgba(99,102,241,0.25)] text-accent-cyan overflow-hidden focus:outline-none"
+              className="relative w-14 h-14 rounded-full bg-[#121215] border-2 border-accent-cyan/80 flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.45),0_0_30px_rgba(251,146,60,0.25)] text-accent-cyan overflow-hidden focus:outline-none"
               aria-label="Open DARVES AI Assistant"
             >
               {/* Holographic Core Glow */}
               <div className="absolute inset-0 bg-gradient-to-tr from-accent-cyan/25 via-transparent to-accent-purple/25" />
               
               {/* Icon */}
-              <Bot size={26} className="relative z-10 text-white drop-shadow-[0_0_8px_rgba(56,189,248,0.6)]" />
+              <Bot size={26} className="relative z-10 text-white drop-shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
             </button>
           </div>
         </div>
@@ -334,12 +334,12 @@ export const DarvesChat: React.FC = () => {
             isMinimized
               ? 'bottom-28 right-8 w-72 h-14 rounded-2xl overflow-hidden'
               : 'bottom-20 md:bottom-28 right-4 md:right-8 w-[calc(100vw-2rem)] md:w-[410px] h-[550px] max-h-[85vh] rounded-3xl'
-          } bg-[#0b0d18]/95 backdrop-blur-[24px] border border-accent-cyan/30 shadow-[0_20px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(56,189,248,0.15)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200`}
+          } bg-[#121216]/95 backdrop-blur-[24px] border border-accent-cyan/30 shadow-[0_20px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(249,115,22,0.2)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200`}
         >
           {/* Chat Window Header */}
-          <div className="h-16 bg-[#121426]/90 border-b border-white/[0.08] px-4 flex items-center justify-between shrink-0">
+          <div className="h-16 bg-[#1c1c22]/90 border-b border-white/[0.08] px-4 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="relative w-9 h-9 rounded-full bg-accent-cyan/15 border border-accent-cyan/40 flex items-center justify-center shadow-[0_0_10px_rgba(56,189,248,0.3)]">
+              <div className="relative w-9 h-9 rounded-full bg-accent-cyan/15 border border-accent-cyan/40 flex items-center justify-center shadow-[0_0_10px_rgba(249,115,22,0.35)]">
                 <Bot size={18} className="text-accent-cyan" />
                 <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-400 border border-[#0b0d18] shadow-[0_0_6px_#22c55e]" />
               </div>
