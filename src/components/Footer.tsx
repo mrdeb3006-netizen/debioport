@@ -23,11 +23,12 @@ export const Footer: React.FC = () => {
 
         {/* Navigation Links */}
         <div className="flex gap-7 items-center flex-wrap">
-          <a href="#home" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">/home</a>
-          <a href="#about" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">/about</a>
-          <a href="#work" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">/work</a>
-          <a href="#experience" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">/experience</a>
-          <a href="#contact" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">/contact</a>
+          <a href="#home" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/home</a>
+          <a href="#about" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/about</a>
+          <a href="#work" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/work</a>
+          <a href="#experience" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/experience</a>
+          <a href="#skills" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/skills</a>
+          <a href="#contact" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/contact</a>
         </div>
 
         {/* Social Links */}

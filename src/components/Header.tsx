@@ -10,9 +10,10 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
 
   const navItems = [
     { id: 'home', label: 'home' },
+    { id: 'about', label: 'about' },
     { id: 'work', label: 'work' },
     { id: 'experience', label: 'experience' },
-    { id: 'about', label: 'about' },
+    { id: 'skills', label: 'skills' },
     { id: 'contact', label: 'contact' },
   ];
 
