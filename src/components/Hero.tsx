@@ -102,8 +102,8 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
-  const debendranathChars = ['D', 'E', 'B', 'E', 'N', 'D', 'R', 'A', 'N', 'A', 'T', 'H'];
-  const beraChars = ['B', 'E', 'R', 'A'];
+  const lettersSolid = ['D', 'E', 'B', 'E', 'N', 'D'];
+  const lettersOutline = ['R', 'A'];
 
   return (
     <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden bg-bg-dark" id="home">
@@ -121,39 +121,41 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
       <div className="max-w-[1600px] w-full mx-auto px-6 md:px-12 lg:px-16 py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
         {/* Left Content Column */}
-        <div className="w-full max-w-[800px] flex flex-col justify-center">
+        <div className="w-full max-w-[760px] flex flex-col justify-center">
 
-          {/* Main Huge Display Title: DEBENDRANATH BERA in Luxury Sculpted Serif Typography */}
-          <div className="mb-6 -mt-3 select-none overflow-visible">
-            {/* Line 1: DEBENDRANATH */}
-            <div className="overflow-visible pb-1">
-              <h1 className="font-cinzel text-[clamp(2.3rem,4.8vw,4.5rem)] font-black tracking-[0.04em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible uppercase text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
-                {debendranathChars.map((char, idx) => (
-                  <span
-                    key={`dn-${idx}`}
-                    className="animate-letter-drop text-white inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 hover:text-accent-orange cursor-default"
-                    style={{ animationDelay: `${0.15 + idx * 0.05}s` }}
-                  >
-                    {char}
-                  </span>
-                ))}
-              </h1>
-            </div>
+          {/* Main Huge Display Title: DEBEND (Solid Chrome White) + RA (Orange Hollow Wireframe) - Moved a little up */}
+          <div className="mb-0 -mt-3 overflow-visible">
+            <h1 className="font-display text-[clamp(3.2rem,7vw,6.4rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase select-none">
+              {/* Solid White Letters: D E B E N D */}
+              {lettersSolid.map((letter, idx) => (
+                <span
+                  key={`solid-${idx}`}
+                  className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                  style={{ animationDelay: `${0.2 + idx * 0.08}s` }}
+                >
+                  {letter}
+                </span>
+              ))}
+              {/* Orange Hollow Wireframe Letters: R A */}
+              {lettersOutline.map((letter, idx) => (
+                <span
+                  key={`outline-${idx}`}
+                  className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                  style={{ animationDelay: `${0.2 + (lettersSolid.length + idx) * 0.08}s` }}
+                >
+                  {letter}
+                </span>
+              ))}
+            </h1>
+          </div>
 
-            {/* Line 2: BERA (Luminous Amber / Gold Gradient) */}
-            <div className="overflow-visible pt-0.5 flex items-center gap-3">
-              <h2 className="font-cinzel text-[clamp(2.3rem,4.8vw,4.5rem)] font-black tracking-[0.08em] leading-[1.05] uppercase inline-flex overflow-visible">
-                {beraChars.map((char, idx) => (
-                  <span
-                    key={`b-${idx}`}
-                    className="animate-letter-drop bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent filter drop-shadow-[0_0_25px_rgba(249,115,22,0.65)] inline-block transition-transform duration-300 hover:scale-110 hover:-translate-y-1 cursor-default"
-                    style={{ animationDelay: `${0.75 + idx * 0.08}s` }}
-                  >
-                    {char}
-                  </span>
-                ))}
-              </h2>
-              <div className="w-2.5 h-2.5 rounded-full bg-accent-orange shadow-[0_0_15px_rgba(249,115,22,0.95)] animate-pulse" />
+          {/* Cursive Signature Underneath: Bera with animated pen stroke */}
+          <div className="mb-6 -mt-1 pl-1 flex items-center overflow-visible">
+            <div className="signature-cursive-wrapper">
+              <span className="signature-cursive-text select-none">
+                Bera
+              </span>
+              <div className="signature-pen-stroke" aria-hidden="true" />
             </div>
           </div>
 

@@ -42,18 +42,24 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
     >
       <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-6">
         
-        {/* Brand Logo Lockup with Uploaded DB Monogram */}
-        <a href="#home" className="flex items-center gap-3 no-underline text-white group" aria-label="Debendranath Bera Portfolio Home">
-          <div className="h-[36px] w-[36px] rounded-lg overflow-hidden border border-white/10 bg-black/60 flex items-center justify-center p-0.5 shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-all duration-300 group-hover:scale-105 group-hover:border-accent-orange/40 group-hover:shadow-[0_0_15px_rgba(249,115,22,0.4)]">
+        {/* Brand Logo Lockup with Luminous DB Monogram */}
+        <a href="#home" className="flex items-center gap-3.5 no-underline text-white group" aria-label="Debendranath Bera Portfolio Home">
+          <div className="relative h-[42px] w-[42px] flex items-center justify-center rounded-xl bg-accent-orange/[0.08] border border-accent-orange/35 p-1 transition-all duration-300 shadow-[0_0_15px_rgba(249,115,22,0.3)] group-hover:scale-105 group-hover:border-accent-orange group-hover:shadow-[0_0_22px_rgba(249,115,22,0.7)] group-hover:bg-accent-orange/[0.15]">
             <img
               src="/db-logo.jpg"
               alt="DB Monogram Logo"
-              className="w-full h-full object-contain filter brightness-110"
+              className="w-full h-full object-contain mix-blend-screen filter contrast-125 brightness-150 drop-shadow-[0_0_8px_rgba(249,115,22,0.9)]"
             />
           </div>
-          <span className="font-cinzel text-[1rem] md:text-[1.12rem] font-bold tracking-[0.14em] text-white uppercase transition-colors duration-300 group-hover:text-accent-orange">
-            DEBENDRANATH BERA
-          </span>
+          <div className="flex flex-col">
+            <span className="font-cinzel text-[0.98rem] md:text-[1.12rem] font-bold tracking-[0.14em] text-white uppercase leading-tight transition-colors duration-300 group-hover:text-accent-orange flex items-center gap-1.5">
+              <span>DEBENDRANATH</span>
+              <span className="text-accent-orange font-extrabold">BERA</span>
+            </span>
+            <span className="font-mono text-[0.62rem] tracking-[0.22em] text-slate-400 font-semibold uppercase -mt-0.5">
+              PORTFOLIO
+            </span>
+          </div>
         </a>
 
         {/* Desktop Navigation */}

@@ -6,12 +6,19 @@ export const Footer: React.FC = () => {
       <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10 flex-wrap">
         
         {/* Brand Block */}
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-lg overflow-hidden border border-white/10 bg-black/60 flex items-center justify-center p-0.5 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-            <img src="/db-logo.jpg" alt="DB Logo" className="w-full h-full object-contain filter brightness-110" />
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 flex items-center justify-center rounded-xl bg-accent-orange/[0.08] border border-accent-orange/35 p-1 shadow-[0_0_20px_rgba(249,115,22,0.3)]">
+            <img
+              src="/db-logo.jpg"
+              alt="DB Logo"
+              className="h-full w-full object-contain mix-blend-screen filter contrast-125 brightness-150 drop-shadow-[0_0_10px_rgba(249,115,22,0.85)]"
+            />
           </div>
           <div className="flex flex-col">
-            <h4 className="font-cinzel text-[1.15rem] font-bold text-white tracking-wider">DEBENDRANATH BERA</h4>
+            <div className="font-cinzel text-[1.15rem] font-bold text-white tracking-wider flex items-center gap-1.5">
+              <span>DEBENDRANATH</span>
+              <span className="text-accent-orange font-extrabold">BERA</span>
+            </div>
             <p className="text-[0.82rem] text-text-muted">Developer • Problem Solver • Dreamer</p>
           </div>
         </div>
