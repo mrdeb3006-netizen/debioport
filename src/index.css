@@ -460,20 +460,20 @@ body {
 }
 
 .signature-cursive-wrapper:hover {
-  transform: rotate(-0.5deg) scale(1.03);
+  transform: rotate(-0.5deg) scale(1.04);
 }
 
 .signature-cursive-text {
-  font-family: 'Caveat', 'Outfit', sans-serif;
-  font-size: clamp(3rem, 5.2vw, 4.4rem);
-  font-weight: 600;
-  line-height: 1.1;
+  font-family: 'Alex Brush', 'Dancing Script', 'Caveat', cursive;
+  font-size: clamp(2.4rem, 4.2vw, 3.8rem);
+  font-weight: 500;
+  line-height: 1.15;
   color: #f97316;
   clip-path: inset(0 100% 0 0);
-  animation: signatureWrite 2s cubic-bezier(0.35, 0, 0.15, 1) forwards 0.2s;
+  animation: signatureWrite 1.6s cubic-bezier(0.35, 0, 0.15, 1) forwards 0.75s;
   white-space: nowrap;
   display: inline-block;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   padding-right: 0.5rem;
   will-change: clip-path, opacity;
 }
@@ -485,7 +485,7 @@ body {
   border-radius: 9999px;
   transform-origin: left;
   transform: scaleX(0);
-  animation: signatureUnderline 1.5s cubic-bezier(0.35, 0, 0.15, 1) forwards 1.4s;
+  animation: signatureUnderline 1.3s cubic-bezier(0.35, 0, 0.15, 1) forwards 1.4s;
   margin-top: -6px;
 }
 
