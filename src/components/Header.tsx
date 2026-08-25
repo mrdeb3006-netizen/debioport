@@ -105,50 +105,113 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
 
       {/* Fullscreen Mobile Drawer Menu */}
       <div
-        className={`fixed inset-0 z-[1500] bg-[#07080f]/98 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-center items-center px-6 ${
+        className={`fixed inset-0 z-[2000] bg-[#050508]/98 backdrop-blur-3xl transition-all duration-300 flex flex-col justify-between p-6 sm:p-8 overflow-y-auto ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
         }`}
         aria-hidden={!mobileMenuOpen}
       >
-        {/* Top bar with close */}
-        <div className="absolute top-5 right-5">
+        {/* Ambient Glows */}
+        <div className="absolute top-0 right-0 w-[280px] h-[280px] rounded-full bg-accent-orange/10 blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[280px] h-[280px] rounded-full bg-accent-cyan/10 blur-[100px] pointer-events-none" />
+
+        {/* Top Header Bar inside Drawer */}
+        <div className="flex items-center justify-between pb-6 border-b border-white/[0.08] relative z-10">
+          <div className="flex items-center gap-3">
+            <img
+              src="/db-logo.jpg"
+              alt="DB Monogram"
+              className="h-8 w-auto object-contain mix-blend-screen filter contrast-125 brightness-125 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]"
+            />
+            <span className="font-cinzel text-[0.92rem] font-bold text-white tracking-wider">
+              DEBENDRANATH <span className="text-accent-orange font-extrabold">BERA</span>
+            </span>
+          </div>
+
           <button
             type="button"
             onClick={() => setMobileMenuOpen(false)}
-            className="w-11 h-11 rounded-xl bg-white/[0.08] border border-white/15 flex items-center justify-center text-white text-lg hover:text-accent-orange hover:border-accent-orange transition-all cursor-pointer shadow-md"
+            className="w-11 h-11 rounded-xl bg-white/[0.08] border border-white/15 flex items-center justify-center text-white text-xl hover:text-accent-orange hover:border-accent-orange active:scale-95 transition-all cursor-pointer shadow-md"
             aria-label="Close navigation menu"
           >
             ✕
           </button>
         </div>
 
-        <ul className="list-none flex flex-col gap-4 text-center w-full max-w-[300px] p-0 m-0">
-          {navItems.map((item) => (
-            <li key={item.id}>
-              <a
-                href={`#${item.id}`}
-                className={`block py-2 text-[1.45rem] font-bold font-display capitalize transition-all duration-200 ${
-                  activeSection === item.id
-                    ? 'text-accent-orange drop-shadow-[0_0_12px_rgba(249,115,22,0.6)] font-black'
-                    : 'text-slate-300 hover:text-accent-orange'
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-          <li className="pt-4">
+        {/* Navigation Items (Crystal Clear, Numbered, High Contrast) */}
+        <div className="my-auto py-6 relative z-10">
+          <ul className="list-none flex flex-col gap-2 max-w-[360px] mx-auto p-0 m-0">
+            {navItems.map((item, idx) => {
+              const isActive = activeSection === item.id;
+              return (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-between py-3 px-4 rounded-xl transition-all duration-200 ${
+                      isActive
+                        ? 'bg-accent-orange/15 border border-accent-orange/40 text-accent-orange shadow-[0_0_16px_rgba(249,115,22,0.2)]'
+                        : 'text-slate-200 hover:text-white hover:bg-white/[0.05] border border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <span className={`font-mono text-[0.78rem] font-bold ${
+                        isActive ? 'text-accent-orange' : 'text-slate-500'
+                      }`}>
+                        0{idx + 1}.
+                      </span>
+                      <span className="font-display text-[1.35rem] font-black uppercase tracking-wide">
+                        {item.label}
+                      </span>
+                    </div>
+
+                    {isActive && (
+                      <span className="w-2 h-2 rounded-full bg-accent-orange shadow-[0_0_8px_#f97316]" />
+                    )}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        {/* Bottom Drawer Actions */}
+        <div className="pt-4 border-t border-white/[0.08] flex flex-col gap-4 max-w-[360px] mx-auto w-full relative z-10">
+          <a
+            href="#contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="btn-primary w-full justify-center py-3.5 rounded-xl text-[0.95rem] font-bold text-white shadow-[0_0_20px_rgba(249,115,22,0.35)] flex items-center gap-2"
+          >
+            <span>Let's connect</span>
+            <span className="text-lg">→</span>
+          </a>
+
+          <div className="flex items-center justify-center gap-4 text-[0.80rem] font-mono text-slate-400">
             <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="btn-primary w-full justify-center py-3.5 rounded-xl text-[0.92rem] font-bold text-white shadow-lg flex items-center gap-2"
+              href="https://github.com/mrdeb3006-netizen"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-accent-orange transition-colors"
             >
-              <span>Let's connect</span>
-              <span className="text-lg">→</span>
+              GitHub ↗
             </a>
-          </li>
-        </ul>
+            <span>•</span>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-accent-orange transition-colors"
+            >
+              LinkedIn ↗
+            </a>
+            <span>•</span>
+            <a
+              href="mailto:mrdeb3006@gmail.com"
+              className="hover:text-accent-orange transition-colors"
+            >
+              Email ↗
+            </a>
+          </div>
+        </div>
       </div>
     </header>
   );
