@@ -148,7 +148,7 @@ export const Experience: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-20 md:py-24 px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden"
+      className="pt-16 md:pt-20 pb-8 md:pb-10 px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden"
       id="journey"
     >
       <div className="max-w-[1400px] mx-auto">
