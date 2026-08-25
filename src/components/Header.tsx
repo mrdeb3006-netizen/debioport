@@ -42,20 +42,17 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
     >
       <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-6">
         
-        {/* Brand Logo Lockup (Reference Mockup Style) */}
-        <a href="#home" className="flex items-center gap-3 no-underline text-white group" aria-label="Debendra Portfolio Home">
-          <div className="w-[32px] h-[32px] flex items-center justify-center filter drop-shadow-[0_0_10px_rgba(249,115,22,0.6)] transition-all duration-300 group-hover:scale-110">
-            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-              {/* Outer Ring */}
-              <circle cx="18" cy="18" r="15" stroke="#f97316" strokeWidth="2.2" strokeOpacity="0.95" />
-              {/* Central Vertical Line */}
-              <line x1="18" y1="3" x2="18" y2="33" stroke="#f97316" strokeWidth="2.2" strokeLinecap="round" />
-              {/* Crossed Diagonal Branch */}
-              <path d="M7 25L18 14L29 25" stroke="#f97316" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+        {/* Brand Logo Lockup with Uploaded DB Monogram */}
+        <a href="#home" className="flex items-center gap-3 no-underline text-white group" aria-label="Debendranath Bera Portfolio Home">
+          <div className="h-[36px] w-[36px] rounded-lg overflow-hidden border border-white/10 bg-black/60 flex items-center justify-center p-0.5 shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-all duration-300 group-hover:scale-105 group-hover:border-accent-orange/40 group-hover:shadow-[0_0_15px_rgba(249,115,22,0.4)]">
+            <img
+              src="/db-logo.jpg"
+              alt="DB Monogram Logo"
+              className="w-full h-full object-contain filter brightness-110"
+            />
           </div>
-          <span className="font-display text-[1.15rem] md:text-[1.25rem] font-black tracking-[0.16em] text-white uppercase">
-            DEBENDRA
+          <span className="font-cinzel text-[1rem] md:text-[1.12rem] font-bold tracking-[0.14em] text-white uppercase transition-colors duration-300 group-hover:text-accent-orange">
+            DEBENDRANATH BERA
           </span>
         </a>
 

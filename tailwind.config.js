@@ -24,6 +24,8 @@ export default {
       fontFamily: {
         main: ['Outfit', 'sans-serif'],
         display: ['Syne', 'Outfit', 'sans-serif'],
+        cinzel: ['Cinzel', 'serif'],
+        serifDisplay: ['"Playfair Display"', 'Cinzel', 'serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       backgroundImage: {

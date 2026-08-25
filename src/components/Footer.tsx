@@ -6,10 +6,14 @@ export const Footer: React.FC = () => {
       <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10 flex-wrap">
         
         {/* Brand Block */}
-        <div className="flex flex-col gap-1">
-          <span className="font-mono text-[0.75rem] font-bold tracking-[0.2em] text-accent-cyan">MR DEB</span>
-          <h4 className="font-display text-[1.4rem] font-black text-white">DEBENDRA</h4>
-          <p className="text-[0.85rem] text-text-muted">Developer • Problem Solver • Dreamer</p>
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-lg overflow-hidden border border-white/10 bg-black/60 flex items-center justify-center p-0.5 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+            <img src="/db-logo.jpg" alt="DB Logo" className="w-full h-full object-contain filter brightness-110" />
+          </div>
+          <div className="flex flex-col">
+            <h4 className="font-cinzel text-[1.15rem] font-bold text-white tracking-wider">DEBENDRANATH BERA</h4>
+            <p className="text-[0.82rem] text-text-muted">Developer • Problem Solver • Dreamer</p>
+          </div>
         </div>
 
         {/* Navigation Links */}
