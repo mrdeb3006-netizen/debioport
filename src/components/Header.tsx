@@ -57,23 +57,18 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center ml-auto gap-8" aria-label="Main Navigation">
-          <ul className="flex items-center gap-8 list-none m-0 p-0">
+        <nav className="hidden md:flex items-center ml-auto gap-4 lg:gap-6" aria-label="Main Navigation">
+          <ul className="flex items-center gap-3.5 md:gap-4.5 lg:gap-5.5 list-none m-0 p-0">
             {navItems.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
-                  className={`relative text-[0.92rem] font-medium tracking-[0.04em] py-1 px-1 inline-flex items-center transition-all duration-300 ${
+                  className={`relative text-[0.88rem] md:text-[0.90rem] lg:text-[0.93rem] font-medium py-1 px-0.5 inline-flex items-center capitalize transition-all duration-300 ${
                     activeSection === item.id
-                      ? 'text-accent-orange font-semibold drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]'
+                      ? 'text-accent-orange font-bold drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]'
                       : 'text-text-secondary hover:text-white'
                   }`}
                 >
-                  <span className={`font-semibold mr-0.5 transition-all duration-300 ${
-                    activeSection === item.id ? 'text-accent-orange opacity-100' : 'text-text-muted group-hover:text-accent-orange'
-                  }`}>
-                    /
-                  </span>
                   {item.label}
                   {activeSection === item.id && (
                     <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-accent-orange rounded shadow-[0_0_6px_rgba(249,115,22,0.5)]" />
@@ -86,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
           {/* Top-Right Action Button: Let's connect → */}
           <a
             href="#contact"
-            className="inline-flex items-center gap-1.5 py-1.5 px-3.5 rounded-md bg-accent-orange text-bg-dark font-display font-extrabold text-[0.75rem] tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_16px_rgba(249,115,22,0.4)] transition-all duration-300 cursor-pointer shadow-sm"
+            className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-md bg-accent-orange text-bg-dark font-display font-extrabold text-[0.74rem] tracking-wider uppercase hover:bg-orange-600 hover:shadow-[0_0_16px_rgba(249,115,22,0.4)] transition-all duration-300 cursor-pointer shadow-sm ml-1"
           >
             <span>Let's connect</span>
             <span className="text-sm font-bold">→</span>
@@ -114,12 +109,12 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
             <li key={item.id}>
               <a
                 href={`#${item.id}`}
-                className={`text-[1.8rem] font-bold no-underline font-display transition-all duration-300 ${
+                className={`text-[1.8rem] font-bold no-underline font-display capitalize transition-all duration-300 ${
                   activeSection === item.id ? 'text-accent-orange drop-shadow-[0_0_12px_rgba(249,115,22,0.6)]' : 'text-slate-300 hover:text-accent-orange'
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                /{item.label}
+                {item.label}
               </a>
             </li>
           ))}

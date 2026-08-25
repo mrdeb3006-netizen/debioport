@@ -22,13 +22,14 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex gap-7 items-center flex-wrap">
-          <a href="#home" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/home</a>
-          <a href="#about" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/about</a>
-          <a href="#work" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/projects</a>
-          <a href="#journey" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/journey</a>
-          <a href="#skills" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/skills</a>
-          <a href="#contact" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-orange">/contact</a>
+        <div className="flex gap-5 sm:gap-6 items-center flex-wrap">
+          <a href="#home" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">home</a>
+          <a href="#about" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">about</a>
+          <a href="#work" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">projects</a>
+          <a href="#journey" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">journey</a>
+          <a href="#skills" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">skills</a>
+          <a href="#other-works" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">other works</a>
+          <a href="#contact" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">contact</a>
         </div>
 
         {/* Social Links */}
