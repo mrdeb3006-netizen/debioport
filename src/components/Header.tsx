@@ -88,29 +88,49 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
           </a>
         </nav>
 
-        {/* Mobile Toggle */}
+        {/* Mobile Hamburger Button */}
         <button
           type="button"
-          className="md:hidden flex flex-col justify-center items-center gap-1.5 w-10 h-10 bg-transparent border-0 cursor-pointer ml-auto"
+          className="md:hidden relative flex flex-col justify-center items-center gap-1.5 w-11 h-11 rounded-xl bg-white/[0.06] border border-white/10 hover:border-accent-orange/40 hover:bg-white/[0.1] active:scale-95 transition-all duration-200 cursor-pointer ml-auto z-[1600] shadow-sm"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle mobile menu"
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
         >
-          <span className={`w-[26px] h-[2px] bg-white rounded transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`w-[26px] h-[2px] bg-white rounded transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`} />
-          <span className={`w-[26px] h-[2px] bg-white rounded transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <span className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2 bg-accent-orange' : ''}`} />
+          <span className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+          <span className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2 bg-accent-orange' : ''}`} />
         </button>
 
       </div>
 
-      {/* Mobile Drawer Menu */}
-      <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'open' : ''}`} aria-hidden={!mobileMenuOpen}>
-        <ul className="list-none flex flex-col gap-7 text-center">
+      {/* Fullscreen Mobile Drawer Menu */}
+      <div
+        className={`fixed inset-0 z-[1500] bg-[#07080f]/98 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-center items-center px-6 ${
+          mobileMenuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
+        }`}
+        aria-hidden={!mobileMenuOpen}
+      >
+        {/* Top bar with close */}
+        <div className="absolute top-5 right-5">
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-11 h-11 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-white text-lg hover:text-accent-orange hover:border-accent-orange transition-all cursor-pointer"
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
+
+        <ul className="list-none flex flex-col gap-4 text-center w-full max-w-[300px] p-0 m-0">
           {navItems.map((item) => (
             <li key={item.id}>
               <a
                 href={`#${item.id}`}
-                className={`text-[1.8rem] font-bold no-underline font-display capitalize transition-all duration-300 ${
-                  activeSection === item.id ? 'text-accent-orange drop-shadow-[0_0_12px_rgba(249,115,22,0.6)]' : 'text-slate-300 hover:text-accent-orange'
+                className={`block py-2 text-[1.45rem] font-bold font-display capitalize transition-all duration-200 ${
+                  activeSection === item.id
+                    ? 'text-accent-orange drop-shadow-[0_0_12px_rgba(249,115,22,0.6)] font-black'
+                    : 'text-slate-300 hover:text-accent-orange'
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -122,10 +142,10 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
             <a
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="inline-flex items-center gap-2 py-2.5 px-6 rounded-lg bg-accent-orange text-bg-dark font-display font-extrabold text-[0.88rem] tracking-wider uppercase shadow-md"
+              className="btn-primary w-full justify-center py-3.5 rounded-xl text-[0.92rem] font-bold text-white shadow-lg flex items-center gap-2"
             >
               <span>Let's connect</span>
-              <span>→</span>
+              <span className="text-lg">→</span>
             </a>
           </li>
         </ul>
