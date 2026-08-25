@@ -42,24 +42,16 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
     >
       <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-6">
         
-        {/* Brand Logo Lockup with Luminous DB Monogram */}
-        <a href="#home" className="flex items-center gap-3.5 no-underline text-white group" aria-label="Debendranath Bera Portfolio Home">
-          <div className="relative h-[42px] w-[42px] flex items-center justify-center rounded-xl bg-accent-orange/[0.08] border border-accent-orange/35 p-1 transition-all duration-300 shadow-[0_0_15px_rgba(249,115,22,0.3)] group-hover:scale-105 group-hover:border-accent-orange group-hover:shadow-[0_0_22px_rgba(249,115,22,0.7)] group-hover:bg-accent-orange/[0.15]">
-            <img
-              src="/db-logo.jpg"
-              alt="DB Monogram Logo"
-              className="w-full h-full object-contain mix-blend-screen filter contrast-125 brightness-150 drop-shadow-[0_0_8px_rgba(249,115,22,0.9)]"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-cinzel text-[0.98rem] md:text-[1.12rem] font-bold tracking-[0.14em] text-white uppercase leading-tight transition-colors duration-300 group-hover:text-accent-orange flex items-center gap-1.5">
-              <span>DEBENDRANATH</span>
-              <span className="text-accent-orange font-extrabold">BERA</span>
-            </span>
-            <span className="font-mono text-[0.62rem] tracking-[0.22em] text-slate-400 font-semibold uppercase -mt-0.5">
-              PORTFOLIO
-            </span>
-          </div>
+        {/* Brand Logo Lockup with Standalone Luminous DB Monogram */}
+        <a href="#home" className="flex items-center gap-3 no-underline text-white group" aria-label="Debendranath Bera Portfolio Home">
+          <img
+            src="/db-logo.jpg"
+            alt="DB Monogram Logo"
+            className="h-9 md:h-10 w-auto object-contain mix-blend-screen select-none transition-all duration-300 filter contrast-125 brightness-125 drop-shadow-[0_0_12px_rgba(249,115,22,0.5)] group-hover:scale-105 group-hover:drop-shadow-[0_0_16px_rgba(249,115,22,0.85)]"
+          />
+          <span className="font-cinzel text-[0.95rem] md:text-[1.08rem] font-bold tracking-[0.12em] text-white uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-accent-orange">
+            DEBENDRANATH <span className="text-accent-orange font-extrabold">BERA</span>
+          </span>
         </a>
 
         {/* Desktop Navigation */}

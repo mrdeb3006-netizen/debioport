@@ -6,16 +6,14 @@ export const Footer: React.FC = () => {
       <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10 flex-wrap">
         
         {/* Brand Block */}
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 flex items-center justify-center rounded-xl bg-accent-orange/[0.08] border border-accent-orange/35 p-1 shadow-[0_0_20px_rgba(249,115,22,0.3)]">
-            <img
-              src="/db-logo.jpg"
-              alt="DB Logo"
-              className="h-full w-full object-contain mix-blend-screen filter contrast-125 brightness-150 drop-shadow-[0_0_10px_rgba(249,115,22,0.85)]"
-            />
-          </div>
+        <div className="flex items-center gap-3.5">
+          <img
+            src="/db-logo.jpg"
+            alt="DB Logo"
+            className="h-11 w-auto object-contain mix-blend-screen select-none filter contrast-125 brightness-125 drop-shadow-[0_0_12px_rgba(249,115,22,0.6)]"
+          />
           <div className="flex flex-col">
-            <div className="font-cinzel text-[1.15rem] font-bold text-white tracking-wider flex items-center gap-1.5">
+            <div className="font-cinzel text-[1.1rem] font-bold text-white tracking-wider flex items-center gap-1.5">
               <span>DEBENDRANATH</span>
               <span className="text-accent-orange font-extrabold">BERA</span>
             </div>
