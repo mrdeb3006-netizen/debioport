@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
           <img
             src="/db-logo.jpg"
             alt="DB Logo"
-            className="h-11 w-auto object-contain mix-blend-screen select-none filter contrast-125 brightness-125 drop-shadow-[0_0_12px_rgba(249,115,22,0.6)]"
+            className="h-11 w-auto rounded-xl object-contain mix-blend-screen select-none transition-transform duration-300"
           />
           <div className="flex flex-col">
             <div className="font-cinzel text-[1.1rem] font-bold text-white tracking-wider flex items-center gap-1.5">
