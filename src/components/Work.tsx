@@ -365,7 +365,7 @@ except KeyboardInterrupt:
                             </div>
 
                             {/* Project Name */}
-                            <h3 className="font-display text-[clamp(1.4rem,2.2vw,2.1rem)] font-black text-[#09090b] leading-tight mb-2 uppercase tracking-wide">
+                            <h3 className="font-display text-[clamp(1.4rem,2.2vw,2.1rem)] font-black text-[#0891b2] hover:text-[#06b6d4] leading-tight mb-2 uppercase tracking-wide transition-colors drop-shadow-sm">
                               {proj.title}
                             </h3>
 
@@ -575,7 +575,7 @@ except KeyboardInterrupt:
                   </div>
                 </div>
 
-                <h3 className="font-display text-xl font-black text-[#09090b] leading-snug">
+                <h3 className="font-display text-xl font-black text-[#0891b2] leading-snug">
                   {proj.title}
                 </h3>
 

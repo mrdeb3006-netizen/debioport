@@ -195,7 +195,7 @@ except KeyboardInterrupt:
               // PROJECT 0{project?.number}
             </span>
           </div>
-          <h2 id="project-detail-title" className="drawer-heading font-display text-2xl md:text-3xl font-black text-white uppercase tracking-wide">
+          <h2 id="project-detail-title" className="drawer-heading font-display text-2xl md:text-3xl font-black text-[#06b6d4] uppercase tracking-wide">
             {project?.title}
           </h2>
           <p className="text-[0.88rem] text-accent-orange font-mono mt-1">
