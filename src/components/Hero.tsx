@@ -258,7 +258,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 <XIcon size={16} />
               </a>
               <a
-                href="mailto:debendra@example.com"
+                href="mailto:mrdeb3006@gmail.com"
                 className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 text-[#a1a1aa] flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:shadow-[0_0_12px_rgba(249,115,22,0.3)]"
                 aria-label="Email Debendra"
               >

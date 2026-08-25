@@ -42,7 +42,7 @@ export const Footer: React.FC = () => {
           <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">
             X (Twitter)
           </a>
-          <a href="mailto:debendra@example.com" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">
+          <a href="mailto:mrdeb3006@gmail.com" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">
             Email
           </a>
         </div>

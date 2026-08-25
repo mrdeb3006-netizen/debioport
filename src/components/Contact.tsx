@@ -10,7 +10,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('debendra@example.com').then(() => {
+    navigator.clipboard.writeText('mrdeb3006@gmail.com').then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2400);
     });
@@ -67,7 +67,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               <span className="font-mono text-[0.75rem] font-semibold text-accent-cyan tracking-[0.16em] mb-1.5 uppercase">
                 {copied ? '✓ COPIED' : 'EMAIL'}
               </span>
-              <span className="text-[0.98rem] font-bold text-white truncate">debendra@example.com</span>
+              <span className="text-[0.98rem] font-bold text-white truncate">mrdeb3006@gmail.com</span>
               <span className="absolute top-5 right-6 text-lg text-accent-cyan">
                 {copied ? '✓' : '📋'}
               </span>

@@ -13,7 +13,7 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose }) => {
 DEBENDRA (MR DEB) - RESUME / CURRICULUM VITAE
 Computer Science Student • Developer • Problem Solver
 Age: 19 | Location: Kolkata, India
-Contact: debendra@example.com
+Contact: mrdeb3006@gmail.com
 Portfolio: https://mrdeb.dev
 =====================================================
 
