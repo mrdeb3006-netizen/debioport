@@ -67,7 +67,7 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
             // 04. /SKILLS
           </div>
           <h2 className="font-display text-[clamp(2.2rem,4vw,3.4rem)] font-black text-white leading-[1.15] mb-2 uppercase tracking-[0.02em]">
-            TECHNICAL<br />COMPETENCIES<span className="text-accent-orange">.</span>
+            SKILLS<span className="text-accent-orange">.</span>
           </h2>
           <p className="text-[1.05rem] text-text-secondary max-w-[640px] leading-[1.65]">
             Core technical tools and engineering foundations I work with daily (Click any tag to filter matching projects).
