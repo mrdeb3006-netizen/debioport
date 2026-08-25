@@ -334,11 +334,30 @@ body {
   overflow-y: auto;
 }
 
+/* Responsive Header & Navigation Rules */
+@media (max-width: 1023px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-hamburger-btn {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-nav {
+    display: flex !important;
+  }
+  .mobile-hamburger-btn {
+    display: none !important;
+  }
+}
+
 /* Mobile Nav Overlay */
 .mobile-menu-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(7, 8, 15, 0.97);
+  background: rgba(7, 8, 15, 0.98);
   backdrop-filter: blur(25px);
   z-index: 1500;
   display: flex;
@@ -347,7 +366,7 @@ body {
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.3s ease;
 }
 
 .mobile-menu-overlay.open {
