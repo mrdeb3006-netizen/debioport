@@ -36,11 +36,12 @@ export const BG_PRESETS = [
 
 export const THEME_COMBOS = [
   { name: 'Ember & Obsidian (Default)', accent: '#f97316', bgDark: '#09090b' },
+  { name: 'Dark Navy & Gold', accent: '#f59e0b', bgDark: '#050c1e' },
   { name: 'White & Deep Blue', accent: '#1d4ed8', bgDark: '#f8fafc' },
   { name: 'White & Cyan', accent: '#0891b2', bgDark: '#f8fafc' },
   { name: 'White & Burgundy', accent: '#881337', bgDark: '#faf8f7' },
   { name: 'White & Electric Blue', accent: '#2563eb', bgDark: '#ffffff' },
-  { name: 'Dark Navy Blue', accent: '#38bdf8', bgDark: '#050c1e' },
+  { name: 'Dark Navy & Cyan', accent: '#38bdf8', bgDark: '#050c1e' },
   { name: 'Cyber Cyan & AMOLED', accent: '#06b6d4', bgDark: '#000000' },
   { name: 'Matrix Emerald & Forest', accent: '#10b981', bgDark: '#05110a' },
   { name: 'Royal Violet & Navy', accent: '#a855f7', bgDark: '#070b19' },
