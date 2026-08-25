@@ -196,6 +196,17 @@ export const OtherWorks: React.FC = () => {
       imageSrc: '/photography/photo15_white_wildflower.jpg',
       downloadFileName: 'debendra_white_wildflower.jpg',
       aspectRatio: 'aspect-[4/3]'
+    },
+    {
+      id: 'photo-16',
+      title: 'Emerald Paddy Plains & Azure Skies',
+      category: 'Landscape & Nature',
+      location: 'Countryside Green Expanse',
+      year: '2026',
+      description: 'Expansive lush green rice meadows stretching under brilliant blue skies, textured cumulus clouds, and towering coconut palms.',
+      imageSrc: '/photography/photo16_emerald_paddy_sky.jpg',
+      downloadFileName: 'debendra_emerald_paddy_sky.jpg',
+      aspectRatio: 'aspect-[4/3]'
     }
   ];
 
