@@ -33,8 +33,8 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Target WhatsApp Number
-    const whatsappNumber = "919876543210"; 
+    // Debendranath Bera's Live WhatsApp Number
+    const whatsappNumber = "916289214258"; 
     
     // Structured WhatsApp Message Formatting
     const structuredMsg = 
@@ -106,7 +106,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
 
             {/* Direct WhatsApp Card with No-Spam Disclaimer */}
             <a
-              href="https://wa.me/919876543210?text=Hi%20Debendra,%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect%20regarding%20a%20project."
+              href="https://wa.me/916289214258?text=Hi%20Debendra,%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect%20regarding%20a%20project."
               target="_blank"
               rel="noopener noreferrer"
               className="specular-card backdrop-blur-[14px] border border-emerald-500/30 bg-emerald-500/[0.04] rounded-2xl p-5 flex flex-col relative transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500/[0.08] hover:shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_20px_rgba(16,185,129,0.25)] hover:-translate-y-1 group"
@@ -120,7 +120,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                   ↗
                 </span>
               </div>
-              <span className="text-[0.92rem] font-bold text-white truncate">Chat on WhatsApp</span>
+              <span className="text-[0.92rem] font-bold text-white truncate">+91 62892 14258</span>
               <div className="mt-2 pt-1.5 border-t border-emerald-500/20">
                 <span className="text-[0.66rem] font-mono text-emerald-300/80 leading-tight block">
                   ⚠️ <span className="font-bold text-emerald-300">NO SPAM</span> • Work &amp; Project Inquiries Only
