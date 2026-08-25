@@ -30,7 +30,7 @@ export const OtherWorks: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // 10 Authentic User Photographs
+  // 15 Authentic User Photographs
   const photos: PhotoItem[] = [
     {
       id: 'photo-1',
@@ -140,6 +140,61 @@ export const OtherWorks: React.FC = () => {
       description: 'A vibrant yellow butterfly resting gracefully atop delicate pink wildflower blossoms amidst lush green leaves.',
       imageSrc: '/photography/photo10_yellow_butterfly.jpg',
       downloadFileName: 'debendra_yellow_butterfly_wildflower.jpg',
+      aspectRatio: 'aspect-[4/3]'
+    },
+    {
+      id: 'photo-11',
+      title: 'Verdant Fields & Lone Palm Tree',
+      category: 'Landscape & Nature',
+      location: 'Rural Green Fields',
+      year: '2026',
+      description: 'Expansive lush green rice paddies stretching toward the horizon, anchored by a lone palm tree under cinematic monsoon clouds.',
+      imageSrc: '/photography/photo11_green_fields_palm.jpg',
+      downloadFileName: 'debendra_verdant_fields_palm.jpg',
+      aspectRatio: 'aspect-[3/4]'
+    },
+    {
+      id: 'photo-12',
+      title: 'Joy by the Waterside • Playful Smile',
+      category: 'Portrait & Sunlight',
+      location: 'Pondside Rural Pathway',
+      year: '2026',
+      description: 'A cheerful candid portrait of youthful charm and playful expression framed naturally against serene water and open sky.',
+      imageSrc: '/photography/photo12_child_by_water.jpg',
+      downloadFileName: 'debendra_joy_waterside.jpg',
+      aspectRatio: 'aspect-[3/4]'
+    },
+    {
+      id: 'photo-13',
+      title: 'Rural Wonder • Crimson Floral Dress',
+      category: 'Portrait & Culture',
+      location: 'Lush Countryside Pathway',
+      year: '2026',
+      description: 'An endearing candid capture of wide-eyed innocence and curiosity in vibrant floral attire surrounded by green countryside.',
+      imageSrc: '/photography/photo13_child_red_dress.jpg',
+      downloadFileName: 'debendra_rural_wonder.jpg',
+      aspectRatio: 'aspect-[3/4]'
+    },
+    {
+      id: 'photo-14',
+      title: 'Grasshoppers on Green Paddy Grass',
+      category: 'Macro & Wildlife',
+      location: 'Rice Meadow Foliage',
+      year: '2026',
+      description: 'Macro perspective on camouflaged green grasshoppers resting on vertical paddy leaf blades in bright afternoon sunlight.',
+      imageSrc: '/photography/photo14_grasshopper_paddy.jpg',
+      downloadFileName: 'debendra_grasshopper_paddy.jpg',
+      aspectRatio: 'aspect-[3/4]'
+    },
+    {
+      id: 'photo-15',
+      title: 'White Bloom • Wild Flora Geometry',
+      category: 'Macro & Flora',
+      location: 'Natural Meadow Flora',
+      year: '2026',
+      description: 'Crisp white wildflower petals radiating around a vibrant yellow pistil core, surrounded by dark textured foliage.',
+      imageSrc: '/photography/photo15_white_wildflower.jpg',
+      downloadFileName: 'debendra_white_wildflower.jpg',
       aspectRatio: 'aspect-[4/3]'
     }
   ];
@@ -346,13 +401,13 @@ export const OtherWorks: React.FC = () => {
             </div>
 
             {/* Slide Navigation Dots */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-[#e7e5e4] shadow-sm z-20">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-[#e7e5e4] shadow-sm z-20 max-w-[90%] overflow-x-auto">
               {photos.map((_, dotIdx) => (
                 <button
                   key={dotIdx}
                   type="button"
                   onClick={() => setCurrentIndex(dotIdx)}
-                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer shrink-0 ${
                     currentIndex === dotIdx
                       ? 'w-6 bg-[#18181b]'
                       : 'w-2 bg-[#d6d3d1] hover:bg-[#78716c]'
