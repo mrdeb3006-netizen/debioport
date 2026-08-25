@@ -3,6 +3,7 @@ export interface Project {
   number: string;
   title: string;
   tagline?: string;
+  category?: string;
   description: string;
   tech: string[];
   fileName?: string;
@@ -13,6 +14,8 @@ export interface Project {
   titleBar: string;
   overview: string;
   highlights: string[];
+  architecture?: string[];
+  sourceCode?: string;
 }
 
 export interface Milestone {
