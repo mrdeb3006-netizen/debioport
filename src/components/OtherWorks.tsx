@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Camera,
   BookOpen,
   X,
   Feather,
   Sparkles,
-  ArrowUpRight,
-  Maximize2
+  Maximize2,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Play,
+  Pause,
+  MapPin,
+  Calendar
 } from 'lucide-react';
 
 interface PhotoItem {
@@ -15,95 +21,99 @@ interface PhotoItem {
   category: string;
   location: string;
   year: string;
-  cameraSettings: string;
   description: string;
-  palette: string[];
-  gradientStyle: string;
-  aspect: string;
+  imageSrc: string;
+  downloadFileName: string;
+  aspectRatio: string;
 }
 
 export const OtherWorks: React.FC = () => {
   const [activePhoto, setActivePhoto] = useState<PhotoItem | null>(null);
-  const [photoFilter, setPhotoFilter] = useState<'all' | 'street' | 'nature' | 'monochrome'>('all');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // 5 Authentic User Photographs
   const photos: PhotoItem[] = [
     {
       id: 'photo-1',
-      title: 'Silent Radiance • Golden Hour Geometry',
-      category: 'street',
-      location: 'Kolkata, Howrah Riverfront',
+      title: 'Sunlight Through The Window Grill',
+      category: 'Light & Shadows',
+      location: 'Morning Rays & Green Canopy',
       year: '2026',
-      cameraSettings: '35mm • f/1.8 • 1/800s • ISO 100',
-      description: 'Capturing the golden intersection where morning sunlight cuts through architectural shadows, revealing geometry in daily rhythm.',
-      palette: ['#f59e0b', '#d97706', '#78350f', '#18181b'],
-      gradientStyle: 'linear-gradient(135deg, #fbbf24 0%, #d97706 40%, #78350f 85%)',
-      aspect: 'aspect-[4/5]'
+      description: 'Luminous morning sunbeams piercing through window geometry, illuminating lush treetops against an open azure sky.',
+      imageSrc: '/photography/photo1_window_sunlight.jpg',
+      downloadFileName: 'debendra_sunlight_window.jpg',
+      aspectRatio: 'aspect-[3/4]'
     },
     {
       id: 'photo-2',
-      title: 'Monochrome Stillness • The Solitary Thinker',
-      category: 'monochrome',
-      location: 'Victoria Memorial Grounds',
+      title: 'Victoria Memorial & Lake Reflection',
+      category: 'Heritage & Nature',
+      location: 'Victoria Memorial Grounds, Kolkata',
       year: '2025',
-      cameraSettings: '50mm • f/2.0 • 1/400s • ISO 200',
-      description: 'High-contrast black & white exploration of texture, marble serenity, and human contemplation in open space.',
-      palette: ['#ffffff', '#a1a1aa', '#3f3f46', '#09090b'],
-      gradientStyle: 'linear-gradient(145deg, #e4e4e7 0%, #71717a 45%, #18181b 100%)',
-      aspect: 'aspect-square'
+      description: 'A picturesque perspective of the historic Victoria Memorial mirrored across serene waters, framed by vibrant yellow wildflowers and dynamic cloud formations.',
+      imageSrc: '/photography/photo2_victoria_memorial.jpg',
+      downloadFileName: 'debendra_victoria_memorial_reflection.jpg',
+      aspectRatio: 'aspect-[4/3]'
     },
     {
       id: 'photo-3',
-      title: 'Verdant Horizons • Whispering Flora',
-      category: 'nature',
-      location: 'Botanical Sanctuary',
+      title: 'Serenade On Water • Two Ducks',
+      category: 'Wildlife & Stillness',
+      location: 'Quiet Lake Horizon',
       year: '2025',
-      cameraSettings: '85mm • f/2.8 • 1/640s • ISO 160',
-      description: 'Macro perspective on organic leaf vein symmetry and the quiet resilience of green ecosystems.',
-      palette: ['#10b981', '#047857', '#064e3b', '#022c22'],
-      gradientStyle: 'linear-gradient(135deg, #34d399 0%, #059669 45%, #064e3b 90%)',
-      aspect: 'aspect-[4/3]'
+      description: 'A study of quiet tranquility as two ducks glide across gentle concentric water ripples in soft overcast daylight.',
+      imageSrc: '/photography/photo3_ducks_lake.jpg',
+      downloadFileName: 'debendra_ducks_lake_serenade.jpg',
+      aspectRatio: 'aspect-[3/4]'
     },
     {
       id: 'photo-4',
-      title: 'Urban Cadence • Midnight Transit',
-      category: 'street',
-      location: 'Park Street Crossway',
-      year: '2026',
-      cameraSettings: '24mm • f/1.4 • 1/60s • ISO 800',
-      description: 'Long-exposure light trail mapping urban momentum and the poetic velocity of night city life.',
-      palette: ['#f97316', '#dc2626', '#450a0a', '#0a0a0a'],
-      gradientStyle: 'linear-gradient(135deg, #fb923c 0%, #b91c1c 50%, #450a0a 100%)',
-      aspect: 'aspect-[16/10]'
+      title: 'Moonlight Over Ocean Waves',
+      category: 'Nightscape & Ocean',
+      location: 'Sea Horizon at Night',
+      year: '2025',
+      description: 'Dramatic moonlight illuminating rolling ocean tide crests and sea spray under deep nocturnal clouds with distant horizon lights.',
+      imageSrc: '/photography/photo4_moonlight_ocean.jpg',
+      downloadFileName: 'debendra_moonlight_ocean_waves.jpg',
+      aspectRatio: 'aspect-[4/3]'
     },
     {
       id: 'photo-5',
-      title: 'Minimalist Horizon • Cloud Tapestry',
-      category: 'nature',
-      location: 'Suburban Ridge',
-      year: '2025',
-      cameraSettings: '50mm • f/4.0 • 1/1200s • ISO 100',
-      description: 'Soft atmospheric gradients at dusk, where sky and earth merge in deep contemplative calm.',
-      palette: ['#93c5fd', '#3b82f6', '#1e3a8a', '#0f172a'],
-      gradientStyle: 'linear-gradient(150deg, #bfdbfe 0%, #60a5fa 40%, #1e40af 85%)',
-      aspect: 'aspect-[4/5]'
-    },
-    {
-      id: 'photo-6',
-      title: 'Architectural Shadows • Modernist Form',
-      category: 'monochrome',
-      location: 'Civic Arts Pavilion',
+      title: 'Golden Sunflower In Bloom',
+      category: 'Botanical & Macro',
+      location: 'Garden Sunlight',
       year: '2026',
-      cameraSettings: '35mm • f/5.6 • 1/500s • ISO 100',
-      description: 'Pure structural lines, repeating concrete cantilevers, and dramatic diagonal shadow cuts.',
-      palette: ['#fafafa', '#cbd5e1', '#475569', '#0f172a'],
-      gradientStyle: 'linear-gradient(135deg, #f1f5f9 0%, #94a3b8 40%, #1e293b 90%)',
-      aspect: 'aspect-square'
+      description: 'Vibrant golden sunflower petals reaching outward in radiant bloom, highlighting intricate seed spiral symmetry.',
+      imageSrc: '/photography/photo5_sunflower.jpg',
+      downloadFileName: 'debendra_golden_sunflower.jpg',
+      aspectRatio: 'aspect-[3/4]'
     }
   ];
 
-  const filteredPhotos = photoFilter === 'all'
-    ? photos
-    : photos.filter(p => p.category === photoFilter);
+  // Automatic Side-Wise Slide Show Interval (Every 3.8s)
+  useEffect(() => {
+    if (isAutoPlaying && !isHovered && !activePhoto) {
+      autoPlayTimerRef.current = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length);
+      }, 3800);
+    }
+    return () => {
+      if (autoPlayTimerRef.current) {
+        clearInterval(autoPlayTimerRef.current);
+      }
+    };
+  }, [isAutoPlaying, isHovered, activePhoto, photos.length]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % photos.length);
+  };
 
   return (
     <section
@@ -116,7 +126,7 @@ export const OtherWorks: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 relative z-10">
         
         {/* =========================================================================
-            SECTION HEADER: Clean Editorial Styling
+            SECTION HEADER: Clean Editorial Title
             ========================================================================= */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-10 border-b-2 border-[#e7e5e4]">
           <div>
@@ -130,11 +140,11 @@ export const OtherWorks: React.FC = () => {
             </h2>
           </div>
 
-          {/* Minimal Metric Tags */}
+          {/* Minimal Telemetry Tag */}
           <div className="flex items-center gap-6 self-start md:self-end pt-1">
             <div className="border-l-2 border-[#d6d3d1] pl-4">
-              <span className="block font-serifDisplay text-2xl font-black text-[#18181b]">06</span>
-              <span className="font-mono text-[0.75rem] font-semibold text-[#78716c] uppercase tracking-wider">Visual Captures</span>
+              <span className="block font-serifDisplay text-2xl font-black text-[#18181b]">05</span>
+              <span className="font-mono text-[0.75rem] font-semibold text-[#78716c] uppercase tracking-wider">Original Captures</span>
             </div>
             <div className="border-l-2 border-[#d6d3d1] pl-4">
               <span className="block font-serifDisplay text-2xl font-black text-[#18181b]">01</span>
@@ -145,10 +155,10 @@ export const OtherWorks: React.FC = () => {
 
 
         {/* =========================================================================
-            SUBSECTION 1: PHOTOGRAPHY & ART
+            SUBSECTION 1: PHOTOGRAPHY (AUTOMATIC SIDE-WISE SLIDESHOW)
             ========================================================================= */}
         <div className="mb-14">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
                 <Camera size={20} className="text-[#f59e0b]" />
@@ -158,102 +168,162 @@ export const OtherWorks: React.FC = () => {
                   Photography &amp; Visual Art
                 </h3>
                 <p className="text-[0.88rem] text-[#78716c] font-medium">
-                  Light, composition, shadow, and timeless urban perspectives.
+                  Tap on any photograph to view high-res pop-up and download.
                 </p>
               </div>
             </div>
 
-            {/* Filter Pills */}
-            <div className="flex items-center gap-1.5 p-1 bg-[#f5f5f4] border border-[#e7e5e4] rounded-xl self-start sm:self-auto">
-              {(['all', 'street', 'nature', 'monochrome'] as const).map((filter) => (
-                <button
-                  key={filter}
-                  type="button"
-                  onClick={() => setPhotoFilter(filter)}
-                  className={`px-3.5 py-1.5 rounded-lg text-[0.78rem] font-mono font-bold capitalize transition-all cursor-pointer ${
-                    photoFilter === filter
-                      ? 'bg-[#18181b] text-white shadow-sm'
-                      : 'text-[#78716c] hover:text-[#18181b] hover:bg-white/80'
-                  }`}
-                >
-                  {filter}
-                </button>
-              ))}
+            {/* Slideshow Controls Bar */}
+            <div className="flex items-center gap-2 self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                className="p-2 rounded-xl bg-white border border-[#e7e5e4] hover:bg-[#18181b] hover:text-white text-[#57534e] transition-all cursor-pointer shadow-xs text-[0.75rem] font-mono flex items-center gap-1.5"
+                title={isAutoPlaying ? 'Pause Slideshow' : 'Resume Auto Slideshow'}
+              >
+                {isAutoPlaying ? <Pause size={14} /> : <Play size={14} />}
+                <span className="hidden sm:inline font-bold">{isAutoPlaying ? 'AUTOPLAY ON' : 'PAUSED'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="w-9 h-9 rounded-xl bg-white border border-[#e7e5e4] hover:bg-[#18181b] hover:text-white text-[#18181b] flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                aria-label="Previous Slide"
+              >
+                <ChevronLeft size={18} />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleNext}
+                className="w-9 h-9 rounded-xl bg-white border border-[#e7e5e4] hover:bg-[#18181b] hover:text-white text-[#18181b] flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                aria-label="Next Slide"
+              >
+                <ChevronRight size={18} />
+              </button>
             </div>
           </div>
 
-          {/* Photo Gallery Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {filteredPhotos.map((photo) => (
-              <div
-                key={photo.id}
-                onClick={() => setActivePhoto(photo)}
-                className="group relative bg-white rounded-2xl border-2 border-[#e7e5e4] hover:border-[#18181b] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] overflow-hidden cursor-pointer flex flex-col"
-              >
-                {/* Photo Canvas Artwork Box */}
+          {/* Side-Wise Automatic Slideshow Viewport */}
+          <div
+            className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden bg-[#f5f5f4] border-2 border-[#e7e5e4] shadow-[0_8px_30px_rgba(0,0,0,0.06)] group"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {/* Horizontal Slide Carousel Track */}
+            <div
+              className="flex transition-transform duration-700 ease-out will-change-transform"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {photos.map((photo, pIdx) => (
                 <div
-                  className={`w-full ${photo.aspect} relative overflow-hidden flex items-center justify-center p-6 transition-transform duration-500 group-hover:scale-[1.02]`}
-                  style={{ background: photo.gradientStyle }}
+                  key={photo.id}
+                  className="w-full shrink-0 p-4 sm:p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 md:gap-10 cursor-pointer"
+                  onClick={() => setActivePhoto(photo)}
                 >
-                  {/* Subtle Grain Overlay */}
-                  <div className="absolute inset-0 bg-black/10 mix-blend-overlay pointer-events-none" />
-
-                  {/* Lens Spec Graphic Centerpiece */}
-                  <div className="relative z-10 flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-white/15 backdrop-blur-md border border-white/30 text-white shadow-lg max-w-[85%] transition-all duration-300 group-hover:bg-white/25">
-                    <Camera size={26} className="mb-2 text-white drop-shadow-md" />
-                    <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase font-bold text-white/90">
-                      {photo.category} ARCHIVE
-                    </span>
-                    <span className="font-serifDisplay text-base font-bold text-white leading-snug mt-1 line-clamp-2">
-                      {photo.title.split('•')[0]}
-                    </span>
-                  </div>
-
-                  {/* Hover Quick-Inspect Eye Badge */}
-                  <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 text-[#18181b] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md transform translate-y-2 group-hover:translate-y-0">
-                    <Maximize2 size={16} />
-                  </div>
-
-                  {/* Year Tag */}
-                  <div className="absolute bottom-4 left-4 font-mono text-[0.7rem] font-bold px-2.5 py-0.5 rounded-full bg-black/50 text-white backdrop-blur-sm">
-                    {photo.year}
-                  </div>
-                </div>
-
-                {/* Photo Card Intel */}
-                <div className="p-5 bg-white flex-1 flex flex-col justify-between border-t border-[#f5f5f4]">
-                  <div>
-                    <div className="flex items-center justify-between text-[0.74rem] font-mono text-[#78716c] mb-1.5">
-                      <span>{photo.location}</span>
-                      <span className="font-bold text-[#b45309] capitalize">{photo.category}</span>
+                  {/* Photo Display Card */}
+                  <div className="w-full lg:w-[58%] h-[320px] sm:h-[400px] md:h-[460px] relative rounded-2xl overflow-hidden shadow-[0_12px_35px_rgba(0,0,0,0.18)] bg-[#18181b] group/img">
+                    <img
+                      src={photo.imageSrc}
+                      alt={photo.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+                      loading="lazy"
+                    />
+                    
+                    {/* Hover Inspect Pill */}
+                    <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#18181b] font-mono text-[0.82rem] font-bold shadow-2xl transform translate-y-3 group-hover/img:translate-y-0 transition-transform duration-300">
+                        <Maximize2 size={16} />
+                        <span>TAP TO OPEN &amp; DOWNLOAD</span>
+                      </div>
                     </div>
 
-                    <h4 className="font-serifDisplay text-lg font-bold text-[#18181b] group-hover:text-[#b45309] transition-colors leading-snug mb-2">
-                      {photo.title}
-                    </h4>
-
-                    <p className="text-[0.88rem] text-[#57534e] line-clamp-2 leading-relaxed mb-3">
-                      {photo.description}
-                    </p>
+                    {/* Badge on Photo */}
+                    <div className="absolute top-4 left-4 font-mono text-[0.72rem] font-bold px-3 py-1 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20">
+                      0{pIdx + 1} / 0{photos.length}
+                    </div>
                   </div>
 
-                  {/* Camera Settings Bar */}
-                  <div className="pt-3 border-t border-[#f5f5f4] flex items-center justify-between font-mono text-[0.72rem] text-[#78716c]">
-                    <span>{photo.cameraSettings}</span>
-                    <span className="inline-flex items-center gap-1 font-bold text-[#18181b] group-hover:translate-x-0.5 transition-transform">
-                      <span>VIEW</span>
-                      <ArrowUpRight size={13} />
-                    </span>
+                  {/* Photo Intel & Details (Side-wise) */}
+                  <div className="w-full lg:w-[42%] flex flex-col justify-between py-2 text-[#18181b]">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2.5">
+                        <span className="font-mono text-[0.75rem] font-bold px-3 py-1 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#fde68a] uppercase">
+                          {photo.category}
+                        </span>
+                        <span className="font-mono text-[0.72rem] text-[#78716c] flex items-center gap-1">
+                          <Calendar size={12} />
+                          {photo.year}
+                        </span>
+                      </div>
+
+                      <h4 className="font-serifDisplay text-2xl sm:text-3xl md:text-4xl font-bold text-[#18181b] leading-tight mb-3">
+                        {photo.title}
+                      </h4>
+
+                      <div className="flex items-center gap-1.5 font-mono text-[0.8rem] text-[#78716c] mb-4">
+                        <MapPin size={14} className="text-[#b45309]" />
+                        <span>{photo.location}</span>
+                      </div>
+
+                      <p className="text-[0.96rem] md:text-[1.04rem] text-[#57534e] leading-relaxed mb-6 font-normal">
+                        {photo.description}
+                      </p>
+                    </div>
+
+                    {/* Action Bar: Tap to Expand & Quick Download */}
+                    <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[#e7e5e4]">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActivePhoto(photo);
+                        }}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#18181b] hover:bg-[#b45309] text-white font-mono text-[0.82rem] font-bold transition-all shadow-sm cursor-pointer"
+                      >
+                        <Maximize2 size={15} />
+                        <span>POP-UP VIEW</span>
+                      </button>
+
+                      <a
+                        href={photo.imageSrc}
+                        download={photo.downloadFileName}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border-2 border-[#18181b]/20 hover:border-[#18181b] text-[#18181b] font-mono text-[0.82rem] font-bold transition-all shadow-xs cursor-pointer"
+                        title="Download full photograph file"
+                      >
+                        <Download size={15} />
+                        <span>DOWNLOAD PHOTO</span>
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Slide Navigation Dots */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-[#e7e5e4] shadow-sm z-20">
+              {photos.map((_, dotIdx) => (
+                <button
+                  key={dotIdx}
+                  type="button"
+                  onClick={() => setCurrentIndex(dotIdx)}
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    currentIndex === dotIdx
+                      ? 'w-7 bg-[#18181b]'
+                      : 'w-2.5 bg-[#d6d3d1] hover:bg-[#78716c]'
+                  }`}
+                  aria-label={`Go to photo ${dotIdx + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
 
         {/* =========================================================================
-            SUBSECTION 2: PHILOSOPHY & WRITING (COMING SOON BANNER)
+            SUBSECTION 2: PHILOSOPHY (COMING SOON BANNER)
             ========================================================================= */}
         <div>
           <div className="flex items-center gap-3 mb-6">
@@ -272,7 +342,6 @@ export const OtherWorks: React.FC = () => {
 
           {/* Clean Coming Soon Banner */}
           <div className="w-full rounded-2xl md:rounded-3xl bg-white border-2 border-dashed border-[#d6d3d1] p-8 md:p-12 text-center flex flex-col items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative overflow-hidden transition-all hover:border-[#18181b]/50">
-            {/* Decorative Icon Centerpiece */}
             <div className="w-14 h-14 rounded-2xl bg-[#fafaf9] border border-[#e7e5e4] flex items-center justify-center text-[#b45309] mb-4 shadow-sm">
               <Feather size={26} />
             </div>
@@ -296,82 +365,80 @@ export const OtherWorks: React.FC = () => {
 
 
       {/* =========================================================================
-          LIGHTBOX MODAL: Photography Full Inspection View
+          POP-UP LIGHTBOX MODAL (WITH DOWNLOAD IN RIGHT CORNER)
           ========================================================================= */}
       {activePhoto && (
         <div
-          className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+          className="fixed inset-0 z-[2000] bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fade-in"
           onClick={() => setActivePhoto(null)}
           role="dialog"
-          aria-label="Photo Lightbox"
+          aria-label="Photo Pop-up View"
         >
           <div
-            className="bg-white rounded-3xl max-w-[840px] w-full overflow-hidden border border-white/20 shadow-2xl animate-scale-up"
+            className="bg-white rounded-3xl max-w-[960px] w-full max-h-[92vh] overflow-y-auto border border-white/25 shadow-2xl animate-scale-up flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Lightbox Visual Stage */}
-            <div
-              className="w-full h-[320px] sm:h-[420px] relative flex items-center justify-center p-8 text-white"
-              style={{ background: activePhoto.gradientStyle }}
-            >
-              <div className="text-center p-8 rounded-2xl bg-black/30 backdrop-blur-md border border-white/20 max-w-[85%]">
-                <Camera size={36} className="mx-auto mb-3 text-white drop-shadow-lg" />
-                <span className="font-mono text-[0.74rem] tracking-[0.2em] font-bold text-white/80 uppercase">
-                  {activePhoto.category} EXHIBITION
+            {/* Top Modal Header with DOWNLOAD in RIGHT CORNER */}
+            <div className="p-4 sm:p-5 bg-white border-b border-[#e7e5e4] flex items-center justify-between gap-4 sticky top-0 z-30">
+              <div className="flex items-center gap-3 overflow-hidden">
+                <span className="font-mono text-[0.75rem] font-bold px-2.5 py-1 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#fde68a] uppercase shrink-0">
+                  {activePhoto.category}
                 </span>
-                <h3 className="font-serifDisplay text-2xl sm:text-3xl font-black mt-2 leading-tight">
+                <h3 className="font-serifDisplay text-lg sm:text-xl font-bold text-[#18181b] truncate">
                   {activePhoto.title}
                 </h3>
               </div>
 
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setActivePhoto(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all cursor-pointer"
-                aria-label="Close Lightbox"
-              >
-                <X size={20} />
-              </button>
-            </div>
+              {/* RIGHT CORNER CONTROLS: DOWNLOAD & CLOSE BUTTONS */}
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href={activePhoto.imageSrc}
+                  download={activePhoto.downloadFileName}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#18181b] hover:bg-[#b45309] text-white font-mono text-[0.8rem] font-bold shadow-md transition-all cursor-pointer"
+                  title="Download full resolution photo"
+                >
+                  <Download size={16} />
+                  <span className="hidden sm:inline">DOWNLOAD PHOTO</span>
+                </a>
 
-            {/* Lightbox Metadata Panel */}
-            <div className="p-6 sm:p-8 bg-white text-[#18181b]">
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-[#e7e5e4]">
-                <div>
-                  <span className="font-mono text-[0.75rem] font-bold text-[#b45309] uppercase block">
-                    {activePhoto.location} • {activePhoto.year}
-                  </span>
-                  <span className="font-mono text-[0.8rem] text-[#78716c]">
-                    Technical Specs: {activePhoto.cameraSettings}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5">
-                  {activePhoto.palette.map((c, i) => (
-                    <span
-                      key={i}
-                      className="w-5 h-5 rounded-full border border-black/15 shadow-xs"
-                      style={{ backgroundColor: c }}
-                      title={`Color: ${c}`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <p className="text-[0.98rem] text-[#44403c] leading-relaxed mb-6">
-                {activePhoto.description}
-              </p>
-
-              <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={() => setActivePhoto(null)}
-                  className="px-6 py-2.5 rounded-xl bg-[#18181b] text-white font-mono text-[0.82rem] font-bold hover:bg-[#b45309] transition-all cursor-pointer"
+                  className="w-10 h-10 rounded-xl bg-[#f5f5f4] hover:bg-[#e7e5e4] text-[#18181b] flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Close Pop-up"
                 >
-                  CLOSE PREVIEW
+                  <X size={20} />
                 </button>
               </div>
+            </div>
+
+            {/* High-Resolution Pop-Up Image Stage */}
+            <div className="w-full bg-[#0c0d14] flex items-center justify-center p-2 sm:p-4 min-h-[300px] max-h-[580px] overflow-hidden">
+              <img
+                src={activePhoto.imageSrc}
+                alt={activePhoto.title}
+                className="max-h-[560px] w-auto max-w-full object-contain rounded-xl shadow-2xl"
+              />
+            </div>
+
+            {/* Bottom Metadata Intel Panel */}
+            <div className="p-5 sm:p-6 bg-white text-[#18181b]">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-[#e7e5e4]">
+                <div className="flex items-center gap-2 font-mono text-[0.8rem] text-[#78716c]">
+                  <MapPin size={15} className="text-[#b45309]" />
+                  <span className="font-bold text-[#18181b]">{activePhoto.location}</span>
+                  <span>•</span>
+                  <span>{activePhoto.year}</span>
+                </div>
+
+                <span className="font-mono text-[0.74rem] text-[#a8a29e]">
+                  Captured by Debendranath Bera
+                </span>
+              </div>
+
+              <p className="text-[0.96rem] text-[#57534e] leading-relaxed">
+                {activePhoto.description}
+              </p>
             </div>
           </div>
         </div>
