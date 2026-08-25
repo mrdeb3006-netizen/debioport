@@ -5,48 +5,48 @@ export const Experience: React.FC = () => {
   const milestones: Milestone[] = [
     {
       number: '01',
-      tag: 'EDUCATION',
-      title: 'Computer Science / Engineering',
-      period: '2026 — Present',
-      description: 'Building core fundamentals in Computer Science, object-oriented software engineering, discrete math, data structures, and computer systems architecture.',
+      tag: 'BACHELOR OF TECHNOLOGY',
+      title: 'Computer Science & Engineering',
+      period: '2023 — Present',
+      description: 'Building deep fundamentals in Computer Science, object-oriented software engineering, discrete math, data structures & algorithms, and computer systems architecture.',
     },
     {
       number: '02',
-      tag: 'PERSONAL DEVELOPMENT',
-      title: 'Programming & Problem Solving',
-      period: 'Java • Python • DSA • Web Development',
-      description: 'Dedicated daily hands-on practice solving algorithmic challenges, implementing core data structures from scratch, and building real-world software tools.',
+      tag: 'HIGHER SECONDARY (12TH)',
+      title: 'Higher Secondary Education • Science & Math',
+      period: 'Physics • Chemistry • Mathematics',
+      description: 'Completed Higher Secondary schooling with strong analytical foundations in advanced mathematics, analytical reasoning, and scientific principles.',
     },
     {
       number: '03',
-      tag: 'PROJECT EXPERIENCE',
-      title: 'Independent Engineering & Web Applications',
-      period: 'Continuous Learning & Prototyping',
-      description: 'Building projects and experimenting with new technologies, modern browser APIs, responsive UI engineering, and testing algorithmic workflows.',
+      tag: 'SECONDARY SCHOOL (10TH)',
+      title: 'Secondary School Education',
+      period: 'Academic Excellence & Science Olympiads',
+      description: 'Graduated with strong academic marks, actively participating in competitive quizzes, mathematics challenges, and technical science exhibitions.',
     },
     {
       number: '04',
-      tag: 'COMPETITIONS',
-      title: 'Portfolio, Coding & College Competitions',
-      period: 'Hackathons & Technical Events',
-      description: 'Participating in coding challenges, technical hackathons, and design sprints to test speed, algorithmic accuracy, and creative problem-solving agility.',
+      tag: 'TECHNICAL SPECIALIZATION',
+      title: 'Self-Directed Engineering & Certifications',
+      period: 'Java • Python • DSA • Full-Stack Web Development',
+      description: 'Dedicated continuous learning mastering Data Structures & Algorithms, modern React ecosystems, TypeScript architecture, and competitive programming.',
     },
   ];
 
   return (
-    <section className="py-28 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="experience">
+    <section className="py-28 px-6 md:px-12 lg:px-16 relative bg-bg-dark" id="education">
       <div className="max-w-[1400px] mx-auto">
         
         {/* Section Header */}
         <div className="mb-14">
           <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-cyan font-semibold mb-3 inline-block">
-            // 03. /EXPERIENCE
+            // 04. /EDUCATION
           </div>
           <h2 className="font-display text-[clamp(2.4rem,4.5vw,3.8rem)] font-black text-white leading-[1.15] mb-3 uppercase tracking-[0.02em]">
-            WORK<br />HISTORY
+            EDUCATION &<br />ACADEMICS
           </h2>
           <p className="text-[1.1rem] text-text-secondary max-w-[640px] leading-[1.65]">
-            My educational foundation and practical technical milestones as an aspiring engineer.
+            My academic foundation, coursework, and specialized technical milestones in Computer Science & Engineering.
           </p>
         </div>
 
