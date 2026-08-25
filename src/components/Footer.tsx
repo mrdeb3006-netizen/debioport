@@ -33,24 +33,59 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Social Links */}
-        <div className="flex gap-7 items-center">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">
+        <div className="flex gap-6 sm:gap-7 items-center flex-wrap">
+          <a
+            href="https://github.com/mrdeb3006-netizen"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-secondary no-underline text-[0.92rem] font-medium transition-all hover:text-accent-orange"
+          >
             GitHub
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-secondary no-underline text-[0.92rem] font-medium transition-all hover:text-accent-orange"
+          >
             LinkedIn
           </a>
-          <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">
+          <a
+            href="https://x.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-secondary no-underline text-[0.92rem] font-medium transition-all hover:text-accent-orange"
+          >
             X (Twitter)
           </a>
-          <a href="mailto:mrdeb3006@gmail.com" className="text-text-secondary no-underline text-[0.95rem] font-medium transition-all hover:text-accent-cyan">
+          <a
+            href="https://wa.me/916289214258"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-secondary no-underline text-[0.92rem] font-medium transition-all hover:text-emerald-400"
+          >
+            WhatsApp
+          </a>
+          <a
+            href="mailto:mrdeb3006@gmail.com"
+            className="text-text-secondary no-underline text-[0.92rem] font-medium transition-all hover:text-accent-orange"
+          >
             Email
           </a>
         </div>
 
-        {/* Copyright */}
-        <div className="w-full border-t border-white/[0.04] pt-8 mt-4 text-center font-mono text-[0.82rem] text-text-muted">
-          © 2026 MR DEB
+        {/* Bottom Attribution & Philosophical Quote */}
+        <div className="w-full border-t border-white/[0.06] pt-8 mt-2 flex flex-col items-center justify-center text-center gap-3">
+          <p className="font-mono text-[0.84rem] text-slate-300 tracking-wide">
+            © {new Date().getFullYear()} <span className="font-bold text-white">DEBENDRANATH BERA</span>. All Rights Reserved.
+          </p>
+
+          {/* Inspirational Philosophy Quote */}
+          <div className="max-w-[760px] mx-auto px-4">
+            <p className="font-serifDisplay italic text-[0.92rem] sm:text-[1.02rem] text-accent-orange/90 leading-relaxed drop-shadow-[0_0_12px_rgba(249,115,22,0.25)]">
+              “Yesterday is history, tomorrow is a mystery, and today is a gift — that's why it is called the present.”
+            </p>
+          </div>
         </div>
 
       </div>
