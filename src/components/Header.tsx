@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection }) => {
                   </span>
                   {item.label}
                   {activeSection === item.id && (
-                    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-accent-orange to-accent-purple rounded shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+                    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-accent-orange rounded shadow-[0_0_6px_rgba(249,115,22,0.5)]" />
                   )}
                 </a>
               </li>

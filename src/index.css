@@ -8,23 +8,23 @@
 :root {
   --bg-dark: #09090b;
   --bg-surface: #111114;
-  --bg-card: rgba(18, 18, 22, 0.85);
-  --bg-glass: rgba(22, 22, 28, 0.65);
+  --bg-card: rgba(16, 16, 20, 0.85);
+  --bg-glass: rgba(18, 18, 24, 0.7);
   --bg-glass-strong: rgba(14, 14, 18, 0.95);
   
   --accent-cyan: #f97316;
   --accent-blue: #ea580c;
-  --accent-purple: #fb923c;
-  --accent-violet: #f59e0b;
-  --accent-magenta: #ffedd5;
+  --accent-purple: #f97316;
+  --accent-violet: #f97316;
+  --accent-magenta: #f97316;
   --accent-orange: #f97316;
 
   --text-primary: #ffffff;
   --text-secondary: #a1a1aa;
   --text-muted: #71717a;
-  --grad-btn-primary: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  --grad-nav-active: linear-gradient(90deg, #f97316, #fb923c);
-  --grad-hero-name: linear-gradient(135deg, #ffffff 40%, #f4f4f5 70%, #d4d4d8 100%);
+  --grad-btn-primary: #f97316;
+  --grad-nav-active: #f97316;
+  --grad-hero-name: linear-gradient(180deg, #ffffff 60%, #a1a1aa 100%);
 
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Syne', 'Outfit', sans-serif;
@@ -73,9 +73,9 @@ body {
   top: 0;
   left: 0;
   width: 0%;
-  height: 3px;
-  background: linear-gradient(90deg, #f97316 0%, #fb923c 50%, #f59e0b 100%);
-  box-shadow: 0 0 10px rgba(249, 115, 22, 0.7), 0 0 20px rgba(245, 158, 11, 0.4);
+  height: 2px;
+  background: #f97316;
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
   z-index: 9999999;
   transition: width 0.08s ease-out;
   pointer-events: none;

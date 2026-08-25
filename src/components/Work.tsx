@@ -516,10 +516,10 @@ except KeyboardInterrupt:
                     key={i}
                     type="button"
                     onClick={() => scrollToSlide(i)}
-                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                       activeSlide === i
-                        ? 'w-8 bg-gradient-to-r from-accent-orange to-accent-purple shadow-[0_0_8px_rgba(249,115,22,0.5)]'
-                        : 'w-2.5 bg-white/20 hover:bg-white/40'
+                        ? 'w-7 bg-accent-orange shadow-[0_0_6px_rgba(249,115,22,0.4)]'
+                        : 'w-2 bg-white/20 hover:bg-white/40'
                     }`}
                     aria-label={`Go to project 0${i + 1}`}
                   />
@@ -536,7 +536,7 @@ except KeyboardInterrupt:
               <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   style={{ width: `${Math.max(10, scrollProgress * 100)}%` }}
-                  className="h-full bg-gradient-to-r from-accent-orange via-accent-violet to-accent-purple rounded-full shadow-[0_0_8px_rgba(249,115,22,0.5)] transition-all duration-75"
+                  className="h-full bg-accent-orange rounded-full shadow-[0_0_6px_rgba(249,115,22,0.4)] transition-all duration-75"
                 />
               </div>
             </div>

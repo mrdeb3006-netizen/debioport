@@ -60,11 +60,11 @@ export const About: React.FC = () => {
             className="relative w-full max-w-[420px] mx-auto lg:mx-0 group"
             style={getSlideUpStyle(0.3)}
           >
-            {/* Ambient Warm Amber Glow Behind Photo */}
-            <div className="absolute -inset-3 bg-gradient-to-tr from-accent-orange/30 via-accent-orange/10 to-transparent rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+            {/* Ambient Minimal Glow Behind Photo */}
+            <div className="absolute -inset-2 bg-accent-orange/10 rounded-3xl blur-xl opacity-40 group-hover:opacity-75 transition-opacity duration-700 pointer-events-none" />
 
             {/* Main Portrait Frame */}
-            <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-bg-surface backdrop-blur-xl shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_30px_rgba(249,115,22,0.15)] group-hover:border-accent-orange/50 group-hover:shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_40px_rgba(249,115,22,0.3)] transition-all duration-500">
+            <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-bg-surface backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:border-accent-orange/40 transition-all duration-500">
               
               {/* Portrait Image */}
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-black">

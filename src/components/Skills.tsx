@@ -91,15 +91,15 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className="relative rounded-3xl p-6 md:p-12 border border-white/[0.08] bg-[#0c0d16]/70 backdrop-blur-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+          className="relative rounded-3xl p-6 md:p-12 border border-white/[0.08] bg-[#0c0d16]/80 backdrop-blur-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
         >
           {/* Subtle Ambient Grid Watermark */}
-          <div className="absolute inset-0 bg-[radial-gradient(rgba(249,115,22,0.06)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-40" />
+          <div className="absolute inset-0 bg-[radial-gradient(rgba(249,115,22,0.04)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
 
           {/* Interactive Proximity Spotlight */}
           {mousePos && (
             <div
-              className="absolute pointer-events-none transition-opacity duration-300 w-[420px] h-[420px] rounded-full blur-3xl opacity-35 bg-gradient-to-r from-accent-orange/30 via-amber-500/20 to-transparent transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute pointer-events-none transition-opacity duration-300 w-[360px] h-[360px] rounded-full blur-3xl opacity-20 bg-accent-orange/20 transform -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: `${mousePos.x}px`,
                 top: `${mousePos.y}px`,
@@ -124,16 +124,16 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
                     onClick={() => handleTagClick(skill.filterKey)}
                     className={`group relative flex items-center gap-3 px-6 md:px-8 py-3.5 md:py-4 rounded-full font-main text-[0.95rem] md:text-[1.05rem] font-bold tracking-wide transition-all duration-300 cursor-pointer select-none border backdrop-blur-md shadow-md ${
                       isActive
-                        ? 'bg-gradient-to-r from-accent-orange via-amber-500 to-orange-500 text-black border-accent-orange shadow-[0_0_35px_rgba(249,115,22,0.7)] scale-105 ring-2 ring-accent-orange/80 -translate-y-1'
-                        : 'bg-[#10121f]/90 border-white/[0.12] text-slate-200 hover:border-accent-orange/70 hover:text-white hover:bg-[#151728] hover:shadow-[0_0_24px_rgba(249,115,22,0.3)] hover:-translate-y-1.5 hover:scale-[1.04]'
+                        ? 'bg-accent-orange text-black font-extrabold border-accent-orange shadow-[0_0_20px_rgba(249,115,22,0.5)] scale-105 -translate-y-1'
+                        : 'bg-[#10121d] border-white/[0.1] text-slate-200 hover:border-accent-orange/50 hover:text-white hover:bg-[#141624] hover:-translate-y-1 hover:scale-[1.02]'
                     }`}
                   >
-                    {/* Icon Glyph with Glow */}
+                    {/* Icon Glyph */}
                     <span
                       className={`p-1 rounded-md transition-colors duration-300 ${
                         isActive
                           ? 'bg-black/15 text-black'
-                          : 'bg-white/[0.06] text-accent-orange group-hover:bg-accent-orange/20 group-hover:text-amber-300'
+                          : 'bg-white/[0.05] text-accent-orange group-hover:bg-accent-orange/15 group-hover:text-accent-orange'
                       }`}
                     >
                       <IconComponent className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:rotate-6" />

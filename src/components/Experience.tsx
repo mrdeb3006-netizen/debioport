@@ -101,9 +101,9 @@ export const Experience: React.FC = () => {
       subtitle: 'Exceptional Result & Class 10th School Topper',
       description: 'Felicitated and awarded by an esteemed professor from Indian Institute of Technology (IIT) Kharagpur in recognition of exceptional academic performance and ranking as the School Topper in Class 10.',
       icon: Trophy,
-      accentGlow: 'from-amber-500/20 via-orange-500/10 to-transparent',
-      borderColor: 'border-accent-orange/40 hover:border-accent-orange',
-      badgeColor: 'text-amber-300 bg-amber-500/15 border-amber-500/30',
+      accentGlow: 'bg-[#0f1019]/90',
+      borderColor: 'border-white/[0.08] hover:border-accent-orange/50',
+      badgeColor: 'text-accent-orange bg-accent-orange/10 border-accent-orange/30',
     },
     {
       id: 'medals',
@@ -113,9 +113,9 @@ export const Experience: React.FC = () => {
       subtitle: 'All India Level Club Karate Championship',
       description: 'Secured two Bronze Medals at the prestigious All India Level Club Karate Championship, demonstrating elite competitive Karate combat discipline, Kumite reflexes, and tactical ring composure against top martial arts athletes nationwide.',
       icon: Medal,
-      accentGlow: 'from-amber-600/20 via-yellow-600/10 to-transparent',
-      borderColor: 'border-yellow-500/30 hover:border-yellow-500/60',
-      badgeColor: 'text-yellow-300 bg-yellow-500/15 border-yellow-500/30',
+      accentGlow: 'bg-[#0f1019]/90',
+      borderColor: 'border-white/[0.08] hover:border-accent-orange/50',
+      badgeColor: 'text-accent-orange bg-accent-orange/10 border-accent-orange/30',
     },
     {
       id: 'karate',
@@ -125,9 +125,9 @@ export const Experience: React.FC = () => {
       subtitle: 'Senior Grade Martial Arts Mastery',
       description: 'Earned the senior Karate Brown Belt grade following years of rigorous traditional martial arts training, advanced Kata technical mastery, physical conditioning, and full-contact Kumite sparring.',
       icon: Shield,
-      accentGlow: 'from-orange-600/20 via-red-600/10 to-transparent',
-      borderColor: 'border-orange-500/30 hover:border-orange-500/60',
-      badgeColor: 'text-orange-300 bg-orange-500/15 border-orange-500/30',
+      accentGlow: 'bg-[#0f1019]/90',
+      borderColor: 'border-white/[0.08] hover:border-accent-orange/50',
+      badgeColor: 'text-accent-orange bg-accent-orange/10 border-accent-orange/30',
     },
   ];
 
@@ -230,7 +230,7 @@ export const Experience: React.FC = () => {
             
             {/* 1. Academic Distinctions Spotlight */}
             <div
-              className="specular-card backdrop-blur-[16px] border border-accent-orange/30 bg-gradient-to-b from-accent-orange/[0.06] to-transparent rounded-2xl p-6 md:p-7 shadow-[0_15px_35px_rgba(0,0,0,0.5),0_0_25px_rgba(249,115,22,0.12)] transition-all duration-300 hover:border-accent-orange/60"
+              className="specular-card backdrop-blur-[16px] border border-white/[0.08] bg-[#0d0e17]/90 rounded-2xl p-6 md:p-7 shadow-[0_15px_35px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-accent-orange/40"
               style={getSlideUpStyle(0.35)}
             >
               <div className="flex items-center gap-2 mb-3">
@@ -342,7 +342,7 @@ export const Experience: React.FC = () => {
               return (
                 <div
                   key={ach.id}
-                  className={`specular-card backdrop-blur-[16px] border ${ach.borderColor} bg-gradient-to-b ${ach.accentGlow} rounded-2xl p-6 md:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.7),0_0_25px_rgba(249,115,22,0.2)] group`}
+                  className={`specular-card backdrop-blur-[16px] border ${ach.borderColor} ${ach.accentGlow} rounded-2xl p-6 md:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] group`}
                   style={getSlideUpStyle(0.75 + aIdx * 0.12)}
                 >
                   <div>

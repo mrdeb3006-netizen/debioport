@@ -306,21 +306,18 @@ export const DarvesChat: React.FC = () => {
 
           {/* Main Floating Orb */}
           <div className="relative">
-            {/* Animated Holographic Orbital Rings */}
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-accent-cyan to-accent-purple opacity-50 blur-md animate-pulse" />
-            <div className="absolute -inset-1 rounded-full border border-accent-cyan/60 animate-spin [animation-duration:8s]" />
-            <div className="absolute -inset-2 rounded-full border border-accent-purple/35 animate-spin [animation-duration:12s] [animation-direction:reverse]" />
+            <div className="absolute -inset-1 rounded-full bg-accent-orange/20 blur-sm" />
 
             <button
               type="button"
-              className="relative w-14 h-14 rounded-full bg-[#121215] border-2 border-accent-cyan/80 flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.45),0_0_30px_rgba(251,146,60,0.25)] text-accent-cyan overflow-hidden focus:outline-none"
+              className="relative w-14 h-14 rounded-full bg-[#121216] border border-accent-orange/60 flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.6)] text-accent-orange overflow-hidden focus:outline-none hover:scale-105 transition-transform"
               aria-label="Open DARVES AI Assistant"
             >
-              {/* Holographic Core Glow */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-accent-cyan/25 via-transparent to-accent-purple/25" />
+              {/* Subtle Core Glow */}
+              <div className="absolute inset-0 bg-accent-orange/[0.08]" />
               
               {/* Icon */}
-              <Bot size={26} className="relative z-10 text-white drop-shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+              <Bot size={24} className="relative z-10 text-accent-orange drop-shadow-sm" />
             </button>
           </div>
         </div>
@@ -405,14 +402,14 @@ export const DarvesChat: React.FC = () => {
                   >
                     {msg.sender === 'darves' && (
                       <div className="w-7 h-7 rounded-full bg-accent-cyan/15 border border-accent-cyan/40 flex items-center justify-center shrink-0 mt-0.5">
-                        <Bot size={14} className="text-accent-cyan" />
+                        <Bot size={14} className="text-accent-orange" />
                       </div>
                     )}
 
                     <div
                       className={`max-w-[82%] px-4 py-3 rounded-2xl leading-[1.55] ${
                         msg.sender === 'user'
-                          ? 'bg-gradient-to-r from-accent-cyan/15 to-accent-purple/20 border border-accent-cyan/30 text-white rounded-tr-sm shadow-sm'
+                          ? 'bg-accent-orange/15 border border-accent-orange/30 text-white rounded-tr-sm shadow-sm'
                           : 'bg-[#15182a] border border-white/[0.08] text-slate-200 rounded-tl-sm shadow-[0_4px_15px_rgba(0,0,0,0.4)] whitespace-pre-line'
                       }`}
                     >
@@ -423,8 +420,8 @@ export const DarvesChat: React.FC = () => {
                     </div>
 
                     {msg.sender === 'user' && (
-                      <div className="w-7 h-7 rounded-full bg-accent-purple/20 border border-accent-purple/40 flex items-center justify-center shrink-0 mt-0.5">
-                        <User size={14} className="text-accent-purple" />
+                      <div className="w-7 h-7 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0 mt-0.5">
+                        <User size={14} className="text-slate-200" />
                       </div>
                     )}
                   </div>
