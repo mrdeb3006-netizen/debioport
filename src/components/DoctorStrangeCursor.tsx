@@ -10,27 +10,33 @@ export const DoctorStrangeCursor: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let animId: number;
     let width = window.innerWidth;
     let height = window.innerHeight;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     const resize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      if (canvas) {
-        canvas.width = width;
-        canvas.height = height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      if (canvas && ctx) {
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.scale(dpr, dpr);
       }
     };
 
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', resize, { passive: true });
 
-    const mouse = { x: -100, y: -100 };
-    const ring = { x: -100, y: -100 };
+    // Smooth physics states
+    const mouse = { x: -200, y: -200 };
+    const ring = { x: -200, y: -200 };
     let isVisible = false;
     let isHovering = false;
     let isClicking = false;
@@ -43,12 +49,24 @@ export const DoctorStrangeCursor: React.FC = () => {
     const onMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
+
       if (!isVisible) {
         isVisible = true;
         ring.x = mouse.x;
         ring.y = mouse.y;
       }
       targetAlpha = 1;
+
+      // Ultra-lightweight interactive target detection
+      const target = e.target as HTMLElement | null;
+      if (target) {
+        const interactive = target.closest('a, button, input, textarea, select, .interactive-skill-tag, .social-icon-btn, .nav-link, [role="button"], .cursor-pointer');
+        const hovering = !!interactive;
+        if (hovering !== isHovering) {
+          isHovering = hovering;
+          targetRadius = isHovering ? 24 : (isClicking ? 10 : 14);
+        }
+      }
     };
 
     const onMouseEnter = () => {
@@ -62,80 +80,60 @@ export const DoctorStrangeCursor: React.FC = () => {
 
     const onMouseDown = () => {
       isClicking = true;
-      targetRadius = isHovering ? 22 : 10;
+      targetRadius = isHovering ? 20 : 9;
     };
 
     const onMouseUp = () => {
       isClicking = false;
-      targetRadius = isHovering ? 26 : 14;
+      targetRadius = isHovering ? 24 : 14;
     };
 
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseenter', onMouseEnter);
-    window.addEventListener('mouseleave', onMouseLeave);
-    window.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mouseup', onMouseUp);
-
-    const setupHoverListeners = () => {
-      const interactiveElements = document.querySelectorAll(
-        'a, button, input, textarea, select, .interactive-skill-tag, .social-icon-btn, .nav-link, [role="button"], .cursor-pointer'
-      );
-      interactiveElements.forEach((el) => {
-        el.addEventListener('mouseenter', () => {
-          isHovering = true;
-          targetRadius = 26;
-        });
-        el.addEventListener('mouseleave', () => {
-          isHovering = false;
-          targetRadius = isClicking ? 10 : 14;
-        });
-      });
-    };
-
-    setupHoverListeners();
-    const observer = new MutationObserver(setupHoverListeners);
-    observer.observe(document.body, { childList: true, subtree: true });
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('mouseenter', onMouseEnter, { passive: true });
+    window.addEventListener('mouseleave', onMouseLeave, { passive: true });
+    window.addEventListener('mousedown', onMouseDown, { passive: true });
+    window.addEventListener('mouseup', onMouseUp, { passive: true });
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth lerp tracking
-      const ringLerp = 0.18;
+      // Buttery smooth organic linear interpolation
+      const ringLerp = 0.16;
       ring.x += (mouse.x - ring.x) * ringLerp;
       ring.y += (mouse.y - ring.y) * ringLerp;
 
-      currentRadius += (targetRadius - currentRadius) * 0.15;
-      currentAlpha += (targetAlpha - currentAlpha) * 0.1;
+      currentRadius += (targetRadius - currentRadius) * 0.18;
+      currentAlpha += (targetAlpha - currentAlpha) * 0.12;
 
       if (currentAlpha > 0.01) {
         ctx.save();
         ctx.globalAlpha = currentAlpha;
 
-        // 1. Sleek Outer Trailing Ring
+        // 1. Smooth Outer Trailing Ring
         ctx.beginPath();
         ctx.arc(ring.x, ring.y, currentRadius, 0, Math.PI * 2);
         
         if (isHovering) {
           ctx.fillStyle = 'rgba(249, 115, 22, 0.08)';
           ctx.fill();
-          ctx.strokeStyle = 'rgba(249, 115, 22, 0.75)';
+          ctx.strokeStyle = 'rgba(249, 115, 22, 0.8)';
           ctx.lineWidth = 1.5;
-          ctx.shadowColor = 'rgba(249, 115, 22, 0.45)';
-          ctx.shadowBlur = 10;
+          ctx.shadowColor = 'rgba(249, 115, 22, 0.4)';
+          ctx.shadowBlur = 8;
         } else {
           ctx.strokeStyle = 'rgba(249, 115, 22, 0.45)';
           ctx.lineWidth = 1.2;
-          ctx.shadowColor = 'rgba(249, 115, 22, 0.25)';
-          ctx.shadowBlur = 5;
+          ctx.shadowColor = 'rgba(249, 115, 22, 0.2)';
+          ctx.shadowBlur = 4;
         }
         ctx.stroke();
 
-        // 2. Crisp Center Dot (Locks directly to pointer)
+        // 2. Crisp Center Dot (Follows pointer directly with zero lag)
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, isHovering ? 2.5 : 2, 0, Math.PI * 2);
         ctx.fillStyle = isHovering ? '#f97316' : '#ffffff';
         ctx.shadowColor = 'rgba(249, 115, 22, 0.7)';
-        ctx.shadowBlur = isHovering ? 8 : 4;
+        ctx.shadowBlur = isHovering ? 6 : 3;
         ctx.fill();
 
         ctx.restore();
@@ -153,14 +151,13 @@ export const DoctorStrangeCursor: React.FC = () => {
       window.removeEventListener('mouseleave', onMouseLeave);
       window.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mouseup', onMouseUp);
-      observer.disconnect();
       cancelAnimationFrame(animId);
     };
   }, []);
 
   return (
-    <div id="magic-cursor-container" className="cursor-layer" aria-hidden="true">
-      <canvas ref={canvasRef} id="magic-cursor-canvas" />
+    <div id="magic-cursor-container" className="cursor-layer pointer-events-none" aria-hidden="true">
+      <canvas ref={canvasRef} id="magic-cursor-canvas" className="pointer-events-none" />
     </div>
   );
 };
