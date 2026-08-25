@@ -34,7 +34,7 @@ export const About: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-28 px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden"
+      className="pt-10 md:pt-14 pb-24 md:pb-28 px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden"
       id="about"
     >
       <div className="max-w-[1400px] mx-auto">

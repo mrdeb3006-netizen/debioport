@@ -275,7 +275,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
       {/* Slide Down Hint */}
       <a
-        href="#work"
+        href="#about"
         className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#a1a1aa] no-underline font-mono text-[0.72rem] tracking-[0.2em] z-20 transition-all duration-300 hover:text-accent-orange animate-bounce-hint"
         aria-label="Slide down to see more"
       >
