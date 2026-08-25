@@ -102,8 +102,10 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
-  const lettersSolid = ['D', 'E', 'B', 'E', 'N', 'D'];
-  const lettersOutline = ['R', 'A'];
+  const debendranathSolid = ['D', 'E', 'B', 'E', 'N', 'D', 'R', 'A'];
+  const debendranathOutline = ['N', 'A', 'T', 'H'];
+  const beraSolid = ['B', 'E'];
+  const beraOutline = ['R', 'A'];
 
   return (
     <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden bg-bg-dark" id="home">
@@ -121,41 +123,60 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
       <div className="max-w-[1600px] w-full mx-auto px-6 md:px-12 lg:px-16 py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
         {/* Left Content Column */}
-        <div className="w-full max-w-[760px] flex flex-col justify-center">
+        <div className="w-full max-w-[800px] flex flex-col justify-center">
 
-          {/* Main Huge Display Title: DEBEND (Solid Chrome White) + RA (Orange Hollow Wireframe) - Moved a little up */}
-          <div className="mb-0 -mt-3 overflow-visible">
-            <h1 className="font-display text-[clamp(3.2rem,7vw,6.4rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase select-none">
-              {/* Solid White Letters: D E B E N D */}
-              {lettersSolid.map((letter, idx) => (
-                <span
-                  key={`solid-${idx}`}
-                  className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
-                  style={{ animationDelay: `${0.2 + idx * 0.08}s` }}
-                >
-                  {letter}
-                </span>
-              ))}
-              {/* Orange Hollow Wireframe Letters: R A */}
-              {lettersOutline.map((letter, idx) => (
-                <span
-                  key={`outline-${idx}`}
-                  className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
-                  style={{ animationDelay: `${0.2 + (lettersSolid.length + idx) * 0.08}s` }}
-                >
-                  {letter}
-                </span>
-              ))}
-            </h1>
-          </div>
+          {/* Main Huge Display Title: DEBENDRANATH (Line 1) + BERA (Line 2) in Previous Letter Drop & Wireframe Style */}
+          <div className="mb-6 -mt-3 select-none overflow-visible">
+            {/* Line 1: DEBENDRANATH */}
+            <div className="overflow-visible pb-1">
+              <h1 className="font-display text-[clamp(2.3rem,4.8vw,4.6rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+                {/* Solid White Letters: D E B E N D R A */}
+                {debendranathSolid.map((letter, idx) => (
+                  <span
+                    key={`dn-solid-${idx}`}
+                    className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    style={{ animationDelay: `${0.2 + idx * 0.06}s` }}
+                  >
+                    {letter}
+                  </span>
+                ))}
+                {/* Orange Hollow Wireframe Letters: N A T H */}
+                {debendranathOutline.map((letter, idx) => (
+                  <span
+                    key={`dn-outline-${idx}`}
+                    className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    style={{ animationDelay: `${0.2 + (debendranathSolid.length + idx) * 0.06}s` }}
+                  >
+                    {letter}
+                  </span>
+                ))}
+              </h1>
+            </div>
 
-          {/* Cursive Signature Underneath: Bera with animated pen stroke */}
-          <div className="mb-6 -mt-1 pl-1 flex items-center overflow-visible">
-            <div className="signature-cursive-wrapper">
-              <span className="signature-cursive-text select-none">
-                Bera
-              </span>
-              <div className="signature-pen-stroke" aria-hidden="true" />
+            {/* Line 2: BERA */}
+            <div className="overflow-visible pt-0.5">
+              <h2 className="font-display text-[clamp(2.3rem,4.8vw,4.6rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+                {/* Solid White Letters: B E */}
+                {beraSolid.map((letter, idx) => (
+                  <span
+                    key={`b-solid-${idx}`}
+                    className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    style={{ animationDelay: `${0.95 + idx * 0.08}s` }}
+                  >
+                    {letter}
+                  </span>
+                ))}
+                {/* Orange Hollow Wireframe Letters: R A */}
+                {beraOutline.map((letter, idx) => (
+                  <span
+                    key={`b-outline-${idx}`}
+                    className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                    style={{ animationDelay: `${0.95 + (beraSolid.length + idx) * 0.08}s` }}
+                  >
+                    {letter}
+                  </span>
+                ))}
+              </h2>
             </div>
           </div>
 
