@@ -8,6 +8,12 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
   const [copied, setCopied] = useState(false);
   const [formStatus, setFormStatus] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('mrdeb3006@gmail.com').then(() => {
@@ -16,18 +22,43 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
     });
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setFormStatus('✓ Message received! Debendra will get back to you shortly.');
-      setIsSubmitting(false);
-      const form = e.target as HTMLFormElement;
-      form.reset();
+    // Target WhatsApp Number
+    const whatsappNumber = "919876543210"; 
+    
+    // Structured WhatsApp Message Formatting
+    const structuredMsg = 
+      `*New Portfolio Inquiry for Debendranath Bera*\n` +
+      `───────────────────────\n` +
+      `👤 *Name:* ${formData.name.trim()}\n` +
+      `📧 *Email:* ${formData.email.trim()}\n` +
+      `📌 *Subject:* ${formData.subject.trim() || 'General Inquiry / Project'}\n` +
+      `───────────────────────\n` +
+      `📝 *Message:*\n${formData.message.trim()}\n` +
+      `───────────────────────\n` +
+      `_Sent directly via portfolio contact form_`;
 
-      setTimeout(() => setFormStatus(null), 4000);
-    }, 1000);
+    const encodedText = encodeURIComponent(structuredMsg);
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedText}`;
+
+    setFormStatus('✓ Opening WhatsApp with your formatted message...');
+
+    setTimeout(() => {
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      setIsSubmitting(false);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setFormStatus(null), 6000);
+    }, 400);
   };
 
   return (
@@ -187,6 +218,8 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                     type="text"
                     id="contact-name"
                     name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required
                     placeholder="John Doe"
                     className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
@@ -200,6 +233,8 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                     type="email"
                     id="contact-email"
                     name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                     placeholder="john@example.com"
                     className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
@@ -215,6 +250,8 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                   type="text"
                   id="contact-subject"
                   name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
                   placeholder="Project collaboration or discussion"
                   className="bg-[#0d0f1c]/80 border border-white/10 rounded-lg p-3.5 text-white font-main text-[0.95rem] transition-all outline-none focus:border-accent-cyan/80 focus:shadow-[0_0_14px_rgba(249,115,22,0.3)] focus:bg-[#18181b]/95"
                 />
@@ -227,6 +264,8 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
                 <textarea
                   id="contact-message"
                   name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   rows={4}
                   required
                   placeholder="Tell me about your idea or project..."
@@ -237,14 +276,18 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-2 btn-primary py-4 px-10 text-[0.92rem] justify-center"
+                className="mt-2 btn-primary py-4 px-10 text-[0.92rem] justify-center flex items-center gap-2.5 shadow-[0_4px_20px_rgba(249,115,22,0.45)] hover:shadow-[0_6px_25px_rgba(249,115,22,0.6)] cursor-pointer"
               >
-                <span>{isSubmitting ? 'Transmitting...' : 'Send Message'}</span>
-                <span className="text-lg">→</span>
+                <span>{isSubmitting ? 'Formatting Message...' : 'SEND MESSAGE VIA WHATSAPP'}</span>
+                <span className="text-lg font-black">→</span>
               </button>
 
+              <div className="flex items-center justify-center gap-2 font-mono text-[0.74rem] text-slate-400 text-center">
+                <span>💬 Clicking send directly prepares &amp; opens this message in your WhatsApp chat</span>
+              </div>
+
               {formStatus && (
-                <div className="mt-2 font-main text-[0.92rem] font-semibold text-accent-cyan text-center">
+                <div className="mt-1 font-main text-[0.92rem] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 text-center animate-in fade-in duration-200">
                   {formStatus}
                 </div>
               )}
