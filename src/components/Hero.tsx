@@ -102,7 +102,7 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
-  const lettersSolid = ['D', 'E', 'B', 'E', 'N', 'D'];
+  const lettersSolid = ['B', 'E'];
   const lettersOutline = ['R', 'A'];
 
   return (
@@ -123,25 +123,25 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         {/* Left Content Column */}
         <div className="w-full max-w-[760px] flex flex-col justify-center">
           
-          {/* Cursive Signature Greeting Line */}
+          {/* Cursive Signature: Debendra */}
           <div className="mb-2 flex items-center overflow-visible">
             <div className="signature-cursive-wrapper">
               <span className="signature-cursive-text select-none">
-                Hey, I am
+                Debendra
               </span>
               <div className="signature-pen-stroke" aria-hidden="true" />
             </div>
           </div>
 
-          {/* Main Huge Display Title: DEBEND (Solid Chrome White) + RA (Orange Hollow Wireframe) */}
+          {/* Main Huge Display Title: BE (Solid Chrome White) + RA (Orange Hollow Wireframe) */}
           <div className="mb-5 overflow-visible">
-            <h1 className="font-display text-[clamp(3.2rem,7vw,6.4rem)] font-black tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase select-none">
-              {/* Solid White Letters: D E B E N D */}
+            <h1 className="font-display text-[clamp(3.8rem,8.5vw,7.4rem)] font-black tracking-[0.04em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase select-none">
+              {/* Solid White Letters: B E */}
               {lettersSolid.map((letter, idx) => (
                 <span
                   key={`solid-${idx}`}
                   className="animate-letter-drop text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.85)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
-                  style={{ animationDelay: `${0.35 + idx * 0.1}s` }}
+                  style={{ animationDelay: `${0.35 + idx * 0.12}s` }}
                 >
                   {letter}
                 </span>
@@ -151,7 +151,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 <span
                   key={`outline-${idx}`}
                   className="animate-letter-drop text-transparent [-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] drop-shadow-[0_0_20px_rgba(249,115,22,0.45)] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
-                  style={{ animationDelay: `${0.35 + (lettersSolid.length + idx) * 0.1}s` }}
+                  style={{ animationDelay: `${0.35 + (lettersSolid.length + idx) * 0.12}s` }}
                 >
                   {letter}
                 </span>
