@@ -464,16 +464,16 @@ body {
 }
 
 .signature-cursive-text {
-  font-family: 'Alex Brush', 'Great Vibes', 'Caveat', cursive;
-  font-size: clamp(2.3rem, 3.8vw, 3.2rem);
-  font-weight: 400;
-  line-height: 1.15;
+  font-family: 'Caveat', 'Outfit', sans-serif;
+  font-size: clamp(3rem, 5.2vw, 4.4rem);
+  font-weight: 600;
+  line-height: 1.1;
   color: #f97316;
   clip-path: inset(0 100% 0 0);
   animation: signatureWrite 2s cubic-bezier(0.35, 0, 0.15, 1) forwards 0.2s;
   white-space: nowrap;
   display: inline-block;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   padding-right: 0.5rem;
   will-change: clip-path, opacity;
 }

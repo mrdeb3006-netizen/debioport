@@ -134,8 +134,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
           </div>
 
           {/* Main Huge Display Title: BE (Solid Chrome White) + RA (Orange Hollow Wireframe) */}
-          <div className="mb-5 overflow-visible">
-            <h1 className="font-display text-[clamp(3.8rem,8.5vw,7.4rem)] font-black tracking-[0.04em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase select-none">
+          <div className="mb-4 overflow-visible">
+            <h1 className="font-display text-[clamp(2.4rem,5vw,4.4rem)] font-black tracking-[0.04em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase select-none">
               {/* Solid White Letters: B E */}
               {lettersSolid.map((letter, idx) => (
                 <span
