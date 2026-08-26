@@ -211,7 +211,7 @@ body {
 .drawer-modal {
   position: fixed;
   inset: 0;
-  z-index: 20000;
+  z-index: 1000000;
   display: flex;
   justify-content: center;
   align-items: center;

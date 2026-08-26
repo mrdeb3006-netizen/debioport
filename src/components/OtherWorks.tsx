@@ -229,6 +229,25 @@ export const OtherWorks: React.FC = () => {
     };
   }, [activePhoto, photos.length]);
 
+  // Lock body scroll and listen for Escape key when activePhoto is open
+  useEffect(() => {
+    if (!activePhoto) return;
+
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActivePhoto(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activePhoto]);
+
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
   };
@@ -685,26 +704,27 @@ export const OtherWorks: React.FC = () => {
 
 
       {/* =========================================================================
-          POP-UP LIGHTBOX MODAL (WITH DOWNLOAD IN RIGHT CORNER)
+          POP-UP LIGHTBOX MODAL (WITH DOWNLOAD & CLOSE IN RIGHT CORNER)
           ========================================================================= */}
       {activePhoto && (
         <div
-          className="fixed inset-0 z-[2000] bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fade-in"
+          className="fixed inset-0 z-[1000000] bg-black/90 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-5 md:p-6 animate-fade-in"
           onClick={() => setActivePhoto(null)}
           role="dialog"
+          aria-modal="true"
           aria-label="Photo Pop-up View"
         >
           <div
-            className="bg-white rounded-3xl max-w-[960px] w-full max-h-[92vh] overflow-y-auto border border-white/25 shadow-2xl animate-scale-up flex flex-col"
+            className="bg-[#101014] text-white rounded-2xl sm:rounded-3xl max-w-[980px] w-full max-h-[92vh] max-h-[92dvh] overflow-y-auto border border-white/20 shadow-[0_25px_80px_rgba(0,0,0,0.95)] animate-scale-up flex flex-col custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Top Modal Header with DOWNLOAD in RIGHT CORNER */}
-            <div className="p-4 sm:p-5 bg-white border-b border-[#e7e5e4] flex items-center justify-between gap-4 sticky top-0 z-30">
-              <div className="flex items-center gap-3 overflow-hidden">
-                <span className="font-mono text-[0.75rem] font-bold px-2.5 py-1 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#fde68a] uppercase shrink-0">
+            {/* Top Modal Header with DOWNLOAD & CLOSE in RIGHT CORNER */}
+            <div className="p-3.5 sm:p-4 md:p-5 bg-[#17171d] border-b border-white/10 flex items-center justify-between gap-3 sticky top-0 z-30">
+              <div className="flex items-center gap-2.5 sm:gap-3 overflow-hidden min-w-0">
+                <span className="font-mono text-[0.70rem] sm:text-[0.75rem] font-bold px-2.5 py-1 rounded-full bg-accent-orange/20 text-accent-orange border border-accent-orange/40 uppercase shrink-0">
                   {activePhoto.category}
                 </span>
-                <h3 className="font-serifDisplay text-lg sm:text-xl font-bold text-[#18181b] truncate">
+                <h3 className="font-serifDisplay text-sm sm:text-lg md:text-xl font-bold text-white truncate">
                   {activePhoto.title}
                 </h3>
               </div>
@@ -714,57 +734,58 @@ export const OtherWorks: React.FC = () => {
                 <a
                   href={activePhoto.imageSrc}
                   download={activePhoto.downloadFileName}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#18181b] hover:bg-[#b45309] text-white font-mono text-[0.8rem] font-bold shadow-md transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-accent-orange hover:bg-orange-600 text-white font-mono text-[0.74rem] sm:text-[0.80rem] font-bold shadow-md transition-all cursor-pointer shrink-0 active:scale-95"
                   title="Download full resolution photo"
                 >
-                  <Download size={16} />
-                  <span className="hidden sm:inline">DOWNLOAD PHOTO</span>
+                  <Download size={15} />
+                  <span className="hidden xs:inline sm:inline">DOWNLOAD</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={() => setActivePhoto(null)}
-                  className="w-10 h-10 rounded-xl bg-[#f5f5f4] hover:bg-[#e7e5e4] text-[#18181b] flex items-center justify-center transition-all cursor-pointer"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 hover:bg-rose-500/25 hover:text-rose-400 text-zinc-200 flex items-center justify-center transition-all cursor-pointer border border-white/15 active:scale-95 shrink-0"
                   aria-label="Close Pop-up"
+                  title="Close (Esc)"
                 >
-                  <X size={20} />
+                  <X size={18} />
                 </button>
               </div>
             </div>
 
             {/* High-Resolution Pop-Up Image Stage with Adaptive True-Frame Backdrop */}
-            <div className="w-full bg-[#0c0d14] relative flex items-center justify-center p-3 sm:p-6 min-h-[340px] max-h-[72vh] overflow-hidden">
+            <div className="w-full bg-[#08080c] relative flex items-center justify-center p-3 sm:p-6 min-h-[300px] sm:min-h-[380px] max-h-[70vh] overflow-hidden">
               {/* Ambient Glow matching the photo */}
               <img
                 src={activePhoto.imageSrc}
                 alt=""
                 aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-25 scale-110 pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-20 scale-110 pointer-events-none"
               />
 
               <img
                 src={activePhoto.imageSrc}
                 alt={activePhoto.title}
-                className="max-h-[66vh] w-auto max-w-full object-contain rounded-xl shadow-2xl relative z-10 drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
+                className="max-h-[64vh] w-auto max-w-full object-contain rounded-xl shadow-2xl relative z-10 drop-shadow-[0_15px_35px_rgba(0,0,0,0.75)]"
               />
             </div>
 
             {/* Bottom Metadata Intel Panel */}
-            <div className="p-5 sm:p-6 bg-white text-[#18181b]">
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-[#e7e5e4]">
-                <div className="flex items-center gap-2 font-mono text-[0.8rem] text-[#78716c]">
-                  <MapPin size={15} className="text-[#b45309]" />
-                  <span className="font-bold text-[#18181b]">{activePhoto.location}</span>
+            <div className="p-4 sm:p-6 bg-[#14141a] text-zinc-200 border-t border-white/10">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-white/[0.08]">
+                <div className="flex items-center gap-2 font-mono text-[0.78rem] sm:text-[0.82rem] text-zinc-400">
+                  <MapPin size={15} className="text-accent-orange shrink-0" />
+                  <span className="font-bold text-white">{activePhoto.location}</span>
                   <span>•</span>
-                  <span>{activePhoto.year}</span>
+                  <span className="text-amber-400 font-bold">{activePhoto.year}</span>
                 </div>
 
-                <span className="font-mono text-[0.74rem] text-[#a8a29e]">
+                <span className="font-mono text-[0.72rem] text-zinc-500">
                   Captured by Debendranath Bera
                 </span>
               </div>
 
-              <p className="text-[0.96rem] text-[#57534e] leading-relaxed">
+              <p className="text-[0.88rem] sm:text-[0.94rem] text-zinc-300 leading-relaxed font-normal">
                 {activePhoto.description}
               </p>
             </div>

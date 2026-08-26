@@ -79,7 +79,7 @@ export const PhilosophyReaderModal: React.FC<PhilosophyReaderModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-[999999] bg-black/90 backdrop-blur-md flex flex-col items-center justify-between p-2 sm:p-4 md:p-6 animate-fade-in select-none"
+      className="fixed inset-0 z-[1000000] bg-black/90 backdrop-blur-md flex flex-col items-center justify-between p-2.5 sm:p-4 md:p-6 animate-fade-in select-none"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -87,34 +87,34 @@ export const PhilosophyReaderModal: React.FC<PhilosophyReaderModalProps> = ({
     >
       {/* Modal Container */}
       <div
-        className="w-full max-w-[1280px] h-full flex flex-col bg-[#0f172a] text-slate-100 rounded-2xl md:rounded-3xl border border-slate-700/60 shadow-2xl overflow-hidden animate-scale-up"
+        className="w-full max-w-[1280px] h-full max-h-[96vh] max-h-[96dvh] flex flex-col bg-[#0f172a] text-slate-100 rounded-2xl md:rounded-3xl border border-slate-700/60 shadow-2xl overflow-hidden animate-scale-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Control Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6 md:py-4 bg-[#1e293b] border-b border-slate-700/80 z-20 shrink-0">
+        <div className="flex items-center justify-between gap-2.5 sm:gap-4 px-3.5 sm:px-6 py-2.5 sm:py-3.5 bg-[#1e293b] border-b border-slate-700/80 z-20 shrink-0">
           
           {/* Left: Paper Title & Meta */}
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
-              <BookOpen size={18} />
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+              <BookOpen size={17} />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="font-serifDisplay text-[0.95rem] sm:text-base md:text-lg font-bold text-white tracking-tight truncate">
+                <h3 className="font-serifDisplay text-[0.88rem] sm:text-base md:text-lg font-bold text-white tracking-tight truncate">
                   The Game of Dopamine
                 </h3>
-                <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 font-mono text-[0.68rem] uppercase font-semibold">
+                <span className="hidden md:inline-block px-2 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 font-mono text-[0.66rem] uppercase font-semibold">
                   Illustrated Edition
                 </span>
               </div>
-              <p className="text-[0.72rem] sm:text-[0.78rem] text-slate-400 truncate">
+              <p className="text-[0.68rem] sm:text-[0.76rem] text-slate-400 truncate max-w-[180px] sm:max-w-[320px] md:max-w-[400px]">
                 {PAGE_TITLES[currentPage - 1]}
               </p>
             </div>
           </div>
 
-          {/* Center: View Mode Switcher & Page Pill */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Center: View Mode Switcher & Page Pill (Visible on sm+) */}
+          <div className="hidden sm:flex items-center gap-2 md:gap-3 shrink-0">
             {/* View Mode Toggle */}
             <div className="hidden md:flex items-center p-1 rounded-xl bg-slate-800 border border-slate-700 text-xs font-mono">
               <button
@@ -127,7 +127,7 @@ export const PhilosophyReaderModal: React.FC<PhilosophyReaderModalProps> = ({
                 }`}
               >
                 <Layers size={13} />
-                <span>Single Page</span>
+                <span>Single</span>
               </button>
               <button
                 type="button"
@@ -139,35 +139,35 @@ export const PhilosophyReaderModal: React.FC<PhilosophyReaderModalProps> = ({
                 }`}
               >
                 <List size={13} />
-                <span>All Pages</span>
+                <span>All</span>
               </button>
             </div>
 
             {/* Current Page Indicator */}
-            <div className="flex items-center gap-1 px-3 py-1 rounded-xl bg-slate-800/90 border border-slate-700 text-slate-200 font-mono text-[0.78rem]">
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-800/90 border border-slate-700 text-slate-200 font-mono text-[0.74rem]">
               <span className="text-amber-400 font-bold">{String(currentPage).padStart(2, '0')}</span>
               <span className="text-slate-500">/</span>
               <span className="text-slate-400">{String(TOTAL_PAGES).padStart(2, '0')}</span>
             </div>
           </div>
 
-          {/* Right: Actions (Open PDF, Download, Close) */}
+          {/* Right: Actions (Open PDF, Download, Close) - ALWAYS VISIBLE & SHRINK-0 */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <a
               href={PDF_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 font-mono text-[0.75rem] font-semibold transition-all cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 font-mono text-[0.72rem] sm:text-[0.75rem] font-semibold transition-all cursor-pointer active:scale-95"
               title="Open Original PDF in New Tab"
             >
-              <ExternalLink size={14} className="text-amber-400" />
-              <span className="hidden sm:inline">Open PDF</span>
+              <ExternalLink size={13} className="text-amber-400" />
+              <span>Open PDF</span>
             </a>
 
             <a
               href={PDF_URL}
               download={DOWNLOAD_FILENAME}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-[0.75rem] font-bold transition-all shadow-sm cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-[0.72rem] sm:text-[0.75rem] font-bold transition-all shadow-sm cursor-pointer active:scale-95 shrink-0"
               title="Download Full PDF File (340 KB)"
             >
               <Download size={14} />
@@ -177,8 +177,9 @@ export const PhilosophyReaderModal: React.FC<PhilosophyReaderModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 hover:bg-rose-500/20 hover:text-rose-400 text-slate-300 flex items-center justify-center border border-slate-700 transition-all cursor-pointer ml-1"
+              className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl bg-slate-800 hover:bg-rose-500/25 hover:text-rose-400 text-slate-200 flex items-center justify-center border border-slate-700 transition-all cursor-pointer ml-1 active:scale-95 shrink-0"
               aria-label="Close Reader"
+              title="Close (Esc)"
             >
               <X size={18} />
             </button>
