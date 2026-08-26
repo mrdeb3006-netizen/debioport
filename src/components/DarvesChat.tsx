@@ -147,8 +147,8 @@ export const DarvesChat: React.FC = () => {
       return "Debendra is located in Kolkata, West Bengal, India 📍.";
     }
 
-    if (q.includes('dopamine') || q.includes('paper') || q.includes('research') || q.includes('gita') || q.includes('essay') || q.includes('writing') || q.includes('game of dopamine')) {
-      return 'Debendra authored the research paper "The Game of Dopamine: From the Inner Push to Inner Freedom" (Illustrated Edition, August 2026). It synthesizes attention and novelty-seeking loops with the Bhagavad Gita\'s teachings on Karma Yoga (action without attachment), equanimity, and mental strength. You can view the first page and read all 10 pages in the Philosophy section under "My Other Works"! 📖';
+    if (q.includes('dopamine') || q.includes('paper') || q.includes('research') || q.includes('gita') || q.includes('essay') || q.includes('writing') || q.includes('game of dopamine') || q.includes('ship wreck') || q.includes('shipwreck')) {
+      return 'Debendra authored the research paper "The Game of Dopamine: From the Inner Push to Inner Freedom" (Illustrated Edition, August 2026). It synthesizes attention and novelty-seeking loops with the Bhagavad Gita\'s teachings on Karma Yoga (action without attachment), equanimity, and mental strength. You can view the first page and read all 10 pages in the Philosophy section under "Ship Wreck"! 📖';
     }
 
     if (q.includes('motto') || q.includes('quote') || q.includes('philosophy') || q.includes('humble') || q.includes('life')) {

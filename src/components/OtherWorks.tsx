@@ -239,7 +239,7 @@ export const OtherWorks: React.FC = () => {
 
   return (
     <section
-      id="other-works"
+      id="ship-wreck"
       className="w-full relative py-10 md:py-14 bg-[#faf9f6] text-[#18181b] border-y-2 border-[#e7e5e4] transition-colors duration-500 overflow-hidden font-main"
     >
       {/* Editorial Watermark Texture & Subtle Grid Lines */}
@@ -253,7 +253,7 @@ export const OtherWorks: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-10 border-b-2 border-[#e7e5e4]">
           <div>
             <h2 className="font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08]">
-              MY OTHER WORKS.
+              SHIP WRECK.
             </h2>
           </div>
 

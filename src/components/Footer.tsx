@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
           <a href="#work" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">projects</a>
           <a href="#journey" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">journey</a>
           <a href="#skills" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">skills</a>
-          <a href="#other-works" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">other works</a>
+          <a href="#ship-wreck" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">ship wreck</a>
           <a href="#contact" className="text-text-secondary no-underline text-[0.92rem] font-medium capitalize transition-all hover:text-accent-orange">contact</a>
         </div>
 
