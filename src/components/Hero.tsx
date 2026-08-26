@@ -105,21 +105,20 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
     <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden bg-bg-dark" id="home">
       {/* Background Portrait Image (The First Photo) */}
       <div
-        className="absolute inset-0 w-full h-full bg-no-repeat bg-[center_right] md:bg-[80%_center] lg:bg-[85%_center] bg-cover z-[1] pointer-events-none"
+        className="absolute inset-0 w-full h-full bg-no-repeat bg-[88%_center] sm:bg-[80%_center] md:bg-[82%_center] lg:bg-[85%_center] bg-cover z-[1] pointer-events-none"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         aria-hidden="true"
       >
         {/* Glowing Orange Celestial Eclipse Ring behind the head/silhouette */}
-        <div className="absolute top-[8%] right-[-12%] sm:right-[4%] md:right-[8%] lg:right-[10%] w-[330px] sm:w-[440px] md:w-[520px] h-[330px] sm:h-[440px] md:h-[520px] rounded-full border-2 border-orange-500/50 shadow-[0_0_90px_rgba(249,115,22,0.45)] pointer-events-none z-[2] opacity-85" />
+        <div className="absolute top-[8%] right-[-10%] sm:right-[3%] md:right-[6%] lg:right-[8%] w-[330px] sm:w-[440px] md:w-[520px] h-[330px] sm:h-[440px] md:h-[520px] rounded-full border-2 border-orange-500/50 shadow-[0_0_100px_rgba(249,115,22,0.5)] pointer-events-none z-[2] opacity-90" />
         
         {/* Subtle Diagonal Laser Accent Streak Lines */}
         <div className="absolute top-8 -left-24 w-[500px] h-[1.5px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent rotate-[-35deg] pointer-events-none z-[2]" />
         <div className="absolute bottom-16 -right-24 w-[600px] h-[1.5px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent rotate-[-35deg] pointer-events-none z-[2]" />
 
-        {/* Cinematic smooth gradient masks for flawless dark mode integration */}
-        <div className="absolute inset-0 bg-gradient-to-r from-bg-dark via-bg-dark/85 sm:via-bg-dark/60 md:via-bg-dark/40 to-transparent z-[2]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/40 z-[2]" />
-        <div className="absolute inset-0 bg-radial from-transparent via-transparent to-bg-dark/70 z-[2]" />
+        {/* Cinematic smooth gradient masks: crisp text on the left, clear vibrant photo on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-bg-dark via-bg-dark/70 from-15% sm:from-10% sm:via-bg-dark/50 md:via-bg-dark/35 to-transparent z-[2]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent from-5% to-bg-dark/20 z-[2]" />
       </div>
 
       <div className="max-w-[1600px] w-full mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
