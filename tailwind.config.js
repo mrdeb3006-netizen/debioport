@@ -26,6 +26,7 @@ export default {
         display: ['Syne', 'Outfit', 'sans-serif'],
         cinzel: ['Cinzel', 'serif'],
         serifDisplay: ['"Playfair Display"', 'Cinzel', 'serif'],
+        signature: ["'Alex Brush'", "'Great Vibes'", "'Dancing Script'", "'Caveat'", 'cursive'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       backgroundImage: {
