@@ -7,46 +7,46 @@ interface StrokeSegment {
   isDot?: boolean;
 }
 
-// 6 sequential strokes extracted from Debendra's cursive signature
+// Precise calligraphic strokes spelling 'Debendra' in cursive with D bowl, flourish, and underline
 const STROKE_SEGMENTS: StrokeSegment[] = [
-  // 1. Cursive Capital 'D' Loop & Bowl
+  // 1. Cursive Capital 'D' Loop & Rounded Bowl
   {
-    path: 'M 235 180 C 180 230 150 310 165 355 C 185 385 240 375 285 315 C 315 260 315 190 275 155 C 240 135 215 155 235 180',
-    duration: 0.95,
+    path: 'M 240 190 C 170 240 140 320 170 375 C 205 405 275 390 320 320 C 350 250 345 170 295 135 C 255 110 220 140 240 190',
+    duration: 1.05,
   },
-  // 2. Main Diagonal Slash through 'D' into cursive 'evendra' with upper tail flourish
+  // 2. Diagonal Stem through 'D' connecting into cursive 'e - b - e - n - d - r - a' and tail flourish
   {
-    path: 'M 40 395 C 120 345 220 275 315 205 C 330 190 345 175 340 190 C 355 175 375 170 385 175 C 395 155 415 140 415 150 C 430 135 445 135 455 130 C 465 110 480 35 486 30 C 482 65 480 100 488 115 C 500 105 515 95 520 110 C 535 95 555 80 555 100 C 570 85 620 60 668 40',
-    duration: 1.4,
+    path: 'M 50 420 C 140 365 240 295 340 230 C 355 210 372 195 365 218 C 385 175 402 105 408 105 C 400 155 415 205 425 195 C 438 180 448 170 442 192 C 458 165 462 185 472 155 C 475 165 478 178 488 170 C 485 182 498 185 510 160 C 518 70 525 50 525 50 C 518 100 522 155 530 170 C 540 155 552 148 556 165 C 562 150 562 168 575 168 C 585 145 635 105 725 48',
+    duration: 1.6,
   },
   // 3. Dot 1
   {
-    path: 'M 682 38 L 684 40',
+    path: 'M 744 42 L 746 44',
     duration: 0.15,
     isDot: true,
   },
   // 4. Dot 2
   {
-    path: 'M 700 28 L 702 30',
+    path: 'M 764 30 L 766 32',
     duration: 0.15,
     isDot: true,
   },
-  // 5. Underline Stroke beneath Name
+  // 5. Underline Stroke beneath 'ebendra'
   {
-    path: 'M 295 330 L 495 205',
+    path: 'M 320 355 C 420 290 500 235 550 200',
     duration: 0.45,
   },
-  // 6. Accent Mark at end of Underline
+  // 6. Accent Mark on Underline
   {
-    path: 'M 522 190 L 524 192',
+    path: 'M 578 184 L 580 186',
     duration: 0.15,
     isDot: true,
   },
 ];
 
-// Single continuous high-precision SVG vector path for the signature
-const AUTHENTIC_SIGNATURE_PATH =
-  'M 40 395 C 120 345 220 275 315 205 C 330 190 345 175 340 190 C 355 175 375 170 385 175 C 395 155 415 140 415 150 C 430 135 445 135 455 130 C 465 110 480 35 486 30 C 482 65 480 100 488 115 C 500 105 515 95 520 110 C 535 95 555 80 555 100 C 570 85 620 60 668 40 M 235 180 C 180 230 150 310 165 355 C 185 385 240 375 285 315 C 315 260 315 190 275 155 C 240 135 215 155 235 180 M 295 330 L 495 205';
+// Continuous master vector path for the full signature
+const MASTER_SIGNATURE_PATH =
+  'M 50 420 C 140 365 240 295 340 230 C 355 210 372 195 365 218 C 385 175 402 105 408 105 C 400 155 415 205 425 195 C 438 180 448 170 442 192 C 458 165 462 185 472 155 C 475 165 478 178 488 170 C 485 182 498 185 510 160 C 518 70 525 50 525 50 C 518 100 522 155 530 170 C 540 155 552 148 556 165 C 562 150 562 168 575 168 C 585 145 635 105 725 48 M 240 190 C 170 240 140 320 170 375 C 205 405 275 390 320 320 C 350 250 345 170 295 135 C 255 110 220 140 240 190 M 320 355 C 420 290 500 235 550 200';
 
 interface Particle {
   x: number;
@@ -82,7 +82,6 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
     startTimeRef.current = null;
     particlesRef.current = [];
 
-    // Reset stroke dashoffsets
     pathRefs.current.forEach((p, idx) => {
       if (p) {
         const len = strokeLengthsRef.current[idx] || p.getTotalLength();
@@ -93,7 +92,6 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
   };
 
   useEffect(() => {
-    // Cache total path lengths on mount
     pathRefs.current.forEach((p, idx) => {
       if (p) {
         const len = p.getTotalLength();
@@ -103,7 +101,6 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
       }
     });
 
-    // Auto-trigger signing after page load
     const timer = setTimeout(() => {
       startSigning();
     }, 1000);
@@ -119,8 +116,8 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
     const ctx = penCanvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    const sigWidth = 724;
-    const sigHeight = 440;
+    const sigWidth = 800;
+    const sigHeight = 480;
 
     const render = (time: number) => {
       if (!startTimeRef.current) {
@@ -130,7 +127,6 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
       const elapsed = (time - startTimeRef.current) / 1000;
       const progress = Math.min(elapsed / totalDuration, 1);
 
-      // Retina canvas sizing
       const dpr = window.devicePixelRatio || 1;
       const rect = penCanvas.getBoundingClientRect();
       if (penCanvas.width !== rect.width * dpr || penCanvas.height !== rect.height * dpr) {
@@ -187,7 +183,6 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
             activePenPos = { x: pt.x, y: pt.y };
             isPenWriting = true;
 
-            // Calculate tangent angle for pen tilt
             if (currentDist > 2 && currentDist < len - 2) {
               const ptPrev = pathEl.getPointAtLength(currentDist - 2);
               const ptNext = pathEl.getPointAtLength(currentDist + 2);
@@ -206,7 +201,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         setIsSigning(false);
       }
 
-      // Spawn sparks while pen is active
+      // Emit fine golden sparks while inking
       if (isPenWriting && activePenPos) {
         if (Math.random() < 0.55) {
           particlesRef.current.push({
@@ -222,7 +217,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         }
       }
 
-      // Render spark particles
+      // Update & render spark particles
       for (let pIdx = particlesRef.current.length - 1; pIdx >= 0; pIdx--) {
         const p = particlesRef.current[pIdx];
         p.x += p.vx;
@@ -245,7 +240,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         ctx.restore();
       }
 
-      // Render Animated Pen Nib
+      // Render animated Fountain Pen Nib
       if (isPenWriting && activePenPos) {
         ctx.save();
         ctx.translate(activePenPos.x, activePenPos.y);
@@ -335,23 +330,23 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
       {/* Main SVG Container */}
       <svg
         ref={svgRef}
-        viewBox="0 0 724 440"
+        viewBox="0 0 800 480"
         className="w-full h-full block relative z-10 overflow-visible"
       >
         <defs>
           {/* Gradient for Rich Gold-Amber Ink */}
-          <linearGradient id="sig-v2-ink-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+          <linearGradient id="sig-debendra-grad" x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#ea580c" />
             <stop offset="45%" stopColor="#f97316" />
             <stop offset="100%" stopColor="#fbbf24" />
           </linearGradient>
 
           {/* SVG Mask that unmasks the signature as the pen moves */}
-          <mask id="sig-v2-mask">
-            <rect width="724" height="440" fill="black" />
+          <mask id="sig-debendra-mask">
+            <rect width="800" height="480" fill="black" />
             {STROKE_SEGMENTS.map((seg, idx) => (
               <path
-                key={`mask-v2-${idx}`}
+                key={`mask-debendra-${idx}`}
                 ref={(el) => (pathRefs.current[idx] = el)}
                 d={seg.path}
                 fill="none"
@@ -365,10 +360,10 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         </defs>
 
         {/* 1. Main Signature Glowing Ink Body */}
-        <g mask="url(#sig-v2-mask)">
+        <g mask="url(#sig-debendra-mask)">
           {/* Glowing outer shadow layer */}
           <path
-            d={AUTHENTIC_SIGNATURE_PATH}
+            d={MASTER_SIGNATURE_PATH}
             fill="none"
             stroke="#ea580c"
             strokeWidth="8"
@@ -380,9 +375,9 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
 
           {/* Core vivid ink stroke */}
           <path
-            d={AUTHENTIC_SIGNATURE_PATH}
+            d={MASTER_SIGNATURE_PATH}
             fill="none"
-            stroke="url(#sig-v2-ink-grad)"
+            stroke="url(#sig-debendra-grad)"
             strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -391,7 +386,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
 
           {/* White-hot highlight filament in center */}
           <path
-            d={AUTHENTIC_SIGNATURE_PATH}
+            d={MASTER_SIGNATURE_PATH}
             fill="none"
             stroke="#ffffff"
             strokeWidth="1.8"
@@ -401,10 +396,10 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
             className="drop-shadow-[0_0_6px_#f97316]"
           />
 
-          {/* Dots */}
-          <circle cx="683" cy="39" r="4.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
-          <circle cx="701" cy="29" r="4.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
-          <circle cx="523" cy="191" r="3.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
+          {/* Two accent dots & underline flourish */}
+          <circle cx="745" cy="43" r="4.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
+          <circle cx="765" cy="31" r="4.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
+          <circle cx="579" cy="185" r="3.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
         </g>
       </svg>
 
