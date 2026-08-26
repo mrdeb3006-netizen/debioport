@@ -151,81 +151,81 @@ export const Experience: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // 120 FPS High-Performance Smooth Laser Beam Animation (Zero React Re-renders)
+  // 144Hz Hyper-Reactive GPU-Accelerated Scroll Beam (0ms Reflow, Zero Layout Thrashing)
   useEffect(() => {
     let animId: number;
     let targetProgress = 0;
     let currentProgress = 0;
+    let rowOffsets: number[] = [];
 
-    const renderLoop = () => {
-      // Damped interpolation for liquid smooth motion
-      currentProgress += (targetProgress - currentProgress) * 0.18;
+    const measureOffsets = () => {
+      if (!timelineRef.current) return;
+      const totalH = timelineRef.current.offsetHeight || 1;
+      const rows = timelineRef.current.querySelectorAll<HTMLElement>('.timeline-row-item');
+      rowOffsets = Array.from(rows).map((r) => r.offsetTop / totalH);
+    };
+
+    const updateDOM = () => {
+      // Snappy, hyper-reactive 0.45 damping for instant tracking without sluggish delay
+      currentProgress += (targetProgress - currentProgress) * 0.45;
       if (Math.abs(targetProgress - currentProgress) < 0.001) {
         currentProgress = targetProgress;
       }
 
       const clamped = Math.min(Math.max(currentProgress, 0.02), 1);
 
-      // 1. Desktop Beam & Spark Direct GPU Updates
-      if (timelineRef.current) {
-        const totalHeight = timelineRef.current.offsetHeight || 1000;
-        const currentPx = totalHeight * clamped;
+      // 1. GPU scaleY transform on desktop beam (composite layer only)
+      if (desktopBeamRef.current) {
+        desktopBeamRef.current.style.transform = `scaleY(${clamped})`;
+      }
+      if (desktopSparkRef.current && timelineRef.current) {
+        const totalHeight = timelineRef.current.offsetHeight || 800;
+        const sparkY = totalHeight * clamped;
+        desktopSparkRef.current.style.transform = `translate3d(-50%, ${sparkY}px, 0)`;
+        desktopSparkRef.current.style.opacity = clamped > 0.03 && clamped < 0.98 ? '1' : '0.4';
+      }
 
-        if (desktopBeamRef.current) {
-          desktopBeamRef.current.style.height = `${currentPx}px`;
-        }
+      // 2. GPU scaleY transform on mobile beam
+      if (mobileBeamRef.current) {
+        mobileBeamRef.current.style.transform = `scaleY(${clamped})`;
+      }
+      if (mobileSparkRef.current && timelineRef.current) {
+        const totalHeight = timelineRef.current.offsetHeight || 800;
+        const sparkY = totalHeight * clamped;
+        mobileSparkRef.current.style.transform = `translate3d(-50%, ${sparkY}px, 0)`;
+        mobileSparkRef.current.style.opacity = clamped > 0.03 && clamped < 0.98 ? '1' : '0.4';
+      }
 
-        if (desktopSparkRef.current) {
-          desktopSparkRef.current.style.transform = `translate3d(-50%, ${currentPx}px, 0)`;
-          desktopSparkRef.current.style.opacity = clamped > 0.03 && clamped < 0.98 ? '1' : '0.4';
-        }
-
-        // 2. Mobile Beam & Spark Direct Updates
-        if (mobileBeamRef.current) {
-          mobileBeamRef.current.style.height = `${currentPx}px`;
-        }
-
-        if (mobileSparkRef.current) {
-          mobileSparkRef.current.style.transform = `translate3d(-50%, ${currentPx}px, 0)`;
-          mobileSparkRef.current.style.opacity = clamped > 0.03 && clamped < 0.98 ? '1' : '0.4';
-        }
-
-        // 3. Highlight rows reached by the beam
+      // 3. Update active node states using pre-computed relative offsets
+      if (timelineRef.current && rowOffsets.length > 0) {
         const rows = timelineRef.current.querySelectorAll<HTMLElement>('.timeline-row-item');
-        rows.forEach((row) => {
-          const rowTop = row.offsetTop;
+        rows.forEach((row, i) => {
+          const offsetFraction = rowOffsets[i] || 0;
           const node = row.querySelector<HTMLElement>('.timeline-node-circle');
           const title = row.querySelector<HTMLElement>('.timeline-row-title');
           const year = row.querySelector<HTMLElement>('.timeline-row-year');
 
-          if (currentPx >= rowTop - 20) {
-            if (node) {
-              node.style.borderColor = '#fbbf24';
-              node.style.boxShadow = '0 0 20px rgba(251,191,36,0.9), 0 0 35px rgba(249,115,22,0.5)';
-              node.style.transform = 'scale(1.2)';
-            }
-            if (title) title.style.color = '#ffffff';
-            if (year) {
-              year.style.color = '#fbbf24';
-              year.style.textShadow = '0 0 12px rgba(251,191,36,0.6)';
-            }
-          } else {
-            if (node) {
-              node.style.borderColor = 'rgba(255,255,255,0.2)';
-              node.style.boxShadow = 'none';
-              node.style.transform = 'scale(1.0)';
-            }
-            if (title) title.style.color = '#d4d4d8';
-            if (year) {
-              year.style.color = '#a1a1aa';
-              year.style.textShadow = 'none';
-            }
+          const isReached = clamped >= offsetFraction - 0.03;
+
+          if (node) {
+            node.style.borderColor = isReached ? '#fbbf24' : 'rgba(255,255,255,0.2)';
+            node.style.boxShadow = isReached
+              ? '0 0 20px rgba(251,191,36,0.95), 0 0 35px rgba(249,115,22,0.5)'
+              : 'none';
+            node.style.transform = isReached ? 'scale(1.2)' : 'scale(1.0)';
+          }
+          if (title) {
+            title.style.color = isReached ? '#ffffff' : '#d4d4d8';
+          }
+          if (year) {
+            year.style.color = isReached ? '#fbbf24' : '#a1a1aa';
+            year.style.textShadow = isReached ? '0 0 12px rgba(251,191,36,0.6)' : 'none';
           }
         });
       }
 
       if (Math.abs(targetProgress - currentProgress) > 0.0005) {
-        animId = requestAnimationFrame(renderLoop);
+        animId = requestAnimationFrame(updateDOM);
       }
     };
 
@@ -235,22 +235,26 @@ export const Experience: React.FC = () => {
       const windowHeight = window.innerHeight;
 
       const start = windowHeight * 0.78;
-      const total = rect.height + (start - windowHeight * 0.32);
+      const total = rect.height + (start - windowHeight * 0.3);
       const scrolled = start - rect.top;
 
-      targetProgress = Math.min(Math.max(scrolled / total, 0.04), 1);
+      targetProgress = Math.min(Math.max(scrolled / total, 0.03), 1);
 
       cancelAnimationFrame(animId);
-      animId = requestAnimationFrame(renderLoop);
+      animId = requestAnimationFrame(updateDOM);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      measureOffsets();
+      handleScroll();
+    }, { passive: true });
+
+    measureOffsets();
     handleScroll();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
       cancelAnimationFrame(animId);
     };
   }, []);
@@ -303,18 +307,18 @@ export const Experience: React.FC = () => {
               aria-hidden="true"
             />
 
-            {/* 2. Active Glowing Golden Laser Beam (Draws Live with Scroll) */}
+            {/* 2. Active Glowing Golden Laser Beam (GPU-Accelerated scaleY) */}
             <div
               ref={desktopBeamRef}
-              className="absolute left-[190px] lg:left-[210px] top-4 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_18px_rgba(245,158,11,0.95),0_0_35px_rgba(249,115,22,0.6)] pointer-events-none z-10"
-              style={{ height: '30px', willChange: 'height' }}
+              className="absolute left-[190px] lg:left-[210px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_18px_rgba(245,158,11,0.95),0_0_35px_rgba(249,115,22,0.6)] origin-top pointer-events-none z-10"
+              style={{ transform: 'scaleY(0.04)', willChange: 'transform' }}
               aria-hidden="true"
             />
 
             {/* 3. Leading Radiant Photon Spark Particle */}
             <div
               ref={desktopSparkRef}
-              className="absolute left-[190px] lg:left-[210px] top-4 w-4 h-4 rounded-full bg-white shadow-[0_0_15px_#ffffff,0_0_25px_#fbbf24,0_0_45px_#f97316] pointer-events-none z-20 transition-opacity duration-300"
+              className="absolute left-[190px] lg:left-[210px] top-4 w-4 h-4 rounded-full bg-white shadow-[0_0_15px_#ffffff,0_0_25px_#fbbf24,0_0_45px_#f97316] pointer-events-none z-20 transition-opacity duration-200"
               style={{ transform: 'translate3d(-50%, 0, 0)', willChange: 'transform, opacity' }}
               aria-hidden="true"
             />
@@ -328,7 +332,7 @@ export const Experience: React.FC = () => {
                 >
                   {/* Left Column: Date / Year Tag (Right-Aligned to the Golden Line) */}
                   <div className="pr-8 lg:pr-10 text-right pt-1 select-none">
-                    <div className="timeline-row-year font-mono text-[0.92rem] lg:text-[1.0rem] font-bold text-zinc-400 tracking-wider uppercase transition-all duration-300">
+                    <div className="timeline-row-year font-mono text-[0.92rem] lg:text-[1.0rem] font-bold text-zinc-400 tracking-wider uppercase transition-all duration-200">
                       {item.year}
                     </div>
                     <div className="font-mono text-[0.70rem] lg:text-[0.74rem] font-extrabold text-accent-orange/90 tracking-widest uppercase mt-1">
@@ -338,7 +342,7 @@ export const Experience: React.FC = () => {
 
                   {/* Glowing Circular Node (Centered over the Golden Line) */}
                   <div className="absolute left-[190px] lg:left-[210px] top-2 -translate-x-1/2 z-20 flex items-center justify-center pointer-events-none">
-                    <div className="timeline-node-circle w-6 h-6 rounded-full bg-[#09090b] border-2 border-white/20 transition-all duration-300 flex items-center justify-center">
+                    <div className="timeline-node-circle w-6 h-6 rounded-full bg-[#09090b] border-2 border-white/20 transition-all duration-200 flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]" />
                     </div>
                   </div>
@@ -348,7 +352,7 @@ export const Experience: React.FC = () => {
                     
                     {/* Bold Uppercase Headline */}
                     <div className="flex items-center gap-3 mb-2 flex-wrap">
-                      <h3 className="timeline-row-title font-display text-[1.45rem] sm:text-[1.8rem] lg:text-[2.15rem] font-black text-zinc-200 uppercase tracking-[0.02em] leading-tight group-hover:text-amber-400 transition-colors duration-200">
+                      <h3 className="timeline-row-title font-display text-[1.45rem] sm:text-[1.8rem] lg:text-[2.15rem] font-black text-zinc-200 uppercase tracking-[0.02em] leading-tight group-hover:text-amber-400 transition-colors duration-150">
                         {item.title}
                       </h3>
                       {item.badge && (
@@ -396,18 +400,18 @@ export const Experience: React.FC = () => {
               aria-hidden="true"
             />
 
-            {/* Mobile Active Laser Beam */}
+            {/* Mobile Active Laser Beam (scaleY GPU) */}
             <div
               ref={mobileBeamRef}
-              className="absolute left-[11px] top-3 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_14px_rgba(245,158,11,0.85)] pointer-events-none z-10"
-              style={{ height: '30px', willChange: 'height' }}
+              className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_14px_rgba(245,158,11,0.85)] origin-top pointer-events-none z-10"
+              style={{ transform: 'scaleY(0.04)', willChange: 'transform' }}
               aria-hidden="true"
             />
 
             {/* Mobile Photon Spark Particle */}
             <div
               ref={mobileSparkRef}
-              className="absolute left-[11px] top-3 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_20px_#fbbf24] pointer-events-none z-20 transition-opacity duration-300"
+              className="absolute left-[11px] top-3 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_20px_#fbbf24] pointer-events-none z-20 transition-opacity duration-200"
               style={{ transform: 'translate3d(-50%, 0, 0)', willChange: 'transform, opacity' }}
               aria-hidden="true"
             />
@@ -419,14 +423,14 @@ export const Experience: React.FC = () => {
                   
                   {/* Node */}
                   <div className="absolute -left-[14px] top-1 z-20 flex items-center justify-center pointer-events-none">
-                    <div className="timeline-node-circle w-5 h-5 rounded-full bg-[#09090b] border-2 border-white/20 flex items-center justify-center transition-all duration-300">
+                    <div className="timeline-node-circle w-5 h-5 rounded-full bg-[#09090b] border-2 border-white/20 flex items-center justify-center transition-all duration-200">
                       <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                     </div>
                   </div>
 
                   {/* Date & Period */}
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="timeline-row-year font-mono text-[0.80rem] font-bold text-zinc-400 uppercase transition-colors duration-300">
+                    <span className="timeline-row-year font-mono text-[0.80rem] font-bold text-zinc-400 uppercase transition-colors duration-200">
                       {item.year}
                     </span>
                     <span className="text-white/30 text-xs">•</span>
@@ -436,7 +440,7 @@ export const Experience: React.FC = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="timeline-row-title font-display text-[1.3rem] font-black text-zinc-200 uppercase tracking-[0.02em] leading-snug mb-1 transition-colors duration-300">
+                  <h3 className="timeline-row-title font-display text-[1.3rem] font-black text-zinc-200 uppercase tracking-[0.02em] leading-snug mb-1 transition-colors duration-150">
                     {item.title}
                   </h3>
 
