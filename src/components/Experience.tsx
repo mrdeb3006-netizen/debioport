@@ -42,21 +42,39 @@ interface AchievementCard {
 const PhysicalShuffleDeck: React.FC = () => {
   const achievements: AchievementCard[] = [
     {
-      id: 'iit-honour',
-      category: 'ACADEMIC EXCELLENCE',
-      badge: 'IIT KGP HONOUR',
-      yearTag: 'CLASS 10TH TOPPER',
-      statNumber: 'RANK #1',
-      statLabel: 'SCHOOL TOPPER',
-      title: 'Awarded by IIT Kharagpur Professor',
-      subtitle: 'Exceptional Result & School Topper Felicitation',
+      id: 'jhs-counselling-honour',
+      category: 'INSTITUTIONAL COMMENDATION',
+      badge: 'COUNSELLING COMMITTEE HONOUR',
+      yearTag: 'JADAVPUR HIGH SCHOOL',
+      statNumber: 'HONOUR',
+      statLabel: 'COUNSELLING COMMITTEE',
+      title: 'Jadavpur High School Counselling Committee Honour',
+      subtitle: 'Institutional Commendation & Academic Guidance Felicitation',
       description:
-        'Felicitated and awarded in person by an esteemed professor from Indian Institute of Technology (IIT) Kharagpur in recognition of academic brilliance and ranking as the School Topper in Class 10.',
+        'Felicitated and honored by the esteemed Jadavpur High School Counselling Committee in recognition of scholastic excellence, discipline, and exemplary performance as the Secondary School Topper.',
+      icon: Award,
+      highlights: [
+        'Felicitated in person by the Jadavpur High School Counselling Committee for scholastic distinction',
+        'Recognized for exceptional academic consistency, moral discipline, and secondary school leadership',
+        'Honored by school mentors for dedication, diligence, and academic brilliance in science & mathematics',
+      ],
+    },
+    {
+      id: 'iit-kgp-consultant-honour',
+      category: 'ENGINEERING & ALUMNI HONOUR',
+      badge: 'IIT KGP ALUMNUS HONOUR',
+      yearTag: 'CONSULTANT ENGINEER AWARD',
+      statNumber: 'IIT KGP',
+      statLabel: 'CONSULTANT ENGINEER',
+      title: 'Awarded by IIT Kharagpur Passed Out Consultant Engineer',
+      subtitle: 'Distinguished IIT Kharagpur Alumnus & Senior Consultant Felicitation',
+      description:
+        'Felicitated and awarded a prestigious commendation in person by an esteemed IIT Kharagpur passed out Consultant Engineer in recognition of academic brilliance, analytical rigor, and scholastic excellence in Class 10.',
       icon: Trophy,
       highlights: [
-        'Ranked #1 School Topper with 88.71% in Secondary Board Examination',
-        'Felicitated in person by distinguished IIT Kharagpur faculty',
-        'Demonstrated foundational analytical rigor in mathematics & physical sciences',
+        'Felicitated in person by an IIT Kharagpur alumnus and practicing Consultant Engineer',
+        'Recognized for sharp analytical aptitude, problem-solving skills, and academic brilliance',
+        'Awarded for ranking as the #1 School Topper with 88.71% in the Secondary Board Examination',
       ],
     },
     {
@@ -116,7 +134,7 @@ const PhysicalShuffleDeck: React.FC = () => {
   ];
 
   const total = achievements.length;
-  const [deckOrder, setDeckOrder] = useState<number[]>([0, 1, 2, 3]);
+  const [deckOrder, setDeckOrder] = useState<number[]>(() => achievements.map((_, i) => i));
   const [isHovered, setIsHovered] = useState(false);
   const [isDealing, setIsDealing] = useState(false);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -257,12 +275,22 @@ const PhysicalShuffleDeck: React.FC = () => {
             transform = `translate3d(${xOffset}px, ${yOffset}px, -120px) rotateZ(${rot}deg) scale(0.92)`;
             opacity = 0.6;
             filter = 'blur(0.8px)';
-          } else {
-            // Deepest Card in Deck
+          } else if (slotPosition === 3) {
+            // 3rd Card Behind Deck
             const yOffset = isHovered ? -68 : -48;
-            transform = `translate3d(0, ${yOffset}px, -180px) rotateZ(0.8deg) scale(0.88)`;
+            const xOffset = isHovered ? 14 : 8;
+            const rot = isHovered ? 1.8 : 0.8;
+            transform = `translate3d(${xOffset}px, ${yOffset}px, -180px) rotateZ(${rot}deg) scale(0.88)`;
             opacity = 0.35;
             filter = 'blur(1.2px)';
+          } else {
+            // Deepest Card in Deck (4th+ Behind Deck)
+            const yOffset = isHovered ? -84 : -60;
+            const xOffset = isHovered ? -10 : -6;
+            const rot = isHovered ? -1.4 : -0.6;
+            transform = `translate3d(${xOffset}px, ${yOffset}px, -240px) rotateZ(${rot}deg) scale(0.84)`;
+            opacity = 0.2;
+            filter = 'blur(1.5px)';
           }
 
           return (
