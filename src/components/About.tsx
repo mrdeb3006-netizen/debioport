@@ -207,8 +207,8 @@ export const About: React.FC = () => {
           <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-cyan font-semibold mb-3 inline-block">
             // 01. /ABOUT
           </div>
-          <h2 className="font-display text-[clamp(2.4rem,4.5vw,3.8rem)] font-black text-white leading-[1.15] mb-3 uppercase tracking-[0.02em]">
-            ABOUT<br />ME.
+          <h2 className="font-display text-[clamp(2rem,3.5vw,3rem)] font-black text-white leading-[1.15] mb-3 uppercase tracking-[0.02em] whitespace-nowrap">
+            ABOUT ME.
           </h2>
           <p className="text-[1.1rem] text-text-secondary max-w-[640px] leading-[1.65]">
             Turning curiosity and algorithmic problem solving into useful digital solutions.
