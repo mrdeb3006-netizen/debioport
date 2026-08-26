@@ -107,6 +107,37 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
   const mobileDebendraLetters = ['D', 'E', 'B', 'E', 'N', 'D', 'R', 'A'];
   const mobileNathLetters = ['N', 'A', 'T', 'H'];
   const mobileBeraLetters = ['B', 'E', 'R', 'A'];
+  const orbitSystemRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const hero = document.getElementById('home');
+    const orbitSystem = orbitSystemRef.current;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!hero || !orbitSystem || reduceMotion) return;
+
+    let frameId: number | null = null;
+    let pointerX = 0;
+    let pointerY = 0;
+
+    const updateParallax = () => {
+      orbitSystem.style.setProperty('--orbit-parallax-x', `${pointerX * 8}px`);
+      orbitSystem.style.setProperty('--orbit-parallax-y', `${pointerY * 5}px`);
+      frameId = null;
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      pointerX = (event.clientX / window.innerWidth - 0.5) * 2;
+      pointerY = (event.clientY / window.innerHeight - 0.5) * 2;
+      if (frameId === null) frameId = requestAnimationFrame(updateParallax);
+    };
+
+    hero.addEventListener('pointermove', handlePointerMove, { passive: true });
+    return () => {
+      hero.removeEventListener('pointermove', handlePointerMove);
+      if (frameId !== null) cancelAnimationFrame(frameId);
+    };
+  }, []);
 
   return (
     <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden bg-bg-dark" id="home">
@@ -126,10 +157,16 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         <div className="hidden md:block absolute inset-0 bg-radial from-transparent via-transparent to-bg-dark/70 z-[2]" />
 
         {/* Animated orbit lines framing the portrait */}
-        <div className="hero-orbit-system" aria-hidden="true">
-          <span className="hero-orbit hero-orbit-one" />
-          <span className="hero-orbit hero-orbit-two" />
-          <span className="hero-orbit hero-orbit-three" />
+        <div ref={orbitSystemRef} className="hero-orbit-system" aria-hidden="true">
+          <span className="hero-orbit hero-orbit-one">
+            <span className="hero-orbit-markings">∴ &nbsp; φ &nbsp; ∑ &nbsp; ∞</span>
+          </span>
+          <span className="hero-orbit hero-orbit-two">
+            <span className="hero-orbit-markings">∆ &nbsp; ϕ &nbsp; ∴ &nbsp; ◇</span>
+          </span>
+          <span className="hero-orbit hero-orbit-three">
+            <span className="hero-orbit-markings">∞ &nbsp; ∑ &nbsp; φ &nbsp; ∆</span>
+          </span>
         </div>
       </div>
 
