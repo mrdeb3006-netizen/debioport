@@ -3,13 +3,11 @@ import { Sparkles } from 'lucide-react';
 
 const InteractivePortraitCard: React.FC = () => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState({ x: 0, y: 0 }); // normalized -1 to +1
-  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [targetState, setTargetState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
   const [currentState, setCurrentState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
 
-  // High-precision organic damping physics loop (buttery smooth 60fps)
+  // High-precision organic damping physics loop for the frame
   useEffect(() => {
     let animFrame: number;
     const updatePhysics = () => {
@@ -28,23 +26,14 @@ const InteractivePortraitCard: React.FC = () => {
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width; // 0 to 1
-    const y = (e.clientY - rect.top) / rect.height; // 0 to 1
+    const normX = ((e.clientX - rect.left) / rect.width - 0.5) * 2; // -1 to +1
+    const normY = ((e.clientY - rect.top) / rect.height - 0.5) * 2; // -1 to +1
 
-    const normX = (x - 0.5) * 2; // -1 to +1
-    const normY = (y - 0.5) * 2; // -1 to +1
-
-    setCoords({ x: normX, y: normY });
     setTargetState({
-      rx: -normY * 8.5,  // Subtle, refined vertical tilt (luxury feel, no extreme warp)
-      ry: normX * 8.5,   // Subtle, refined horizontal tilt
-      tx: normX * 6,     // Magnetic micro-translation
-      ty: normY * 6,
-    });
-    setGlare({
-      x: x * 100,
-      y: y * 100,
-      opacity: 1,
+      rx: -normY * 8,   // Subtle, refined 3D vertical tilt on frame only
+      ry: normX * 8,    // Subtle, refined 3D horizontal tilt on frame only
+      tx: normX * 5,    // Gentle magnetic micro-shift
+      ty: normY * 5,
     });
   };
 
@@ -54,9 +43,7 @@ const InteractivePortraitCard: React.FC = () => {
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    setCoords({ x: 0, y: 0 });
     setTargetState({ rx: 0, ry: 0, tx: 0, ty: 0 });
-    setGlare((prev) => ({ ...prev, opacity: 0 }));
   };
 
   return (
@@ -68,46 +55,29 @@ const InteractivePortraitCard: React.FC = () => {
       className="relative w-full max-w-[360px] md:max-w-full mx-auto md:mx-0 select-none group/portrait cursor-pointer"
       style={{ perspective: 1400 }}
     >
-      {/* Soft Atmospheric Ambient Backlight (Gentle & Diffused) */}
+      {/* Atmospheric Ambient Glow behind Frame */}
       <div
-        className="absolute -inset-6 rounded-3xl blur-3xl transition-all duration-700 pointer-events-none"
+        className="absolute -inset-5 rounded-3xl blur-3xl transition-all duration-700 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.18) 0%, rgba(249, 115, 22, 0.08) 50%, transparent 80%)',
-          opacity: isHovered ? 0.9 : 0.4,
-          transform: `translate(${currentState.tx * 2}px, ${currentState.ty * 2}px) scale(${isHovered ? 1.05 : 1})`,
+          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.16) 0%, rgba(249, 115, 22, 0.06) 50%, transparent 75%)',
+          opacity: isHovered ? 0.85 : 0.35,
+          transform: `translate(${currentState.tx * 1.8}px, ${currentState.ty * 1.8}px)`,
         }}
       />
 
-      {/* Main Glassmorphic Portrait Frame */}
+      {/* Main Glassmorphic Frame (Reacts smoothly to cursor) */}
       <div
-        className="relative rounded-3xl overflow-hidden border bg-[#0d0e12]/95 backdrop-blur-2xl transition-all duration-300"
+        className="relative rounded-3xl overflow-hidden border bg-[#0d0e12] backdrop-blur-2xl transition-all duration-300"
         style={{
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${isHovered ? 12 : 0}px)`,
-          borderColor: isHovered ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.12)',
+          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${isHovered ? 10 : 0}px)`,
+          borderColor: isHovered ? 'rgba(245, 158, 11, 0.4)' : 'rgba(255, 255, 255, 0.12)',
           boxShadow: isHovered
-            ? '0 30px 70px -15px rgba(0, 0, 0, 0.9), 0 0 45px -10px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-            : '0 20px 50px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+            ? '0 30px 70px -15px rgba(0, 0, 0, 0.9), 0 0 40px -10px rgba(245, 158, 11, 0.18)'
+            : '0 20px 50px -10px rgba(0, 0, 0, 0.8)',
         }}
       >
-        {/* Prismatic Specular Light Glare (Realistic Glass Reflection) */}
-        <div
-          className="absolute inset-0 z-30 pointer-events-none transition-opacity duration-500 rounded-3xl"
-          style={{
-            opacity: glare.opacity,
-            background: `radial-gradient(circle 420px at ${glare.x}% ${glare.y}%, rgba(255, 255, 255, 0.22) 0%, rgba(251, 191, 36, 0.12) 35%, rgba(14, 165, 233, 0.04) 65%, transparent 85%)`,
-          }}
-        />
-
-        {/* Diagonal Soft Sheen Highlight */}
-        <div
-          className="absolute inset-0 z-25 pointer-events-none opacity-0 group-hover/portrait:opacity-30 transition-opacity duration-700 bg-gradient-to-tr from-transparent via-white/10 to-transparent"
-          style={{
-            transform: `translate(${coords.x * 30}px, ${coords.y * 30}px)`,
-          }}
-        />
-
-        {/* Portrait Image Stage */}
+        {/* Clean, Natural Portrait Image (Does NOT react to cursor, perfectly crisp) */}
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#090a0f]">
           <img
             src="/about-portrait.jpg"
@@ -118,7 +88,7 @@ const InteractivePortraitCard: React.FC = () => {
           {/* Cinematic Editorial Gradient Fade */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0d0e12] via-transparent to-black/20 opacity-85 pointer-events-none" />
 
-          {/* Minimalist Status Pill */}
+          {/* Status Pill */}
           <div className="absolute top-4 left-4 z-20 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/65 backdrop-blur-xl border border-white/20 shadow-xl">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
             <span className="font-mono text-[0.72rem] font-bold text-slate-100 tracking-wider uppercase">
@@ -126,19 +96,14 @@ const InteractivePortraitCard: React.FC = () => {
             </span>
           </div>
 
-          {/* Refined Monogram Watermark on Corner */}
+          {/* Corner Watermark */}
           <div className="absolute top-4 right-4 z-20 px-2.5 py-1 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 font-mono text-[0.68rem] font-semibold tracking-widest uppercase">
             DB • 2026
           </div>
         </div>
 
-        {/* Bottom Card Caption & Monogram */}
-        <div
-          className="p-5 pt-3 bg-[#0d0e12] relative z-20 flex flex-col gap-1 border-t border-white/[0.08]"
-          style={{
-            transform: `translateZ(15px)`,
-          }}
-        >
+        {/* Bottom Card Caption */}
+        <div className="p-5 pt-3 bg-[#0d0e12] relative z-20 flex flex-col gap-1 border-t border-white/[0.08]">
           <div className="flex items-center justify-between">
             <h3 className="font-cinzel text-lg font-bold text-white tracking-wide flex items-center gap-1.5">
               <span>DEBENDRANATH</span>
