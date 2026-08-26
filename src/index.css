@@ -408,6 +408,94 @@ body {
   animation: bounceHint 2.4s ease-in-out infinite;
 }
 
+/* --- Portrait Orbit Animation --- */
+.hero-orbit-system {
+  position: absolute;
+  z-index: 3;
+  top: 52%;
+  right: 8%;
+  width: min(43vw, 620px);
+  aspect-ratio: 2.35 / 1;
+  transform: translateY(-50%);
+  pointer-events: none;
+  filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.45));
+}
+
+.hero-orbit {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(249, 115, 22, 0.82);
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  animation: orbitFloat 8s ease-in-out infinite;
+}
+
+.hero-orbit-one {
+  transform: rotate(30deg) scaleY(0.92);
+}
+
+.hero-orbit-two {
+  transform: rotate(-30deg) scaleY(0.92);
+  animation-delay: -2.7s;
+  opacity: 0.7;
+}
+
+.hero-orbit-three {
+  transform: rotate(90deg) scaleY(0.82);
+  animation-delay: -5.2s;
+  opacity: 0.45;
+}
+
+@keyframes orbitFloat {
+  0%, 100% {
+    transform: rotate(30deg) scaleY(0.92) translateX(0);
+  }
+  50% {
+    transform: rotate(30deg) scaleY(0.92) translateX(12px);
+  }
+}
+
+.hero-orbit-two {
+  animation-name: orbitFloatReverse;
+}
+
+@keyframes orbitFloatReverse {
+  0%, 100% {
+    transform: rotate(-30deg) scaleY(0.92) translateX(0);
+  }
+  50% {
+    transform: rotate(-30deg) scaleY(0.92) translateX(-12px);
+  }
+}
+
+.hero-orbit-three {
+  animation-name: orbitFloatVertical;
+}
+
+@keyframes orbitFloatVertical {
+  0%, 100% {
+    transform: rotate(90deg) scaleY(0.82) translateX(0);
+  }
+  50% {
+    transform: rotate(90deg) scaleY(0.82) translateX(10px);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-orbit-system {
+    top: 32%;
+    right: -16%;
+    width: 88vw;
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-orbit {
+    animation: none;
+  }
+}
+
 /* ==========================================================================
    ENTRANCE ANIMATIONS: SIGNATURE & SLOWED LETTER DROP
    ========================================================================== */

@@ -124,6 +124,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-bg-dark via-bg-dark/85 sm:via-bg-dark/60 md:via-bg-dark/40 to-transparent z-[2]" />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/40 z-[2]" />
         <div className="hidden md:block absolute inset-0 bg-radial from-transparent via-transparent to-bg-dark/70 z-[2]" />
+
+        {/* Animated orbit lines framing the portrait */}
+        <div className="hero-orbit-system" aria-hidden="true">
+          <span className="hero-orbit hero-orbit-one" />
+          <span className="hero-orbit hero-orbit-two" />
+          <span className="hero-orbit hero-orbit-three" />
+        </div>
       </div>
 
       <div className="max-w-[1600px] w-full mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
