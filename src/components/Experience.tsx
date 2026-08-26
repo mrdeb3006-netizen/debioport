@@ -10,6 +10,8 @@ import {
   Award,
   Sparkles,
   CheckCircle2,
+  ArrowRight,
+  Shuffle,
 } from 'lucide-react';
 
 interface TimelineMilestone {
@@ -118,42 +120,46 @@ const PhysicalShuffleDeck: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDealing, setIsDealing] = useState(false);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const dealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (dealTimerRef.current) clearTimeout(dealTimerRef.current);
+  }, []);
 
   // Physical "Swipe & Re-deal to Back" Shuffle Execution
   const shuffleNext = useCallback(() => {
     if (isDealing) return;
     setIsDealing(true);
 
-    // Phase 1 (500ms): Front card slides out horizontally to the right
-    setTimeout(() => {
+    dealTimerRef.current = setTimeout(() => {
       // Phase 2: Shift array order (front card goes to back)
       setDeckOrder((prev) => {
         const [first, ...rest] = prev;
         return [...rest, first];
       });
       setIsDealing(false);
-    }, 480);
+    }, 680);
   }, [isDealing]);
 
   const shufflePrev = useCallback(() => {
     if (isDealing) return;
     setIsDealing(true);
 
-    setTimeout(() => {
+    dealTimerRef.current = setTimeout(() => {
       setDeckOrder((prev) => {
         const last = prev[prev.length - 1];
         const rest = prev.slice(0, prev.length - 1);
         return [last, ...rest];
       });
       setIsDealing(false);
-    }, 480);
+    }, 680);
   }, [isDealing]);
 
   const bringToFront = (targetIndex: number) => {
     if (isDealing || deckOrder[0] === targetIndex) return;
     setIsDealing(true);
 
-    setTimeout(() => {
+    dealTimerRef.current = setTimeout(() => {
       setDeckOrder((prev) => {
         const itemPos = prev.indexOf(targetIndex);
         if (itemPos === -1) return prev;
@@ -161,7 +167,7 @@ const PhysicalShuffleDeck: React.FC = () => {
         return newOrder;
       });
       setIsDealing(false);
-    }, 480);
+    }, 680);
   };
 
   // Continuous auto-shuffle timer
@@ -191,6 +197,27 @@ const PhysicalShuffleDeck: React.FC = () => {
         className="relative min-h-[440px] sm:min-h-[380px] md:min-h-[350px] w-full flex items-center justify-center py-2"
         style={{ perspective: 1800 }}
       >
+        {/* Flanking Side Arrows for Direct Manual Shuffling */}
+        <button
+          onClick={shufflePrev}
+          disabled={isDealing}
+          className="absolute -left-1 sm:-left-3 md:-left-6 top-1/2 -translate-y-1/2 z-50 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#0c0d14]/90 backdrop-blur-xl border border-white/20 hover:border-amber-400 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-90 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(245,158,11,0.25)] disabled:opacity-30 disabled:cursor-not-allowed group/deck-prev"
+          aria-label="Previous Achievement Card"
+          title="Previous Card (Shuffle Back)"
+        >
+          <ChevronLeft size={20} className="transition-transform duration-200 group-hover/deck-prev:-translate-x-0.5" />
+        </button>
+
+        <button
+          onClick={shuffleNext}
+          disabled={isDealing}
+          className="absolute -right-1 sm:-right-3 md:-right-6 top-1/2 -translate-y-1/2 z-50 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#0c0d14]/90 backdrop-blur-xl border border-white/20 hover:border-amber-400 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-90 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(245,158,11,0.25)] disabled:opacity-30 disabled:cursor-not-allowed group/deck-next"
+          aria-label="Next / Shuffle Achievement Card"
+          title="Next Card (Shuffle Forward)"
+        >
+          <ChevronRight size={20} className="transition-transform duration-200 group-hover/deck-next:translate-x-0.5" />
+        </button>
+
         {deckOrder.map((achIdx, slotPosition) => {
           const item = achievements[achIdx];
           const IconComponent = item.icon;
@@ -203,12 +230,12 @@ const PhysicalShuffleDeck: React.FC = () => {
           let filter = 'none';
 
           if (isFront && isDealing) {
-            // Dealing motion: Card deals smoothly to the right with physical tilt
+            // Lift the active card above the stack before sending it away.
             transform =
-              'translate3d(95%, -20px, 80px) rotateY(-18deg) rotateZ(8deg) scale(0.96)';
-            opacity = 0.3;
+              'translate3d(112%, -34px, 150px) rotateY(-22deg) rotateZ(10deg) scale(0.9)';
+            opacity = 0.08;
             zIndex = 50;
-            filter = 'blur(1px)';
+            filter = 'blur(1.5px)';
           } else if (slotPosition === 0) {
             // Front Active Card
             transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
@@ -242,7 +269,7 @@ const PhysicalShuffleDeck: React.FC = () => {
             <div
               key={item.id}
               onClick={() => !isFront && bringToFront(achIdx)}
-              className={`absolute top-6 w-full max-w-[1000px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0c0d14]/95 backdrop-blur-2xl transition-all duration-[550ms] ${
+              className={`achievement-deck-card absolute top-6 w-full max-w-[1000px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0c0d14]/95 backdrop-blur-2xl ${
                 !isFront ? 'cursor-pointer hover:border-amber-400/50' : 'cursor-default'
               }`}
               style={{
@@ -250,8 +277,6 @@ const PhysicalShuffleDeck: React.FC = () => {
                 opacity,
                 zIndex,
                 filter,
-                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-                willChange: 'transform, opacity',
                 borderColor: isFront
                   ? 'rgba(245, 158, 11, 0.5)'
                   : 'rgba(255, 255, 255, 0.1)',
@@ -273,19 +298,39 @@ const PhysicalShuffleDeck: React.FC = () => {
                 
                 {/* Left Area: Content, Badges & Highlights */}
                 <div>
-                  {/* Category Pill Bar */}
-                  <div className="flex items-center gap-2.5 mb-3 flex-wrap">
-                    <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5">
-                      <CheckCircle2 size={12} />
-                      <span>{item.badge}</span>
-                    </span>
-                    <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest">
-                      {item.category}
-                    </span>
-                    <span className="text-white/20 text-xs hidden sm:inline">•</span>
-                    <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
-                      {item.yearTag}
-                    </span>
+                  {/* Category Pill Bar & Top Shuffle Arrow Button */}
+                  <div className="flex items-center justify-between gap-2.5 mb-3 flex-wrap">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5">
+                        <CheckCircle2 size={12} />
+                        <span>{item.badge}</span>
+                      </span>
+                      <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest">
+                        {item.category}
+                      </span>
+                      <span className="text-white/20 text-xs hidden sm:inline">•</span>
+                      <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
+                        {item.yearTag}
+                      </span>
+                    </div>
+
+                    {/* Quick Shuffle Arrow Button on Card Header */}
+                    {isFront && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          shuffleNext();
+                        }}
+                        disabled={isDealing}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/35 hover:border-amber-400/70 text-amber-400 hover:text-amber-300 text-[0.70rem] font-mono font-bold uppercase tracking-wider transition-all duration-200 active:scale-95 group/shufbtn shadow-[0_0_15px_rgba(245,158,11,0.15)] ml-auto"
+                        title="Click arrow to shuffle next card"
+                        aria-label="Shuffle to next card"
+                      >
+                        <Shuffle size={11} className="text-amber-400" />
+                        <span>Shuffle</span>
+                        <ArrowRight size={13} className="transition-transform duration-200 group-hover/shufbtn:translate-x-1 text-accent-orange" />
+                      </button>
+                    )}
                   </div>
 
                   {/* Title */}
@@ -318,7 +363,7 @@ const PhysicalShuffleDeck: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Right Area: Hologram Emblem Tile */}
+                {/* Right Area: Hologram Emblem Tile & Manual Shuffle Action */}
                 <div className="hidden md:flex flex-col items-center justify-center p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-3">
                     <IconComponent size={30} />
@@ -326,23 +371,75 @@ const PhysicalShuffleDeck: React.FC = () => {
                   <div className="font-display text-[1.4rem] font-black text-white leading-none mb-1">
                     {item.statNumber}
                   </div>
-                  <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase mb-3">
+                  <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase mb-2">
                     {item.statLabel}
                   </div>
                   <div className="inline-flex items-center gap-1 text-[0.64rem] font-mono text-zinc-400 pt-2 border-t border-white/[0.06] w-full justify-center">
                     <Star size={11} className="text-amber-400" fill="currentColor" />
                     <span>VERIFIED</span>
                   </div>
+
+                  {/* Quick Card Action on the front card */}
+                  {isFront && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        shuffleNext();
+                      }}
+                      disabled={isDealing}
+                      className="mt-3 w-full py-1.5 px-2 rounded-xl bg-gradient-to-r from-amber-400/15 to-accent-orange/15 hover:from-amber-400/25 hover:to-accent-orange/25 border border-amber-400/30 hover:border-amber-400/60 text-amber-300 text-[0.66rem] font-mono font-bold flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 group/tile-shuf"
+                      title="Shuffle to next card"
+                      aria-label="Shuffle to next card"
+                    >
+                      <span>NEXT CARD</span>
+                      <ArrowRight size={12} className="transition-transform duration-200 group-hover/tile-shuf:translate-x-1 text-accent-orange" />
+                    </button>
+                  )}
                 </div>
 
               </div>
 
-              {/* Footnote Bar */}
+              {/* Footnote Bar with quick arrows */}
               <div className="pt-3 mt-4 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500">
-                <span>3D PHYSICAL SHUFFLE DECK</span>
-                <div className="flex items-center gap-1 text-accent-orange font-bold">
-                  <Sparkles size={11} />
-                  <span>DECK 0{achIdx + 1} OF 0{total}</span>
+                <div className="flex items-center gap-2">
+                  <span>3D PHYSICAL SHUFFLE DECK</span>
+                  {isFront && (
+                    <span className="text-zinc-400 hidden sm:inline">• CLICK ARROWS OR CARDS TO SHUFFLE</span>
+                  )}
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1 text-accent-orange font-bold">
+                    <Sparkles size={11} />
+                    <span>DECK 0{achIdx + 1} OF 0{total}</span>
+                  </div>
+                  {isFront && (
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          shufflePrev();
+                        }}
+                        disabled={isDealing}
+                        className="w-6 h-6 rounded-md bg-white/[0.06] hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/40 text-zinc-300 hover:text-amber-300 flex items-center justify-center transition-all duration-200 active:scale-90"
+                        aria-label="Previous card"
+                        title="Previous card"
+                      >
+                        <ChevronLeft size={13} />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          shuffleNext();
+                        }}
+                        disabled={isDealing}
+                        className="w-6 h-6 rounded-md bg-white/[0.06] hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/40 text-zinc-300 hover:text-amber-300 flex items-center justify-center transition-all duration-200 active:scale-90"
+                        aria-label="Next card"
+                        title="Next card"
+                      >
+                        <ChevronRight size={13} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
