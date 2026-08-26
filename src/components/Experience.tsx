@@ -33,11 +33,6 @@ interface AchievementCard {
 }
 
 const StackedAchievementDeck: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
   const achievements: AchievementCard[] = [
     {
       id: 'iit-honour',
@@ -102,132 +97,135 @@ const StackedAchievementDeck: React.FC = () => {
   ];
 
   const total = achievements.length;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [animatingCard, setAnimatingCard] = useState<number | null>(null);
+  const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const nextCard = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
+    if (animatingCard !== null) return;
+    setAnimatingCard(activeIndex);
     setTimeout(() => {
       setActiveIndex((prev) => (prev + 1) % total);
-      setIsTransitioning(false);
-    }, 600);
-  }, [isTransitioning, total]);
+      setAnimatingCard(null);
+    }, 450);
+  }, [animatingCard, activeIndex, total]);
 
   const prevCard = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
+    if (animatingCard !== null) return;
+    setAnimatingCard((activeIndex - 1 + total) % total);
     setTimeout(() => {
       setActiveIndex((prev) => (prev - 1 + total) % total);
-      setIsTransitioning(false);
-    }, 600);
-  }, [isTransitioning, total]);
+      setAnimatingCard(null);
+    }, 450);
+  }, [animatingCard, activeIndex, total]);
 
   const goToCard = (index: number) => {
-    if (isTransitioning || index === activeIndex) return;
-    setIsTransitioning(true);
+    if (animatingCard !== null || index === activeIndex) return;
+    setAnimatingCard(activeIndex);
     setTimeout(() => {
       setActiveIndex(index);
-      setIsTransitioning(false);
-    }, 600);
+      setAnimatingCard(null);
+    }, 450);
   };
 
-  // Continuous auto-cycle loop (pauses when user hovers)
+  // Continuous loop with pause on hover
   useEffect(() => {
     if (isHovered) {
-      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
       return;
     }
 
-    autoPlayRef.current = setInterval(() => {
+    autoPlayTimerRef.current = setInterval(() => {
       nextCard();
-    }, 3800);
+    }, 4500);
 
     return () => {
-      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
     };
   }, [isHovered, nextCard]);
 
   return (
     <div
-      className="relative w-full max-w-[860px] mx-auto pt-6 pb-8 select-none"
+      className="relative w-full max-w-[840px] mx-auto select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 3D Stack Container */}
+      {/* 3D Stack Viewport */}
       <div
-        className="relative h-[430px] sm:h-[390px] md:h-[360px] w-full flex items-center justify-center"
-        style={{ perspective: 1600 }}
+        className="relative min-h-[380px] sm:min-h-[340px] md:min-h-[310px] w-full flex items-center justify-center py-4"
+        style={{ perspective: 1800 }}
       >
         {achievements.map((item, index) => {
           const IconComponent = item.icon;
           
-          // Slot position relative to active front card (0 = front, 1 = behind, 2 = 2nd behind, etc.)
+          // Slot index relative to active card
           const slot = (index - activeIndex + total) % total;
           const isFront = slot === 0;
-          const isOutgoing = isFront && isTransitioning;
+          const isLeaving = animatingCard === index;
 
-          // Compute 3D stacked transform properties
-          let transformStyle = '';
-          let zIndex = 30 - slot * 5;
+          // Highly refined physics styling based on slot position
+          let transform = '';
           let opacity = 1;
+          let zIndex = 30 - slot * 5;
           let filter = 'none';
 
-          if (isOutgoing) {
-            // Outgoing animation: flies upward and forward, then glides to the back
-            transformStyle =
-              'translate3d(0, -95px, 80px) rotateX(-12deg) rotateZ(-3.5deg) scale(1.03)';
-            zIndex = 50;
-            opacity = 0.85;
+          if (isLeaving) {
+            // Outgoing card smoothly sweeps up and out with silky motion
+            transform = 'translate3d(0, -60px, 80px) rotateX(-8deg) rotateZ(-2.5deg) scale(1.02)';
+            opacity = 0.4;
+            zIndex = 45;
             filter = 'blur(1px)';
           } else if (slot === 0) {
-            // Front Active Card
-            transformStyle = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
-            zIndex = 40;
+            // Front Hero Card
+            transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
             opacity = 1;
+            zIndex = 35;
           } else if (slot === 1) {
             // 1st Card Behind
-            const yOffset = isHovered ? 26 : 20;
-            const rot = isHovered ? 2.5 : 1.8;
-            transformStyle = `translate3d(0, ${yOffset}px, -50px) rotateX(2deg) rotateZ(${rot}deg) scale(0.95)`;
-            opacity = 0.88;
-            filter = 'blur(0.3px)';
+            const yOffset = isHovered ? 24 : 16;
+            const rot = isHovered ? 2.0 : 1.2;
+            transform = `translate3d(0, ${yOffset}px, -45px) rotateX(1.5deg) rotateZ(${rot}deg) scale(0.96)`;
+            opacity = 0.85;
+            filter = 'blur(0.4px)';
           } else if (slot === 2) {
             // 2nd Card Behind
-            const yOffset = isHovered ? 50 : 38;
-            const rot = isHovered ? -2.5 : -1.8;
-            transformStyle = `translate3d(0, ${yOffset}px, -100px) rotateX(4deg) rotateZ(${rot}deg) scale(0.90)`;
-            opacity = 0.65;
+            const yOffset = isHovered ? 45 : 32;
+            const rot = isHovered ? -2.0 : -1.2;
+            transform = `translate3d(0, ${yOffset}px, -90px) rotateX(3deg) rotateZ(${rot}deg) scale(0.92)`;
+            opacity = 0.6;
             filter = 'blur(0.8px)';
           } else {
-            // Deepest Card in Stack
-            const yOffset = isHovered ? 72 : 54;
-            transformStyle = `translate3d(0, ${yOffset}px, -150px) rotateX(6deg) rotateZ(1deg) scale(0.85)`;
-            opacity = 0.4;
-            filter = 'blur(1.5px)';
+            // Deepest Card Behind
+            const yOffset = isHovered ? 64 : 46;
+            transform = `translate3d(0, ${yOffset}px, -135px) rotateX(4deg) rotateZ(0.8deg) scale(0.88)`;
+            opacity = 0.35;
+            filter = 'blur(1.2px)';
           }
 
           return (
             <div
               key={item.id}
               onClick={() => !isFront && goToCard(index)}
-              className={`absolute top-0 w-full max-w-[760px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0c0d13]/95 backdrop-blur-2xl transition-all duration-[650ms] ${
+              className={`absolute top-0 w-full max-w-[760px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0d0e14]/95 backdrop-blur-2xl transition-all duration-[650ms] ${
                 !isFront ? 'cursor-pointer hover:border-amber-400/40' : 'cursor-default'
               }`}
               style={{
-                transform: transformStyle,
-                zIndex,
+                transform,
                 opacity,
+                zIndex,
                 filter,
-                transitionTimingFunction: 'cubic-bezier(0.2, 0.9, 0.3, 1.15)',
-                willChange: 'transform, opacity, filter',
+                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                willChange: 'transform, opacity',
                 borderColor: isFront
-                  ? 'rgba(245, 158, 11, 0.5)'
+                  ? 'rgba(245, 158, 11, 0.45)'
                   : 'rgba(255, 255, 255, 0.1)',
                 boxShadow: isFront
-                  ? '0 30px 70px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
-                  : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+                  ? '0 25px 60px -12px rgba(0, 0, 0, 0.95), 0 0 30px -5px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
+                  : '0 18px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
               }}
             >
-              {/* Active Ambient Golden Edge Sheen */}
+              {/* Active Golden Edge Highlight */}
               {isFront && (
                 <div
                   className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
@@ -235,8 +233,8 @@ const StackedAchievementDeck: React.FC = () => {
                 />
               )}
 
-              {/* Card Header: Category Tag & Icon */}
-              <div className="flex items-center justify-between gap-3 mb-3.5">
+              {/* Header: Badge & Icon */}
+              <div className="flex items-center justify-between gap-3 mb-3">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider">
                     {item.badge}
@@ -251,28 +249,28 @@ const StackedAchievementDeck: React.FC = () => {
                 </div>
               </div>
 
-              {/* Card Title */}
-              <h4 className="font-display text-[1.25rem] sm:text-[1.5rem] md:text-[1.65rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
+              {/* Title */}
+              <h4 className="font-display text-[1.25rem] sm:text-[1.45rem] md:text-[1.6rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
                 {item.title}
               </h4>
 
-              {/* Subtitle with Amber Accent */}
+              {/* Subtitle */}
               <div className="font-mono text-[0.80rem] sm:text-[0.85rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
                 <span>▹</span>
                 <span>{item.subtitle}</span>
               </div>
 
               {/* Description */}
-              <p className="text-[0.88rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[680px]">
+              <p className="text-[0.88rem] sm:text-[0.92rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[680px]">
                 {item.description}
               </p>
 
-              {/* Key Bullet Highlights */}
+              {/* Highlights */}
               <div className="flex flex-col gap-1.5 pt-2 border-t border-white/[0.06]">
                 {item.highlights.map((highlight, hIdx) => (
                   <div
                     key={hIdx}
-                    className="flex items-start gap-2.5 text-[0.82rem] sm:text-[0.86rem] text-zinc-300"
+                    className="flex items-start gap-2 text-[0.82rem] sm:text-[0.86rem] text-zinc-300"
                   >
                     <span className="text-accent-orange text-xs mt-0.5">●</span>
                     <span className="leading-tight">{highlight}</span>
@@ -280,12 +278,12 @@ const StackedAchievementDeck: React.FC = () => {
                 ))}
               </div>
 
-              {/* Footnote Indicator */}
+              {/* Footnote */}
               <div className="pt-3 mt-3 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500">
-                <span>VERIFIED RECOGNITION</span>
+                <span>VERIFIED HONOUR</span>
                 <div className="flex items-center gap-1 text-accent-orange font-bold">
                   <Star size={11} fill="currentColor" />
-                  <span>HONOUR</span>
+                  <span>NATIONAL RECOGNITION</span>
                 </div>
               </div>
             </div>
@@ -293,8 +291,8 @@ const StackedAchievementDeck: React.FC = () => {
         })}
       </div>
 
-      {/* Interactive Controls & Pagination Indicators */}
-      <div className="mt-8 flex items-center justify-between max-w-[760px] mx-auto px-2">
+      {/* Modern Navigation Bar & Slide Indicators */}
+      <div className="mt-4 flex items-center justify-between max-w-[760px] mx-auto px-2">
         {/* Step Indicator Pills */}
         <div className="flex items-center gap-2">
           {achievements.map((_, i) => (
@@ -306,7 +304,7 @@ const StackedAchievementDeck: React.FC = () => {
                   ? 'w-8 bg-gradient-to-r from-amber-400 to-accent-orange shadow-[0_0_10px_rgba(251,191,36,0.7)]'
                   : 'w-2 bg-white/20 hover:bg-white/40'
               }`}
-              aria-label={`Go to slide ${i + 1}`}
+              aria-label={`Go to achievement ${i + 1}`}
             />
           ))}
           <span className="font-mono text-[0.70rem] text-zinc-500 ml-2">
@@ -318,16 +316,14 @@ const StackedAchievementDeck: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={prevCard}
-            disabled={isTransitioning}
-            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50"
+            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95"
             aria-label="Previous Achievement"
           >
             <ChevronLeft size={18} />
           </button>
           <button
             onClick={nextCard}
-            disabled={isTransitioning}
-            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50"
+            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95"
             aria-label="Next Achievement"
           >
             <ChevronRight size={18} />
