@@ -13,87 +13,84 @@ interface StrokeData {
   isDot?: boolean;
 }
 
-// Master Parametric Calligraphy Points for 'Debendra'
-const CALLIGRAPHY_STROKES: StrokeData[] = [
-  // 1. The Grand Cursive 'D' Bowl & Loop
+// Master Calligraphic Strokes accurately tracing Debendra's signature
+const SIGNATURE_STROKES: StrokeData[] = [
+  // 1. Cursive 'D' Bowl & Loop (Sweeping counter-clockwise oval)
   {
     name: 'd_loop',
-    duration: 1.1,
+    duration: 0.55,
     points: [
-      { x: 245, y: 175 }, { x: 232, y: 188 }, { x: 215, y: 206 }, { x: 198, y: 226 },
-      { x: 182, y: 248 }, { x: 168, y: 272 }, { x: 158, y: 298 }, { x: 154, y: 324 },
-      { x: 156, y: 348 }, { x: 165, y: 368 }, { x: 182, y: 382 }, { x: 204, y: 390 },
-      { x: 228, y: 392 }, { x: 252, y: 384 }, { x: 274, y: 368 }, { x: 292, y: 346 },
-      { x: 308, y: 320 }, { x: 320, y: 290 }, { x: 326, y: 258 }, { x: 326, y: 226 },
-      { x: 320, y: 196 }, { x: 308, y: 170 }, { x: 292, y: 150 }, { x: 272, y: 142 },
-      { x: 252, y: 148 }, { x: 242, y: 162 }, { x: 245, y: 175 },
+      { x: 245, y: 175 }, { x: 228, y: 192 }, { x: 208, y: 214 }, { x: 188, y: 242 },
+      { x: 170, y: 274 }, { x: 158, y: 310 }, { x: 156, y: 346 }, { x: 168, y: 372 },
+      { x: 190, y: 388 }, { x: 218, y: 394 }, { x: 248, y: 386 }, { x: 276, y: 366 },
+      { x: 298, y: 338 }, { x: 316, y: 302 }, { x: 326, y: 260 }, { x: 324, y: 218 },
+      { x: 312, y: 180 }, { x: 292, y: 152 }, { x: 268, y: 142 }, { x: 246, y: 156 },
+      { x: 245, y: 175 },
     ],
   },
-  // 2. Diagonal Stem through 'D' connecting into cursive 'e - b - e - n - d - r - a' + tail
+  // 2. Main Diagonal Stem through 'D' connecting into cursive 'debendra' and ascending flourish
   {
     name: 'debendra_word',
-    duration: 1.85,
+    duration: 0.95,
     points: [
-      // Starting diagonal slash through D
-      { x: 45, y: 415 }, { x: 72, y: 398 }, { x: 104, y: 378 }, { x: 138, y: 358 },
-      { x: 174, y: 338 }, { x: 212, y: 314 }, { x: 250, y: 290 }, { x: 284, y: 266 },
-      { x: 314, y: 242 }, { x: 338, y: 225 },
+      // Starting diagonal slash cutting through D
+      { x: 45, y: 415 }, { x: 82, y: 392 }, { x: 125, y: 368 }, { x: 172, y: 340 },
+      { x: 222, y: 310 }, { x: 268, y: 278 }, { x: 308, y: 248 }, { x: 336, y: 226 },
       // 'e' loop
-      { x: 350, y: 206 }, { x: 364, y: 194 }, { x: 368, y: 204 }, { x: 362, y: 216 },
+      { x: 350, y: 204 }, { x: 366, y: 192 }, { x: 368, y: 206 }, { x: 360, y: 218 },
       { x: 372, y: 210 },
       // 'b' tall loop
-      { x: 382, y: 178 }, { x: 392, y: 142 }, { x: 402, y: 112 }, { x: 408, y: 100 },
-      { x: 404, y: 128 }, { x: 398, y: 162 }, { x: 408, y: 192 }, { x: 418, y: 204 },
-      { x: 426, y: 192 },
+      { x: 382, y: 176 }, { x: 394, y: 136 }, { x: 404, y: 106 }, { x: 408, y: 98 },
+      { x: 402, y: 132 }, { x: 396, y: 168 }, { x: 408, y: 196 }, { x: 418, y: 204 },
+      { x: 426, y: 190 },
       // 'e' loop
-      { x: 434, y: 180 }, { x: 446, y: 168 }, { x: 448, y: 178 }, { x: 442, y: 190 },
+      { x: 434, y: 178 }, { x: 446, y: 166 }, { x: 448, y: 178 }, { x: 440, y: 192 },
       { x: 448, y: 184 },
       // 'n' twin arches
-      { x: 454, y: 166 }, { x: 460, y: 184 }, { x: 466, y: 162 }, { x: 472, y: 176 },
-      // 'd' oval bowl & tall loop
-      { x: 484, y: 166 }, { x: 480, y: 178 }, { x: 494, y: 182 }, { x: 506, y: 142 },
-      { x: 518, y: 88 }, { x: 526, y: 48 }, { x: 522, y: 82 }, { x: 518, y: 130 },
+      { x: 454, y: 164 }, { x: 460, y: 184 }, { x: 466, y: 160 }, { x: 472, y: 176 },
+      // 'd' round bowl & tall ascender loop
+      { x: 484, y: 164 }, { x: 480, y: 178 }, { x: 494, y: 182 }, { x: 508, y: 136 },
+      { x: 520, y: 82 }, { x: 526, y: 44 }, { x: 520, y: 88 }, { x: 518, y: 134 },
       { x: 526, y: 170 },
       // 'r' shoulder
-      { x: 536, y: 156 }, { x: 548, y: 148 }, { x: 556, y: 164 },
-      // 'a' oval & sweeping tail
-      { x: 566, y: 150 }, { x: 562, y: 166 }, { x: 574, y: 168 }, { x: 585, y: 148 },
-      { x: 610, y: 128 }, { x: 642, y: 102 }, { x: 680, y: 72 }, { x: 730, y: 42 },
+      { x: 536, y: 154 }, { x: 548, y: 146 }, { x: 556, y: 164 },
+      // 'a' oval & upward tail flourish
+      { x: 566, y: 148 }, { x: 560, y: 166 }, { x: 574, y: 168 }, { x: 585, y: 146 },
+      { x: 615, y: 122 }, { x: 652, y: 94 }, { x: 692, y: 64 }, { x: 735, y: 38 },
     ],
   },
   // 3. Dot 1
   {
     name: 'dot1',
-    duration: 0.14,
+    duration: 0.1,
     isDot: true,
-    points: [{ x: 748, y: 38 }, { x: 750, y: 40 }],
+    points: [{ x: 752, y: 34 }, { x: 754, y: 36 }],
   },
   // 4. Dot 2
   {
     name: 'dot2',
-    duration: 0.14,
+    duration: 0.1,
     isDot: true,
-    points: [{ x: 768, y: 26 }, { x: 770, y: 28 }],
+    points: [{ x: 772, y: 22 }, { x: 774, y: 24 }],
   },
-  // 5. Underline Stroke
+  // 5. Underline Stroke beneath 'ebendra'
   {
     name: 'underline',
-    duration: 0.45,
+    duration: 0.32,
     points: [
-      { x: 310, y: 358 }, { x: 355, y: 328 }, { x: 405, y: 294 }, { x: 460, y: 256 },
-      { x: 510, y: 220 }, { x: 545, y: 195 },
+      { x: 310, y: 358 }, { x: 362, y: 324 }, { x: 418, y: 288 }, { x: 476, y: 248 },
+      { x: 524, y: 214 }, { x: 552, y: 192 },
     ],
   },
   // 6. Star / Accent Mark on Underline
   {
     name: 'star_mark',
-    duration: 0.14,
+    duration: 0.1,
     isDot: true,
-    points: [{ x: 574, y: 182 }, { x: 576, y: 184 }],
+    points: [{ x: 580, y: 178 }, { x: 582, y: 180 }],
   },
 ];
 
-// Helper: Smooth point interpolation
 function getInterpolatedPoint(pts: Point[], t: number): Point {
   if (pts.length === 1) return pts[0];
   if (t <= 0) return pts[0];
@@ -137,9 +134,8 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
   const animFrameRef = useRef<number | null>(null);
   const particlesRef = useRef<Particle[]>([]);
 
-  // Total duration of complete signature writing
   const totalDuration =
-    CALLIGRAPHY_STROKES.reduce((acc, s) => acc + s.duration, 0) + 0.35;
+    SIGNATURE_STROKES.reduce((acc, s) => acc + s.duration, 0) + 0.25;
 
   const startSigning = () => {
     setIsSigning(true);
@@ -199,9 +195,9 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
       let penAngle = -0.55;
       let isPenWriting = false;
 
-      // Draw each stroke progressively
-      for (let i = 0; i < CALLIGRAPHY_STROKES.length; i++) {
-        const stroke = CALLIGRAPHY_STROKES[i];
+      // Draw each stroke
+      for (let i = 0; i < SIGNATURE_STROKES.length; i++) {
+        const stroke = SIGNATURE_STROKES[i];
         const strokeStart = accumulatedTime;
         const strokeEnd = strokeStart + stroke.duration;
         accumulatedTime = strokeEnd;
@@ -218,11 +214,11 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         ctx.lineJoin = 'round';
 
         if (stroke.isDot) {
-          if (strokeProgress > 0.25) {
+          if (strokeProgress > 0.2) {
             const pt = stroke.points[0];
             const radius = stroke.name.startsWith('dot') ? 4.5 : 3.5;
 
-            // 1. Ambient Glow Halo
+            // Halo glow
             ctx.shadowColor = '#f97316';
             ctx.shadowBlur = 12;
             ctx.fillStyle = '#ea580c';
@@ -230,13 +226,13 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
             ctx.arc(pt.x, pt.y, radius + 1.5, 0, Math.PI * 2);
             ctx.fill();
 
-            // 2. Radiant Golden Ring
+            // Gold ring
             ctx.fillStyle = '#fbbf24';
             ctx.beginPath();
             ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
             ctx.fill();
 
-            // 3. White-Hot Incandescent Core
+            // Incandescent core
             ctx.fillStyle = '#ffffff';
             ctx.beginPath();
             ctx.arc(pt.x, pt.y, radius * 0.55, 0, Math.PI * 2);
@@ -255,7 +251,6 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
           subPts.push(currentTip);
 
           if (subPts.length >= 2) {
-            // Function to draw smooth quadratic bezier curve
             const drawSpline = () => {
               ctx.beginPath();
               ctx.moveTo(subPts[0].x, subPts[0].y);
@@ -267,7 +262,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
               ctx.lineTo(subPts[subPts.length - 1].x, subPts[subPts.length - 1].y);
             };
 
-            // Layer 1: Ambient fiery orange aura
+            // Layer 1: Ambient outer flame aura
             ctx.shadowColor = '#f97316';
             ctx.shadowBlur = 14;
             ctx.strokeStyle = 'rgba(234, 88, 12, 0.45)';
@@ -300,7 +295,6 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
             activePenPos = currentTip;
             isPenWriting = true;
 
-            // Compute tangent angle for natural pen slant
             if (subPts.length >= 2) {
               const pA = subPts[subPts.length - 2];
               const pB = subPts[subPts.length - 1];
@@ -321,7 +315,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         setIsSigning(false);
       }
 
-      // Spawn glowing spark particles while pen is active
+      // Embers
       if (isPenWriting && activePenPos) {
         if (Math.random() < 0.6) {
           particlesRef.current.push({
@@ -337,7 +331,6 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         }
       }
 
-      // Update & render spark particles
       for (let pIdx = particlesRef.current.length - 1; pIdx >= 0; pIdx--) {
         const p = particlesRef.current[pIdx];
         p.x += p.vx;
@@ -360,13 +353,13 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         ctx.restore();
       }
 
-      // Render 3D Animated Luxury Fountain Pen Nib
+      // Render 3D Stylus Nib
       if (isPenWriting && activePenPos) {
         ctx.save();
         ctx.translate(activePenPos.x, activePenPos.y);
         ctx.rotate(penAngle);
 
-        // 1. Radiant Pen Laser Contact Flare
+        // 1. Radiant flare
         const flare = ctx.createRadialGradient(0, 0, 0, 0, 0, 16);
         flare.addColorStop(0, '#ffffff');
         flare.addColorStop(0.3, 'rgba(251, 191, 36, 0.95)');
@@ -377,7 +370,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         ctx.arc(0, 0, 16, 0, Math.PI * 2);
         ctx.fill();
 
-        // 2. White-hot contact nib tip
+        // 2. White-hot contact nib
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = '#f97316';
         ctx.shadowBlur = 10;
@@ -385,7 +378,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // 3. Fountain Pen Chrome Nib Body
+        // 3. Chrome Nib Body
         ctx.fillStyle = '#f1f5f9';
         ctx.beginPath();
         ctx.moveTo(0, 0);
