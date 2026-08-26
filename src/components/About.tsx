@@ -16,21 +16,21 @@ const InteractivePortraitCard: React.FC = () => {
       const elapsed = (now - startTime) / 1000;
 
       // Ambient idle wave baseline
-      const idleRx = Math.sin(elapsed * 1.8) * 2.5;
-      const idleRy = Math.cos(elapsed * 1.4) * 2.2;
-      const idleTy = Math.sin(elapsed * 2.2) * 5;
+      const idleRx = Math.sin(elapsed * 1.8) * 3.0;
+      const idleRy = Math.cos(elapsed * 1.4) * 2.6;
+      const idleTy = Math.sin(elapsed * 2.2) * 5.5;
 
       const effectiveTargetRx = targetState.rx !== 0 ? targetState.rx : idleRx;
       const effectiveTargetRy = targetState.ry !== 0 ? targetState.ry : idleRy;
       const effectiveTargetTx = targetState.tx;
       const effectiveTargetTy = targetState.ty !== 0 ? targetState.ty : idleTy;
 
-      // Ultra-reactive snappy damping (0.18 for immediate, fluid tracking)
+      // Ultra-reactive snappy damping (0.22 for instant, fluid tracking)
       setCurrentState((prev) => ({
-        rx: prev.rx + (effectiveTargetRx - prev.rx) * 0.18,
-        ry: prev.ry + (effectiveTargetRy - prev.ry) * 0.18,
-        tx: prev.tx + (effectiveTargetTx - prev.tx) * 0.18,
-        ty: prev.ty + (effectiveTargetTy - prev.ty) * 0.18,
+        rx: prev.rx + (effectiveTargetRx - prev.rx) * 0.22,
+        ry: prev.ry + (effectiveTargetRy - prev.ry) * 0.22,
+        tx: prev.tx + (effectiveTargetTx - prev.tx) * 0.22,
+        ty: prev.ty + (effectiveTargetTy - prev.ty) * 0.22,
       }));
 
       animFrame = requestAnimationFrame(updatePhysics);
@@ -49,8 +49,8 @@ const InteractivePortraitCard: React.FC = () => {
       const cardCenterY = rect.top + rect.height / 2;
 
       // Calculate normalized cursor vector relative to card center
-      const distX = (e.clientX - cardCenterX) / (window.innerWidth * 0.55);
-      const distY = (e.clientY - cardCenterY) / (window.innerHeight * 0.55);
+      const distX = (e.clientX - cardCenterX) / (window.innerWidth * 0.5);
+      const distY = (e.clientY - cardCenterY) / (window.innerHeight * 0.5);
 
       const clampedX = Math.max(-1, Math.min(1, distX));
       const clampedY = Math.max(-1, Math.min(1, distY));
@@ -63,8 +63,8 @@ const InteractivePortraitCard: React.FC = () => {
 
       setIsHovered(isInside);
 
-      const multiplier = isInside ? 13 : 8.5;
-      const shiftMult = isInside ? 9 : 5.5;
+      const multiplier = isInside ? 18 : 12;
+      const shiftMult = isInside ? 14 : 8;
 
       setTargetState({
         rx: -clampedY * multiplier,
@@ -96,11 +96,11 @@ const InteractivePortraitCard: React.FC = () => {
     >
       {/* Atmospheric Ambient Glow behind Frame (Reacts to cursor direction) */}
       <div
-        className="absolute -inset-5 rounded-3xl blur-3xl transition-all duration-300 pointer-events-none"
+        className="absolute -inset-6 rounded-3xl blur-3xl transition-all duration-300 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(249, 115, 22, 0.1) 50%, transparent 75%)',
-          opacity: isHovered ? 0.95 : 0.5,
-          transform: `translate(${currentState.tx * 2}px, ${currentState.ty * 2}px)`,
+          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, rgba(249, 115, 22, 0.12) 50%, transparent 75%)',
+          opacity: isHovered ? 1 : 0.55,
+          transform: `translate(${currentState.tx * 2.2}px, ${currentState.ty * 2.2}px) scale(${isHovered ? 1.06 : 1})`,
         }}
       />
 
@@ -109,11 +109,11 @@ const InteractivePortraitCard: React.FC = () => {
         className="relative rounded-3xl overflow-hidden border bg-[#0d0e12] backdrop-blur-2xl transition-all duration-150"
         style={{
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${isHovered ? 14 : 0}px)`,
-          borderColor: isHovered ? 'rgba(245, 158, 11, 0.55)' : 'rgba(255, 255, 255, 0.14)',
+          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${isHovered ? 18 : 0}px)`,
+          borderColor: isHovered ? 'rgba(245, 158, 11, 0.65)' : 'rgba(255, 255, 255, 0.16)',
           boxShadow: isHovered
-            ? '0 30px 75px -15px rgba(0, 0, 0, 0.95), 0 0 45px -10px rgba(245, 158, 11, 0.28)'
-            : '0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 25px -5px rgba(245, 158, 11, 0.1)',
+            ? '0 35px 85px -15px rgba(0, 0, 0, 0.95), 0 0 50px -10px rgba(245, 158, 11, 0.35)'
+            : '0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 25px -5px rgba(245, 158, 11, 0.12)',
         }}
       >
         {/* Clean, Natural Portrait Image (Does NOT react to cursor, perfectly crisp) */}
