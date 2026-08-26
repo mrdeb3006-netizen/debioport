@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Minus, Send, Sparkles, Bot, User, RefreshCw, Key } from 'lucide-react';
 
 interface Message {
@@ -487,57 +488,59 @@ export const DarvesChat: React.FC = () => {
       )}
 
       {/* Optional Gemini API Key Configuration Modal */}
-      {showKeyModal && (
-        <div className="fixed inset-0 z-[100000] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-[#101222] border border-accent-cyan/40 rounded-3xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(0,240,255,0.2)] flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <Sparkles size={20} className="text-accent-cyan" />
-                <h3 className="font-display text-lg font-bold text-white">Gemini API Assistant</h3>
+      {showKeyModal &&
+        createPortal(
+          <div className="fixed inset-0 z-[9999999] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="max-w-md w-full bg-[#101222] border border-accent-cyan/40 rounded-3xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(0,240,255,0.2)] flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <Sparkles size={20} className="text-accent-cyan" />
+                  <h3 className="font-display text-lg font-bold text-white">Gemini API Assistant</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowKeyModal(false)}
+                  className="text-text-muted hover:text-white"
+                >
+                  <X size={18} />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowKeyModal(false)}
-                className="text-text-muted hover:text-white"
-              >
-                <X size={18} />
-              </button>
-            </div>
 
-            <p className="text-[0.85rem] text-text-secondary leading-relaxed">
-              DARVES has a built-in neural knowledge engine with full knowledge of Debendra. To connect directly to live Google Gemini 2.0 Flash generation, you can enter your Gemini API Key below (stored locally in your browser).
-            </p>
+              <p className="text-[0.85rem] text-text-secondary leading-relaxed">
+                DARVES has a built-in neural knowledge engine with full knowledge of Debendra. To connect directly to live Google Gemini 2.0 Flash generation, you can enter your Gemini API Key below (stored locally in your browser).
+              </p>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[0.75rem] text-accent-cyan">GEMINI_API_KEY (Optional)</label>
-              <input
-                type="password"
-                value={tempApiKey}
-                onChange={(e) => setTempApiKey(e.target.value)}
-                placeholder="AIzaSy..."
-                className="bg-[#181a30] border border-white/15 rounded-xl px-3.5 py-2.5 text-white text-[0.88rem] focus:outline-none focus:border-accent-cyan"
-              />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="font-mono text-[0.75rem] text-accent-cyan">GEMINI_API_KEY (Optional)</label>
+                <input
+                  type="password"
+                  value={tempApiKey}
+                  onChange={(e) => setTempApiKey(e.target.value)}
+                  placeholder="AIzaSy..."
+                  className="bg-[#181a30] border border-white/15 rounded-xl px-3.5 py-2.5 text-white text-[0.88rem] focus:outline-none focus:border-accent-cyan"
+                />
+              </div>
 
-            <div className="flex items-center justify-end gap-3 mt-2">
-              <button
-                type="button"
-                onClick={() => setShowKeyModal(false)}
-                className="px-4 py-2 text-sm text-text-muted hover:text-white"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveApiKey}
-                className="px-5 py-2 rounded-xl bg-accent-orange text-black text-sm font-bold shadow-md hover:bg-orange-600 cursor-pointer"
-              >
-                Save &amp; Connect
-              </button>
+              <div className="flex items-center justify-end gap-3 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowKeyModal(false)}
+                  className="px-4 py-2 text-sm text-text-muted hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveApiKey}
+                  className="px-5 py-2 rounded-xl bg-accent-orange text-black text-sm font-bold shadow-md hover:bg-orange-600 cursor-pointer"
+                >
+                  Save &amp; Connect
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </>
   );
 };
