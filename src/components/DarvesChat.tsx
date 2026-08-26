@@ -285,7 +285,7 @@ export const DarvesChat: React.FC = () => {
         id="darves-floating-widget"
         style={{
           position: 'fixed',
-          top: '96px',
+          bottom: '28px',
           right: '24px',
           transform: `translate3d(${dragOffset.x}px, ${dragOffset.y}px, 0)`,
           zIndex: 99999,
@@ -329,8 +329,8 @@ export const DarvesChat: React.FC = () => {
           aria-label="DARVES AI Conversation Window"
           className={`fixed z-[99998] transition-all duration-300 ${
             isMinimized
-              ? 'top-[96px] right-4 md:right-8 w-72 h-14 rounded-2xl overflow-hidden'
-              : 'top-[92px] right-3 md:right-6 w-[calc(100vw-1.5rem)] md:w-[410px] h-[550px] max-h-[82vh] rounded-3xl'
+              ? 'bottom-24 right-4 md:right-8 w-72 h-14 rounded-2xl overflow-hidden'
+              : 'bottom-20 md:bottom-24 right-3 md:right-6 w-[calc(100vw-1.5rem)] md:w-[410px] h-[550px] max-h-[82vh] rounded-3xl'
           } bg-[#121216]/95 backdrop-blur-[24px] border border-white/15 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200`}
         >
           {/* Chat Window Header */}
