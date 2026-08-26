@@ -97,10 +97,9 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
-  const debendranathSolid = ['D', 'E', 'B', 'E', 'N', 'D', 'R', 'A'];
-  const debendranathOutline = ['N', 'A', 'T', 'H'];
-  const beraSolid = ['B', 'E'];
-  const beraOutline = ['R', 'A'];
+  const debendraLetters = ['D', 'E', 'B', 'E', 'N', 'D', 'R', 'A'];
+  const nathLetters = ['N', 'A', 'T', 'H'];
+  const beraLetters = ['B', 'E', 'R', 'A'];
 
   return (
     <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden bg-bg-dark" id="home">
@@ -110,6 +109,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         aria-hidden="true"
       >
+        {/* Glowing Orange Celestial Eclipse Ring behind the head/silhouette */}
+        <div className="absolute top-[8%] right-[-12%] sm:right-[4%] md:right-[8%] lg:right-[10%] w-[330px] sm:w-[440px] md:w-[520px] h-[330px] sm:h-[440px] md:h-[520px] rounded-full border-2 border-orange-500/50 shadow-[0_0_90px_rgba(249,115,22,0.45)] pointer-events-none z-[2] opacity-85" />
+        
+        {/* Subtle Diagonal Laser Accent Streak Lines */}
+        <div className="absolute top-8 -left-24 w-[500px] h-[1.5px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent rotate-[-35deg] pointer-events-none z-[2]" />
+        <div className="absolute bottom-16 -right-24 w-[600px] h-[1.5px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent rotate-[-35deg] pointer-events-none z-[2]" />
+
         {/* Cinematic smooth gradient masks for flawless dark mode integration */}
         <div className="absolute inset-0 bg-gradient-to-r from-bg-dark via-bg-dark/85 sm:via-bg-dark/60 md:via-bg-dark/40 to-transparent z-[2]" />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/40 z-[2]" />
@@ -120,27 +126,27 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         {/* Left Content Column */}
         <div className="w-full max-w-[800px] flex flex-col justify-center">
 
-          {/* Main Huge Display Title: DEBENDRANATH (Line 1) + BERA (Line 2) in Previous Letter Drop & Wireframe Style */}
-          <div className="mb-4 sm:mb-6 -mt-2 sm:-mt-3 select-none overflow-visible w-full">
-            {/* Line 1: DEBENDRANATH */}
+          {/* Status Badge: Open to Opportunities */}
+          <div
+            className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#141419]/90 border border-white/10 backdrop-blur-md mb-4 sm:mb-5 w-fit select-none animate-item shadow-sm"
+            style={{ ['--delay' as any]: '0.1s' }}
+          >
+            <span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse shadow-[0_0_8px_#f97316]" />
+            <span className="text-[0.78rem] sm:text-[0.84rem] text-slate-200 font-medium tracking-wide">
+              Open to Opportunities
+            </span>
+          </div>
+
+          {/* Main Huge Display Title: Line 1 (DEBENDRA) + Line 2 (NATH BERA) */}
+          <div className="mb-4 sm:mb-5 -mt-1 select-none overflow-visible w-full">
+            {/* Line 1: DEBENDRA (Solid White) */}
             <div className="overflow-visible pb-0.5 sm:pb-1 w-full">
-              <h1 className="font-display text-[clamp(1.4rem,7.2vw,2.6rem)] sm:text-[2.8rem] md:text-[3.6rem] lg:text-[4.5rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.08] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
-                {/* Solid White Letters: D E B E N D R A */}
-                {debendranathSolid.map((letter, idx) => (
+              <h1 className="font-display text-[2.2rem] xs:text-[2.65rem] sm:text-[3.5rem] md:text-[4.4rem] lg:text-[5.2rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+                {debendraLetters.map((letter, idx) => (
                   <span
-                    key={`dn-solid-${idx}`}
+                    key={`deb-${idx}`}
                     className="animate-letter-drop text-white inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
-                    style={{ animationDelay: `${0.2 + idx * 0.06}s` }}
-                  >
-                    {letter}
-                  </span>
-                ))}
-                {/* Orange Hollow Wireframe Letters: N A T H */}
-                {debendranathOutline.map((letter, idx) => (
-                  <span
-                    key={`dn-outline-${idx}`}
-                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
-                    style={{ animationDelay: `${0.2 + (debendranathSolid.length + idx) * 0.06}s` }}
+                    style={{ animationDelay: `${0.2 + idx * 0.05}s` }}
                   >
                     {letter}
                   </span>
@@ -148,37 +154,42 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
               </h1>
             </div>
 
-            {/* Line 2: BERA */}
+            {/* Line 2: NATH (Solid White) + BERA (Orange Wireframe) */}
             <div className="overflow-visible pt-0.5 w-full">
-              <h2 className="font-display text-[clamp(1.4rem,7.2vw,2.6rem)] sm:text-[2.8rem] md:text-[3.6rem] lg:text-[4.5rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.08] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
-                {/* Solid White Letters: B E */}
-                {beraSolid.map((letter, idx) => (
-                  <span
-                    key={`b-solid-${idx}`}
-                    className="animate-letter-drop text-white inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
-                    style={{ animationDelay: `${0.95 + idx * 0.08}s` }}
-                  >
-                    {letter}
-                  </span>
-                ))}
-                {/* Orange Hollow Wireframe Letters: R A */}
-                {beraOutline.map((letter, idx) => (
-                  <span
-                    key={`b-outline-${idx}`}
-                    className="animate-letter-drop text-transparent [-webkit-text-stroke:1.5px_#f97316] sm:[-webkit-text-stroke:2px_#f97316] md:[-webkit-text-stroke:2.5px_#f97316] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
-                    style={{ animationDelay: `${0.95 + (beraSolid.length + idx) * 0.08}s` }}
-                  >
-                    {letter}
-                  </span>
-                ))}
+              <h2 className="font-display text-[2.2rem] xs:text-[2.65rem] sm:text-[3.5rem] md:text-[4.4rem] lg:text-[5.2rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.05] whitespace-nowrap inline-flex items-center gap-2.5 sm:gap-3.5 md:gap-4 overflow-visible pb-[0.05em] uppercase">
+                {/* Solid White Letters: N A T H */}
+                <span className="inline-flex overflow-visible">
+                  {nathLetters.map((letter, idx) => (
+                    <span
+                      key={`nath-${idx}`}
+                      className="animate-letter-drop text-white inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                      style={{ animationDelay: `${0.65 + idx * 0.06}s` }}
+                    >
+                      {letter}
+                    </span>
+                  ))}
+                </span>
+
+                {/* Orange Wireframe Hollow Letters: B E R A */}
+                <span className="inline-flex overflow-visible">
+                  {beraLetters.map((letter, idx) => (
+                    <span
+                      key={`bera-${idx}`}
+                      className="animate-letter-drop text-transparent [-webkit-text-stroke:1.8px_#f97316] sm:[-webkit-text-stroke:2.4px_#f97316] md:[-webkit-text-stroke:2.8px_#f97316] inline-block transition-transform duration-300 hover:scale-105 hover:-translate-y-1 cursor-default"
+                      style={{ animationDelay: `${0.95 + idx * 0.07}s` }}
+                    >
+                      {letter}
+                    </span>
+                  ))}
+                </span>
               </h2>
             </div>
           </div>
 
           {/* Tagline Bar: — DEVELOPER • PROBLEM SOLVER • DREAMER */}
-          <div className="flex items-center gap-3 mb-5 animate-item" style={{ ['--delay' as any]: '1.35s' }}>
-            <div className="w-7 h-[2.5px] bg-accent-orange rounded-full" />
-            <div className="font-mono text-[0.72rem] sm:text-[0.84rem] md:text-[0.88rem] font-bold tracking-[0.14em] sm:tracking-[0.18em] uppercase text-text-primary flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-3 mb-5 animate-item" style={{ ['--delay' as any]: '1.3s' }}>
+            <div className="w-7 h-[2px] bg-accent-orange rounded-full" />
+            <div className="font-mono text-[0.74rem] sm:text-[0.84rem] md:text-[0.88rem] font-bold tracking-[0.14em] sm:tracking-[0.18em] uppercase text-text-primary flex items-center gap-2 flex-wrap">
               <span className="text-slate-200">DEVELOPER</span>
               <span className="text-text-muted text-[0.75rem]">•</span>
               <span className="text-slate-200">PROBLEM SOLVER</span>
@@ -188,16 +199,20 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
           </div>
 
           {/* Description Paragraph */}
-          <div className="mb-6 animate-item" style={{ ['--delay' as any]: '1.5s' }}>
-            <p className="text-[0.90rem] sm:text-[1.05rem] leading-[1.65] text-[#d4d4d8] font-normal max-w-[560px] mb-4">
+          <div className="mb-5 animate-item" style={{ ['--delay' as any]: '1.45s' }}>
+            <p className="text-[0.92rem] sm:text-[1.05rem] leading-[1.65] text-[#d4d4d8] font-normal max-w-[560px]">
               Turning ideas into digital reality. I build clean, efficient and impactful solutions for the web.
             </p>
-            
-            <div className="border-l-2 border-white/35 pl-3.5 py-1 max-w-[580px]">
-              <p className="text-[0.82rem] sm:text-[0.88rem] text-slate-300 italic font-normal leading-[1.6]">
-                “Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth”
-              </p>
-            </div>
+          </div>
+
+          {/* Quote Card (Clean Card with Orange Left Accent) */}
+          <div
+            className="border-l-[3px] border-accent-orange bg-[#111116]/85 backdrop-blur-md rounded-r-xl p-3.5 sm:p-4 border border-white/[0.06] border-l-0 max-w-[580px] mb-6 animate-item shadow-sm"
+            style={{ ['--delay' as any]: '1.55s' }}
+          >
+            <p className="text-[0.86rem] sm:text-[0.92rem] text-slate-300 italic font-normal leading-[1.55]">
+              “Follow your passion, keep learning, and keep growing.”
+            </p>
           </div>
 
           {/* CTA Action Buttons (Stacked Full-Width on Mobile, Row on Desktop) */}
@@ -205,7 +220,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             <button
               type="button"
               onClick={onOpenCvModal}
-              className="w-full sm:w-auto justify-center py-3.5 px-7 rounded-xl bg-accent-orange text-bg-dark font-display font-black text-[0.84rem] sm:text-[0.90rem] tracking-wider uppercase flex items-center gap-2 shadow-md hover:bg-orange-600 active:scale-98 transition-all cursor-pointer"
+              className="w-full sm:w-auto justify-center py-4 px-8 rounded-2xl bg-accent-orange text-bg-dark font-display font-black text-[0.88rem] sm:text-[0.92rem] tracking-wider uppercase flex items-center gap-2 shadow-lg shadow-orange-500/20 hover:bg-orange-600 active:scale-[0.98] transition-all cursor-pointer"
             >
               <span>DOWNLOAD CV</span>
               <span className="text-base font-black">↓</span>
@@ -213,7 +228,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
             <a
               href="#work"
-              className="w-full sm:w-auto justify-center py-3.5 px-7 rounded-xl bg-[#141419]/90 border border-white/15 text-white font-display font-bold text-[0.84rem] sm:text-[0.90rem] tracking-wider uppercase flex items-center gap-2 hover:border-white/30 hover:bg-[#1c1c24] active:scale-98 transition-all shadow-sm cursor-pointer"
+              className="w-full sm:w-auto justify-center py-4 px-8 rounded-2xl bg-[#121218]/90 border border-white/15 text-white font-display font-bold text-[0.88rem] sm:text-[0.92rem] tracking-wider uppercase flex items-center gap-2 hover:border-white/30 hover:bg-[#1a1a22] active:scale-[0.98] transition-all shadow-md cursor-pointer text-[0.88rem] sm:text-[0.92rem]"
             >
               <span>VIEW WORK</span>
               <span className="text-base font-bold">→</span>
@@ -221,14 +236,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
           </div>
 
           {/* Social Icons Bar */}
-          <div className="flex items-center gap-3.5 animate-item mb-2" style={{ ['--delay' as any]: '1.85s' }}>
-            <div className="w-[2px] h-6 bg-accent-orange rounded-full" />
+          <div className="flex items-center gap-3 animate-item mb-2" style={{ ['--delay' as any]: '1.8s' }}>
+            <div className="w-[3px] h-7 bg-accent-orange rounded-full mr-0.5" />
             <div className="flex items-center gap-2.5">
               <a
                 href="https://github.com/mrdeb3006-netizen"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
+                className="w-11 h-11 rounded-xl bg-[#121218]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
                 aria-label="GitHub Profile"
               >
                 <Github size={18} />
@@ -237,7 +252,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
+                className="w-11 h-11 rounded-xl bg-[#121218]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
                 aria-label="LinkedIn Profile"
               >
                 <Linkedin size={18} />
@@ -246,14 +261,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
+                className="w-11 h-11 rounded-xl bg-[#121218]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
                 aria-label="X (formerly Twitter) Profile"
               >
                 <XIcon size={16} />
               </a>
               <a
                 href="mailto:mrdeb3006@gmail.com"
-                className="w-10 h-10 rounded-xl bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
+                className="w-11 h-11 rounded-xl bg-[#121218]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
                 aria-label="Email Debendra"
               >
                 <Mail size={18} />
