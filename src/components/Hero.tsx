@@ -1,5 +1,6 @@
 import React from 'react';
 import { Github, Linkedin, Mail } from 'lucide-react';
+import { AnimatedSignature } from './AnimatedSignature';
 
 const XIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, className = "" }) => (
   <svg
@@ -124,6 +125,11 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-bg-dark via-bg-dark/85 sm:via-bg-dark/60 md:via-bg-dark/40 to-transparent z-[2]" />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/40 z-[2]" />
         <div className="hidden md:block absolute inset-0 bg-radial from-transparent via-transparent to-bg-dark/70 z-[2]" />
+      </div>
+
+      {/* Hand-position Authentic Animated Handwritten Signature with Live Pen Drawing */}
+      <div className="absolute z-20 pointer-events-auto right-4 sm:right-10 md:right-14 lg:right-20 xl:right-28 top-[56%] sm:top-[54%] md:top-[52%] lg:top-[48%] -translate-y-1/2 w-[150px] sm:w-[190px] md:w-[230px] lg:w-[270px] xl:w-[300px] aspect-[347/415] opacity-90 sm:opacity-95 hover:opacity-100 transition-opacity">
+        <AnimatedSignature className="w-full h-full" />
       </div>
 
       <div className="max-w-[1600px] w-full mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
