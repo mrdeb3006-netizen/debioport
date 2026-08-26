@@ -7,7 +7,7 @@ const InteractivePortraitCard: React.FC = () => {
   const [targetState, setTargetState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
   const [currentState, setCurrentState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
 
-  // 60fps high-precision physics loop with continuous organic floating wave + snappy cursor damping
+  // 60fps high-precision physics loop with continuous organic wave + responsive proximity tracking
   useEffect(() => {
     let animFrame: number;
     const startTime = performance.now();
@@ -15,22 +15,22 @@ const InteractivePortraitCard: React.FC = () => {
     const updatePhysics = (now: number) => {
       const elapsed = (now - startTime) / 1000;
 
-      // Frequent continuous ambient floating oscillation
-      const idleRx = Math.sin(elapsed * 1.6) * 2.2;
-      const idleRy = Math.cos(elapsed * 1.3) * 2.0;
-      const idleTy = Math.sin(elapsed * 2.0) * 4.5;
+      // Ambient idle wave baseline
+      const idleRx = Math.sin(elapsed * 1.8) * 2.5;
+      const idleRy = Math.cos(elapsed * 1.4) * 2.2;
+      const idleTy = Math.sin(elapsed * 2.2) * 5;
 
-      const effectiveTargetRx = isHovered ? targetState.rx : idleRx;
-      const effectiveTargetRy = isHovered ? targetState.ry : idleRy;
-      const effectiveTargetTx = isHovered ? targetState.tx : 0;
-      const effectiveTargetTy = isHovered ? targetState.ty : idleTy;
+      const effectiveTargetRx = targetState.rx !== 0 ? targetState.rx : idleRx;
+      const effectiveTargetRy = targetState.ry !== 0 ? targetState.ry : idleRy;
+      const effectiveTargetTx = targetState.tx;
+      const effectiveTargetTy = targetState.ty !== 0 ? targetState.ty : idleTy;
 
-      // Snappy, clean damping (0.14 for crisp responsiveness)
+      // Ultra-reactive snappy damping (0.18 for immediate, fluid tracking)
       setCurrentState((prev) => ({
-        rx: prev.rx + (effectiveTargetRx - prev.rx) * 0.14,
-        ry: prev.ry + (effectiveTargetRy - prev.ry) * 0.14,
-        tx: prev.tx + (effectiveTargetTx - prev.tx) * 0.14,
-        ty: prev.ty + (effectiveTargetTy - prev.ty) * 0.14,
+        rx: prev.rx + (effectiveTargetRx - prev.rx) * 0.18,
+        ry: prev.ry + (effectiveTargetRy - prev.ry) * 0.18,
+        tx: prev.tx + (effectiveTargetTx - prev.tx) * 0.18,
+        ty: prev.ty + (effectiveTargetTy - prev.ty) * 0.18,
       }));
 
       animFrame = requestAnimationFrame(updatePhysics);
@@ -38,60 +38,82 @@ const InteractivePortraitCard: React.FC = () => {
 
     animFrame = requestAnimationFrame(updatePhysics);
     return () => cancelAnimationFrame(animFrame);
-  }, [isHovered, targetState]);
+  }, [targetState]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const normX = ((e.clientX - rect.left) / rect.width - 0.5) * 2; // -1 to +1
-    const normY = ((e.clientY - rect.top) / rect.height - 0.5) * 2; // -1 to +1
+  // Section-wide & viewport reactive cursor proximity tracking
+  useEffect(() => {
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
 
-    setTargetState({
-      rx: -normY * 9,   // Crisp 3D tilt on frame
-      ry: normX * 9,
-      tx: normX * 6,   // Smooth magnetic micro-shift
-      ty: normY * 6,
-    });
-  };
+      // Calculate normalized cursor vector relative to card center
+      const distX = (e.clientX - cardCenterX) / (window.innerWidth * 0.55);
+      const distY = (e.clientY - cardCenterY) / (window.innerHeight * 0.55);
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
+      const clampedX = Math.max(-1, Math.min(1, distX));
+      const clampedY = Math.max(-1, Math.min(1, distY));
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setTargetState({ rx: 0, ry: 0, tx: 0, ty: 0 });
-  };
+      const isInside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      setIsHovered(isInside);
+
+      const multiplier = isInside ? 13 : 8.5;
+      const shiftMult = isInside ? 9 : 5.5;
+
+      setTargetState({
+        rx: -clampedY * multiplier,
+        ry: clampedX * multiplier,
+        tx: clampedX * shiftMult,
+        ty: clampedY * shiftMult,
+      });
+    };
+
+    const handleMouseLeaveWindow = () => {
+      setIsHovered(false);
+      setTargetState({ rx: 0, ry: 0, tx: 0, ty: 0 });
+    };
+
+    window.addEventListener('mousemove', handleGlobalMouseMove, { passive: true });
+    window.addEventListener('mouseleave', handleMouseLeaveWindow);
+
+    return () => {
+      window.removeEventListener('mousemove', handleGlobalMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeaveWindow);
+    };
+  }, []);
 
   return (
     <div
       ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       className="relative w-full max-w-[360px] md:max-w-full mx-auto md:mx-0 select-none group/portrait cursor-pointer"
       style={{ perspective: 1400 }}
     >
-      {/* Atmospheric Ambient Glow behind Frame */}
+      {/* Atmospheric Ambient Glow behind Frame (Reacts to cursor direction) */}
       <div
-        className="absolute -inset-5 rounded-3xl blur-3xl transition-all duration-500 pointer-events-none"
+        className="absolute -inset-5 rounded-3xl blur-3xl transition-all duration-300 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.18) 0%, rgba(249, 115, 22, 0.08) 50%, transparent 75%)',
-          opacity: isHovered ? 0.9 : 0.45,
-          transform: `translate(${currentState.tx * 1.8}px, ${currentState.ty * 1.8}px)`,
+          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(249, 115, 22, 0.1) 50%, transparent 75%)',
+          opacity: isHovered ? 0.95 : 0.5,
+          transform: `translate(${currentState.tx * 2}px, ${currentState.ty * 2}px)`,
         }}
       />
 
-      {/* Main Glassmorphic Frame (Continuous Organic Wave + Snappy Cursor Tracking) */}
+      {/* Main Glassmorphic Frame (Highly Reactive 3D Tilt & Magnetic Micro-Shift) */}
       <div
-        className="relative rounded-3xl overflow-hidden border bg-[#0d0e12] backdrop-blur-2xl transition-all duration-200"
+        className="relative rounded-3xl overflow-hidden border bg-[#0d0e12] backdrop-blur-2xl transition-all duration-150"
         style={{
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${isHovered ? 12 : 0}px)`,
-          borderColor: isHovered ? 'rgba(245, 158, 11, 0.5)' : 'rgba(255, 255, 255, 0.14)',
+          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${isHovered ? 14 : 0}px)`,
+          borderColor: isHovered ? 'rgba(245, 158, 11, 0.55)' : 'rgba(255, 255, 255, 0.14)',
           boxShadow: isHovered
-            ? '0 30px 70px -15px rgba(0, 0, 0, 0.9), 0 0 40px -10px rgba(245, 158, 11, 0.22)'
-            : '0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 25px -5px rgba(245, 158, 11, 0.08)',
+            ? '0 30px 75px -15px rgba(0, 0, 0, 0.95), 0 0 45px -10px rgba(245, 158, 11, 0.28)'
+            : '0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 25px -5px rgba(245, 158, 11, 0.1)',
         }}
       >
         {/* Clean, Natural Portrait Image (Does NOT react to cursor, perfectly crisp) */}
