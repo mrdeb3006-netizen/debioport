@@ -7,46 +7,40 @@ interface StrokeSegment {
   isDot?: boolean;
 }
 
-// Precise calligraphic strokes spelling 'Debendra' in cursive with D bowl, flourish, and underline
+// 4 continuous guide strokes aligned with the authentic handwritten signature photo
 const STROKE_SEGMENTS: StrokeSegment[] = [
-  // 1. Cursive Capital 'D' Loop & Rounded Bowl
+  // 1. Initial Cursive 'D' loop and wide bowl
   {
-    path: 'M 240 190 C 170 240 140 320 170 375 C 205 405 275 390 320 320 C 350 250 345 170 295 135 C 255 110 220 140 240 190',
-    duration: 1.05,
+    path: 'M 220 180 C 170 230 145 310 165 355 C 185 385 240 375 285 315 C 315 260 315 190 275 155 C 240 135 200 155 220 180',
+    duration: 1.0,
   },
-  // 2. Diagonal Stem through 'D' connecting into cursive 'e - b - e - n - d - r - a' and tail flourish
+  // 2. Main Slanted Cross-Line cutting through 'D' and writing cursive 'debendra' with tail flourish
   {
-    path: 'M 50 420 C 140 365 240 295 340 230 C 355 210 372 195 365 218 C 385 175 402 105 408 105 C 400 155 415 205 425 195 C 438 180 448 170 442 192 C 458 165 462 185 472 155 C 475 165 478 178 488 170 C 485 182 498 185 510 160 C 518 70 525 50 525 50 C 518 100 522 155 530 170 C 540 155 552 148 556 165 C 562 150 562 168 575 168 C 585 145 635 105 725 48',
-    duration: 1.6,
+    path: 'M 35 400 C 120 350 220 280 315 210 C 335 190 355 170 345 190 C 365 170 385 165 395 170 C 405 150 425 135 425 145 C 440 130 455 130 465 125 C 475 105 490 35 496 30 C 492 65 490 100 498 115 C 510 105 525 95 530 110 C 545 95 565 80 565 100 C 580 85 630 60 678 40',
+    duration: 1.5,
   },
-  // 3. Dot 1
+  // 3. Two Accent Dots at the top right
   {
-    path: 'M 744 42 L 746 44',
+    path: 'M 692 36 L 694 38',
     duration: 0.15,
     isDot: true,
   },
-  // 4. Dot 2
   {
-    path: 'M 764 30 L 766 32',
+    path: 'M 710 26 L 712 28',
     duration: 0.15,
     isDot: true,
   },
-  // 5. Underline Stroke beneath 'ebendra'
+  // 4. Underline stroke beneath the name with accent mark
   {
-    path: 'M 320 355 C 420 290 500 235 550 200',
+    path: 'M 290 335 L 500 200',
     duration: 0.45,
   },
-  // 6. Accent Mark on Underline
   {
-    path: 'M 578 184 L 580 186',
+    path: 'M 525 185 L 527 187',
     duration: 0.15,
     isDot: true,
   },
 ];
-
-// Continuous master vector path for the full signature
-const MASTER_SIGNATURE_PATH =
-  'M 50 420 C 140 365 240 295 340 230 C 355 210 372 195 365 218 C 385 175 402 105 408 105 C 400 155 415 205 425 195 C 438 180 448 170 442 192 C 458 165 462 185 472 155 C 475 165 478 178 488 170 C 485 182 498 185 510 160 C 518 70 525 50 525 50 C 518 100 522 155 530 170 C 540 155 552 148 556 165 C 562 150 562 168 575 168 C 585 145 635 105 725 48 M 240 190 C 170 240 140 320 170 375 C 205 405 275 390 320 320 C 350 250 345 170 295 135 C 255 110 220 140 240 190 M 320 355 C 420 290 500 235 550 200';
 
 interface Particle {
   x: number;
@@ -116,8 +110,8 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
     const ctx = penCanvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    const sigWidth = 800;
-    const sigHeight = 480;
+    const sigWidth = 724;
+    const sigHeight = 440;
 
     const render = (time: number) => {
       if (!startTimeRef.current) {
@@ -322,36 +316,29 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         className="absolute -inset-4 rounded-2xl blur-xl transition-opacity duration-500 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.35) 0%, rgba(245, 158, 11, 0.12) 50%, transparent 75%)',
-          opacity: isSigning ? 1 : isHovered ? 0.9 : 0.65,
+            'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.38) 0%, rgba(245, 158, 11, 0.12) 50%, transparent 75%)',
+          opacity: isSigning ? 1 : isHovered ? 0.95 : 0.7,
         }}
       />
 
       {/* Main SVG Container */}
       <svg
         ref={svgRef}
-        viewBox="0 0 800 480"
+        viewBox="0 0 724 440"
         className="w-full h-full block relative z-10 overflow-visible"
       >
         <defs>
-          {/* Gradient for Rich Gold-Amber Ink */}
-          <linearGradient id="sig-debendra-grad" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ea580c" />
-            <stop offset="45%" stopColor="#f97316" />
-            <stop offset="100%" stopColor="#fbbf24" />
-          </linearGradient>
-
-          {/* SVG Mask that unmasks the signature as the pen moves */}
-          <mask id="sig-debendra-mask">
-            <rect width="800" height="480" fill="black" />
+          {/* SVG Mask that unmasks the exact authentic handwritten signature as the pen moves */}
+          <mask id="exact-photo-sig-mask">
+            <rect width="724" height="440" fill="black" />
             {STROKE_SEGMENTS.map((seg, idx) => (
               <path
-                key={`mask-debendra-${idx}`}
+                key={`exact-mask-${idx}`}
                 ref={(el) => (pathRefs.current[idx] = el)}
                 d={seg.path}
                 fill="none"
                 stroke="white"
-                strokeWidth={seg.isDot ? 22 : 36}
+                strokeWidth={seg.isDot ? 28 : 46}
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -359,47 +346,24 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
           </mask>
         </defs>
 
-        {/* 1. Main Signature Glowing Ink Body */}
-        <g mask="url(#sig-debendra-mask)">
-          {/* Glowing outer shadow layer */}
-          <path
-            d={MASTER_SIGNATURE_PATH}
-            fill="none"
-            stroke="#ea580c"
-            strokeWidth="8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.5"
-            className="drop-shadow-[0_0_12px_rgba(249,115,22,0.8)]"
+        {/* 1. Exact Authentic Handwritten Signature image revealed smoothly under the pen */}
+        <g mask="url(#exact-photo-sig-mask)">
+          {/* Glowing Amber Ink Signature Layer */}
+          <image
+            href="/debendra-exact-signature.png"
+            width="724"
+            height="440"
+            className="drop-shadow-[0_0_12px_rgba(249,115,22,0.85)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]"
           />
 
-          {/* Core vivid ink stroke */}
-          <path
-            d={MASTER_SIGNATURE_PATH}
-            fill="none"
-            stroke="url(#sig-debendra-grad)"
-            strokeWidth="5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
-          />
-
-          {/* White-hot highlight filament in center */}
-          <path
-            d={MASTER_SIGNATURE_PATH}
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.9"
+          {/* Crisp White-Hot Highlight Filament */}
+          <image
+            href="/debendra-signature-white.png"
+            width="724"
+            height="440"
+            opacity="0.65"
             className="drop-shadow-[0_0_6px_#f97316]"
           />
-
-          {/* Two accent dots & underline flourish */}
-          <circle cx="745" cy="43" r="4.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
-          <circle cx="765" cy="31" r="4.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
-          <circle cx="579" cy="185" r="3.5" fill="#ffffff" className="drop-shadow-[0_0_6px_#f97316]" />
         </g>
       </svg>
 
