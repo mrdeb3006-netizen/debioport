@@ -455,6 +455,56 @@ body {
   animation: cursorBlink 0.85s infinite;
 }
 
+@keyframes orangeBarGrow {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(249, 115, 22, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.2);
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.8);
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+    box-shadow: 0 0 6px rgba(249, 115, 22, 0.4);
+  }
+}
+
+@keyframes contactItemPopOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-35px) scale(0.4);
+  }
+  65% {
+    opacity: 1;
+    transform: translateX(5px) scale(1.08);
+  }
+  85% {
+    transform: translateX(-1px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-orange-bar {
+  transform-origin: center;
+  animation: orangeBarGrow 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--delay, 1.85s);
+  opacity: 0;
+}
+
+.animate-contact-item {
+  opacity: 0;
+  animation: contactItemPopOut 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+  animation-delay: var(--delay, 1.95s);
+  will-change: transform, opacity;
+}
+
 @keyframes signatureWrite {
   0% {
     clip-path: inset(0 100% 0 0);

@@ -370,15 +370,19 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             </a>
           </div>
 
-          {/* Social Icons Bar */}
-          <div className="flex items-center gap-3 md:gap-3.5 animate-item mb-2" style={{ ['--delay' as any]: '1.85s' }}>
-            <div className="w-[3px] md:w-[2px] h-7 md:h-6 bg-accent-orange rounded-full mr-0.5 md:mr-0" />
+          {/* Social / Contact Icons Bar - Cascading emergence from the Orange Line Bar */}
+          <div className="flex items-center gap-3 md:gap-3.5 mb-2 relative">
+            <div
+              className="w-[3px] md:w-[2.5px] h-8 md:h-7 bg-accent-orange rounded-full mr-0.5 md:mr-0 animate-orange-bar"
+              style={{ ['--delay' as any]: '1.85s' }}
+            />
             <div className="flex items-center gap-2.5">
               <a
                 href="https://github.com/mrdeb3006-netizen"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 rounded-xl bg-[#121218]/90 md:bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
+                className="animate-contact-item w-11 h-11 md:w-10 md:h-10 rounded-xl bg-[#121218]/90 md:bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:scale-105 shadow-sm"
+                style={{ ['--delay' as any]: '1.95s' }}
                 aria-label="GitHub Profile"
               >
                 <Github size={18} />
@@ -387,7 +391,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 rounded-xl bg-[#121218]/90 md:bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
+                className="animate-contact-item w-11 h-11 md:w-10 md:h-10 rounded-xl bg-[#121218]/90 md:bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:scale-105 shadow-sm"
+                style={{ ['--delay' as any]: '2.07s' }}
                 aria-label="LinkedIn Profile"
               >
                 <Linkedin size={18} />
@@ -396,14 +401,16 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                 href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 rounded-xl bg-[#121218]/90 md:bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
+                className="animate-contact-item w-11 h-11 md:w-10 md:h-10 rounded-xl bg-[#121218]/90 md:bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:scale-105 shadow-sm"
+                style={{ ['--delay' as any]: '2.19s' }}
                 aria-label="X (formerly Twitter) Profile"
               >
                 <XIcon size={16} />
               </a>
               <a
                 href="mailto:mrdeb3006@gmail.com"
-                className="w-11 h-11 md:w-10 md:h-10 rounded-xl bg-[#121218]/90 md:bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 shadow-sm"
+                className="animate-contact-item w-11 h-11 md:w-10 md:h-10 rounded-xl bg-[#121218]/90 md:bg-[#141419]/90 border border-white/15 text-slate-300 flex items-center justify-center transition-all duration-300 hover:text-accent-orange hover:border-accent-orange/40 hover:-translate-y-0.5 hover:scale-105 shadow-sm"
+                style={{ ['--delay' as any]: '2.31s' }}
                 aria-label="Email Debendra"
               >
                 <Mail size={18} />
