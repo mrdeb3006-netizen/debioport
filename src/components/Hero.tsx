@@ -92,6 +92,77 @@ const InteractiveDotMatrix: React.FC = () => {
   );
 };
 
+const MOTIVATION_QUOTE =
+  "Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth";
+
+const MotivationQuoteTypewriter: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
+  const [displayedText, setDisplayedText] = React.useState('');
+  const [isTypingStarted, setIsTypingStarted] = React.useState(false);
+  const [isCompleted, setIsCompleted] = React.useState(false);
+
+  React.useEffect(() => {
+    // Start typing right after the name letters drop and settle (~1.85s)
+    const delayTimer = setTimeout(() => {
+      setIsTypingStarted(true);
+    }, 1850);
+
+    return () => clearTimeout(delayTimer);
+  }, []);
+
+  React.useEffect(() => {
+    if (!isTypingStarted) return;
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < MOTIVATION_QUOTE.length) {
+        index++;
+        setDisplayedText(MOTIVATION_QUOTE.slice(0, index));
+      } else {
+        setIsCompleted(true);
+        clearInterval(interval);
+      }
+    }, 22);
+
+    return () => clearInterval(interval);
+  }, [isTypingStarted]);
+
+  if (isMobile) {
+    return (
+      <div
+        className="border-l-[3px] border-accent-orange bg-[#111116]/85 backdrop-blur-md rounded-r-xl p-3.5 sm:p-4 border border-white/[0.06] border-l-0 max-w-[580px] mb-6 shadow-sm min-h-[5.6rem] flex items-start"
+      >
+        <p className="text-[0.84rem] sm:text-[0.90rem] text-slate-300 italic font-normal leading-[1.6]">
+          <span className="text-accent-orange font-serif text-base select-none mr-0.5">“</span>
+          <span>{displayedText}</span>
+          <span
+            className="inline-block w-[2px] h-[1.1em] bg-accent-orange ml-1 align-middle animate-cursor-blink"
+            aria-hidden="true"
+          />
+          {isCompleted && (
+            <span className="text-accent-orange font-serif text-base select-none ml-0.5">”</span>
+          )}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="border-l-2 border-accent-orange/50 pl-3.5 py-1.5 max-w-[620px] min-h-[4.8rem] flex items-start">
+      <p className="text-[0.82rem] sm:text-[0.88rem] text-slate-300 italic font-normal leading-[1.65]">
+        <span className="text-accent-orange font-serif text-base select-none mr-0.5">“</span>
+        <span>{displayedText}</span>
+        <span
+          className="inline-block w-[2px] h-[1.1em] bg-accent-orange ml-1 align-middle animate-cursor-blink"
+          aria-hidden="true"
+        />
+        {isCompleted && (
+          <span className="text-accent-orange font-serif text-base select-none ml-0.5">”</span>
+        )}
+      </p>
+    </div>
+  );
+};
+
 interface HeroProps {
   onOpenCvModal: () => void;
 }
@@ -258,21 +329,17 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
             </div>
           </div>
 
-          {/* Description Paragraph & Quote */}
-          {/* Desktop Version (md and up): Original description + long quote with clean border */}
+          {/* Description Paragraph & Motivation Quote */}
+          {/* Desktop Version (md and up): Description + typewriter motivation quote */}
           <div className="hidden md:block mb-6 animate-item" style={{ ['--delay' as any]: '1.5s' }}>
             <p className="text-[0.90rem] sm:text-[1.05rem] leading-[1.65] text-[#d4d4d8] font-normal max-w-[560px] mb-4">
               Turning ideas into digital reality. I build clean, efficient and impactful solutions for the web.
             </p>
             
-            <div className="border-l-2 border-white/35 pl-3.5 py-1 max-w-[580px]">
-              <p className="text-[0.82rem] sm:text-[0.88rem] text-slate-300 italic font-normal leading-[1.6]">
-                “Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth”
-              </p>
-            </div>
+            <MotivationQuoteTypewriter />
           </div>
 
-          {/* Mobile Version (< md): Mobile description + compact quote card */}
+          {/* Mobile Version (< md): Description + typewriter motivation quote */}
           <div className="block md:hidden">
             <div className="mb-5 animate-item" style={{ ['--delay' as any]: '1.45s' }}>
               <p className="text-[0.92rem] sm:text-[1.05rem] leading-[1.65] text-[#d4d4d8] font-normal max-w-[560px]">
@@ -280,14 +347,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
               </p>
             </div>
 
-            <div
-              className="border-l-[3px] border-accent-orange bg-[#111116]/85 backdrop-blur-md rounded-r-xl p-3.5 sm:p-4 border border-white/[0.06] border-l-0 max-w-[580px] mb-6 animate-item shadow-sm"
-              style={{ ['--delay' as any]: '1.55s' }}
-            >
-              <p className="text-[0.86rem] sm:text-[0.92rem] text-slate-300 italic font-normal leading-[1.55]">
-                “Follow your passion, keep learning, and keep growing.”
-              </p>
-            </div>
+            <MotivationQuoteTypewriter isMobile />
           </div>
 
           {/* CTA Action Buttons (Stacked Full-Width on Mobile, Row on Desktop) */}

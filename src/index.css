@@ -439,6 +439,22 @@ body {
   will-change: transform, opacity;
 }
 
+@keyframes cursorBlink {
+  0%, 45% {
+    opacity: 1;
+  }
+  50%, 95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-cursor-blink {
+  animation: cursorBlink 0.85s infinite;
+}
+
 @keyframes signatureWrite {
   0% {
     clip-path: inset(0 100% 0 0);
