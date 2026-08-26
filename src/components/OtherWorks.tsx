@@ -10,8 +10,11 @@ import {
   ChevronRight,
   Download,
   MapPin,
-  Calendar
+  Calendar,
+  ExternalLink,
+  Eye
 } from 'lucide-react';
+import { PhilosophyReaderModal } from './PhilosophyReaderModal';
 
 interface PhotoItem {
   id: string;
@@ -28,6 +31,8 @@ interface PhotoItem {
 export const OtherWorks: React.FC = () => {
   const [activePhoto, setActivePhoto] = useState<PhotoItem | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [philosophyModalOpen, setPhilosophyModalOpen] = useState(false);
+  const [readerInitialPage, setReaderInitialPage] = useState(1);
   const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // 15 Authentic User Photographs
@@ -265,7 +270,7 @@ export const OtherWorks: React.FC = () => {
             </div>
             <div className="border-l-2 border-[#d6d3d1] pl-4">
               <span className="block font-serifDisplay text-2xl font-black text-[#18181b]">01</span>
-              <span className="font-mono text-[0.75rem] font-semibold text-[#78716c] uppercase tracking-wider">Philosophy Hub</span>
+              <span className="font-mono text-[0.75rem] font-semibold text-[#78716c] uppercase tracking-wider">Research Paper</span>
             </div>
           </div>
         </div>
@@ -444,41 +449,240 @@ export const OtherWorks: React.FC = () => {
 
 
         {/* =========================================================================
-            SUBSECTION 2: PHILOSOPHY (COMING SOON BANNER)
+            SUBSECTION 2: PHILOSOPHY & RESEARCH PAPER
             ========================================================================= */}
         <div>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
-              <BookOpen size={20} className="text-[#f59e0b]" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
+                <BookOpen size={20} className="text-[#f59e0b]" />
+              </div>
+              <div>
+                <h3 className="font-serifDisplay text-2xl md:text-3xl font-bold text-[#18181b] tracking-tight">
+                  Philosophy &amp; Writing
+                </h3>
+                <p className="text-[0.88rem] text-[#78716c] font-medium">
+                  Reflections on attention, discipline, learning, and timeless wisdom from the Bhagavad Gita.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-serifDisplay text-2xl md:text-3xl font-bold text-[#18181b] tracking-tight">
-                Philosophy &amp; Writing
-              </h3>
-              <p className="text-[0.88rem] text-[#78716c] font-medium">
-                Reflections on learning, growth, life, and mental models.
-              </p>
+
+            {/* Quick Status Tag */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#fef3c7] border border-[#f59e0b]/40 text-[#92400e] font-mono text-[0.74rem] font-bold uppercase tracking-wider self-start sm:self-auto shadow-xs">
+              <Sparkles size={13} className="text-[#d97706]" />
+              <span>PUBLISHED PAPER • 10 PAGES</span>
             </div>
           </div>
 
-          {/* Clean Coming Soon Banner */}
-          <div className="w-full rounded-2xl md:rounded-3xl bg-white border-2 border-dashed border-[#d6d3d1] p-8 md:p-12 text-center flex flex-col items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative overflow-hidden transition-all hover:border-[#18181b]/50">
-            <div className="w-14 h-14 rounded-2xl bg-[#fafaf9] border border-[#e7e5e4] flex items-center justify-center text-[#b45309] mb-4 shadow-sm">
-              <Feather size={26} />
+          {/* Editorial Research Paper Presentation Card */}
+          <div className="w-full rounded-2xl md:rounded-3xl bg-white border-2 border-[#e7e5e4] p-6 sm:p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.05)] relative overflow-hidden transition-all duration-300 hover:shadow-[0_16px_45px_rgba(0,0,0,0.08)]">
+            
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              {/* Left Column (5 cols): Visible 1st Page Cover Preview Mockup */}
+              <div className="lg:col-span-5 flex flex-col items-center">
+                
+                {/* 3D Paper Cover Mockup Container */}
+                <div
+                  onClick={() => {
+                    setReaderInitialPage(1);
+                    setPhilosophyModalOpen(true);
+                  }}
+                  className="group/cover relative w-full max-w-[340px] sm:max-w-[380px] aspect-[1/1.414] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] shadow-[0_20px_45px_rgba(15,23,42,0.22)] border border-slate-800/20 bg-[#1e293b]"
+                  title="Click to read full paper"
+                >
+                  {/* Subtle Book Spine & Gradient Lighting */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-white/10 pointer-events-none z-10" />
+
+                  {/* 1st Page Cover Image */}
+                  <img
+                    src="/philosophy/page_1.jpg"
+                    alt="The Game of Dopamine - Cover Page (Page 1)"
+                    className="w-full h-full object-cover select-none transition-transform duration-700 group-hover/cover:scale-105"
+                  />
+
+                  {/* Top Badge: Page 1 Cover Tag */}
+                  <div className="absolute top-3.5 left-3.5 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/80 text-amber-400 font-mono text-[0.72rem] font-bold backdrop-blur-md border border-amber-400/30 shadow-md">
+                    <BookOpen size={13} />
+                    <span>PAGE 01 • COVER</span>
+                  </div>
+
+                  {/* Interactive Hover Overlay */}
+                  <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[2px] opacity-0 group-hover/cover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-6 text-center text-white">
+                    <div className="w-14 h-14 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center mb-3 shadow-xl transform translate-y-3 group-hover/cover:translate-y-0 transition-transform duration-300">
+                      <Eye size={26} />
+                    </div>
+                    <span className="font-serifDisplay text-lg font-bold text-white mb-1">
+                      Read Full Paper
+                    </span>
+                    <span className="font-mono text-[0.75rem] text-amber-300 uppercase tracking-wider">
+                      Tap to open interactive 10-page reader
+                    </span>
+                  </div>
+
+                  {/* Bottom Page Indicator Ribbon */}
+                  <div className="absolute bottom-3 right-3 z-20 px-2.5 py-0.5 rounded-md bg-white/90 text-slate-900 font-mono text-[0.68rem] font-bold shadow-xs">
+                    10 Pages • PDF
+                  </div>
+                </div>
+
+                {/* Quick Page Jump Thumbnails Strip */}
+                <div className="w-full max-w-[380px] mt-4 pt-3 border-t border-[#e7e5e4] flex flex-col gap-2">
+                  <div className="flex items-center justify-between text-[0.75rem] font-mono text-[#78716c]">
+                    <span className="font-semibold uppercase tracking-wider">Explore Pages</span>
+                    <span>1 to 10</span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar">
+                    {Array.from({ length: 10 }, (_, i) => i + 1).map((pNum) => (
+                      <button
+                        key={pNum}
+                        type="button"
+                        onClick={() => {
+                          setReaderInitialPage(pNum);
+                          setPhilosophyModalOpen(true);
+                        }}
+                        className="px-2 py-1 rounded-lg bg-[#f5f5f4] hover:bg-[#18181b] hover:text-white text-[#57534e] font-mono text-[0.72rem] font-bold border border-[#e7e5e4] transition-all cursor-pointer shrink-0"
+                        title={`Open Page ${pNum}`}
+                      >
+                        P.{pNum}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Right Column (7 cols): Paper Intel & Key Takeaways */}
+              <div className="lg:col-span-7 flex flex-col justify-between">
+                
+                <div>
+                  {/* Category & Date Metadata Tags */}
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <span className="font-mono text-[0.72rem] font-bold px-3 py-1 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#fde68a] uppercase">
+                      Research Paper
+                    </span>
+                    <span className="font-mono text-[0.72rem] font-bold px-3 py-1 rounded-full bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0] uppercase">
+                      Illustrated Edition
+                    </span>
+                    <span className="font-mono text-[0.72rem] text-[#78716c] flex items-center gap-1">
+                      <Calendar size={12} />
+                      August 2026
+                    </span>
+                  </div>
+
+                  {/* Main Title & Subtitle */}
+                  <h4 className="font-serifDisplay text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#18181b] tracking-tight leading-[1.18] mb-2">
+                    THE GAME OF DOPAMINE
+                  </h4>
+                  <p className="font-serifDisplay text-[1.05rem] sm:text-[1.15rem] italic text-[#b45309] font-semibold mb-3">
+                    From the Inner Push to Inner Freedom
+                  </p>
+
+                  <p className="text-[0.92rem] sm:text-[0.98rem] text-[#57534e] leading-relaxed mb-5">
+                    A reflective research-style synthesis of attention, novelty, discipline, purpose, and the Bhagavad Gita. Analyzing the conflict between immediate reward and meaningful action.
+                  </p>
+
+                  {/* Central Proposition Featured Quote Callout */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-[#fafaf9] border-l-4 border-[#b45309] border-y border-r border-[#e7e5e4] mb-6 shadow-2xs">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <Feather size={14} className="text-[#b45309]" />
+                      <span className="font-mono text-[0.72rem] font-bold text-[#92400e] uppercase tracking-wider">
+                        Central Proposition
+                      </span>
+                    </div>
+                    <blockquote className="font-serifDisplay text-[0.98rem] sm:text-[1.06rem] text-[#18181b] font-semibold italic leading-relaxed">
+                      "Freedom is not the absence of desire. It is the growing ability to notice an impulse, choose according to values, act, and return when the mind wanders."
+                    </blockquote>
+                  </div>
+
+                  {/* Key Highlights Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                      <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
+                        <span>The Dopamine Loop</span>
+                      </div>
+                      <p className="text-[0.82rem] text-[#57534e] leading-snug">
+                        Cue → Anticipation → Easy Reward → Temporary Relief → Cost → Return.
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                      <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
+                        <span>Bhagavad Gita Wisdom</span>
+                      </div>
+                      <p className="text-[0.82rem] text-[#57534e] leading-snug">
+                        Karma Yoga (2.47), Equanimity in Action (2.48), and Svadharma (3.35).
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                      <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
+                        <span>Mental Strength Protocol</span>
+                      </div>
+                      <p className="text-[0.82rem] text-[#57534e] leading-snug">
+                        Notice → Name → Pause → Choose → Begin Tiny → Return without drama.
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                      <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
+                        <span>Formula for Passion</span>
+                      </div>
+                      <p className="text-[0.82rem] text-[#57534e] leading-snug">
+                        Passion = Curiosity × Practice × Time × Meaningful Feedback.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons Row */}
+                <div className="flex flex-wrap items-center gap-3 pt-5 border-t border-[#e7e5e4]">
+                  {/* Primary: Open Interactive Reader */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setReaderInitialPage(1);
+                      setPhilosophyModalOpen(true);
+                    }}
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#18181b] hover:bg-[#b45309] text-white font-mono text-[0.84rem] font-bold transition-all shadow-md cursor-pointer hover:shadow-lg hover:-translate-y-0.5"
+                  >
+                    <BookOpen size={16} className="text-[#f59e0b]" />
+                    <span>READ FULL PAPER (10 PAGES)</span>
+                  </button>
+
+                  {/* Secondary: Open Original PDF */}
+                  <a
+                    href="/philosophy/the-game-of-dopamine.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white border-2 border-[#18181b]/20 hover:border-[#18181b] text-[#18181b] font-mono text-[0.82rem] font-bold transition-all shadow-xs cursor-pointer hover:-translate-y-0.5"
+                    title="Open PDF in new browser tab"
+                  >
+                    <ExternalLink size={15} />
+                    <span>OPEN PDF</span>
+                  </a>
+
+                  {/* Tertiary: Direct Download */}
+                  <a
+                    href="/philosophy/the-game-of-dopamine.pdf"
+                    download="The-Game-of-Dopamine-Debendranath-Bera.pdf"
+                    className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#f5f5f4] hover:bg-[#e7e5e4] text-[#18181b] font-mono text-[0.82rem] font-bold transition-all border border-[#d6d3d1] cursor-pointer hover:-translate-y-0.5"
+                    title="Download complete PDF document (340 KB)"
+                  >
+                    <Download size={15} />
+                    <span>DOWNLOAD PDF</span>
+                  </a>
+                </div>
+
+              </div>
+
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fef3c7] border border-[#fde68a] text-[#92400e] font-mono text-[0.74rem] font-bold uppercase tracking-wider mb-3">
-              <Sparkles size={13} className="text-[#d97706]" />
-              <span>COMING SOON</span>
-            </div>
-
-            <h4 className="font-serifDisplay text-2xl md:text-3xl font-black text-[#18181b] tracking-tight leading-snug max-w-[580px] mb-2">
-              Philosophical Writings &amp; Essays in Progress
-            </h4>
-
-            <p className="text-[0.95rem] md:text-[1rem] text-[#78716c] font-normal leading-relaxed max-w-[520px]">
-              Essays on continuous learning, personal growth, and reflective mental models are currently being written and will be published here soon.
-            </p>
           </div>
         </div>
 
@@ -572,6 +776,15 @@ export const OtherWorks: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* =========================================================================
+          PHILOSOPHY PAPER INTERACTIVE 10-PAGE READER MODAL
+          ========================================================================= */}
+      <PhilosophyReaderModal
+        isOpen={philosophyModalOpen}
+        initialPage={readerInitialPage}
+        onClose={() => setPhilosophyModalOpen(false)}
+      />
 
     </section>
   );

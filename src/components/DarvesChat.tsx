@@ -22,6 +22,7 @@ Key Information About Debendra:
 - Life Motto: "Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth"
 - Interests: Technology, Entrepreneurship, Tennis, Philosophy, Coffee, Building Useful Software.
 - Personality: A coffee lover with a keen interest in philosophy and deep intellectual curiosity.
+- Published Research & Philosophy Paper: "The Game of Dopamine: From the Inner Push to Inner Freedom" (Illustrated Edition, August 2026, 10 pages). It explores attention, novelty seeking, the dopamine loop (Cue, Anticipation, Reward, Relief, Cost, Return), slow learning, and ancient philosophical insights from the Bhagavad Gita (Karma Yoga Gita 2.47, Equanimity 2.48, and Svadharma 3.35) for cultivating discipline and focus.
 - Key Projects:
   1. Snake Water Gun Game (main.py): Interactive Python command-line game against the computer with randomized choices and score-based win logic.
   2. Stone Paper Sciccor Game (sps.py): Classic Python CLI hand game with user input validation, round comparisons, and win-streak tracking.
@@ -34,7 +35,7 @@ Keep your responses concise, engaging, polite, and helpful. Always highlight Deb
 
 const QUICK_PROMPTS = [
   'Who is Debendra?',
-  'What is his age & location?',
+  'What is The Game of Dopamine paper?',
   'What is his life motto?',
   'What are his tech skills & focus?',
   'Tell me about his projects',
@@ -146,8 +147,12 @@ export const DarvesChat: React.FC = () => {
       return "Debendra is located in Kolkata, West Bengal, India 📍.";
     }
 
+    if (q.includes('dopamine') || q.includes('paper') || q.includes('research') || q.includes('gita') || q.includes('essay') || q.includes('writing') || q.includes('game of dopamine')) {
+      return 'Debendra authored the research paper "The Game of Dopamine: From the Inner Push to Inner Freedom" (Illustrated Edition, August 2026). It synthesizes attention and novelty-seeking loops with the Bhagavad Gita\'s teachings on Karma Yoga (action without attachment), equanimity, and mental strength. You can view the first page and read all 10 pages in the Philosophy section under "My Other Works"! 📖';
+    }
+
     if (q.includes('motto') || q.includes('quote') || q.includes('philosophy') || q.includes('humble') || q.includes('life')) {
-      return 'Debendra lives by the motto: "Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth." ✨';
+      return 'Debendra\'s central philosophy is grounded in both his life motto ("Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile...") and his research paper "The Game of Dopamine", where he articulates: "Freedom is not the absence of desire. It is the growing ability to notice an impulse, choose according to values, act, and return when the mind wanders." ✨';
     }
 
     if (q.includes('project') || q.includes('portfolio') || q.includes('built') || q.includes('work')) {
