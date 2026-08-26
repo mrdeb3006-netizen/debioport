@@ -266,11 +266,6 @@ except KeyboardInterrupt:
           {/* Section Header */}
           <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex items-end justify-between gap-4 shrink-0 pb-2.5 border-b border-white/[0.06] relative z-20">
             <div>
-              <div className="font-mono text-[0.82rem] tracking-[0.2em] text-accent-orange font-semibold mb-1 uppercase flex items-center gap-2">
-                <span>// PROJECTS</span>
-                <span className="text-text-muted">•</span>
-                <span className="text-text-secondary text-[0.74rem]">CODE REPOSITORY &amp; CASE STUDIES</span>
-              </div>
               <h2 className="font-display text-[clamp(1.6rem,2.4vw,2.2rem)] font-black text-white uppercase tracking-[0.02em] leading-tight">
                 FEATURED<br className="sm:hidden" /> PROJECTS
               </h2>
@@ -550,9 +545,6 @@ except KeyboardInterrupt:
         /* MOBILE: VERTICAL MINIMAL SEQUENCE */
         <div className="max-w-[800px] mx-auto flex flex-col gap-12">
           <div className="pt-8">
-            <div className="font-mono text-[0.8rem] tracking-[0.2em] text-accent-orange font-semibold mb-2 uppercase">
-              // PROJECTS
-            </div>
             <h2 className="font-display text-3xl font-black text-white uppercase tracking-[0.02em]">
               FEATURED PROJECTS
             </h2>

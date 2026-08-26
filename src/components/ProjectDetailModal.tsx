@@ -191,9 +191,6 @@ except KeyboardInterrupt:
             <span className="font-mono text-[0.74rem] font-bold text-accent-orange bg-accent-orange/15 px-2.5 py-0.5 rounded-full border border-accent-orange/30 uppercase">
               {project?.category || 'CASE STUDY'}
             </span>
-            <span className="font-mono text-[0.72rem] text-text-muted">
-              // PROJECT 0{project?.number}
-            </span>
           </div>
           <h2 id="project-detail-title" className="drawer-heading font-display text-2xl md:text-3xl font-black text-[#06b6d4] uppercase tracking-wide">
             {project?.title}

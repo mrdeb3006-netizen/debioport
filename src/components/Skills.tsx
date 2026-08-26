@@ -71,11 +71,6 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
         {/* Section Header */}
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="font-mono text-[0.82rem] tracking-[0.2em] text-accent-orange font-semibold mb-2 inline-flex items-center gap-2 uppercase">
-              <span>// SKILLS</span>
-              <span className="text-text-muted">•</span>
-              <span className="text-text-secondary text-[0.74rem]">INTERACTIVE CAPABILITY MATRIX</span>
-            </div>
             <h2 className="font-display text-[clamp(2.2rem,4vw,3.4rem)] font-black text-white leading-[1.15] mb-2 uppercase tracking-[0.02em]">
               SKILLS<span className="text-accent-orange">.</span>
             </h2>

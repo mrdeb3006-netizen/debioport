@@ -205,9 +205,6 @@ export const About: React.FC = () => {
         
         {/* Section Header - Slower, Elegant PowerPoint Slide Up Reveal */}
         <div className="mb-14" style={getSlideUpStyle(0.15)}>
-          <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-cyan font-semibold mb-3 inline-block">
-            // ABOUT
-          </div>
           <h2 className="font-display text-[clamp(0.75rem,3.6vw,1.35rem)] md:text-[clamp(1.5rem,2.8vw,2.6rem)] font-black text-white leading-[1.15] uppercase tracking-[0.01em] md:tracking-[0.02em] whitespace-nowrap">
             I DON'T JUST BUILD; I FEEL.
           </h2>
