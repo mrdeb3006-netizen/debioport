@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface CVModalProps {
   isOpen: boolean;
@@ -59,7 +60,7 @@ SELECTED PROJECT CASE STUDIES
     setTimeout(() => setDownloaded(false), 2500);
   };
 
-  return (
+  return createPortal(
     <div
       className={`drawer-modal ${isOpen ? 'open' : ''}`}
       aria-hidden={!isOpen}
@@ -107,6 +108,7 @@ SELECTED PROJECT CASE STUDIES
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

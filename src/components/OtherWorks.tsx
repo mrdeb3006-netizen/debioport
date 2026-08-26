@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Camera,
   BookOpen,
@@ -704,94 +705,96 @@ export const OtherWorks: React.FC = () => {
 
 
       {/* =========================================================================
-          POP-UP LIGHTBOX MODAL (WITH DOWNLOAD & CLOSE IN RIGHT CORNER)
+          POP-UP LIGHTBOX MODAL (RENDERED VIA PORTAL TO BODY FOR TOP Z-STACKING)
           ========================================================================= */}
-      {activePhoto && (
-        <div
-          className="fixed inset-0 z-[1000000] bg-black/90 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-5 md:p-6 animate-fade-in"
-          onClick={() => setActivePhoto(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Photo Pop-up View"
-        >
+      {activePhoto &&
+        createPortal(
           <div
-            className="bg-[#101014] text-white rounded-2xl sm:rounded-3xl max-w-[980px] w-full max-h-[92vh] max-h-[92dvh] overflow-y-auto border border-white/20 shadow-[0_25px_80px_rgba(0,0,0,0.95)] animate-scale-up flex flex-col custom-scrollbar"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[9999999] bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 md:p-6 animate-fade-in overflow-y-auto"
+            onClick={() => setActivePhoto(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Photo Pop-up View"
           >
-            {/* Top Modal Header with DOWNLOAD & CLOSE in RIGHT CORNER */}
-            <div className="p-3.5 sm:p-4 md:p-5 bg-[#17171d] border-b border-white/10 flex items-center justify-between gap-3 sticky top-0 z-30">
-              <div className="flex items-center gap-2.5 sm:gap-3 overflow-hidden min-w-0">
-                <span className="font-mono text-[0.70rem] sm:text-[0.75rem] font-bold px-2.5 py-1 rounded-full bg-accent-orange/20 text-accent-orange border border-accent-orange/40 uppercase shrink-0">
-                  {activePhoto.category}
-                </span>
-                <h3 className="font-serifDisplay text-sm sm:text-lg md:text-xl font-bold text-white truncate">
-                  {activePhoto.title}
-                </h3>
-              </div>
-
-              {/* RIGHT CORNER CONTROLS: DOWNLOAD & CLOSE BUTTONS */}
-              <div className="flex items-center gap-2 shrink-0">
-                <a
-                  href={activePhoto.imageSrc}
-                  download={activePhoto.downloadFileName}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-accent-orange hover:bg-orange-600 text-white font-mono text-[0.74rem] sm:text-[0.80rem] font-bold shadow-md transition-all cursor-pointer shrink-0 active:scale-95"
-                  title="Download full resolution photo"
-                >
-                  <Download size={15} />
-                  <span className="hidden xs:inline sm:inline">DOWNLOAD</span>
-                </a>
-
-                <button
-                  type="button"
-                  onClick={() => setActivePhoto(null)}
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 hover:bg-rose-500/25 hover:text-rose-400 text-zinc-200 flex items-center justify-center transition-all cursor-pointer border border-white/15 active:scale-95 shrink-0"
-                  aria-label="Close Pop-up"
-                  title="Close (Esc)"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-            </div>
-
-            {/* High-Resolution Pop-Up Image Stage with Adaptive True-Frame Backdrop */}
-            <div className="w-full bg-[#08080c] relative flex items-center justify-center p-3 sm:p-6 min-h-[300px] sm:min-h-[380px] max-h-[70vh] overflow-hidden">
-              {/* Ambient Glow matching the photo */}
-              <img
-                src={activePhoto.imageSrc}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-20 scale-110 pointer-events-none"
-              />
-
-              <img
-                src={activePhoto.imageSrc}
-                alt={activePhoto.title}
-                className="max-h-[64vh] w-auto max-w-full object-contain rounded-xl shadow-2xl relative z-10 drop-shadow-[0_15px_35px_rgba(0,0,0,0.75)]"
-              />
-            </div>
-
-            {/* Bottom Metadata Intel Panel */}
-            <div className="p-4 sm:p-6 bg-[#14141a] text-zinc-200 border-t border-white/10">
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-white/[0.08]">
-                <div className="flex items-center gap-2 font-mono text-[0.78rem] sm:text-[0.82rem] text-zinc-400">
-                  <MapPin size={15} className="text-accent-orange shrink-0" />
-                  <span className="font-bold text-white">{activePhoto.location}</span>
-                  <span>•</span>
-                  <span className="text-amber-400 font-bold">{activePhoto.year}</span>
+            <div
+              className="bg-[#101014] text-white rounded-2xl sm:rounded-3xl max-w-[980px] w-full my-auto border border-white/20 shadow-[0_25px_80px_rgba(0,0,0,0.95)] animate-scale-up flex flex-col overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Top Modal Header with DOWNLOAD & CLOSE in RIGHT CORNER */}
+              <div className="p-3.5 sm:p-4 md:p-5 bg-[#17171d] border-b border-white/10 flex items-center justify-between gap-3 sticky top-0 z-30 shrink-0">
+                <div className="flex items-center gap-2.5 sm:gap-3 overflow-hidden min-w-0">
+                  <span className="font-mono text-[0.70rem] sm:text-[0.75rem] font-bold px-2.5 py-1 rounded-full bg-accent-orange/20 text-accent-orange border border-accent-orange/40 uppercase shrink-0">
+                    {activePhoto.category}
+                  </span>
+                  <h3 className="font-serifDisplay text-sm sm:text-lg md:text-xl font-bold text-white truncate">
+                    {activePhoto.title}
+                  </h3>
                 </div>
 
-                <span className="font-mono text-[0.72rem] text-zinc-500">
-                  Captured by Debendranath Bera
-                </span>
+                {/* RIGHT CORNER CONTROLS: DOWNLOAD & CLOSE BUTTONS */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <a
+                    href={activePhoto.imageSrc}
+                    download={activePhoto.downloadFileName}
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-accent-orange hover:bg-orange-600 text-white font-mono text-[0.74rem] sm:text-[0.80rem] font-bold shadow-md transition-all cursor-pointer shrink-0 active:scale-95"
+                    title="Download full resolution photo"
+                  >
+                    <Download size={15} />
+                    <span className="hidden xs:inline sm:inline">DOWNLOAD</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => setActivePhoto(null)}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 hover:bg-rose-500/25 hover:text-rose-400 text-zinc-200 flex items-center justify-center transition-all cursor-pointer border border-white/15 active:scale-95 shrink-0"
+                    aria-label="Close Pop-up"
+                    title="Close (Esc)"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
               </div>
 
-              <p className="text-[0.88rem] sm:text-[0.94rem] text-zinc-300 leading-relaxed font-normal">
-                {activePhoto.description}
-              </p>
+              {/* High-Resolution Pop-Up Image Stage with Adaptive True-Frame Backdrop */}
+              <div className="w-full bg-[#08080c] relative flex items-center justify-center p-3 sm:p-6 min-h-[300px] sm:min-h-[380px] max-h-[64vh] overflow-hidden">
+                {/* Ambient Glow matching the photo */}
+                <img
+                  src={activePhoto.imageSrc}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-20 scale-110 pointer-events-none"
+                />
+
+                <img
+                  src={activePhoto.imageSrc}
+                  alt={activePhoto.title}
+                  className="max-h-[60vh] w-auto max-w-full object-contain rounded-xl shadow-2xl relative z-10 drop-shadow-[0_15px_35px_rgba(0,0,0,0.75)]"
+                />
+              </div>
+
+              {/* Bottom Metadata Intel Panel */}
+              <div className="p-4 sm:p-6 bg-[#14141a] text-zinc-200 border-t border-white/10 shrink-0">
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-white/[0.08]">
+                  <div className="flex items-center gap-2 font-mono text-[0.78rem] sm:text-[0.82rem] text-zinc-400">
+                    <MapPin size={15} className="text-accent-orange shrink-0" />
+                    <span className="font-bold text-white">{activePhoto.location}</span>
+                    <span>•</span>
+                    <span className="text-amber-400 font-bold">{activePhoto.year}</span>
+                  </div>
+
+                  <span className="font-mono text-[0.72rem] text-zinc-500">
+                    Captured by Debendranath Bera
+                  </span>
+                </div>
+
+                <p className="text-[0.88rem] sm:text-[0.94rem] text-zinc-300 leading-relaxed font-normal">
+                  {activePhoto.description}
+                </p>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
 
       {/* =========================================================================
           PHILOSOPHY PAPER INTERACTIVE 10-PAGE READER MODAL

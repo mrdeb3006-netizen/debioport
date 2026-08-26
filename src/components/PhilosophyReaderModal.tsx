@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   ChevronLeft,
@@ -77,9 +78,9 @@ export const PhilosophyReaderModal: React.FC<PhilosophyReaderModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[1000000] bg-black/90 backdrop-blur-md flex flex-col items-center justify-between p-2.5 sm:p-4 md:p-6 animate-fade-in select-none"
+      className="fixed inset-0 z-[9999999] bg-black/90 backdrop-blur-md flex flex-col items-center justify-between p-2.5 sm:p-4 md:p-6 animate-fade-in select-none"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -312,6 +313,7 @@ export const PhilosophyReaderModal: React.FC<PhilosophyReaderModalProps> = ({
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

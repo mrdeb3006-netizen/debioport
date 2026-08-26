@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Project } from '../types';
 import { Code, Github, ExternalLink, Copy, Check, Terminal, FileCode2, Cpu, CheckCircle2 } from 'lucide-react';
 
@@ -175,7 +176,7 @@ except KeyboardInterrupt:
     }
   };
 
-  return (
+  return createPortal(
     <div
       className={`drawer-modal ${project ? 'open' : ''}`}
       aria-hidden={!project}
@@ -228,74 +229,69 @@ except KeyboardInterrupt:
                 {project.architecture.map((arch, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-start gap-2.5 text-[0.88rem] text-slate-300"
+                    className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-start gap-2.5"
                   >
-                    <span className="font-mono text-accent-orange font-bold text-[0.78rem] shrink-0 mt-0.5">
+                    <span className="text-accent-orange font-mono text-xs mt-0.5 font-bold">
                       0{idx + 1}.
                     </span>
-                    <span>{arch}</span>
+                    <span className="text-[0.84rem] text-slate-300 leading-snug">
+                      {arch}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* 3. Technical Implementation Highlights */}
-          <div>
-            <h4 className="font-mono text-[0.78rem] text-accent-orange tracking-[0.14em] mb-2.5 uppercase flex items-center gap-2">
-              <CheckCircle2 size={14} />
-              <span>TECHNICAL HIGHLIGHTS &amp; ALGORITHMIC DECISIONS</span>
-            </h4>
-            <ul className="list-none flex flex-col gap-2.5 p-0 m-0">
-              {project?.highlights.map((h, idx) => (
-                <li
-                  key={idx}
-                  className="relative pl-5 text-[0.92rem] text-slate-300 leading-relaxed before:content-['▹'] before:absolute before:left-0 before:text-accent-orange before:font-bold"
-                >
-                  {h}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* 3. Engineering Highlights */}
+          {project?.highlights && (
+            <div>
+              <h4 className="font-mono text-[0.78rem] text-accent-orange tracking-[0.14em] mb-2.5 uppercase flex items-center gap-2">
+                <CheckCircle2 size={14} />
+                <span>KEY ENGINEERING HIGHLIGHTS</span>
+              </h4>
+              <div className="flex flex-col gap-2">
+                {project.highlights.map((hl, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 text-[0.88rem] text-slate-300"
+                  >
+                    <span className="text-accent-orange text-xs mt-1">●</span>
+                    <span className="leading-relaxed">{hl}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-          {/* 4. Complete Source Code Viewer */}
+          {/* 4. Complete Executable Source Code */}
           <div>
             <div className="flex items-center justify-between mb-2">
               <h4 className="font-mono text-[0.78rem] text-accent-orange tracking-[0.14em] uppercase flex items-center gap-2">
                 <FileCode2 size={14} />
-                <span>SOURCE CODE ({project?.fileName})</span>
+                <span>COMPLETE EXECUTABLE SOURCE CODE</span>
               </h4>
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.06] border border-white/15 text-slate-200 font-mono text-[0.74rem] hover:border-accent-orange hover:text-accent-orange transition-all cursor-pointer"
+                className="flex items-center gap-1.5 font-mono text-[0.72rem] px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/[0.12] text-slate-300 border border-white/10 transition-colors"
+                title="Copy entire source code to clipboard"
               >
-                {copied ? (
-                  <>
-                    <Check size={13} className="text-emerald-400" />
-                    <span className="text-emerald-400">COPIED</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy size={13} />
-                    <span>COPY CODE</span>
-                  </>
-                )}
+                {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                <span>{copied ? 'COPIED!' : 'COPY CODE'}</span>
               </button>
             </div>
 
-            {/* Code Terminal Box */}
-            <div className="w-full bg-[#080911] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
-              <div className="h-[34px] bg-[#121422] border-b border-white/[0.08] flex items-center px-3.5 gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-                <span className="ml-2 font-mono text-[0.72rem] text-slate-300 font-bold">
-                  {project?.fileName}
-                </span>
-                <span className="ml-auto font-mono text-[0.68rem] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                  READY TO RUN
-                </span>
+            {/* Code Block Container with IDE Header */}
+            <div className="rounded-xl overflow-hidden border border-white/10 bg-[#0d1117] shadow-inner">
+              <div className="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-white/10 font-mono text-xs text-slate-400">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span>
+                  <span className="ml-2 text-slate-300 font-bold">{project?.fileName}</span>
+                </div>
+                <span className="text-[0.7rem] text-slate-500">Python 3.x Native</span>
               </div>
               <div className="p-4 overflow-x-auto font-mono text-[0.82rem] leading-[1.65] text-slate-300 max-h-[320px] overflow-y-auto">
                 <pre>
@@ -376,6 +372,7 @@ except KeyboardInterrupt:
 
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
