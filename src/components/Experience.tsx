@@ -22,11 +22,13 @@ interface TimelineMilestone {
 export const Experience: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const timelineContainerRef = useRef<HTMLDivElement | null>(null);
-  const milestoneRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const desktopBeamRef = useRef<HTMLDivElement | null>(null);
+  const desktopSparkRef = useRef<HTMLDivElement | null>(null);
+  const mobileBeamRef = useRef<HTMLDivElement | null>(null);
+  const mobileSparkRef = useRef<HTMLDivElement | null>(null);
 
   const [isVisible, setIsVisible] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeMilestones, setActiveMilestones] = useState<boolean[]>([]);
+  const [activeMilestones, setActiveMilestones] = useState<boolean[]>([true, false, false, false, false, false]);
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
 
   const timelineMilestones: TimelineMilestone[] = [
@@ -162,7 +164,7 @@ export const Experience: React.FC = () => {
     },
   ];
 
-  // Intersection Observer for Section Visibility
+  // 1. Initial Entrance Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -183,54 +185,107 @@ export const Experience: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Live 60FPS Scroll-Driven Beam & Milestone Illumination
+  // 2. High-Performance GPU-Accelerated Scroll Beam with Smooth Interpolation
   useEffect(() => {
-    let animationFrameId: number;
+    let animId: number;
+    let targetProgress = 0;
+    let currentProgress = 0;
+
+    const updateBeamDOM = () => {
+      // Smooth lerp for buttery transitions
+      currentProgress += (targetProgress - currentProgress) * 0.2;
+      if (Math.abs(targetProgress - currentProgress) < 0.001) {
+        currentProgress = targetProgress;
+      }
+
+      const clamped = Math.min(Math.max(currentProgress, 0), 1);
+
+      // Desktop Beam Direct GPU transform (no layout reflow)
+      if (desktopBeamRef.current) {
+        desktopBeamRef.current.style.transform = `scaleY(${clamped})`;
+      }
+      if (desktopSparkRef.current) {
+        const height = desktopBeamRef.current?.offsetHeight || 800;
+        const sparkY = height * clamped;
+        desktopSparkRef.current.style.transform = `translate3d(0, ${sparkY}px, 0)`;
+        desktopSparkRef.current.style.opacity = clamped > 0.02 && clamped < 0.98 ? '1' : '0';
+      }
+
+      // Mobile Beam Direct GPU transform
+      if (mobileBeamRef.current) {
+        mobileBeamRef.current.style.transform = `scaleY(${clamped})`;
+      }
+      if (mobileSparkRef.current) {
+        const height = mobileBeamRef.current?.offsetHeight || 800;
+        const sparkY = height * clamped;
+        mobileSparkRef.current.style.transform = `translate3d(0, ${sparkY}px, 0)`;
+        mobileSparkRef.current.style.opacity = clamped > 0.02 && clamped < 0.98 ? '1' : '0';
+      }
+
+      if (Math.abs(targetProgress - currentProgress) > 0.0005) {
+        animId = requestAnimationFrame(updateBeamDOM);
+      }
+    };
 
     const handleScroll = () => {
       if (!timelineContainerRef.current) return;
-
-      const containerRect = timelineContainerRef.current.getBoundingClientRect();
+      const rect = timelineContainerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Start beam as container enters viewport smoothly
       const triggerStart = windowHeight * 0.78;
-      const totalScrollDistance = containerRect.height + (triggerStart - windowHeight * 0.35);
-      const scrolled = triggerStart - containerRect.top;
+      const totalScrollDist = rect.height + (triggerStart - windowHeight * 0.35);
+      const scrolled = triggerStart - rect.top;
 
-      const progress = Math.min(Math.max(scrolled / totalScrollDistance, 0), 1);
-      setScrollProgress(progress);
+      targetProgress = Math.min(Math.max(scrolled / totalScrollDist, 0), 1);
 
-      // Check illumination state for each individual milestone
-      const newActive = milestoneRefs.current.map((el) => {
-        if (!el) return false;
-        const rect = el.getBoundingClientRect();
-        return rect.top <= windowHeight * 0.70;
-      });
-
-      setActiveMilestones(newActive);
+      cancelAnimationFrame(animId);
+      animId = requestAnimationFrame(updateBeamDOM);
     };
 
-    const onScroll = () => {
-      cancelAnimationFrame(animationFrameId);
-      animationFrameId = requestAnimationFrame(handleScroll);
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      cancelAnimationFrame(animId);
     };
+  }, []);
+
+  // 3. Zero-Thrashing IntersectionObserver for Milestone Illumination
+  useEffect(() => {
+    const itemElements = document.querySelectorAll<HTMLElement>('.timeline-milestone-item');
+    if (!itemElements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setActiveMilestones((prev) => {
+          const next = [...prev];
+          entries.forEach((entry) => {
+            const index = Number(entry.target.getAttribute('data-index'));
+            if (!isNaN(index)) {
+              next[index] = entry.isIntersecting;
+            }
+          });
+          return next;
+        });
+      },
+      {
+        rootMargin: '0px 0px -28% 0px',
+        threshold: 0.1,
+      }
+    );
+
+    itemElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   const getSlideUpStyle = (delay: number) => ({
     opacity: isVisible ? 1 : 0,
     transform: isVisible ? 'translateY(0px)' : 'translateY(35px)',
-    transition: `opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
+    transition: `opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
     willChange: 'opacity, transform',
   });
 
@@ -270,25 +325,27 @@ export const Experience: React.FC = () => {
           {/* Desktop Timeline Layout (>= 768px) */}
           <div className="hidden md:block relative">
             
-            {/* 1. Base Dim Optical Guide Line */}
+            {/* 1. Base Dim Guide Line Track */}
             <div
-              className="absolute left-[200px] lg:left-[220px] top-6 bottom-6 w-[2px] bg-white/[0.07] rounded-full"
+              className="absolute left-[200px] lg:left-[220px] top-6 bottom-6 w-[2px] bg-white/[0.07] rounded-full pointer-events-none"
               aria-hidden="true"
             />
 
-            {/* 2. Primary Glowing Optical Filament Beam */}
+            {/* 2. Active Optical Beam (ScaleY GPU-Accelerated, zero layout reflow) */}
             <div
-              className="absolute left-[200px] lg:left-[220px] top-6 w-[2px] bg-gradient-to-b from-accent-orange via-amber-400 to-accent-orange rounded-full shadow-[0_0_16px_rgba(249,115,22,0.9),0_0_30px_rgba(249,115,22,0.45)] transition-[height] duration-75 ease-out z-10"
-              style={{
-                height: `calc(${Math.min(scrollProgress * 100, 100)}% - 24px)`,
-              }}
+              ref={desktopBeamRef}
+              className="absolute left-[200px] lg:left-[220px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-accent-orange via-amber-400 to-accent-orange rounded-full shadow-[0_0_16px_rgba(249,115,22,0.9),0_0_30px_rgba(249,115,22,0.45)] origin-top pointer-events-none z-10"
+              style={{ transform: 'scaleY(0)', willChange: 'transform' }}
               aria-hidden="true"
-            >
-              {/* Photon Spark particle at the leading tip of the drawn beam */}
-              {scrollProgress > 0.02 && scrollProgress < 0.98 && (
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_24px_#f97316,0_0_40px_#f97316] animate-pulse" />
-              )}
-            </div>
+            />
+
+            {/* 3. Photon Spark Particle (Translate3D GPU-Accelerated) */}
+            <div
+              ref={desktopSparkRef}
+              className="absolute left-[200px] lg:left-[220px] top-6 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_24px_#f97316,0_0_40px_#f97316] pointer-events-none z-20 transition-opacity duration-300"
+              style={{ transform: 'translate3d(0, 0, 0)', opacity: 0, willChange: 'transform, opacity' }}
+              aria-hidden="true"
+            />
 
             {/* Milestones List */}
             <div className="space-y-12 lg:space-y-16">
@@ -300,15 +357,15 @@ export const Experience: React.FC = () => {
                 return (
                   <div
                     key={item.id}
-                    ref={(el) => { milestoneRefs.current[idx] = el; }}
+                    data-index={idx}
                     onMouseEnter={() => setHoveredNode(idx)}
                     onMouseLeave={() => setHoveredNode(null)}
-                    className="grid grid-cols-[200px_1fr] lg:grid-cols-[220px_1fr] gap-0 items-start group relative transition-all duration-500"
+                    className="timeline-milestone-item grid grid-cols-[200px_1fr] lg:grid-cols-[220px_1fr] gap-0 items-start group relative"
                   >
                     {/* Left Column: Date & Period Tag (Right-Aligned to Timeline) */}
                     <div className="pr-8 lg:pr-10 text-right pt-2 select-none">
                       <div
-                        className={`font-cinzel text-[1.05rem] lg:text-[1.18rem] font-bold tracking-[0.06em] uppercase transition-all duration-500 ${
+                        className={`font-cinzel text-[1.05rem] lg:text-[1.18rem] font-bold tracking-[0.06em] uppercase transition-all duration-400 ${
                           isHighlighted
                             ? 'text-white drop-shadow-[0_0_12px_rgba(249,115,22,0.45)]'
                             : 'text-white/35'
@@ -317,7 +374,7 @@ export const Experience: React.FC = () => {
                         {item.year}
                       </div>
                       <div
-                        className={`font-mono text-[0.68rem] lg:text-[0.72rem] font-extrabold tracking-[0.16em] uppercase mt-1 transition-colors duration-500 ${
+                        className={`font-mono text-[0.68rem] lg:text-[0.72rem] font-extrabold tracking-[0.16em] uppercase mt-1 transition-colors duration-400 ${
                           isHighlighted ? 'text-accent-orange' : 'text-text-muted'
                         }`}
                       >
@@ -328,7 +385,7 @@ export const Experience: React.FC = () => {
                     {/* Timeline Multi-Layer Optical Node */}
                     <div className="absolute left-[200px] lg:left-[220px] top-4 -translate-x-1/2 z-20 flex items-center justify-center pointer-events-none">
                       <div
-                        className={`w-7 h-7 rounded-full transition-all duration-500 flex items-center justify-center ${
+                        className={`w-7 h-7 rounded-full transition-all duration-400 flex items-center justify-center ${
                           isHighlighted
                             ? 'bg-[#0e0f18]/90 border-2 border-accent-orange scale-110 shadow-[0_0_22px_rgba(249,115,22,0.9),0_0_40px_rgba(249,115,22,0.35)]'
                             : 'bg-[#09090b] border-2 border-white/15'
@@ -355,11 +412,12 @@ export const Experience: React.FC = () => {
                     {/* Right Column: Specular Glass Card with Headline & Highlights */}
                     <div className="pl-8 lg:pl-10">
                       <div
-                        className={`specular-card relative rounded-2xl md:rounded-3xl p-6 sm:p-7 md:p-8 bg-gradient-to-br from-[#12131c]/90 via-[#0e0f18]/85 to-[#09090e]/95 border transition-all duration-500 ${
+                        className={`specular-card relative rounded-2xl md:rounded-3xl p-6 sm:p-7 md:p-8 bg-gradient-to-br from-[#12131c]/90 via-[#0e0f18]/85 to-[#09090e]/95 border transition-all duration-400 ${
                           isHighlighted
                             ? 'border-accent-orange/40 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_25px_rgba(249,115,22,0.1)] translate-x-0 opacity-100'
-                            : 'border-white/[0.06] opacity-40 translate-x-2'
+                            : 'border-white/[0.06] opacity-45 translate-x-1.5'
                         }`}
+                        style={{ willChange: 'opacity, transform' }}
                       >
                         {/* Title & Badge */}
                         <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
@@ -394,7 +452,7 @@ export const Experience: React.FC = () => {
                           {item.description}
                         </p>
 
-                        {/* Highlights (Rendered as refined glowing micro-rows) */}
+                        {/* Highlights */}
                         {item.highlights && (
                           <div className="flex flex-col gap-2 pt-2 border-t border-white/[0.06]">
                             {item.highlights.map((h, hIdx) => (
@@ -448,16 +506,23 @@ export const Experience: React.FC = () => {
             
             {/* 1. Base Dim Line */}
             <div
-              className="absolute left-[11px] top-4 bottom-4 w-[2px] bg-white/[0.07] rounded-full"
+              className="absolute left-[11px] top-4 bottom-4 w-[2px] bg-white/[0.07] rounded-full pointer-events-none"
               aria-hidden="true"
             />
 
-            {/* 2. Active Glowing Laser Beam */}
+            {/* 2. Active Optical Beam (ScaleY GPU-Accelerated) */}
             <div
-              className="absolute left-[11px] top-4 w-[2px] bg-gradient-to-b from-accent-orange via-amber-400 to-accent-orange rounded-full shadow-[0_0_14px_rgba(249,115,22,0.9)] transition-[height] duration-75 ease-out z-10"
-              style={{
-                height: `calc(${Math.min(scrollProgress * 100, 100)}% - 16px)`,
-              }}
+              ref={mobileBeamRef}
+              className="absolute left-[11px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-accent-orange via-amber-400 to-accent-orange rounded-full shadow-[0_0_14px_rgba(249,115,22,0.9)] origin-top pointer-events-none z-10"
+              style={{ transform: 'scaleY(0)', willChange: 'transform' }}
+              aria-hidden="true"
+            />
+
+            {/* 3. Mobile Spark Particle */}
+            <div
+              ref={mobileSparkRef}
+              className="absolute left-[11px] top-4 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-[0_0_10px_#ffffff,0_0_20px_#f97316] pointer-events-none z-20 transition-opacity duration-300"
+              style={{ transform: 'translate3d(0, 0, 0)', opacity: 0, willChange: 'transform, opacity' }}
               aria-hidden="true"
             />
 
@@ -469,15 +534,13 @@ export const Experience: React.FC = () => {
                 return (
                   <div
                     key={item.id}
-                    ref={(el) => { milestoneRefs.current[idx] = el; }}
-                    className={`relative pl-6 transition-all duration-500 ${
-                      isReached ? 'opacity-100' : 'opacity-45'
-                    }`}
+                    data-index={idx}
+                    className="timeline-milestone-item relative pl-6"
                   >
                     {/* Timeline Node */}
                     <div className="absolute -left-[14px] top-3 z-20 flex items-center justify-center pointer-events-none">
                       <div
-                        className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-400 ${
                           isReached
                             ? 'bg-[#09090b] border-2 border-accent-orange shadow-[0_0_14px_rgba(249,115,22,0.8)] scale-110'
                             : 'bg-[#09090b] border-2 border-white/20'
@@ -492,7 +555,14 @@ export const Experience: React.FC = () => {
                     </div>
 
                     {/* Mobile Specular Glass Card */}
-                    <div className="specular-card rounded-2xl p-5 bg-[#0e0f18]/90 border border-white/[0.08] shadow-lg">
+                    <div
+                      className={`specular-card rounded-2xl p-5 bg-[#0e0f18]/90 border transition-all duration-400 ${
+                        isReached
+                          ? 'border-accent-orange/40 shadow-lg opacity-100'
+                          : 'border-white/[0.08] opacity-50'
+                      }`}
+                      style={{ willChange: 'opacity, transform' }}
+                    >
                       {/* Date & Tag */}
                       <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                         <span
@@ -574,7 +644,7 @@ export const Experience: React.FC = () => {
         {/* ========================================================================= */}
         {/* OTHER ACHIEVEMENTS: Sports, Martial Arts & Academic Honors Grid          */}
         {/* ========================================================================= */}
-        <div style={getSlideUpStyle(0.65)}>
+        <div style={getSlideUpStyle(0.5)}>
           <div className="flex items-center gap-3 mb-6 pt-6 border-t border-white/[0.08]">
             <Trophy className="text-accent-orange" size={22} />
             <div>
@@ -593,8 +663,8 @@ export const Experience: React.FC = () => {
               return (
                 <div
                   key={ach.id}
-                  className={`specular-card backdrop-blur-[16px] border ${ach.borderColor} ${ach.accentGlow} rounded-2xl p-6 md:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] group`}
-                  style={getSlideUpStyle(0.7 + aIdx * 0.12)}
+                  className={`specular-card backdrop-blur-[16px] border ${ach.borderColor} ${ach.accentGlow} rounded-2xl p-6 md:p-7 flex flex-col justify-between transition-all duration-400 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] group`}
+                  style={getSlideUpStyle(0.55 + aIdx * 0.1)}
                 >
                   <div>
                     {/* Header Pill & Icon */}
