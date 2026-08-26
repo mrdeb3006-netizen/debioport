@@ -101,7 +101,7 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
   return (
     <div
       ref={cardRef}
-      className="relative w-full max-w-[290px] md:max-w-[330px] lg:max-w-[365px] mx-auto md:mx-0 select-none group/portrait cursor-pointer transition-all"
+      className="relative w-full max-w-[290px] md:max-w-[330px] lg:max-w-[365px] mx-auto md:mx-0 select-none group/portrait cursor-pointer"
       style={{
         perspective: 1400,
         opacity: isVisible ? 1 : 0,
@@ -109,8 +109,9 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
           ? 'translateY(0px) scale(1) rotateX(0deg)'
           : 'translateY(95px) scale(0.68) rotateX(20deg)',
         filter: isVisible ? 'blur(0px)' : 'blur(10px)',
-        transition:
-          'opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 1.5s cubic-bezier(0.18, 0.95, 0.32, 1.25) 0.15s, filter 1.2s ease-out 0.15s',
+        transition: isVisible
+          ? 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 1.4s cubic-bezier(0.18, 0.95, 0.32, 1.25) 0.1s, filter 1.0s ease-out 0.1s'
+          : 'opacity 0.35s ease-out, transform 0.35s ease-out, filter 0.35s ease-out',
         willChange: 'transform, opacity, filter',
       }}
     >
@@ -188,13 +189,11 @@ export const About: React.FC = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        setIsVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.08,
-        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.1,
+        rootMargin: '0px 0px -30px 0px',
       }
     );
 
@@ -210,7 +209,9 @@ export const About: React.FC = () => {
     transform: isVisible
       ? 'translateY(0px) scale(1) rotateX(0deg)'
       : 'translateY(32px) scale(0.96) rotateX(5deg)',
-    transition: `opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+    transition: isVisible
+      ? `opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`
+      : 'opacity 0.3s ease-out, transform 0.3s ease-out',
     willChange: 'opacity, transform',
     perspective: 1000,
   });
@@ -239,7 +240,7 @@ export const About: React.FC = () => {
         {/* Compact Split Layout: Portrait Card + Story & Bento Blocks */}
         <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[340px_1fr] xl:grid-cols-[370px_1fr] gap-6 md:gap-8 lg:gap-10 items-start">
           
-          {/* Left Column: Interactive 3D Cursor-Physics Portrait Card with Pop-Up & Slow Deceleration */}
+          {/* Left Column: Interactive 3D Cursor-Physics Portrait Card (Always triggers pop-up on scroll) */}
           <div>
             <InteractivePortraitCard isVisible={isVisible} />
           </div>
