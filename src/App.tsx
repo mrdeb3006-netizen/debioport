@@ -41,34 +41,26 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Specular Mouse Lighting
+  // Specular Mouse Lighting (Per-Card Event Listener: 0 global layout thrashing)
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLElement>('.specular-card');
-    let frameId: number | null = null;
-    let latestEvent: MouseEvent | null = null;
+    const cleanups: (() => void)[] = [];
 
-    const handleMouseMove = (e: MouseEvent) => {
-      latestEvent = e;
-      if (frameId !== null) return;
+    cards.forEach((card) => {
+      const handlePointerMove = (e: MouseEvent) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      };
 
-      frameId = requestAnimationFrame(() => {
-        if (latestEvent) {
-          cards.forEach((card) => {
-            const rect = card.getBoundingClientRect();
-            const x = latestEvent!.clientX - rect.left;
-            const y = latestEvent!.clientY - rect.top;
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
-          });
-        }
-        frameId = null;
-      });
-    };
+      card.addEventListener('mousemove', handlePointerMove, { passive: true });
+      cleanups.push(() => card.removeEventListener('mousemove', handlePointerMove));
+    });
 
-    window.addEventListener('mousemove', handleMouseMove);
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (frameId !== null) cancelAnimationFrame(frameId);
+      cleanups.forEach((cleanup) => cleanup());
     };
   }, []);
 
