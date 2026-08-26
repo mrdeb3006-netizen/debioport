@@ -16,7 +16,6 @@ interface TimelineMilestone {
   badge?: string;
   description: string;
   highlights?: string[];
-  languages?: { name: string; level: string; badge: string; detail: string; nativeScript: string }[];
 }
 
 export const Experience: React.FC = () => {
@@ -32,7 +31,7 @@ export const Experience: React.FC = () => {
   const timelineMilestones: TimelineMilestone[] = [
     {
       id: 'btech-cse',
-      year: '2023 — 2027',
+      year: '2026 — PRESENT',
       periodTag: 'PRESENT DEGREE',
       title: 'B.TECH IN COMPUTER SCIENCE & ENGINEERING',
       subtitle: 'FUTURE INSTITUTE OF ENGINEERING AND MANAGEMENT (FIEM)',
@@ -47,7 +46,7 @@ export const Experience: React.FC = () => {
     },
     {
       id: 'class-12',
-      year: '2021 — 2023',
+      year: '2024 — 2026',
       periodTag: 'HIGHER SECONDARY',
       title: 'CLASS 12 — SCIENCE STREAM',
       subtitle: 'JADAVPUR VIDYAPITH',
@@ -61,7 +60,7 @@ export const Experience: React.FC = () => {
     },
     {
       id: 'class-10',
-      year: '2019 — 2021',
+      year: '2024',
       periodTag: 'SECONDARY SCHOOL',
       title: 'CLASS 10 — SECONDARY SCHOOL',
       subtitle: 'JADAVPUR HIGH SCHOOL',
@@ -74,48 +73,18 @@ export const Experience: React.FC = () => {
       ],
     },
     {
-      id: 'distinctions',
-      year: '2021 & 2023',
-      periodTag: 'ACADEMIC HONORS',
-      title: 'ACADEMIC DISTINCTIONS SPOTLIGHT',
-      subtitle: 'JADAVPUR HIGH SCHOOL & JADAVPUR VIDYAPITH',
-      badge: 'RANK #1 & EXCELLENCE',
+      id: 'jadavpur-high-school',
+      year: '2018 — 2024',
+      periodTag: 'SCHOOLING YEARS',
+      title: 'JADAVPUR HIGH SCHOOL',
+      subtitle: 'FOUNDATIONAL & SECONDARY EDUCATION',
+      badge: 'ALUMNUS & TOPPER',
       description:
-        'Consistent academic distinction across secondary and higher secondary schooling with School Topper status in secondary board examinations and excellence in science education.',
+        'Completed foundational and secondary schooling at Jadavpur High School, cultivating academic rigor, discipline, and a deep-seated interest in mathematics, science, and technology.',
       highlights: [
-        'Class 10 School Topper — 88.71% at Jadavpur High School (Rank #1).',
-        'Class 12 Science Stream — 77.81% at Jadavpur Vidyapith.',
-      ],
-    },
-    {
-      id: 'learning',
-      year: '2023 — NOW',
-      periodTag: 'TECH RIGOR',
-      title: 'CORE LEARNING & SKILL FOCUS',
-      subtitle: 'COMPUTATIONAL PROBLEM SOLVING & ARCHITECTURE',
-      badge: 'CS FUNDAMENTALS',
-      description:
-        'Dedicated daily discipline across algorithmic mastery, object-oriented software engineering, and modern full-stack software development.',
-      highlights: [
-        'Pursuing Computer Science & Engineering with focus on core algorithms & practical development.',
-        'Coding actively in Python & automating desktop workflows.',
-        'Mastering Java Object-Oriented Programming (OOP) & Data Structures & Algorithms (DSA).',
-        'Building real-world software projects and exploring web engineering.',
-      ],
-    },
-    {
-      id: 'languages',
-      year: 'PROFICIENCY',
-      periodTag: 'COMMUNICATION',
-      title: 'SPOKEN & WRITTEN LANGUAGES',
-      subtitle: 'MULTILINGUAL COLLABORATION',
-      badge: 'MULTILINGUAL',
-      description:
-        'Effective multilingual communication across diverse technical, collaborative, and global settings.',
-      languages: [
-        { name: 'English', level: 'Fluent', badge: 'Fluent', detail: 'Technical & Professional', nativeScript: 'English' },
-        { name: 'Hindi', level: 'Fluent', badge: 'Fluent', detail: 'Conversational & Fluent', nativeScript: 'हिन्दी' },
-        { name: 'Bengali', level: 'Native', badge: 'Native', detail: 'Mother Tongue', nativeScript: 'বাংলা' },
+        'Six years of foundational academic and extracurricular growth (Class 5 to Class 10).',
+        'School Topper in secondary board examination with 88.71% (Rank #1).',
+        'Awarded academic honors and recognition for excellence in science.',
       ],
     },
   ];
@@ -412,33 +381,6 @@ export const Experience: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Languages Badges (If Last Milestone) */}
-                    {item.languages && (
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-[760px] pt-3">
-                        {item.languages.map((lang, lIdx) => (
-                          <div
-                            key={lIdx}
-                            className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.08] hover:border-amber-400/50 hover:bg-amber-400/[0.03] transition-all flex flex-col gap-1"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="font-display font-bold text-[1.0rem] text-white">
-                                {lang.name}
-                              </span>
-                              <span className="text-[0.74rem] text-amber-400 font-mono">
-                                {lang.nativeScript}
-                              </span>
-                            </div>
-                            <span className="font-mono text-[0.72rem] text-accent-orange font-semibold">
-                              {lang.badge}
-                            </span>
-                            <span className="text-[0.74rem] text-zinc-500">
-                              {lang.detail}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
                   </div>
                 </div>
               ))}
@@ -515,25 +457,6 @@ export const Experience: React.FC = () => {
                         <div key={hIdx} className="flex items-start gap-2 text-[0.84rem] text-zinc-300">
                           <span className="text-accent-orange text-xs mt-0.5">●</span>
                           <span className="leading-relaxed">{h}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Languages */}
-                  {item.languages && (
-                    <div className="grid grid-cols-1 gap-2 pt-2">
-                      {item.languages.map((lang, lIdx) => (
-                        <div
-                          key={lIdx}
-                          className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between"
-                        >
-                          <span className="font-bold text-[0.88rem] text-white">
-                            {lang.name} ({lang.nativeScript})
-                          </span>
-                          <span className="font-mono text-[0.70rem] text-amber-400 font-semibold">
-                            {lang.badge}
-                          </span>
                         </div>
                       ))}
                     </div>

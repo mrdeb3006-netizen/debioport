@@ -310,6 +310,50 @@ export const About: React.FC = () => {
 
             </div>
 
+            {/* Spoken & Written Languages */}
+            <div
+              className="specular-card backdrop-blur-[14px] border border-white/[0.07] rounded-2xl p-6 transition-all duration-300 hover:border-white/30 hover:shadow-xl"
+              style={getSlideUpStyle(0.95)}
+            >
+              <div className="flex items-center justify-between gap-2 mb-3.5">
+                <span className="font-mono text-[0.76rem] font-semibold text-accent-orange tracking-[0.16em] uppercase">
+                  SPOKEN &amp; WRITTEN LANGUAGES
+                </span>
+                <span className="font-mono text-[0.68rem] text-text-muted uppercase">
+                  Multilingual Collaboration
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-accent-orange/40 hover:bg-accent-orange/[0.03] transition-colors flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="font-bold text-[0.92rem] text-white">English</span>
+                    <span className="text-[0.72rem] text-text-muted">Technical &amp; Professional</span>
+                  </div>
+                  <span className="font-mono text-[0.70rem] text-accent-orange font-semibold px-2 py-0.5 rounded-full bg-accent-orange/10 border border-accent-orange/20">
+                    Fluent
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-accent-orange/40 hover:bg-accent-orange/[0.03] transition-colors flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="font-bold text-[0.92rem] text-white">Hindi (हिन्दी)</span>
+                    <span className="text-[0.72rem] text-text-muted">Conversational &amp; Fluent</span>
+                  </div>
+                  <span className="font-mono text-[0.70rem] text-accent-orange font-semibold px-2 py-0.5 rounded-full bg-accent-orange/10 border border-accent-orange/20">
+                    Fluent
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-accent-orange/40 hover:bg-accent-orange/[0.03] transition-colors flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="font-bold text-[0.92rem] text-white">Bengali (বাংলা)</span>
+                    <span className="text-[0.72rem] text-text-muted">Mother Tongue</span>
+                  </div>
+                  <span className="font-mono text-[0.70rem] text-accent-orange font-semibold px-2 py-0.5 rounded-full bg-accent-orange/10 border border-accent-orange/20">
+                    Native
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </div>
