@@ -128,7 +128,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
       </div>
 
       {/* Hand-position Authentic Animated Handwritten Signature with Live Pen Drawing */}
-      <div className="absolute z-20 pointer-events-auto right-4 sm:right-10 md:right-14 lg:right-20 xl:right-28 top-[56%] sm:top-[54%] md:top-[52%] lg:top-[48%] -translate-y-1/2 w-[150px] sm:w-[190px] md:w-[230px] lg:w-[270px] xl:w-[300px] aspect-[347/415] opacity-90 sm:opacity-95 hover:opacity-100 transition-opacity">
+      <div className="absolute z-20 pointer-events-auto right-4 sm:right-8 md:right-12 lg:right-16 xl:right-24 bottom-12 sm:bottom-14 md:bottom-16 lg:bottom-20 xl:bottom-24 w-[110px] sm:w-[135px] md:w-[160px] lg:w-[185px] xl:w-[205px] aspect-[347/415] opacity-90 sm:opacity-95 hover:opacity-100 transition-opacity">
         <AnimatedSignature className="w-full h-full" />
       </div>
 
