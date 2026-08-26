@@ -254,7 +254,7 @@ export const OtherWorks: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fef3c7] border border-[#f59e0b]/40 text-[#92400e] font-mono text-[0.74rem] font-bold tracking-[0.2em] uppercase mb-3 shadow-xs">
               <Sparkles size={13} className="text-[#d97706]" />
-              <span>// 05. /CREATIVE ODYSSEY</span>
+              <span>// CREATIVE ODYSSEY</span>
             </div>
             
             <h2 className="font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08]">

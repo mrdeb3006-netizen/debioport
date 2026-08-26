@@ -156,7 +156,7 @@ export const Experience: React.FC = () => {
         {/* Section Header */}
         <div className="mb-12" style={getSlideUpStyle(0.15)}>
           <div className="font-mono text-[0.82rem] tracking-[0.2em] text-accent-orange font-semibold mb-2 inline-flex items-center gap-2 uppercase">
-            <span>// 03. /JOURNEY</span>
+            <span>// JOURNEY</span>
             <span className="text-text-muted">•</span>
             <span className="text-text-secondary text-[0.74rem]">EDUCATIONAL &amp; ACHIEVEMENT PROFILE</span>
           </div>

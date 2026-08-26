@@ -72,7 +72,7 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <div className="font-mono text-[0.82rem] tracking-[0.2em] text-accent-orange font-semibold mb-2 inline-flex items-center gap-2 uppercase">
-              <span>// 04. /SKILLS</span>
+              <span>// SKILLS</span>
               <span className="text-text-muted">•</span>
               <span className="text-text-secondary text-[0.74rem]">INTERACTIVE CAPABILITY MATRIX</span>
             </div>

@@ -68,7 +68,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCvModal }) => {
           {/* Section Header */}
         <div className="mb-10 max-w-full overflow-visible">
           <div className="font-mono text-[0.85rem] tracking-[0.18em] text-accent-cyan font-semibold mb-3 inline-block">
-            // 06. /CONTACT
+            // CONTACT
           </div>
           <h2 className="font-display text-[clamp(1.65rem,6.5vw,2.6rem)] sm:text-[3rem] md:text-[4.2rem] lg:text-[5.2rem] font-black leading-[1.14] uppercase tracking-[0.01em] text-white mb-6 overflow-visible">
             <span className="block">LET'S BUILD</span>
