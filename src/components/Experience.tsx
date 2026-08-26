@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Award,
   Sparkles,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface TimelineMilestone {
@@ -22,59 +23,69 @@ interface TimelineMilestone {
   highlights?: string[];
 }
 
-interface AchievementCard {
+interface AchievementItem {
   id: string;
   category: string;
   badge: string;
+  tabTitle: string;
   title: string;
   subtitle: string;
   yearTag: string;
+  statNumber: string;
+  statLabel: string;
   description: string;
   icon: React.ElementType;
   highlights: string[];
 }
 
-const StackedAchievementDeck: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const achievements: AchievementCard[] = [
+const KineticAchievementShowcase: React.FC = () => {
+  const achievements: AchievementItem[] = [
     {
       id: 'iit-honour',
       category: 'ACADEMIC EXCELLENCE',
       badge: 'IIT KGP HONOUR',
+      tabTitle: 'IIT Kharagpur Award',
       yearTag: 'CLASS 10TH TOPPER',
+      statNumber: 'RANK #1',
+      statLabel: 'SCHOOL TOPPER',
       title: 'Awarded by IIT Kharagpur Professor',
       subtitle: 'Exceptional Result & School Topper Felicitation',
       description:
-        'Felicitated and awarded by an esteemed professor from Indian Institute of Technology (IIT) Kharagpur in recognition of exceptional academic performance and ranking as the School Topper in Class 10.',
+        'Felicitated and awarded in person by an esteemed professor from Indian Institute of Technology (IIT) Kharagpur in recognition of academic brilliance and ranking as the School Topper in Class 10.',
       icon: Trophy,
       highlights: [
-        'Rank #1 School Topper with 88.71% in Secondary Board Examinations',
+        'Ranked #1 School Topper with 88.71% in Secondary Board Examination',
         'Felicitated in person by distinguished IIT Kharagpur faculty',
-        'Demonstrated early brilliance and rigor in mathematics & physical sciences',
+        'Demonstrated foundational analytical rigor in mathematics & physical sciences',
       ],
     },
     {
       id: 'karate-bronze',
       category: 'NATIONAL SPORTS • MARTIAL ARTS',
       badge: '2X NATIONAL BRONZE',
+      tabTitle: '2x Bronze Medalist',
       yearTag: 'ALL INDIA CHAMPIONSHIP',
+      statNumber: '2X BRONZE',
+      statLabel: 'NATIONAL LEVEL',
       title: '2x Bronze Medalist • All India Karate Championship',
       subtitle: 'All India Level Club Karate Championship',
       description:
-        'Secured two Bronze Medals at the prestigious All India Level Club Karate Championship, demonstrating elite competitive Karate combat discipline, Kumite reflexes, and tactical ring composure against top martial arts athletes nationwide.',
+        'Secured two Bronze Medals at the prestigious All India Level Club Karate Championship, demonstrating competitive Karate combat discipline, rapid Kumite reflexes, and tactical ring composure against top martial arts athletes nationwide.',
       icon: Medal,
       highlights: [
         'Two-time Bronze Medalist at All-India Club Karate Championship Level',
         'High-intensity competitive Kumite combat sparring & tactical execution',
-        'Demonstrated athletic discipline, composure and agility against top athletes',
+        'Demonstrated athletic discipline, physical stamina and composure under pressure',
       ],
     },
     {
       id: 'karate-brown-belt',
       category: 'MARTIAL ARTS MASTERY',
       badge: 'BROWN BELT SENIOR',
+      tabTitle: 'Karate Brown Belt',
       yearTag: 'SENIOR GRADE MASTERY',
+      statNumber: 'BROWN BELT',
+      statLabel: 'SENIOR GRADE',
       title: 'Karate Brown Belt Senior Grade',
       subtitle: 'Advanced Martial Arts Conditioning & Sparring',
       description:
@@ -83,14 +94,17 @@ const StackedAchievementDeck: React.FC = () => {
       highlights: [
         'Senior Grade Brown Belt qualification in traditional Karate discipline',
         '6+ years of disciplined conditioning, advanced Kata forms & full-contact sparring',
-        'Developed unwavering mental focus, tactical stamina & defensive composure',
+        'Cultivated mental focus, physical endurance, agility & situational awareness',
       ],
     },
     {
       id: 'school-topper',
       category: 'SCHOLASTIC DISTINCTION',
       badge: 'RANK #1 TOPPER',
+      tabTitle: 'School Topper Award',
       yearTag: 'SECONDARY EXCELLENCE',
+      statNumber: '88.71%',
+      statLabel: 'BOARD SCORE',
       title: 'School Topper & Science Distinction',
       subtitle: 'Jadavpur High School • Secondary Board',
       description:
@@ -107,275 +121,240 @@ const StackedAchievementDeck: React.FC = () => {
   const total = achievements.length;
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [animatingCard, setAnimatingCard] = useState<number | null>(null);
-
-  // Responsive Scroll-Driven Deck Transition (Like Project Section Behavior)
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (!containerRef.current) return;
-          const rect = containerRef.current.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-
-          // Track scroll penetration through the achievements deck
-          const start = windowHeight * 0.85;
-          const totalDistance = rect.height + windowHeight * 0.45;
-          const scrolled = start - rect.top;
-
-          if (scrolled >= 0 && scrolled <= totalDistance) {
-            const progress = Math.max(0, Math.min(1, scrolled / totalDistance));
-            const calculatedIndex = Math.min(
-              total - 1,
-              Math.max(0, Math.floor(progress * total * 1.05))
-            );
-            setActiveIndex(calculatedIndex);
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [total]);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const activeItem = achievements[activeIndex];
+  const IconComponent = activeItem.icon;
 
   const nextCard = useCallback(() => {
-    if (animatingCard !== null) return;
-    setAnimatingCard(activeIndex);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setTimeout(() => {
       setActiveIndex((prev) => (prev + 1) % total);
-      setAnimatingCard(null);
-    }, 400);
-  }, [animatingCard, activeIndex, total]);
+      setIsTransitioning(false);
+    }, 280);
+  }, [isTransitioning, total]);
 
   const prevCard = useCallback(() => {
-    if (animatingCard !== null) return;
-    setAnimatingCard((activeIndex - 1 + total) % total);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setTimeout(() => {
       setActiveIndex((prev) => (prev - 1 + total) % total);
-      setAnimatingCard(null);
-    }, 400);
-  }, [animatingCard, activeIndex, total]);
+      setIsTransitioning(false);
+    }, 280);
+  }, [isTransitioning, total]);
 
-  const goToCard = (index: number) => {
-    if (animatingCard !== null || index === activeIndex) return;
-    setAnimatingCard(activeIndex);
+  const selectCard = (index: number) => {
+    if (isTransitioning || index === activeIndex) return;
+    setIsTransitioning(true);
     setTimeout(() => {
       setActiveIndex(index);
-      setAnimatingCard(null);
-    }, 400);
+      setIsTransitioning(false);
+    }, 280);
   };
+
+  // Continuous auto-cycle when not hovered
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      nextCard();
+    }, 4800);
+    return () => clearInterval(interval);
+  }, [isHovered, nextCard]);
 
   return (
     <div
-      ref={containerRef}
-      className="relative w-full max-w-[1080px] mx-auto select-none pt-4 pb-6"
+      className="relative w-full max-w-[1140px] mx-auto select-none pt-2"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 3D Stretched Deck Viewport */}
-      <div
-        className="relative min-h-[420px] sm:min-h-[360px] md:min-h-[330px] w-full flex items-center justify-center py-2"
-        style={{ perspective: 1800 }}
-      >
-        {achievements.map((item, index) => {
-          const IconComponent = item.icon;
-          
-          // Slot index relative to active card
-          const slot = (index - activeIndex + total) % total;
-          const isFront = slot === 0;
-          const isLeaving = animatingCard === index;
-
-          let transform = '';
-          let opacity = 1;
-          let zIndex = 30 - slot * 5;
-          let filter = 'none';
-
-          if (isLeaving) {
-            transform = 'translate3d(0, -65px, 80px) rotateX(-8deg) rotateZ(-2deg) scale(1.02)';
-            opacity = 0.4;
-            zIndex = 45;
-            filter = 'blur(1px)';
-          } else if (slot === 0) {
-            // Front Stretched Hero Card
-            transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
-            opacity = 1;
-            zIndex = 35;
-          } else if (slot === 1) {
-            // 1st Card Behind
-            const yOffset = isHovered ? 24 : 16;
-            const rot = isHovered ? 1.6 : 1.0;
-            transform = `translate3d(0, ${yOffset}px, -45px) rotateX(1.5deg) rotateZ(${rot}deg) scale(0.97)`;
-            opacity = 0.85;
-            filter = 'blur(0.3px)';
-          } else if (slot === 2) {
-            // 2nd Card Behind
-            const yOffset = isHovered ? 45 : 32;
-            const rot = isHovered ? -1.6 : -1.0;
-            transform = `translate3d(0, ${yOffset}px, -90px) rotateX(3deg) rotateZ(${rot}deg) scale(0.94)`;
-            opacity = 0.6;
-            filter = 'blur(0.6px)';
-          } else {
-            // Deepest Card Behind
-            const yOffset = isHovered ? 64 : 46;
-            transform = `translate3d(0, ${yOffset}px, -135px) rotateX(4.5deg) rotateZ(0.6deg) scale(0.91)`;
-            opacity = 0.35;
-            filter = 'blur(1.0px)';
-          }
+      {/* ========================================================================= */}
+      {/* 1. INTERACTIVE ACCOLADE SELECTOR TABS                                      */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        {achievements.map((item, idx) => {
+          const TabIcon = item.icon;
+          const isActive = idx === activeIndex;
 
           return (
-            <div
+            <button
               key={item.id}
-              onClick={() => !isFront && goToCard(index)}
-              className={`absolute top-0 w-full max-w-[1040px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0d0e14]/95 backdrop-blur-2xl transition-all duration-[600ms] ${
-                !isFront ? 'cursor-pointer hover:border-amber-400/40' : 'cursor-default'
+              onClick={() => selectCard(idx)}
+              className={`relative p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-300 flex items-center gap-3 group ${
+                isActive
+                  ? 'bg-gradient-to-br from-amber-400/[0.12] to-accent-orange/[0.06] border-amber-400/60 shadow-[0_10px_25px_rgba(245,158,11,0.15)] scale-[1.02]'
+                  : 'bg-[#0c0d14]/80 border-white/[0.08] hover:border-white/20 hover:bg-white/[0.03]'
               }`}
-              style={{
-                transform,
-                opacity,
-                zIndex,
-                filter,
-                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-                willChange: 'transform, opacity',
-                borderColor: isFront
-                  ? 'rgba(245, 158, 11, 0.5)'
-                  : 'rgba(255, 255, 255, 0.1)',
-                boxShadow: isFront
-                  ? '0 30px 75px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.14)'
-                  : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-              }}
             >
-              {/* Active Golden Edge Highlight Sheen */}
-              {isFront && (
+              {/* Tab Icon */}
+              <div
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                  isActive
+                    ? 'bg-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.6)]'
+                    : 'bg-white/[0.06] text-zinc-400 group-hover:text-amber-400 group-hover:bg-white/10'
+                }`}
+              >
+                <TabIcon size={18} />
+              </div>
+
+              {/* Tab Label */}
+              <div className="flex flex-col min-w-0">
+                <span
+                  className={`font-mono text-[0.62rem] sm:text-[0.66rem] font-bold uppercase tracking-wider ${
+                    isActive ? 'text-accent-orange' : 'text-zinc-500'
+                  }`}
+                >
+                  {item.badge}
+                </span>
+                <span
+                  className={`font-display text-[0.82rem] sm:text-[0.88rem] font-bold truncate leading-tight mt-0.5 ${
+                    isActive ? 'text-white' : 'text-zinc-300 group-hover:text-white'
+                  }`}
+                >
+                  {item.tabTitle}
+                </span>
+              </div>
+
+              {/* Active Bottom Glow Pill Indicator */}
+              {isActive && (
                 <div
-                  className="absolute -top-px left-1/5 right-1/5 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+                  className="absolute -bottom-px left-4 right-4 h-[2px] bg-gradient-to-r from-amber-400 via-accent-orange to-amber-400 rounded-full shadow-[0_0_10px_#fbbf24]"
                   aria-hidden="true"
                 />
               )}
-
-              {/* Wide 2-Column Responsive Card Content */}
-              <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-start">
-                
-                {/* Left Area: Title, Badges, Subtitle & Highlights */}
-                <div>
-                  {/* Category Pill & Verification Tag */}
-                  <div className="flex items-center gap-2.5 mb-3 flex-wrap">
-                    <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider">
-                      {item.badge}
-                    </span>
-                    <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest">
-                      {item.category}
-                    </span>
-                    <span className="text-white/20 text-xs hidden sm:inline">•</span>
-                    <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
-                      {item.yearTag}
-                    </span>
-                  </div>
-
-                  {/* Achievement Title */}
-                  <h4 className="font-display text-[1.35rem] sm:text-[1.6rem] md:text-[1.85rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
-                    {item.title}
-                  </h4>
-
-                  {/* Monospace Subtitle */}
-                  <div className="font-mono text-[0.80rem] sm:text-[0.86rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
-                    <span>▹</span>
-                    <span>{item.subtitle}</span>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-[0.88rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[780px]">
-                    {item.description}
-                  </p>
-
-                  {/* Highlights Bullet List */}
-                  <div className="flex flex-col gap-1.5 pt-2.5 border-t border-white/[0.06] max-w-[780px]">
-                    {item.highlights.map((highlight, hIdx) => (
-                      <div
-                        key={hIdx}
-                        className="flex items-start gap-2 text-[0.82rem] sm:text-[0.86rem] text-zinc-300"
-                      >
-                        <span className="text-accent-orange text-xs mt-0.5">●</span>
-                        <span className="leading-tight">{highlight}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Right Area: Large Glowing Glass Icon Panel */}
-                <div className="hidden md:flex flex-col items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] min-w-[130px] self-stretch text-center">
-                  <div className="w-14 h-14 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.25)] mb-2">
-                    <IconComponent size={28} />
-                  </div>
-                  <div className="flex flex-col items-center gap-1 mt-auto">
-                    <span className="inline-flex items-center gap-1 text-accent-orange font-mono text-[0.66rem] font-bold uppercase tracking-wider">
-                      <Sparkles size={11} />
-                      <span>HONOUR</span>
-                    </span>
-                    <span className="font-mono text-[0.62rem] text-zinc-500">
-                      0{index + 1} / 0{total}
-                    </span>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Footnote Bar */}
-              <div className="pt-3 mt-4 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500">
-                <span>SCROLL-DRIVEN ACHIEVEMENTS</span>
-                <div className="flex items-center gap-1 text-accent-orange font-bold">
-                  <Star size={11} fill="currentColor" />
-                  <span>VERIFIED RECORD</span>
-                </div>
-              </div>
-            </div>
+            </button>
           );
         })}
       </div>
 
-      {/* Modern Navigation & Progress Bar */}
-      <div className="mt-6 flex items-center justify-between max-w-[1040px] mx-auto px-2">
-        {/* Step Indicator Pills */}
-        <div className="flex items-center gap-2">
-          {achievements.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goToCard(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === activeIndex
-                  ? 'w-10 bg-gradient-to-r from-amber-400 to-accent-orange shadow-[0_0_12px_rgba(251,191,36,0.7)]'
-                  : 'w-2.5 bg-white/20 hover:bg-white/40'
-              }`}
-              aria-label={`Go to achievement ${i + 1}`}
+      {/* ========================================================================= */}
+      {/* 2. EXPANSIVE KINETIC SHOWCASE STAGE                                       */}
+      {/* ========================================================================= */}
+      <div
+        className={`relative rounded-3xl border border-amber-400/30 bg-[#0d0e15]/95 backdrop-blur-2xl p-6 sm:p-8 md:p-10 shadow-[0_30px_80px_rgba(0,0,0,0.9),0_0_35px_rgba(245,158,11,0.12)] transition-all duration-300 overflow-hidden ${
+          isTransitioning ? 'opacity-40 scale-[0.985] blur-[1px]' : 'opacity-100 scale-100 blur-0'
+        }`}
+      >
+        {/* Ambient Top Glow Line */}
+        <div
+          className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+          aria-hidden="true"
+        />
+
+        {/* Ambient Corner Background Bloom */}
+        <div
+          className="absolute -top-24 -right-24 w-72 h-72 bg-accent-orange/[0.08] rounded-full blur-[90px] pointer-events-none"
+          aria-hidden="true"
+        />
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-8 items-center relative z-10">
+          
+          {/* Left Narrative Details */}
+          <div>
+            {/* Header Tag Bar */}
+            <div className="flex items-center gap-2.5 mb-3.5 flex-wrap">
+              <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5">
+                <CheckCircle2 size={12} />
+                <span>{activeItem.badge}</span>
+              </span>
+              <span className="font-mono text-[0.68rem] text-zinc-400 uppercase tracking-widest">
+                {activeItem.category}
+              </span>
+              <span className="text-white/20 text-xs hidden sm:inline">•</span>
+              <span className="font-mono text-[0.68rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
+                {activeItem.yearTag}
+              </span>
+            </div>
+
+            {/* Achievement Title */}
+            <h3 className="font-display text-[1.45rem] sm:text-[1.8rem] md:text-[2.1rem] font-black text-white leading-tight mb-1.5 uppercase tracking-[0.01em]">
+              {activeItem.title}
+            </h3>
+
+            {/* Amber Monospace Subtitle */}
+            <div className="font-mono text-[0.82rem] sm:text-[0.88rem] font-bold text-amber-400 tracking-wide uppercase mb-4 flex items-center gap-2">
+              <span>▹</span>
+              <span>{activeItem.subtitle}</span>
+            </div>
+
+            {/* Main Narrative Paragraph */}
+            <p className="text-[0.92rem] sm:text-[0.98rem] text-zinc-300 leading-relaxed mb-5 font-normal max-w-[760px]">
+              {activeItem.description}
+            </p>
+
+            {/* Highlights List */}
+            <div className="flex flex-col gap-2 pt-3 border-t border-white/[0.06] max-w-[760px]">
+              {activeItem.highlights.map((h, hIdx) => (
+                <div
+                  key={hIdx}
+                  className="flex items-start gap-2.5 text-[0.86rem] sm:text-[0.90rem] text-zinc-300"
+                >
+                  <span className="text-accent-orange text-xs mt-1">●</span>
+                  <span className="leading-relaxed">{h}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Holographic Emblem & Credential Tile */}
+          <div className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white/[0.025] border border-white/[0.1] text-center relative overflow-hidden group">
+            {/* Hologram Glow */}
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-amber-400/[0.08] to-transparent pointer-events-none"
+              aria-hidden="true"
             />
-          ))}
-          <span className="font-mono text-[0.72rem] text-zinc-500 ml-2">
-            0{activeIndex + 1} / 0{total}
-          </span>
+
+            {/* Large Emblem Icon */}
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.3)] mb-4 group-hover:scale-105 transition-transform duration-300">
+              <IconComponent size={40} />
+            </div>
+
+            {/* Stat Callout */}
+            <div className="font-display text-[1.5rem] sm:text-[1.75rem] font-black text-white leading-none mb-1 tracking-wide">
+              {activeItem.statNumber}
+            </div>
+            <div className="font-mono text-[0.66rem] font-bold text-accent-orange tracking-widest uppercase mb-4">
+              {activeItem.statLabel}
+            </div>
+
+            {/* Verified Seal */}
+            <div className="w-full pt-3 border-t border-white/[0.08] flex items-center justify-center gap-1.5 font-mono text-[0.68rem] text-zinc-400">
+              <Star size={12} className="text-amber-400" fill="currentColor" />
+              <span>OFFICIAL HONOUR</span>
+            </div>
+          </div>
+
         </div>
 
-        {/* Next / Prev Navigation Buttons */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={prevCard}
-            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95"
-            aria-label="Previous Achievement"
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <button
-            onClick={nextCard}
-            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95"
-            aria-label="Next Achievement"
-          >
-            <ChevronRight size={18} />
-          </button>
+        {/* Footnote & Control Navigation Bar */}
+        <div className="pt-4 mt-6 border-t border-white/[0.06] flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[0.70rem] text-zinc-500">
+              ACCOLADE 0{activeIndex + 1} OF 0{total}
+            </span>
+            <span className="text-white/20">•</span>
+            <span className="inline-flex items-center gap-1 text-[0.70rem] font-mono text-accent-orange font-bold">
+              <Sparkles size={11} />
+              <span>NATIONAL &amp; ACADEMIC EXCELLENCE</span>
+            </span>
+          </div>
+
+          {/* Chevrons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={prevCard}
+              className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95"
+              aria-label="Previous Achievement"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              onClick={nextCard}
+              className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95"
+              aria-label="Next Achievement"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -791,7 +770,7 @@ export const Experience: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* OTHER ACHIEVEMENTS: Stretched 3D Stacked Deck (Scroll-Driven Reactive)   */}
+        {/* OTHER ACHIEVEMENTS: Kinetic Accolades Vault Stage                         */}
         {/* ========================================================================= */}
         <div className="pt-6 border-t border-white/[0.08]">
           <div className="flex items-center gap-3 mb-8">
@@ -806,8 +785,8 @@ export const Experience: React.FC = () => {
             </div>
           </div>
 
-          {/* Stretched Interactive 3D Stacked Deck */}
-          <StackedAchievementDeck />
+          {/* Kinetic Showcase Stage */}
+          <KineticAchievementShowcase />
         </div>
 
       </div>
