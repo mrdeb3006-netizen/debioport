@@ -4,7 +4,7 @@ import { Sparkles } from 'lucide-react';
 const InteractivePortraitCard: React.FC = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [targetState, setTargetState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
+  const targetStateRef = useRef({ rx: 0, ry: 0, tx: 0, ty: 0 });
   const [currentState, setCurrentState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
 
   // 60fps high-precision physics loop with continuous organic wave + responsive proximity tracking
@@ -20,6 +20,7 @@ const InteractivePortraitCard: React.FC = () => {
       const idleRy = Math.cos(elapsed * 1.4) * 2.6;
       const idleTy = Math.sin(elapsed * 2.2) * 5.5;
 
+      const targetState = targetStateRef.current;
       const effectiveTargetRx = targetState.rx !== 0 ? targetState.rx : idleRx;
       const effectiveTargetRy = targetState.ry !== 0 ? targetState.ry : idleRy;
       const effectiveTargetTx = targetState.tx;
@@ -38,7 +39,7 @@ const InteractivePortraitCard: React.FC = () => {
 
     animFrame = requestAnimationFrame(updatePhysics);
     return () => cancelAnimationFrame(animFrame);
-  }, [targetState]);
+  }, []);
 
   // Section-wide & viewport reactive cursor proximity tracking
   useEffect(() => {
@@ -66,17 +67,17 @@ const InteractivePortraitCard: React.FC = () => {
       const multiplier = isInside ? 18 : 12;
       const shiftMult = isInside ? 14 : 8;
 
-      setTargetState({
+      targetStateRef.current = {
         rx: -clampedY * multiplier,
         ry: clampedX * multiplier,
         tx: clampedX * shiftMult,
         ty: clampedY * shiftMult,
-      });
+      };
     };
 
     const handleMouseLeaveWindow = () => {
       setIsHovered(false);
-      setTargetState({ rx: 0, ry: 0, tx: 0, ty: 0 });
+      targetStateRef.current = { rx: 0, ry: 0, tx: 0, ty: 0 };
     };
 
     window.addEventListener('mousemove', handleGlobalMouseMove, { passive: true });

@@ -98,7 +98,7 @@ export const DoctorStrangeCursor: React.FC = () => {
       ctx.clearRect(0, 0, width, height);
 
       // Buttery smooth organic linear interpolation
-      const ringLerp = 0.16;
+      const ringLerp = 0.28;
       ring.x += (mouse.x - ring.x) * ringLerp;
       ring.y += (mouse.y - ring.y) * ringLerp;
 

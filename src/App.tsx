@@ -44,18 +44,32 @@ export const App: React.FC = () => {
   // Specular Mouse Lighting
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLElement>('.specular-card');
+    let frameId: number | null = null;
+    let latestEvent: MouseEvent | null = null;
+
     const handleMouseMove = (e: MouseEvent) => {
-      cards.forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
+      latestEvent = e;
+      if (frameId !== null) return;
+
+      frameId = requestAnimationFrame(() => {
+        if (latestEvent) {
+          cards.forEach((card) => {
+            const rect = card.getBoundingClientRect();
+            const x = latestEvent!.clientX - rect.left;
+            const y = latestEvent!.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+          });
+        }
+        frameId = null;
       });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (frameId !== null) cancelAnimationFrame(frameId);
+    };
   }, []);
 
   return (
