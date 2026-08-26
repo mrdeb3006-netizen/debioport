@@ -124,7 +124,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
           <div className="mb-4 sm:mb-6 -mt-2 sm:-mt-3 select-none overflow-visible w-full">
             {/* Line 1: DEBENDRANATH */}
             <div className="overflow-visible pb-0.5 sm:pb-1 w-full">
-              <h1 className="font-display text-[1.85rem] xs:text-[2.1rem] sm:text-[2.8rem] md:text-[3.6rem] lg:text-[4.5rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.08] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+              <h1 className="font-display text-[clamp(1.4rem,7.2vw,2.6rem)] sm:text-[2.8rem] md:text-[3.6rem] lg:text-[4.5rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.08] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
                 {/* Solid White Letters: D E B E N D R A */}
                 {debendranathSolid.map((letter, idx) => (
                   <span
@@ -150,7 +150,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
             {/* Line 2: BERA */}
             <div className="overflow-visible pt-0.5 w-full">
-              <h2 className="font-display text-[1.85rem] xs:text-[2.1rem] sm:text-[2.8rem] md:text-[3.6rem] lg:text-[4.5rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.08] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
+              <h2 className="font-display text-[clamp(1.4rem,7.2vw,2.6rem)] sm:text-[2.8rem] md:text-[3.6rem] lg:text-[4.5rem] font-black tracking-[0.01em] sm:tracking-[0.02em] leading-[1.08] whitespace-nowrap inline-flex overflow-visible pb-[0.05em] uppercase">
                 {/* Solid White Letters: B E */}
                 {beraSolid.map((letter, idx) => (
                   <span

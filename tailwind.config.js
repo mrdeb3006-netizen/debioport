@@ -6,9 +6,6 @@ export default {
   ],
   theme: {
     extend: {
-      screens: {
-        'xs': '420px',
-      },
       colors: {
         'bg-dark': 'var(--bg-dark, #09090b)',
         'bg-surface': 'var(--bg-surface, #111114)',
