@@ -23,11 +23,10 @@ interface TimelineMilestone {
   highlights?: string[];
 }
 
-interface AchievementItem {
+interface AchievementCard {
   id: string;
   category: string;
   badge: string;
-  tabTitle: string;
   title: string;
   subtitle: string;
   yearTag: string;
@@ -38,13 +37,12 @@ interface AchievementItem {
   highlights: string[];
 }
 
-const KineticAchievementShowcase: React.FC = () => {
-  const achievements: AchievementItem[] = [
+const PhysicalShuffleDeck: React.FC = () => {
+  const achievements: AchievementCard[] = [
     {
       id: 'iit-honour',
       category: 'ACADEMIC EXCELLENCE',
       badge: 'IIT KGP HONOUR',
-      tabTitle: 'IIT Kharagpur Award',
       yearTag: 'CLASS 10TH TOPPER',
       statNumber: 'RANK #1',
       statLabel: 'SCHOOL TOPPER',
@@ -63,7 +61,6 @@ const KineticAchievementShowcase: React.FC = () => {
       id: 'karate-bronze',
       category: 'NATIONAL SPORTS • MARTIAL ARTS',
       badge: '2X NATIONAL BRONZE',
-      tabTitle: '2x Bronze Medalist',
       yearTag: 'ALL INDIA CHAMPIONSHIP',
       statNumber: '2X BRONZE',
       statLabel: 'NATIONAL LEVEL',
@@ -82,7 +79,6 @@ const KineticAchievementShowcase: React.FC = () => {
       id: 'karate-brown-belt',
       category: 'MARTIAL ARTS MASTERY',
       badge: 'BROWN BELT SENIOR',
-      tabTitle: 'Karate Brown Belt',
       yearTag: 'SENIOR GRADE MASTERY',
       statNumber: 'BROWN BELT',
       statLabel: 'SENIOR GRADE',
@@ -101,7 +97,6 @@ const KineticAchievementShowcase: React.FC = () => {
       id: 'school-topper',
       category: 'SCHOLASTIC DISTINCTION',
       badge: 'RANK #1 TOPPER',
-      tabTitle: 'School Topper Award',
       yearTag: 'SECONDARY EXCELLENCE',
       statNumber: '88.71%',
       statLabel: 'BOARD SCORE',
@@ -111,7 +106,7 @@ const KineticAchievementShowcase: React.FC = () => {
         'Ranked #1 as the Secondary Examination School Topper at Jadavpur High School with 88.71%, earning institutional commendations and scientific excellence distinctions.',
       icon: Award,
       highlights: [
-        'Rank #1 among all secondary graduation candidates across the institution',
+        'Ranked #1 among all secondary graduation candidates across the institution',
         '88.71% aggregate score with distinctions across Science & Higher Mathematics',
         'Awarded institutional honors for academic dedication and scientific inquiry',
       ],
@@ -119,242 +114,281 @@ const KineticAchievementShowcase: React.FC = () => {
   ];
 
   const total = achievements.length;
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [deckOrder, setDeckOrder] = useState<number[]>([0, 1, 2, 3]);
   const [isHovered, setIsHovered] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const activeItem = achievements[activeIndex];
-  const IconComponent = activeItem.icon;
+  const [isDealing, setIsDealing] = useState(false);
+  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const nextCard = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setActiveIndex((prev) => (prev + 1) % total);
-      setIsTransitioning(false);
-    }, 280);
-  }, [isTransitioning, total]);
+  // Physical "Swipe & Re-deal to Back" Shuffle Execution
+  const shuffleNext = useCallback(() => {
+    if (isDealing) return;
+    setIsDealing(true);
 
-  const prevCard = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
+    // Phase 1 (500ms): Front card slides out horizontally to the right
     setTimeout(() => {
-      setActiveIndex((prev) => (prev - 1 + total) % total);
-      setIsTransitioning(false);
-    }, 280);
-  }, [isTransitioning, total]);
+      // Phase 2: Shift array order (front card goes to back)
+      setDeckOrder((prev) => {
+        const [first, ...rest] = prev;
+        return [...rest, first];
+      });
+      setIsDealing(false);
+    }, 480);
+  }, [isDealing]);
 
-  const selectCard = (index: number) => {
-    if (isTransitioning || index === activeIndex) return;
-    setIsTransitioning(true);
+  const shufflePrev = useCallback(() => {
+    if (isDealing) return;
+    setIsDealing(true);
+
     setTimeout(() => {
-      setActiveIndex(index);
-      setIsTransitioning(false);
-    }, 280);
+      setDeckOrder((prev) => {
+        const last = prev[prev.length - 1];
+        const rest = prev.slice(0, prev.length - 1);
+        return [last, ...rest];
+      });
+      setIsDealing(false);
+    }, 480);
+  }, [isDealing]);
+
+  const bringToFront = (targetIndex: number) => {
+    if (isDealing || deckOrder[0] === targetIndex) return;
+    setIsDealing(true);
+
+    setTimeout(() => {
+      setDeckOrder((prev) => {
+        const itemPos = prev.indexOf(targetIndex);
+        if (itemPos === -1) return prev;
+        const newOrder = [...prev.slice(itemPos), ...prev.slice(0, itemPos)];
+        return newOrder;
+      });
+      setIsDealing(false);
+    }, 480);
   };
 
-  // Continuous auto-cycle when not hovered
+  // Continuous auto-shuffle timer
   useEffect(() => {
-    if (isHovered) return;
-    const interval = setInterval(() => {
-      nextCard();
-    }, 4800);
-    return () => clearInterval(interval);
-  }, [isHovered, nextCard]);
+    if (isHovered) {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+      return;
+    }
+
+    autoPlayRef.current = setInterval(() => {
+      shuffleNext();
+    }, 4500);
+
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [isHovered, shuffleNext]);
 
   return (
     <div
-      className="relative w-full max-w-[1140px] mx-auto select-none pt-2"
+      className="relative w-full max-w-[1060px] mx-auto select-none pt-4 pb-4"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* ========================================================================= */}
-      {/* 1. INTERACTIVE ACCOLADE SELECTOR TABS                                      */}
-      {/* ========================================================================= */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        {achievements.map((item, idx) => {
-          const TabIcon = item.icon;
-          const isActive = idx === activeIndex;
+      {/* 3D Physical Deck Container */}
+      <div
+        className="relative min-h-[440px] sm:min-h-[380px] md:min-h-[350px] w-full flex items-center justify-center py-2"
+        style={{ perspective: 1800 }}
+      >
+        {deckOrder.map((achIdx, slotPosition) => {
+          const item = achievements[achIdx];
+          const IconComponent = item.icon;
+          const isFront = slotPosition === 0;
+
+          // Slot-based 3D Physical Deck Positioning
+          let transform = '';
+          let zIndex = 40 - slotPosition * 8;
+          let opacity = 1;
+          let filter = 'none';
+
+          if (isFront && isDealing) {
+            // Dealing motion: Card deals smoothly to the right with physical tilt
+            transform =
+              'translate3d(95%, -20px, 80px) rotateY(-18deg) rotateZ(8deg) scale(0.96)';
+            opacity = 0.3;
+            zIndex = 50;
+            filter = 'blur(1px)';
+          } else if (slotPosition === 0) {
+            // Front Active Card
+            transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
+            opacity = 1;
+            zIndex = 35;
+          } else if (slotPosition === 1) {
+            // 1st Card Behind Deck
+            const yOffset = isHovered ? -26 : -18;
+            const xOffset = isHovered ? 20 : 12;
+            const rot = isHovered ? 2.5 : 1.5;
+            transform = `translate3d(${xOffset}px, ${yOffset}px, -60px) rotateZ(${rot}deg) scale(0.96)`;
+            opacity = 0.85;
+            filter = 'blur(0.4px)';
+          } else if (slotPosition === 2) {
+            // 2nd Card Behind Deck
+            const yOffset = isHovered ? -48 : -34;
+            const xOffset = isHovered ? -18 : -10;
+            const rot = isHovered ? -2.2 : -1.2;
+            transform = `translate3d(${xOffset}px, ${yOffset}px, -120px) rotateZ(${rot}deg) scale(0.92)`;
+            opacity = 0.6;
+            filter = 'blur(0.8px)';
+          } else {
+            // Deepest Card in Deck
+            const yOffset = isHovered ? -68 : -48;
+            transform = `translate3d(0, ${yOffset}px, -180px) rotateZ(0.8deg) scale(0.88)`;
+            opacity = 0.35;
+            filter = 'blur(1.2px)';
+          }
 
           return (
-            <button
+            <div
               key={item.id}
-              onClick={() => selectCard(idx)}
-              className={`relative p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-300 flex items-center gap-3 group ${
-                isActive
-                  ? 'bg-gradient-to-br from-amber-400/[0.12] to-accent-orange/[0.06] border-amber-400/60 shadow-[0_10px_25px_rgba(245,158,11,0.15)] scale-[1.02]'
-                  : 'bg-[#0c0d14]/80 border-white/[0.08] hover:border-white/20 hover:bg-white/[0.03]'
+              onClick={() => !isFront && bringToFront(achIdx)}
+              className={`absolute top-6 w-full max-w-[1000px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0c0d14]/95 backdrop-blur-2xl transition-all duration-[550ms] ${
+                !isFront ? 'cursor-pointer hover:border-amber-400/50' : 'cursor-default'
               }`}
+              style={{
+                transform,
+                opacity,
+                zIndex,
+                filter,
+                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                willChange: 'transform, opacity',
+                borderColor: isFront
+                  ? 'rgba(245, 158, 11, 0.5)'
+                  : 'rgba(255, 255, 255, 0.1)',
+                boxShadow: isFront
+                  ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.14)'
+                  : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+              }}
             >
-              {/* Tab Icon */}
-              <div
-                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                  isActive
-                    ? 'bg-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.6)]'
-                    : 'bg-white/[0.06] text-zinc-400 group-hover:text-amber-400 group-hover:bg-white/10'
-                }`}
-              >
-                <TabIcon size={18} />
-              </div>
-
-              {/* Tab Label */}
-              <div className="flex flex-col min-w-0">
-                <span
-                  className={`font-mono text-[0.62rem] sm:text-[0.66rem] font-bold uppercase tracking-wider ${
-                    isActive ? 'text-accent-orange' : 'text-zinc-500'
-                  }`}
-                >
-                  {item.badge}
-                </span>
-                <span
-                  className={`font-display text-[0.82rem] sm:text-[0.88rem] font-bold truncate leading-tight mt-0.5 ${
-                    isActive ? 'text-white' : 'text-zinc-300 group-hover:text-white'
-                  }`}
-                >
-                  {item.tabTitle}
-                </span>
-              </div>
-
-              {/* Active Bottom Glow Pill Indicator */}
-              {isActive && (
+              {/* Active Golden Edge Sheen */}
+              {isFront && (
                 <div
-                  className="absolute -bottom-px left-4 right-4 h-[2px] bg-gradient-to-r from-amber-400 via-accent-orange to-amber-400 rounded-full shadow-[0_0_10px_#fbbf24]"
+                  className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
                   aria-hidden="true"
                 />
               )}
-            </button>
+
+              {/* Responsive 2-Column Wide Card Layout */}
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-6 items-center">
+                
+                {/* Left Area: Content, Badges & Highlights */}
+                <div>
+                  {/* Category Pill Bar */}
+                  <div className="flex items-center gap-2.5 mb-3 flex-wrap">
+                    <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5">
+                      <CheckCircle2 size={12} />
+                      <span>{item.badge}</span>
+                    </span>
+                    <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest">
+                      {item.category}
+                    </span>
+                    <span className="text-white/20 text-xs hidden sm:inline">•</span>
+                    <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
+                      {item.yearTag}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h4 className="font-display text-[1.35rem] sm:text-[1.65rem] md:text-[1.85rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
+                    {item.title}
+                  </h4>
+
+                  {/* Monospace Subtitle */}
+                  <div className="font-mono text-[0.80rem] sm:text-[0.86rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
+                    <span>▹</span>
+                    <span>{item.subtitle}</span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-[0.88rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[740px]">
+                    {item.description}
+                  </p>
+
+                  {/* Bullet Highlights */}
+                  <div className="flex flex-col gap-1.5 pt-2.5 border-t border-white/[0.06] max-w-[740px]">
+                    {item.highlights.map((highlight, hIdx) => (
+                      <div
+                        key={hIdx}
+                        className="flex items-start gap-2 text-[0.82rem] sm:text-[0.86rem] text-zinc-300"
+                      >
+                        <span className="text-accent-orange text-xs mt-0.5">●</span>
+                        <span className="leading-tight">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right Area: Hologram Emblem Tile */}
+                <div className="hidden md:flex flex-col items-center justify-center p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-3">
+                    <IconComponent size={30} />
+                  </div>
+                  <div className="font-display text-[1.4rem] font-black text-white leading-none mb-1">
+                    {item.statNumber}
+                  </div>
+                  <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase mb-3">
+                    {item.statLabel}
+                  </div>
+                  <div className="inline-flex items-center gap-1 text-[0.64rem] font-mono text-zinc-400 pt-2 border-t border-white/[0.06] w-full justify-center">
+                    <Star size={11} className="text-amber-400" fill="currentColor" />
+                    <span>VERIFIED</span>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Footnote Bar */}
+              <div className="pt-3 mt-4 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500">
+                <span>3D PHYSICAL SHUFFLE DECK</span>
+                <div className="flex items-center gap-1 text-accent-orange font-bold">
+                  <Sparkles size={11} />
+                  <span>DECK 0{achIdx + 1} OF 0{total}</span>
+                </div>
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {/* ========================================================================= */}
-      {/* 2. EXPANSIVE KINETIC SHOWCASE STAGE                                       */}
-      {/* ========================================================================= */}
-      <div
-        className={`relative rounded-3xl border border-amber-400/30 bg-[#0d0e15]/95 backdrop-blur-2xl p-6 sm:p-8 md:p-10 shadow-[0_30px_80px_rgba(0,0,0,0.9),0_0_35px_rgba(245,158,11,0.12)] transition-all duration-300 overflow-hidden ${
-          isTransitioning ? 'opacity-40 scale-[0.985] blur-[1px]' : 'opacity-100 scale-100 blur-0'
-        }`}
-      >
-        {/* Ambient Top Glow Line */}
-        <div
-          className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
-          aria-hidden="true"
-        />
-
-        {/* Ambient Corner Background Bloom */}
-        <div
-          className="absolute -top-24 -right-24 w-72 h-72 bg-accent-orange/[0.08] rounded-full blur-[90px] pointer-events-none"
-          aria-hidden="true"
-        />
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-8 items-center relative z-10">
-          
-          {/* Left Narrative Details */}
-          <div>
-            {/* Header Tag Bar */}
-            <div className="flex items-center gap-2.5 mb-3.5 flex-wrap">
-              <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5">
-                <CheckCircle2 size={12} />
-                <span>{activeItem.badge}</span>
-              </span>
-              <span className="font-mono text-[0.68rem] text-zinc-400 uppercase tracking-widest">
-                {activeItem.category}
-              </span>
-              <span className="text-white/20 text-xs hidden sm:inline">•</span>
-              <span className="font-mono text-[0.68rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
-                {activeItem.yearTag}
-              </span>
-            </div>
-
-            {/* Achievement Title */}
-            <h3 className="font-display text-[1.45rem] sm:text-[1.8rem] md:text-[2.1rem] font-black text-white leading-tight mb-1.5 uppercase tracking-[0.01em]">
-              {activeItem.title}
-            </h3>
-
-            {/* Amber Monospace Subtitle */}
-            <div className="font-mono text-[0.82rem] sm:text-[0.88rem] font-bold text-amber-400 tracking-wide uppercase mb-4 flex items-center gap-2">
-              <span>▹</span>
-              <span>{activeItem.subtitle}</span>
-            </div>
-
-            {/* Main Narrative Paragraph */}
-            <p className="text-[0.92rem] sm:text-[0.98rem] text-zinc-300 leading-relaxed mb-5 font-normal max-w-[760px]">
-              {activeItem.description}
-            </p>
-
-            {/* Highlights List */}
-            <div className="flex flex-col gap-2 pt-3 border-t border-white/[0.06] max-w-[760px]">
-              {activeItem.highlights.map((h, hIdx) => (
-                <div
-                  key={hIdx}
-                  className="flex items-start gap-2.5 text-[0.86rem] sm:text-[0.90rem] text-zinc-300"
-                >
-                  <span className="text-accent-orange text-xs mt-1">●</span>
-                  <span className="leading-relaxed">{h}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Holographic Emblem & Credential Tile */}
-          <div className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white/[0.025] border border-white/[0.1] text-center relative overflow-hidden group">
-            {/* Hologram Glow */}
-            <div
-              className="absolute inset-0 bg-gradient-to-b from-amber-400/[0.08] to-transparent pointer-events-none"
-              aria-hidden="true"
+      {/* Navigation Controls & Pagination */}
+      <div className="mt-8 flex items-center justify-between max-w-[1000px] mx-auto px-2">
+        {/* Step Indicator Pills */}
+        <div className="flex items-center gap-2">
+          {achievements.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => bringToFront(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                deckOrder[0] === i
+                  ? 'w-10 bg-gradient-to-r from-amber-400 to-accent-orange shadow-[0_0_12px_rgba(251,191,36,0.7)]'
+                  : 'w-2.5 bg-white/20 hover:bg-white/40'
+              }`}
+              aria-label={`Deal card ${i + 1}`}
             />
-
-            {/* Large Emblem Icon */}
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.3)] mb-4 group-hover:scale-105 transition-transform duration-300">
-              <IconComponent size={40} />
-            </div>
-
-            {/* Stat Callout */}
-            <div className="font-display text-[1.5rem] sm:text-[1.75rem] font-black text-white leading-none mb-1 tracking-wide">
-              {activeItem.statNumber}
-            </div>
-            <div className="font-mono text-[0.66rem] font-bold text-accent-orange tracking-widest uppercase mb-4">
-              {activeItem.statLabel}
-            </div>
-
-            {/* Verified Seal */}
-            <div className="w-full pt-3 border-t border-white/[0.08] flex items-center justify-center gap-1.5 font-mono text-[0.68rem] text-zinc-400">
-              <Star size={12} className="text-amber-400" fill="currentColor" />
-              <span>OFFICIAL HONOUR</span>
-            </div>
-          </div>
-
+          ))}
+          <span className="font-mono text-[0.72rem] text-zinc-500 ml-2">
+            0{deckOrder[0] + 1} / 0{total}
+          </span>
         </div>
 
-        {/* Footnote & Control Navigation Bar */}
-        <div className="pt-4 mt-6 border-t border-white/[0.06] flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-[0.70rem] text-zinc-500">
-              ACCOLADE 0{activeIndex + 1} OF 0{total}
-            </span>
-            <span className="text-white/20">•</span>
-            <span className="inline-flex items-center gap-1 text-[0.70rem] font-mono text-accent-orange font-bold">
-              <Sparkles size={11} />
-              <span>NATIONAL &amp; ACADEMIC EXCELLENCE</span>
-            </span>
-          </div>
-
-          {/* Chevrons */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={prevCard}
-              className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95"
-              aria-label="Previous Achievement"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={nextCard}
-              className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95"
-              aria-label="Next Achievement"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
+        {/* Next / Prev Navigation Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={shufflePrev}
+            disabled={isDealing}
+            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50"
+            aria-label="Previous Achievement"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            onClick={shuffleNext}
+            disabled={isDealing}
+            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50"
+            aria-label="Next Achievement"
+          >
+            <ChevronRight size={18} />
+          </button>
         </div>
       </div>
     </div>
@@ -770,7 +804,7 @@ export const Experience: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* OTHER ACHIEVEMENTS: Kinetic Accolades Vault Stage                         */}
+        {/* OTHER ACHIEVEMENTS: 3D Physical Card Shuffler                             */}
         {/* ========================================================================= */}
         <div className="pt-6 border-t border-white/[0.08]">
           <div className="flex items-center gap-3 mb-8">
@@ -785,8 +819,8 @@ export const Experience: React.FC = () => {
             </div>
           </div>
 
-          {/* Kinetic Showcase Stage */}
-          <KineticAchievementShowcase />
+          {/* 3D Physical Shuffler Deck */}
+          <PhysicalShuffleDeck />
         </div>
 
       </div>
