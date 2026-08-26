@@ -8,7 +8,11 @@ import {
   Languages,
 } from 'lucide-react';
 
-const InteractivePortraitCard: React.FC = () => {
+interface InteractivePortraitCardProps {
+  isVisible: boolean;
+}
+
+const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVisible }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const targetStateRef = useRef({ rx: 0, ry: 0, tx: 0, ty: 0 });
@@ -97,8 +101,18 @@ const InteractivePortraitCard: React.FC = () => {
   return (
     <div
       ref={cardRef}
-      className="relative w-full max-w-[290px] md:max-w-[330px] lg:max-w-[365px] mx-auto md:mx-0 select-none group/portrait cursor-pointer"
-      style={{ perspective: 1400 }}
+      className="relative w-full max-w-[290px] md:max-w-[330px] lg:max-w-[365px] mx-auto md:mx-0 select-none group/portrait cursor-pointer transition-all"
+      style={{
+        perspective: 1400,
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible
+          ? 'translateY(0px) scale(1) rotateX(0deg)'
+          : 'translateY(95px) scale(0.68) rotateX(20deg)',
+        filter: isVisible ? 'blur(0px)' : 'blur(10px)',
+        transition:
+          'opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 1.5s cubic-bezier(0.18, 0.95, 0.32, 1.25) 0.15s, filter 1.2s ease-out 0.15s',
+        willChange: 'transform, opacity, filter',
+      }}
     >
       {/* Ambient Glow */}
       <div
@@ -110,7 +124,7 @@ const InteractivePortraitCard: React.FC = () => {
         }}
       />
 
-      {/* Main Frame */}
+      {/* Main 3D Frame (Responsive to cursor tilt & magnetic micro-shift) */}
       <div
         className="relative rounded-2xl overflow-hidden border bg-[#0d0e12] backdrop-blur-2xl transition-all duration-150"
         style={{
@@ -225,9 +239,9 @@ export const About: React.FC = () => {
         {/* Compact Split Layout: Portrait Card + Story & Bento Blocks */}
         <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[340px_1fr] xl:grid-cols-[370px_1fr] gap-6 md:gap-8 lg:gap-10 items-start">
           
-          {/* Left Column: Interactive 3D Cursor-Physics Portrait Card */}
-          <div style={getSlideUpStyle(0.18)}>
-            <InteractivePortraitCard />
+          {/* Left Column: Interactive 3D Cursor-Physics Portrait Card with Pop-Up & Slow Deceleration */}
+          <div>
+            <InteractivePortraitCard isVisible={isVisible} />
           </div>
 
           {/* Right Column: Narrative Story & Compact Bento Grid */}
@@ -251,7 +265,7 @@ export const About: React.FC = () => {
             </div>
 
             {/* ========================================================================= */}
-            {/* COMPACT BENTO INFO & LANGUAGES GRID (Fits in One Screen View)              */}
+            {/* COMPACT BENTO INFO & LANGUAGES GRID                                       */}
             {/* ========================================================================= */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               
