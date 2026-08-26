@@ -285,8 +285,8 @@ export const DarvesChat: React.FC = () => {
         id="darves-floating-widget"
         style={{
           position: 'fixed',
-          bottom: '96px',
-          right: '36px',
+          top: '96px',
+          right: '24px',
           transform: `translate3d(${dragOffset.x}px, ${dragOffset.y}px, 0)`,
           zIndex: 99999,
           touchAction: 'none',
@@ -298,26 +298,26 @@ export const DarvesChat: React.FC = () => {
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
-          className={`relative flex items-center gap-3 cursor-grab active:cursor-grabbing transition-transform duration-200 ${
+          className={`relative flex items-center gap-2.5 cursor-grab active:cursor-grabbing transition-transform duration-200 ${
             isDragging ? 'scale-110' : 'hover:scale-105'
           }`}
           title="Drag to reposition • Click to chat with DARVES"
         >
           {/* Label Pill (Always clearly visible) */}
-          <div className="hidden sm:flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-[#18181b]/95 border border-white/20 backdrop-blur-md shadow-md text-white text-[0.82rem] font-bold tracking-wide pointer-events-none">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-orange" />
+          <div className="hidden sm:flex items-center gap-2 py-1.5 px-3 rounded-full bg-[#18181b]/95 border border-white/20 backdrop-blur-md shadow-md text-white text-[0.80rem] font-bold tracking-wide pointer-events-none">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-orange animate-pulse" />
             <span className="font-display tracking-wider text-accent-orange">DARVES</span>
-            <span className="text-white/80 font-normal text-[0.75rem]">AI Chat</span>
+            <span className="text-white/80 font-normal text-[0.72rem]">AI</span>
           </div>
 
           {/* Main Floating Orb */}
           <div className="relative">
             <button
               type="button"
-              className="relative w-14 h-14 rounded-full bg-[#121216] border border-accent-orange/60 flex items-center justify-center shadow-lg text-accent-orange overflow-hidden focus:outline-none hover:scale-105 transition-transform"
+              className="relative w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-[#121216] border border-accent-orange/60 flex items-center justify-center shadow-lg text-accent-orange overflow-hidden focus:outline-none hover:scale-105 transition-transform"
               aria-label="Open DARVES AI Assistant"
             >
-              <Bot size={24} className="relative z-10 text-accent-orange" />
+              <Bot size={22} className="relative z-10 text-accent-orange" />
             </button>
           </div>
         </div>
@@ -329,8 +329,8 @@ export const DarvesChat: React.FC = () => {
           aria-label="DARVES AI Conversation Window"
           className={`fixed z-[99998] transition-all duration-300 ${
             isMinimized
-              ? 'bottom-28 right-8 w-72 h-14 rounded-2xl overflow-hidden'
-              : 'bottom-20 md:bottom-28 right-4 md:right-8 w-[calc(100vw-2rem)] md:w-[410px] h-[550px] max-h-[85vh] rounded-3xl'
+              ? 'top-[96px] right-4 md:right-8 w-72 h-14 rounded-2xl overflow-hidden'
+              : 'top-[92px] right-3 md:right-6 w-[calc(100vw-1.5rem)] md:w-[410px] h-[550px] max-h-[82vh] rounded-3xl'
           } bg-[#121216]/95 backdrop-blur-[24px] border border-white/15 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200`}
         >
           {/* Chat Window Header */}
