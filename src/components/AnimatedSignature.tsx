@@ -13,12 +13,12 @@ interface StrokeData {
   isDot?: boolean;
 }
 
-// Master Calligraphic Strokes accurately tracing Debendra's signature
+// Master Calligraphic Strokes accurately tracing Debendra's signature from photo
 const SIGNATURE_STROKES: StrokeData[] = [
   // 1. Cursive 'D' Bowl & Loop (Sweeping counter-clockwise oval)
   {
     name: 'd_loop',
-    duration: 0.55,
+    duration: 0.45,
     points: [
       { x: 245, y: 175 }, { x: 228, y: 192 }, { x: 208, y: 214 }, { x: 188, y: 242 },
       { x: 170, y: 274 }, { x: 158, y: 310 }, { x: 156, y: 346 }, { x: 168, y: 372 },
@@ -31,7 +31,7 @@ const SIGNATURE_STROKES: StrokeData[] = [
   // 2. Main Diagonal Stem through 'D' connecting into cursive 'debendra' and ascending flourish
   {
     name: 'debendra_word',
-    duration: 0.95,
+    duration: 0.85,
     points: [
       // Starting diagonal slash cutting through D
       { x: 45, y: 415 }, { x: 82, y: 392 }, { x: 125, y: 368 }, { x: 172, y: 340 },
@@ -62,21 +62,21 @@ const SIGNATURE_STROKES: StrokeData[] = [
   // 3. Dot 1
   {
     name: 'dot1',
-    duration: 0.1,
+    duration: 0.08,
     isDot: true,
     points: [{ x: 752, y: 34 }, { x: 754, y: 36 }],
   },
   // 4. Dot 2
   {
     name: 'dot2',
-    duration: 0.1,
+    duration: 0.08,
     isDot: true,
     points: [{ x: 772, y: 22 }, { x: 774, y: 24 }],
   },
   // 5. Underline Stroke beneath 'ebendra'
   {
     name: 'underline',
-    duration: 0.32,
+    duration: 0.28,
     points: [
       { x: 310, y: 358 }, { x: 362, y: 324 }, { x: 418, y: 288 }, { x: 476, y: 248 },
       { x: 524, y: 214 }, { x: 552, y: 192 },
@@ -85,7 +85,7 @@ const SIGNATURE_STROKES: StrokeData[] = [
   // 6. Star / Accent Mark on Underline
   {
     name: 'star_mark',
-    duration: 0.1,
+    duration: 0.08,
     isDot: true,
     points: [{ x: 580, y: 178 }, { x: 582, y: 180 }],
   },
@@ -135,7 +135,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
   const particlesRef = useRef<Particle[]>([]);
 
   const totalDuration =
-    SIGNATURE_STROKES.reduce((acc, s) => acc + s.duration, 0) + 0.25;
+    SIGNATURE_STROKES.reduce((acc, s) => acc + s.duration, 0) + 0.2;
 
   const startSigning = () => {
     setIsSigning(true);
@@ -147,7 +147,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
   useEffect(() => {
     const timer = setTimeout(() => {
       startSigning();
-    }, 1000);
+    }, 800);
 
     return () => clearTimeout(timer);
   }, []);
@@ -214,13 +214,13 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         ctx.lineJoin = 'round';
 
         if (stroke.isDot) {
-          if (strokeProgress > 0.2) {
+          if (strokeProgress > 0.15) {
             const pt = stroke.points[0];
             const radius = stroke.name.startsWith('dot') ? 4.5 : 3.5;
 
             // Halo glow
             ctx.shadowColor = '#f97316';
-            ctx.shadowBlur = 12;
+            ctx.shadowBlur = 14;
             ctx.fillStyle = '#ea580c';
             ctx.beginPath();
             ctx.arc(pt.x, pt.y, radius + 1.5, 0, Math.PI * 2);
@@ -239,7 +239,7 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
             ctx.fill();
 
             activePenPos = pt;
-            isPenWriting = strokeProgress < 0.95;
+            isPenWriting = strokeProgress < 0.9;
           }
         } else {
           // Continuous spline drawing
@@ -264,8 +264,8 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
 
             // Layer 1: Ambient outer flame aura
             ctx.shadowColor = '#f97316';
-            ctx.shadowBlur = 14;
-            ctx.strokeStyle = 'rgba(234, 88, 12, 0.45)';
+            ctx.shadowBlur = 16;
+            ctx.strokeStyle = 'rgba(234, 88, 12, 0.5)';
             ctx.lineWidth = stroke.name === 'underline' ? 5.5 : 7.0;
             drawSpline();
             ctx.stroke();
@@ -276,14 +276,14 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
             inkGrad.addColorStop(0.5, '#f97316');
             inkGrad.addColorStop(1, '#fbbf24');
 
-            ctx.shadowBlur = 8;
+            ctx.shadowBlur = 9;
             ctx.strokeStyle = inkGrad;
             ctx.lineWidth = stroke.name === 'underline' ? 3.4 : 4.2;
             drawSpline();
             ctx.stroke();
 
             // Layer 3: White-Hot Filament Core
-            ctx.shadowBlur = 4;
+            ctx.shadowBlur = 5;
             ctx.shadowColor = '#ffffff';
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 1.4;
@@ -435,8 +435,8 @@ export const AnimatedSignature: React.FC<{ className?: string }> = ({ className 
         className="absolute -inset-4 rounded-3xl blur-2xl transition-opacity duration-500 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.38) 0%, rgba(245, 158, 11, 0.12) 50%, transparent 75%)',
-          opacity: isSigning ? 1 : isHovered ? 0.95 : 0.7,
+            'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.42) 0%, rgba(245, 158, 11, 0.15) 50%, transparent 75%)',
+          opacity: isSigning ? 1 : isHovered ? 0.95 : 0.75,
         }}
       />
 
