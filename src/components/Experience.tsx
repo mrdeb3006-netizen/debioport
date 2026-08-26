@@ -275,22 +275,19 @@ export const Experience: React.FC = () => {
         
         {/* Section Header */}
         <div
-          className="mb-16 md:mb-24 transition-all duration-700 ease-out"
+          className="mb-10 md:mb-14 transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0px)' : 'translateY(24px)',
           }}
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-orange/10 border border-accent-orange/30 text-accent-orange font-mono text-[0.74rem] font-bold uppercase tracking-wider mb-4 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
-            <GraduationCap size={14} />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-orange/10 border border-accent-orange/30 text-accent-orange font-mono text-[0.72rem] font-bold uppercase tracking-wider mb-3 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+            <GraduationCap size={13} />
             <span>Academic &amp; Growth Timeline</span>
           </div>
-          <h2 className="font-display text-[clamp(2.4rem,4.5vw,4.0rem)] font-black text-white leading-[1.1] mb-3 uppercase tracking-[0.02em]">
+          <h2 className="font-display text-[clamp(1.6rem,3.0vw,2.6rem)] font-black text-white leading-tight uppercase tracking-[0.02em]">
             MY JOURNEY<span className="text-accent-orange">.</span>
           </h2>
-          <p className="text-[1.05rem] text-text-secondary max-w-[700px] leading-[1.65]">
-            Academic milestones, national achievements, distinctions, and technical foundations from school to Computer Science Engineering.
-          </p>
         </div>
 
         {/* ========================================================================= */}
