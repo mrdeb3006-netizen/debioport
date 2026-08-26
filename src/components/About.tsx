@@ -140,17 +140,6 @@ const InteractivePortraitCard: React.FC = () => {
           <div className="absolute top-4 right-4 z-20 px-2.5 py-1 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 font-mono text-[0.68rem] font-semibold tracking-widest uppercase">
             DB • 2026
           </div>
-
-          {/* Authentic Handwritten Signature in Corner of Photo */}
-          <div className="absolute bottom-3 right-4 z-20 pointer-events-none select-none flex flex-col items-end transform transition-all duration-300 group-hover/portrait:scale-105 group-hover/portrait:-rotate-1">
-            <span
-              style={{ fontFamily: "'Alex Brush', 'Great Vibes', 'Dancing Script', cursive" }}
-              className="text-[2.1rem] sm:text-[2.4rem] leading-none text-accent-orange font-normal -rotate-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_8px_rgba(249,115,22,0.45)] tracking-wide"
-            >
-              Debendra
-            </span>
-            <div className="w-24 h-[1.5px] bg-gradient-to-r from-transparent via-accent-orange/70 to-accent-orange rounded-full -mt-1 shadow-[0_0_6px_rgba(249,115,22,0.5)]" />
-          </div>
         </div>
 
         {/* Bottom Card Caption */}
