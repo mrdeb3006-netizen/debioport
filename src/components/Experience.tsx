@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Award,
+  Sparkles,
 } from 'lucide-react';
 
 interface TimelineMilestone {
@@ -27,71 +28,78 @@ interface AchievementCard {
   badge: string;
   title: string;
   subtitle: string;
+  yearTag: string;
   description: string;
   icon: React.ElementType;
   highlights: string[];
 }
 
 const StackedAchievementDeck: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
   const achievements: AchievementCard[] = [
     {
       id: 'iit-honour',
       category: 'ACADEMIC EXCELLENCE',
       badge: 'IIT KGP HONOUR',
+      yearTag: 'CLASS 10TH TOPPER',
       title: 'Awarded by IIT Kharagpur Professor',
-      subtitle: 'Exceptional Result & Class 10th School Topper',
+      subtitle: 'Exceptional Result & School Topper Felicitation',
       description:
         'Felicitated and awarded by an esteemed professor from Indian Institute of Technology (IIT) Kharagpur in recognition of exceptional academic performance and ranking as the School Topper in Class 10.',
       icon: Trophy,
       highlights: [
-        'Rank #1 School Topper with 88.71% in Secondary Board',
-        'Felicitated by distinguished IIT Kharagpur faculty',
-        'Demonstrated foundational brilliance in mathematics & sciences',
+        'Rank #1 School Topper with 88.71% in Secondary Board Examinations',
+        'Felicitated in person by distinguished IIT Kharagpur faculty',
+        'Demonstrated early brilliance and rigor in mathematics & physical sciences',
       ],
     },
     {
       id: 'karate-bronze',
       category: 'NATIONAL SPORTS • MARTIAL ARTS',
       badge: '2X NATIONAL BRONZE',
+      yearTag: 'ALL INDIA CHAMPIONSHIP',
       title: '2x Bronze Medalist • All India Karate Championship',
       subtitle: 'All India Level Club Karate Championship',
       description:
         'Secured two Bronze Medals at the prestigious All India Level Club Karate Championship, demonstrating elite competitive Karate combat discipline, Kumite reflexes, and tactical ring composure against top martial arts athletes nationwide.',
       icon: Medal,
       highlights: [
-        'Two-time Bronze Medalist at All-India Championship Level',
-        'High-intensity Kumite combat sparring & tactical execution',
-        'Competitive athletics composure against top national contenders',
+        'Two-time Bronze Medalist at All-India Club Karate Championship Level',
+        'High-intensity competitive Kumite combat sparring & tactical execution',
+        'Demonstrated athletic discipline, composure and agility against top athletes',
       ],
     },
     {
       id: 'karate-brown-belt',
       category: 'MARTIAL ARTS MASTERY',
       badge: 'BROWN BELT SENIOR',
-      title: 'Karate Brown Belt',
-      subtitle: 'Senior Grade Martial Arts Mastery',
+      yearTag: 'SENIOR GRADE MASTERY',
+      title: 'Karate Brown Belt Senior Grade',
+      subtitle: 'Advanced Martial Arts Conditioning & Sparring',
       description:
         'Earned the senior Karate Brown Belt grade following years of rigorous traditional martial arts training, advanced Kata technical mastery, physical conditioning, and full-contact Kumite sparring.',
       icon: Shield,
       highlights: [
-        'Senior Grade Brown Belt qualification in Shotokan/Goju Karate',
-        '6+ years of disciplined conditioning, Kata & Kumite',
-        'Deep mental focus, agility, stamina & tactical precision',
+        'Senior Grade Brown Belt qualification in traditional Karate discipline',
+        '6+ years of disciplined conditioning, advanced Kata forms & full-contact sparring',
+        'Developed unwavering mental focus, tactical stamina & defensive composure',
       ],
     },
     {
       id: 'school-topper',
       category: 'SCHOLASTIC DISTINCTION',
       badge: 'RANK #1 TOPPER',
+      yearTag: 'SECONDARY EXCELLENCE',
       title: 'School Topper & Science Distinction',
       subtitle: 'Jadavpur High School • Secondary Board',
       description:
         'Ranked #1 as the Secondary Examination School Topper at Jadavpur High School with 88.71%, earning institutional commendations and scientific excellence distinctions.',
       icon: Award,
       highlights: [
-        'Rank #1 among all secondary graduation candidates',
-        '88.71% aggregate with distinctions across Science & Math',
-        'Institutional commendation for academic excellence',
+        'Rank #1 among all secondary graduation candidates across the institution',
+        '88.71% aggregate score with distinctions across Science & Higher Mathematics',
+        'Awarded institutional honors for academic dedication and scientific inquiry',
       ],
     },
   ];
@@ -100,7 +108,42 @@ const StackedAchievementDeck: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [animatingCard, setAnimatingCard] = useState<number | null>(null);
-  const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Responsive Scroll-Driven Deck Transition (Like Project Section Behavior)
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (!containerRef.current) return;
+          const rect = containerRef.current.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+
+          // Track scroll penetration through the achievements deck
+          const start = windowHeight * 0.85;
+          const totalDistance = rect.height + windowHeight * 0.45;
+          const scrolled = start - rect.top;
+
+          if (scrolled >= 0 && scrolled <= totalDistance) {
+            const progress = Math.max(0, Math.min(1, scrolled / totalDistance));
+            const calculatedIndex = Math.min(
+              total - 1,
+              Math.max(0, Math.floor(progress * total * 1.05))
+            );
+            setActiveIndex(calculatedIndex);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [total]);
 
   const nextCard = useCallback(() => {
     if (animatingCard !== null) return;
@@ -108,7 +151,7 @@ const StackedAchievementDeck: React.FC = () => {
     setTimeout(() => {
       setActiveIndex((prev) => (prev + 1) % total);
       setAnimatingCard(null);
-    }, 450);
+    }, 400);
   }, [animatingCard, activeIndex, total]);
 
   const prevCard = useCallback(() => {
@@ -117,7 +160,7 @@ const StackedAchievementDeck: React.FC = () => {
     setTimeout(() => {
       setActiveIndex((prev) => (prev - 1 + total) % total);
       setAnimatingCard(null);
-    }, 450);
+    }, 400);
   }, [animatingCard, activeIndex, total]);
 
   const goToCard = (index: number) => {
@@ -126,34 +169,19 @@ const StackedAchievementDeck: React.FC = () => {
     setTimeout(() => {
       setActiveIndex(index);
       setAnimatingCard(null);
-    }, 450);
+    }, 400);
   };
-
-  // Continuous loop with pause on hover
-  useEffect(() => {
-    if (isHovered) {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-      return;
-    }
-
-    autoPlayTimerRef.current = setInterval(() => {
-      nextCard();
-    }, 4500);
-
-    return () => {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-    };
-  }, [isHovered, nextCard]);
 
   return (
     <div
-      className="relative w-full max-w-[840px] mx-auto select-none"
+      ref={containerRef}
+      className="relative w-full max-w-[1080px] mx-auto select-none pt-4 pb-6"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 3D Stack Viewport */}
+      {/* 3D Stretched Deck Viewport */}
       <div
-        className="relative min-h-[380px] sm:min-h-[340px] md:min-h-[310px] w-full flex items-center justify-center py-4"
+        className="relative min-h-[420px] sm:min-h-[360px] md:min-h-[330px] w-full flex items-center justify-center py-2"
         style={{ perspective: 1800 }}
       >
         {achievements.map((item, index) => {
@@ -164,50 +192,48 @@ const StackedAchievementDeck: React.FC = () => {
           const isFront = slot === 0;
           const isLeaving = animatingCard === index;
 
-          // Highly refined physics styling based on slot position
           let transform = '';
           let opacity = 1;
           let zIndex = 30 - slot * 5;
           let filter = 'none';
 
           if (isLeaving) {
-            // Outgoing card smoothly sweeps up and out with silky motion
-            transform = 'translate3d(0, -60px, 80px) rotateX(-8deg) rotateZ(-2.5deg) scale(1.02)';
+            transform = 'translate3d(0, -65px, 80px) rotateX(-8deg) rotateZ(-2deg) scale(1.02)';
             opacity = 0.4;
             zIndex = 45;
             filter = 'blur(1px)';
           } else if (slot === 0) {
-            // Front Hero Card
+            // Front Stretched Hero Card
             transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
             opacity = 1;
             zIndex = 35;
           } else if (slot === 1) {
             // 1st Card Behind
             const yOffset = isHovered ? 24 : 16;
-            const rot = isHovered ? 2.0 : 1.2;
-            transform = `translate3d(0, ${yOffset}px, -45px) rotateX(1.5deg) rotateZ(${rot}deg) scale(0.96)`;
+            const rot = isHovered ? 1.6 : 1.0;
+            transform = `translate3d(0, ${yOffset}px, -45px) rotateX(1.5deg) rotateZ(${rot}deg) scale(0.97)`;
             opacity = 0.85;
-            filter = 'blur(0.4px)';
+            filter = 'blur(0.3px)';
           } else if (slot === 2) {
             // 2nd Card Behind
             const yOffset = isHovered ? 45 : 32;
-            const rot = isHovered ? -2.0 : -1.2;
-            transform = `translate3d(0, ${yOffset}px, -90px) rotateX(3deg) rotateZ(${rot}deg) scale(0.92)`;
+            const rot = isHovered ? -1.6 : -1.0;
+            transform = `translate3d(0, ${yOffset}px, -90px) rotateX(3deg) rotateZ(${rot}deg) scale(0.94)`;
             opacity = 0.6;
-            filter = 'blur(0.8px)';
+            filter = 'blur(0.6px)';
           } else {
             // Deepest Card Behind
             const yOffset = isHovered ? 64 : 46;
-            transform = `translate3d(0, ${yOffset}px, -135px) rotateX(4deg) rotateZ(0.8deg) scale(0.88)`;
+            transform = `translate3d(0, ${yOffset}px, -135px) rotateX(4.5deg) rotateZ(0.6deg) scale(0.91)`;
             opacity = 0.35;
-            filter = 'blur(1.2px)';
+            filter = 'blur(1.0px)';
           }
 
           return (
             <div
               key={item.id}
               onClick={() => !isFront && goToCard(index)}
-              className={`absolute top-0 w-full max-w-[760px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0d0e14]/95 backdrop-blur-2xl transition-all duration-[650ms] ${
+              className={`absolute top-0 w-full max-w-[1040px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0d0e14]/95 backdrop-blur-2xl transition-all duration-[600ms] ${
                 !isFront ? 'cursor-pointer hover:border-amber-400/40' : 'cursor-default'
               }`}
               style={{
@@ -218,72 +244,94 @@ const StackedAchievementDeck: React.FC = () => {
                 transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
                 willChange: 'transform, opacity',
                 borderColor: isFront
-                  ? 'rgba(245, 158, 11, 0.45)'
+                  ? 'rgba(245, 158, 11, 0.5)'
                   : 'rgba(255, 255, 255, 0.1)',
                 boxShadow: isFront
-                  ? '0 25px 60px -12px rgba(0, 0, 0, 0.95), 0 0 30px -5px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
-                  : '0 18px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+                  ? '0 30px 75px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.14)'
+                  : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
               }}
             >
-              {/* Active Golden Edge Highlight */}
+              {/* Active Golden Edge Highlight Sheen */}
               {isFront && (
                 <div
-                  className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+                  className="absolute -top-px left-1/5 right-1/5 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
                   aria-hidden="true"
                 />
               )}
 
-              {/* Header: Badge & Icon */}
-              <div className="flex items-center justify-between gap-3 mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider">
-                    {item.badge}
-                  </span>
-                  <span className="font-mono text-[0.66rem] text-zinc-500 uppercase tracking-widest hidden sm:inline">
-                    {item.category}
-                  </span>
-                </div>
-
-                <div className="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.2)]">
-                  <IconComponent size={20} />
-                </div>
-              </div>
-
-              {/* Title */}
-              <h4 className="font-display text-[1.25rem] sm:text-[1.45rem] md:text-[1.6rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
-                {item.title}
-              </h4>
-
-              {/* Subtitle */}
-              <div className="font-mono text-[0.80rem] sm:text-[0.85rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
-                <span>▹</span>
-                <span>{item.subtitle}</span>
-              </div>
-
-              {/* Description */}
-              <p className="text-[0.88rem] sm:text-[0.92rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[680px]">
-                {item.description}
-              </p>
-
-              {/* Highlights */}
-              <div className="flex flex-col gap-1.5 pt-2 border-t border-white/[0.06]">
-                {item.highlights.map((highlight, hIdx) => (
-                  <div
-                    key={hIdx}
-                    className="flex items-start gap-2 text-[0.82rem] sm:text-[0.86rem] text-zinc-300"
-                  >
-                    <span className="text-accent-orange text-xs mt-0.5">●</span>
-                    <span className="leading-tight">{highlight}</span>
+              {/* Wide 2-Column Responsive Card Content */}
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-start">
+                
+                {/* Left Area: Title, Badges, Subtitle & Highlights */}
+                <div>
+                  {/* Category Pill & Verification Tag */}
+                  <div className="flex items-center gap-2.5 mb-3 flex-wrap">
+                    <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider">
+                      {item.badge}
+                    </span>
+                    <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest">
+                      {item.category}
+                    </span>
+                    <span className="text-white/20 text-xs hidden sm:inline">•</span>
+                    <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
+                      {item.yearTag}
+                    </span>
                   </div>
-                ))}
+
+                  {/* Achievement Title */}
+                  <h4 className="font-display text-[1.35rem] sm:text-[1.6rem] md:text-[1.85rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
+                    {item.title}
+                  </h4>
+
+                  {/* Monospace Subtitle */}
+                  <div className="font-mono text-[0.80rem] sm:text-[0.86rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
+                    <span>▹</span>
+                    <span>{item.subtitle}</span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-[0.88rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[780px]">
+                    {item.description}
+                  </p>
+
+                  {/* Highlights Bullet List */}
+                  <div className="flex flex-col gap-1.5 pt-2.5 border-t border-white/[0.06] max-w-[780px]">
+                    {item.highlights.map((highlight, hIdx) => (
+                      <div
+                        key={hIdx}
+                        className="flex items-start gap-2 text-[0.82rem] sm:text-[0.86rem] text-zinc-300"
+                      >
+                        <span className="text-accent-orange text-xs mt-0.5">●</span>
+                        <span className="leading-tight">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right Area: Large Glowing Glass Icon Panel */}
+                <div className="hidden md:flex flex-col items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] min-w-[130px] self-stretch text-center">
+                  <div className="w-14 h-14 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.25)] mb-2">
+                    <IconComponent size={28} />
+                  </div>
+                  <div className="flex flex-col items-center gap-1 mt-auto">
+                    <span className="inline-flex items-center gap-1 text-accent-orange font-mono text-[0.66rem] font-bold uppercase tracking-wider">
+                      <Sparkles size={11} />
+                      <span>HONOUR</span>
+                    </span>
+                    <span className="font-mono text-[0.62rem] text-zinc-500">
+                      0{index + 1} / 0{total}
+                    </span>
+                  </div>
+                </div>
+
               </div>
 
-              {/* Footnote */}
-              <div className="pt-3 mt-3 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500">
-                <span>VERIFIED HONOUR</span>
+              {/* Footnote Bar */}
+              <div className="pt-3 mt-4 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500">
+                <span>SCROLL-DRIVEN ACHIEVEMENTS</span>
                 <div className="flex items-center gap-1 text-accent-orange font-bold">
                   <Star size={11} fill="currentColor" />
-                  <span>NATIONAL RECOGNITION</span>
+                  <span>VERIFIED RECORD</span>
                 </div>
               </div>
             </div>
@@ -291,8 +339,8 @@ const StackedAchievementDeck: React.FC = () => {
         })}
       </div>
 
-      {/* Modern Navigation Bar & Slide Indicators */}
-      <div className="mt-4 flex items-center justify-between max-w-[760px] mx-auto px-2">
+      {/* Modern Navigation & Progress Bar */}
+      <div className="mt-6 flex items-center justify-between max-w-[1040px] mx-auto px-2">
         {/* Step Indicator Pills */}
         <div className="flex items-center gap-2">
           {achievements.map((_, i) => (
@@ -301,13 +349,13 @@ const StackedAchievementDeck: React.FC = () => {
               onClick={() => goToCard(i)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === activeIndex
-                  ? 'w-8 bg-gradient-to-r from-amber-400 to-accent-orange shadow-[0_0_10px_rgba(251,191,36,0.7)]'
-                  : 'w-2 bg-white/20 hover:bg-white/40'
+                  ? 'w-10 bg-gradient-to-r from-amber-400 to-accent-orange shadow-[0_0_12px_rgba(251,191,36,0.7)]'
+                  : 'w-2.5 bg-white/20 hover:bg-white/40'
               }`}
               aria-label={`Go to achievement ${i + 1}`}
             />
           ))}
-          <span className="font-mono text-[0.70rem] text-zinc-500 ml-2">
+          <span className="font-mono text-[0.72rem] text-zinc-500 ml-2">
             0{activeIndex + 1} / 0{total}
           </span>
         </div>
@@ -743,7 +791,7 @@ export const Experience: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* OTHER ACHIEVEMENTS: 3D Stacked Deck of Cards with Physics Shuffling      */}
+        {/* OTHER ACHIEVEMENTS: Stretched 3D Stacked Deck (Scroll-Driven Reactive)   */}
         {/* ========================================================================= */}
         <div className="pt-6 border-t border-white/[0.08]">
           <div className="flex items-center gap-3 mb-8">
@@ -758,7 +806,7 @@ export const Experience: React.FC = () => {
             </div>
           </div>
 
-          {/* Interactive 3D Stacked Deck */}
+          {/* Stretched Interactive 3D Stacked Deck */}
           <StackedAchievementDeck />
         </div>
 
