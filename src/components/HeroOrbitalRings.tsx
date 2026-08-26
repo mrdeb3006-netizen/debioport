@@ -4,12 +4,13 @@ interface HeroOrbitalRingsProps {
   className?: string;
 }
 
-// Mystical Eldritch, Alchemical & Mathematical Runes from Doctor Strange Tao Mandala
-const RUNIC_SYMBOLS = [
+// Authentic Eldritch, Tao Mandala & Sacred Mathematical Runes
+const RUNES = [
   'ᛟ', '⊘', '∇', 'ᚱ', '⊕', '∰', 'ᛊ', '⊗', '∆', 'ᚦ',
   '⊙', 'ℵ', 'ᚹ', '⊚', '∞', 'ᚲ', '⊛', '∿', 'ᛞ', '⊜',
   '≈', 'ᛗ', '⊝', '≢', 'ᛉ', '⊞', '≤', 'ᛏ', '⊟', '≥',
-  'ᛒ', '⊠', '⊸', 'ᛖ', '⊡', '⊹', 'ᛚ', '∯', '⋈', 'ᛦ'
+  'ᛒ', '⊠', '⊸', 'ᛖ', '⊡', '⊹', 'ᛚ', '∯', '⋈', 'ᛦ',
+  '⊶', '⊷', '⋀', '⋁', '⋆', '⋇', '⋍', '⋎', '⋘', '⋙'
 ];
 
 interface ProjectedPoint {
@@ -20,29 +21,33 @@ interface ProjectedPoint {
   alpha: number;
 }
 
-interface OrbitalRingConfig {
+interface Spark {
+  progress: number;
+  speed: number;
+  size: number;
+  offset: number;
+  alpha: number;
+  pulsePhase: number;
+  tailLength: number;
+}
+
+interface RingConfig {
   radius: number;
   bandWidth: number;
-  tiltX: number; // Radian inclination around X
-  tiltY: number; // Radian inclination around Y
-  tiltZ: number; // Radian inclination around Z
-  rotSpeed: number; // Continuous rotation speed
+  rotX: number;
+  rotY: number;
+  rotZ: number;
+  speed: number;
   currentAngle: number;
-  colorCore: string;
-  colorGlow: string;
-  colorOuter: string;
   symbols: string[];
   glyphCount: number;
-  numParticles: number;
-  particles: Array<{
-    progress: number;
-    speed: number;
-    size: number;
-    offsetRadius: number;
-    alpha: number;
-    pulseSpeed: number;
-    phase: number;
-  }>;
+  sparks: Spark[];
+  colorTheme: {
+    core: string;
+    mid: string;
+    glow: string;
+    rail: string;
+  };
 }
 
 export const HeroOrbitalRings: React.FC<HeroOrbitalRingsProps> = ({ className = '' }) => {
@@ -64,12 +69,12 @@ export const HeroOrbitalRings: React.FC<HeroOrbitalRingsProps> = ({ className = 
     let height = 0;
     let dpr = 1;
 
-    // Center of portrait anchor (recalculated on resize)
-    let portraitCenterX = 0;
-    let portraitCenterY = 0;
-    let responsiveScale = 1;
+    // Anchor center for the portrait head in the Hero background
+    let centerX = 0;
+    let centerY = 0;
+    let scale = 1;
 
-    // Mouse parallax tracking
+    // Smooth mouse parallax
     const mouse = { x: 0, y: 0 };
     const tilt = { x: 0, y: 0 };
 
@@ -77,90 +82,95 @@ export const HeroOrbitalRings: React.FC<HeroOrbitalRingsProps> = ({ className = 
       const rect = canvas.getBoundingClientRect();
       const nx = (e.clientX - rect.left) / (rect.width || 1) - 0.5;
       const ny = (e.clientY - rect.top) / (rect.height || 1) - 0.5;
-      mouse.x = nx * 0.18; // Smooth subtle max tilt ~10 deg
-      mouse.y = -ny * 0.18;
+      mouse.x = nx * 0.22;
+      mouse.y = -ny * 0.22;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
-    // Floating Ambient Cosmic Embers around orbit
-    const ambientEmbers = Array.from({ length: 45 }, () => ({
-      x: (Math.random() - 0.5) * 500,
-      y: (Math.random() - 0.5) * 500,
-      z: (Math.random() - 0.5) * 300,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
+    // Ambient floating cosmic sparks
+    const ambientEmbers = Array.from({ length: 60 }, () => ({
+      x: (Math.random() - 0.5) * 600,
+      y: (Math.random() - 0.5) * 600,
+      z: (Math.random() - 0.5) * 400,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4 - 0.1, // subtle upward drift
       vz: (Math.random() - 0.5) * 0.3,
-      size: Math.random() * 2 + 0.8,
-      alpha: Math.random() * 0.8 + 0.2,
-      baseAlpha: Math.random() * 0.7 + 0.3,
+      size: Math.random() * 2.2 + 0.8,
+      baseAlpha: Math.random() * 0.75 + 0.25,
       phase: Math.random() * Math.PI * 2,
     }));
 
-    // Construct 3 Intersecting Doctor Strange / Mathematical Gyroscope Orbital Rings
-    const createRingParticles = (count: number) => {
+    const createSparks = (count: number): Spark[] => {
       return Array.from({ length: count }, () => ({
         progress: Math.random(),
-        speed: (Math.random() * 0.002 + 0.0015) * (Math.random() > 0.3 ? 1 : -1),
-        size: Math.random() * 2.2 + 1.2,
-        offsetRadius: (Math.random() - 0.5) * 16,
-        alpha: Math.random() * 0.7 + 0.3,
-        pulseSpeed: Math.random() * 0.05 + 0.02,
-        phase: Math.random() * Math.PI * 2,
+        speed: (Math.random() * 0.0025 + 0.0018) * (Math.random() > 0.3 ? 1 : -1),
+        size: Math.random() * 2.8 + 1.2,
+        offset: (Math.random() - 0.5) * 24,
+        alpha: Math.random() * 0.8 + 0.2,
+        pulsePhase: Math.random() * Math.PI * 2,
+        tailLength: Math.random() * 0.025 + 0.01,
       }));
     };
 
-    const rings: OrbitalRingConfig[] = [
-      // Ring 1: Primary Descending Diagonal Orbit (Crossing top-left to bottom-right)
+    // 2 Major Intersecting Fiery Doctor Strange Rings + 1 Accent Celestial Loop
+    const rings: RingConfig[] = [
+      // Ring 1: Primary Descending Diagonal Orbit (Top-Left to Bottom-Right across chin/neck)
       {
-        radius: 255,
-        bandWidth: 32,
-        tiltX: 1.08, // ~62 deg
-        tiltY: -0.48, // ~ -28 deg
-        tiltZ: 0.64, // ~ 37 deg
-        rotSpeed: reducedMotion ? 0 : 0.0032,
+        radius: 225,
+        bandWidth: 42,
+        rotX: 1.10, // ~63 deg
+        rotY: -0.44, // ~ -25 deg
+        rotZ: 0.62, // ~ 35 deg
+        speed: reducedMotion ? 0 : 0.0036,
         currentAngle: 0,
-        colorCore: '#ffedd5',
-        colorGlow: '#f97316',
-        colorOuter: '#fbbf24',
-        symbols: RUNIC_SYMBOLS,
-        glyphCount: 32,
-        numParticles: 28,
-        particles: createRingParticles(28),
+        symbols: RUNES,
+        glyphCount: 38,
+        sparks: createSparks(36),
+        colorTheme: {
+          core: '#fffbeb',
+          mid: '#fbbf24',
+          glow: '#f97316',
+          rail: '#ffd166',
+        },
       },
-      // Ring 2: Intersecting Ascending Diagonal Orbit (Crossing bottom-left to top-right)
+      // Ring 2: Primary Ascending Diagonal Orbit (Bottom-Left to Top-Right across face)
       {
-        radius: 265,
-        bandWidth: 30,
-        tiltX: 1.14, // ~65 deg
-        tiltY: 0.52, // ~ 30 deg
-        tiltZ: -0.68, // ~ -39 deg
-        rotSpeed: reducedMotion ? 0 : -0.0028,
-        currentAngle: Math.PI * 0.4,
-        colorCore: '#fef3c7',
-        colorGlow: '#ea580c',
-        colorOuter: '#f59e0b',
-        symbols: [...RUNIC_SYMBOLS].reverse(),
-        glyphCount: 30,
-        numParticles: 26,
-        particles: createRingParticles(26),
+        radius: 235,
+        bandWidth: 40,
+        rotX: 1.15, // ~66 deg
+        rotY: 0.46, // ~ 26 deg
+        rotZ: -0.64, // ~ -37 deg
+        speed: reducedMotion ? 0 : -0.0032,
+        currentAngle: Math.PI * 0.5,
+        symbols: [...RUNES].reverse(),
+        glyphCount: 36,
+        sparks: createSparks(34),
+        colorTheme: {
+          core: '#fff7ed',
+          mid: '#f59e0b',
+          glow: '#ea580c',
+          rail: '#fbbf24',
+        },
       },
-      // Ring 3: Delicate Equatorial Celestial Orbit (Outer astrolabe telemetry ring)
+      // Ring 3: Subtle Equatorial Celestial Armillary Loop
       {
-        radius: 285,
-        bandWidth: 16,
-        tiltX: 1.34, // ~77 deg
-        tiltY: 0.12, // ~ 7 deg
-        tiltZ: 0.22, // ~ 13 deg
-        rotSpeed: reducedMotion ? 0 : 0.0018,
+        radius: 260,
+        bandWidth: 18,
+        rotX: 1.36, // ~78 deg
+        rotY: 0.10, // ~ 6 deg
+        rotZ: 0.18, // ~ 10 deg
+        speed: reducedMotion ? 0 : 0.0018,
         currentAngle: Math.PI * 0.8,
-        colorCore: '#ffffff',
-        colorGlow: '#f97316',
-        colorOuter: '#fed7aa',
         symbols: ['⊕', '⊘', '⊙', '⊚', '⊛', '⊜', '⊝', '⊞', '⊟', '⊠', '⊡', '∇', '∆', '∞'],
-        glyphCount: 18,
-        numParticles: 20,
-        particles: createRingParticles(20),
+        glyphCount: 16,
+        sparks: createSparks(22),
+        colorTheme: {
+          core: '#ffffff',
+          mid: '#f97316',
+          glow: '#dc2626',
+          rail: '#fed7aa',
+        },
       },
     ];
 
@@ -178,34 +188,29 @@ export const HeroOrbitalRings: React.FC<HeroOrbitalRingsProps> = ({ className = 
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
-      // Responsive portrait head center calculation
-      if (width >= 1280) {
-        // XL Desktop Screens (1280px - 2560px+)
-        portraitCenterX = width * 0.77;
-        portraitCenterY = height * 0.50;
-        responsiveScale = Math.min(1.05, Math.max(0.85, width / 1500));
+      // Match face center in hero-bg.jpg across all screen breakpoints
+      if (width >= 1440) {
+        centerX = width * 0.77;
+        centerY = height * 0.49;
+        scale = Math.min(1.15, Math.max(0.95, width / 1600));
       } else if (width >= 1024) {
-        // Standard Desktop (1024px - 1279px)
-        portraitCenterX = width * 0.76;
-        portraitCenterY = height * 0.50;
-        responsiveScale = 0.88;
+        centerX = width * 0.76;
+        centerY = height * 0.49;
+        scale = 0.95;
       } else if (width >= 768) {
-        // Tablet Screens (768px - 1023px)
-        portraitCenterX = width * 0.75;
-        portraitCenterY = height * 0.50;
-        responsiveScale = 0.74;
+        centerX = width * 0.75;
+        centerY = height * 0.49;
+        scale = 0.80;
       } else {
-        // Mobile Screens (< 768px)
-        portraitCenterX = width * 0.74;
-        portraitCenterY = height * 0.44;
-        responsiveScale = Math.min(0.56, Math.max(0.42, width / 650));
+        centerX = width * 0.74;
+        centerY = height * 0.43;
+        scale = Math.min(0.65, Math.max(0.48, width / 550));
       }
     };
 
     resize();
     window.addEventListener('resize', resize, { passive: true });
 
-    // Intersection observer to pause loop when out of viewport
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -216,49 +221,46 @@ export const HeroOrbitalRings: React.FC<HeroOrbitalRingsProps> = ({ className = 
       observer.observe(containerRef.current);
     }
 
-    // 3D Euler coordinate rotation and perspective projection
-    const fov = 750;
+    const fov = 850;
 
     const project3D = (
       x0: number,
       y0: number,
       z0: number,
-      rotX: number,
-      rotY: number,
-      rotZ: number,
-      originX: number,
-      originY: number
+      rx: number,
+      ry: number,
+      rz: number
     ): ProjectedPoint => {
-      // 1. Rotate around Z
-      const cosZ = Math.cos(rotZ);
-      const sinZ = Math.sin(rotZ);
-      const x1 = x0 * cosZ - y0 * sinZ;
-      const y1 = x0 * sinZ + y0 * cosZ;
+      // Rotate Z
+      const cz = Math.cos(rz);
+      const sz = Math.sin(rz);
+      const x1 = x0 * cz - y0 * sz;
+      const y1 = x0 * sz + y0 * cz;
       const z1 = z0;
 
-      // 2. Rotate around X
-      const cosX = Math.cos(rotX);
-      const sinX = Math.sin(rotX);
+      // Rotate X
+      const cx = Math.cos(rx);
+      const sx = Math.sin(rx);
       const x2 = x1;
-      const y2 = y1 * cosX - z1 * sinX;
-      const z2 = y1 * sinX + z1 * cosX;
+      const y2 = y1 * cx - z1 * sx;
+      const z2 = y1 * sx + z1 * cx;
 
-      // 3. Rotate around Y
-      const cosY = Math.cos(rotY);
-      const sinY = Math.sin(rotY);
-      const x3 = x2 * cosY + z2 * sinY;
+      // Rotate Y
+      const cy = Math.cos(ry);
+      const sy = Math.sin(ry);
+      const x3 = x2 * cy + z2 * sy;
       const y3 = y2;
-      const z3 = -x2 * sinY + z2 * cosY;
+      const z3 = -x2 * sy + z2 * cy;
 
-      // Perspective Scale Projection
+      // Perspective Projection
       const depth = fov / (fov - z3);
-      const screenX = originX + x3 * depth;
-      const screenY = originY + y3 * depth;
+      const screenX = centerX + x3 * depth;
+      const screenY = centerY + y3 * depth;
 
-      // Calculate depth alpha (front is bright 1.0, back is dimmed 0.45)
-      const maxZ = 280;
-      const normalizedZ = Math.max(-1, Math.min(1, z3 / maxZ));
-      const alpha = 0.5 + 0.5 * normalizedZ;
+      // Normalized Z: -1 (deep back) to +1 (front close to camera)
+      const maxZ = 250;
+      const normZ = Math.max(-1, Math.min(1, z3 / maxZ));
+      const alpha = 0.5 + 0.5 * normZ;
 
       return {
         x: screenX,
@@ -279,124 +281,154 @@ export const HeroOrbitalRings: React.FC<HeroOrbitalRingsProps> = ({ className = 
 
       time += 0.016;
 
-      // Smooth mouse lerp
-      tilt.x += (mouse.x - tilt.x) * 0.05;
-      tilt.y += (mouse.y - tilt.y) * 0.05;
+      // Spring mouse tilt
+      tilt.x += (mouse.x - tilt.x) * 0.06;
+      tilt.y += (mouse.y - tilt.y) * 0.06;
 
       ctx.save();
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, width, height);
 
       // =========================================================================
-      // 1. SOFT VOLUMETRIC RADIAL BLOOM (Centered around Portrait Orbit)
+      // 1. WARM VOLUMETRIC AURA (Radiating around the face)
       // =========================================================================
-      const pulse = Math.sin(time * 1.5) * 0.08 + 0.92;
-      const glowRadius = 360 * responsiveScale * pulse;
-      const glowGrad = ctx.createRadialGradient(
-        portraitCenterX,
-        portraitCenterY,
-        30,
-        portraitCenterX,
-        portraitCenterY,
-        glowRadius
-      );
-      glowGrad.addColorStop(0, 'rgba(249, 115, 22, 0.18)');
-      glowGrad.addColorStop(0.35, 'rgba(245, 158, 11, 0.09)');
-      glowGrad.addColorStop(0.7, 'rgba(234, 88, 12, 0.03)');
-      glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      const pulse = Math.sin(time * 2.2) * 0.06 + 0.94;
+      const auraR = 340 * scale * pulse;
+      const auraGrad = ctx.createRadialGradient(centerX, centerY, 20, centerX, centerY, auraR);
+      auraGrad.addColorStop(0, 'rgba(251, 146, 60, 0.22)');
+      auraGrad.addColorStop(0.35, 'rgba(245, 158, 11, 0.11)');
+      auraGrad.addColorStop(0.7, 'rgba(234, 88, 12, 0.04)');
+      auraGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-      ctx.fillStyle = glowGrad;
+      ctx.fillStyle = auraGrad;
       ctx.beginPath();
-      ctx.arc(portraitCenterX, portraitCenterY, glowRadius, 0, Math.PI * 2);
+      ctx.arc(centerX, centerY, auraR, 0, Math.PI * 2);
       ctx.fill();
 
       // =========================================================================
-      // 2. AMBIENT FLOATING COSMIC EMBERS (Background field)
+      // 2. AMBIENT DRIFTING EMBERS
       // =========================================================================
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
       for (const ember of ambientEmbers) {
         ember.x += ember.vx;
         ember.y += ember.vy;
         ember.z += ember.vz;
 
-        if (ember.x > 300) ember.x = -300;
-        if (ember.x < -300) ember.x = 300;
-        if (ember.y > 300) ember.y = -300;
-        if (ember.y < -300) ember.y = 300;
-        if (ember.z > 200) ember.z = -200;
-        if (ember.z < -200) ember.z = 200;
+        if (ember.x > 320) ember.x = -320;
+        if (ember.x < -320) ember.x = 320;
+        if (ember.y > 320) ember.y = -320;
+        if (ember.y < -320) ember.y = 320;
+        if (ember.z > 220) ember.z = -220;
+        if (ember.z < -220) ember.z = 220;
 
         const p = project3D(
-          ember.x * responsiveScale,
-          ember.y * responsiveScale,
-          ember.z * responsiveScale,
-          tilt.y,
-          tilt.x,
-          0,
-          portraitCenterX,
-          portraitCenterY
+          ember.x * scale,
+          ember.y * scale,
+          ember.z * scale,
+          tilt.y * 0.8,
+          tilt.x * 0.8,
+          0
         );
 
-        const emberPulse = (Math.sin(time * 3 + ember.phase) + 1) * 0.5;
-        const currentAlpha = ember.baseAlpha * emberPulse * (p.z > 0 ? 0.85 : 0.4);
+        const emberPulse = (Math.sin(time * 3.5 + ember.phase) + 1) * 0.5;
+        const eAlpha = ember.baseAlpha * emberPulse * (p.z > 0 ? 0.9 : 0.4);
 
         if (p.x > 0 && p.x < width && p.y > 0 && p.y < height) {
           ctx.beginPath();
-          ctx.arc(p.x, p.y, ember.size * p.depth * responsiveScale, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(251, 191, 36, ${currentAlpha})`;
+          ctx.arc(p.x, p.y, ember.size * p.depth * scale, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(254, 215, 170, ${eAlpha})`;
           ctx.shadowColor = '#f97316';
-          ctx.shadowBlur = 6 * p.depth;
+          ctx.shadowBlur = 8 * p.depth;
           ctx.fill();
         }
       }
+      ctx.restore();
 
       // =========================================================================
-      // 3. RENDER ORBITAL RINGS WITH DUAL-PASS 3D DEPTH
+      // 3. DUAL-PASS 3D ORBITAL RINGS (BACK PASS then FRONT PASS)
       // =========================================================================
-      // Pass 1: Render Back Segments (z < 0)
-      // Pass 2: Render Front Segments (z >= 0) with intense bloom
       for (const isFrontPass of [false, true]) {
         for (const ring of rings) {
           if (!reducedMotion) {
-            ring.currentAngle += ring.rotSpeed;
+            ring.currentAngle += ring.speed;
           }
 
-          const currentRadius = ring.radius * responsiveScale;
-          const currentBandWidth = ring.bandWidth * responsiveScale;
-          const outerR = currentRadius + currentBandWidth / 2;
-          const innerR = currentRadius - currentBandWidth / 2;
+          const curR = ring.radius * scale;
+          const curBandW = ring.bandWidth * scale;
+          const outerR = curR + curBandW / 2;
+          const innerR = curR - curBandW / 2;
+          const midR = curR;
 
-          const totalSegments = 140;
+          const totalSegments = 160;
           const step = (Math.PI * 2) / totalSegments;
 
-          const ringRotX = ring.tiltX + tilt.y * 0.6;
-          const ringRotY = ring.tiltY + tilt.x * 0.6;
-          const ringRotZ = ring.tiltZ;
+          const rx = ring.rotX + tilt.y * 0.7;
+          const ry = ring.rotY + tilt.x * 0.7;
+          const rz = ring.rotZ;
 
-          // --- Draw Concentric Rails (Outer & Inner boundaries) ---
-          for (const [radius, railIdx] of [[outerR, 0], [innerR, 1]] as [number, number][]) {
+          // --- PASS A: GLOWING RIBBON BODY (Solid fiery ribbon surface) ---
+          ctx.save();
+          if (isFrontPass) {
+            ctx.globalCompositeOperation = 'lighter';
+          }
+
+          for (let i = 0; i < totalSegments; i++) {
+            const theta1 = i * step;
+            const theta2 = (i + 1) * step;
+
+            const pOut1 = project3D(outerR * Math.cos(theta1), outerR * Math.sin(theta1), 0, rx, ry, rz);
+            const pOut2 = project3D(outerR * Math.cos(theta2), outerR * Math.sin(theta2), 0, rx, ry, rz);
+            const pIn1 = project3D(innerR * Math.cos(theta1), innerR * Math.sin(theta1), 0, rx, ry, rz);
+            const pIn2 = project3D(innerR * Math.cos(theta2), innerR * Math.sin(theta2), 0, rx, ry, rz);
+
+            const avgZ = (pOut1.z + pOut2.z + pIn1.z + pIn2.z) / 4;
+            const passes = isFrontPass ? avgZ >= -12 : avgZ < -12;
+            if (!passes) continue;
+
+            const segAlpha = isFrontPass
+              ? Math.min(0.24, 0.12 + 0.12 * Math.max(0, avgZ / 200))
+              : 0.06;
+
             ctx.beginPath();
+            ctx.moveTo(pOut1.x, pOut1.y);
+            ctx.lineTo(pOut2.x, pOut2.y);
+            ctx.lineTo(pIn2.x, pIn2.y);
+            ctx.lineTo(pIn1.x, pIn1.y);
+            ctx.closePath();
+
+            ctx.fillStyle = isFrontPass
+              ? `rgba(251, 146, 60, ${segAlpha})`
+              : `rgba(234, 88, 12, ${segAlpha})`;
+            ctx.fill();
+          }
+          ctx.restore();
+
+          // --- PASS B: CONCENTRIC GLOWING RAILS (Outer, Center, Inner) ---
+          ctx.save();
+          if (isFrontPass) {
+            ctx.globalCompositeOperation = 'lighter';
+          }
+
+          const rails = [
+            { r: outerR, width: 2.2, color: ring.colorTheme.rail, blur: 16 },
+            { r: midR, width: 1.0, color: ring.colorTheme.core, blur: 8 },
+            { r: innerR, width: 2.0, color: ring.colorTheme.mid, blur: 14 },
+          ];
+
+          for (const rail of rails) {
             let isDrawing = false;
+            ctx.beginPath();
 
             for (let i = 0; i <= totalSegments; i++) {
               const theta = i * step;
-              const x0 = radius * Math.cos(theta);
-              const y0 = radius * Math.sin(theta);
-              const z0 = 0;
+              const x0 = rail.r * Math.cos(theta);
+              const y0 = rail.r * Math.sin(theta);
+              const p = project3D(x0, y0, 0, rx, ry, rz);
 
-              const p = project3D(
-                x0,
-                y0,
-                z0,
-                ringRotX,
-                ringRotY,
-                ringRotZ,
-                portraitCenterX,
-                portraitCenterY
-              );
+              const passes = isFrontPass ? p.z >= -10 : p.z < -10;
 
-              const passesFilter = isFrontPass ? p.z >= -10 : p.z < -10;
-
-              if (passesFilter) {
+              if (passes) {
                 if (!isDrawing) {
                   ctx.beginPath();
                   ctx.moveTo(p.x, p.y);
@@ -405,13 +437,12 @@ export const HeroOrbitalRings: React.FC<HeroOrbitalRingsProps> = ({ className = 
                   ctx.lineTo(p.x, p.y);
                 }
               } else if (isDrawing) {
-                // Stroke current segment
                 ctx.strokeStyle = isFrontPass
-                  ? ring.colorOuter
-                  : 'rgba(234, 88, 12, 0.45)';
-                ctx.lineWidth = (isFrontPass ? (railIdx === 0 ? 1.8 : 1.2) : 1.0) * responsiveScale;
-                ctx.shadowColor = ring.colorGlow;
-                ctx.shadowBlur = isFrontPass ? 14 : 4;
+                  ? rail.color
+                  : 'rgba(234, 88, 12, 0.4)';
+                ctx.lineWidth = (isFrontPass ? rail.width : rail.width * 0.7) * scale;
+                ctx.shadowColor = ring.colorTheme.glow;
+                ctx.shadowBlur = isFrontPass ? rail.blur : 4;
                 ctx.stroke();
                 ctx.beginPath();
                 isDrawing = false;
@@ -420,176 +451,153 @@ export const HeroOrbitalRings: React.FC<HeroOrbitalRingsProps> = ({ className = 
 
             if (isDrawing) {
               ctx.strokeStyle = isFrontPass
-                ? ring.colorOuter
-                : 'rgba(234, 88, 12, 0.45)';
-              ctx.lineWidth = (isFrontPass ? (railIdx === 0 ? 1.8 : 1.2) : 1.0) * responsiveScale;
-              ctx.shadowColor = ring.colorGlow;
-              ctx.shadowBlur = isFrontPass ? 14 : 4;
+                ? rail.color
+                : 'rgba(234, 88, 12, 0.4)';
+              ctx.lineWidth = (isFrontPass ? rail.width : rail.width * 0.7) * scale;
+              ctx.shadowColor = ring.colorTheme.glow;
+              ctx.shadowBlur = isFrontPass ? rail.blur : 4;
               ctx.stroke();
             }
           }
+          ctx.restore();
 
-          // --- Draw Glowing Ribbon Surface Fill ---
-          if (isFrontPass) {
-            ctx.beginPath();
-            for (let i = 0; i <= totalSegments; i++) {
-              const theta = i * step;
-              const pOuter = project3D(
-                outerR * Math.cos(theta),
-                outerR * Math.sin(theta),
-                0,
-                ringRotX,
-                ringRotY,
-                ringRotZ,
-                portraitCenterX,
-                portraitCenterY
-              );
-              if (pOuter.z >= -20) {
-                if (i === 0) ctx.moveTo(pOuter.x, pOuter.y);
-                else ctx.lineTo(pOuter.x, pOuter.y);
-              }
-            }
-            for (let i = totalSegments; i >= 0; i--) {
-              const theta = i * step;
-              const pInner = project3D(
-                innerR * Math.cos(theta),
-                innerR * Math.sin(theta),
-                0,
-                ringRotX,
-                ringRotY,
-                ringRotZ,
-                portraitCenterX,
-                portraitCenterY
-              );
-              if (pInner.z >= -20) {
-                ctx.lineTo(pInner.x, pInner.y);
-              }
-            }
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(249, 115, 22, 0.07)';
-            ctx.fill();
-          }
-
-          // --- Draw Doctor Strange Mystical Runes & Mathematical Symbols ---
+          // --- PASS C: RADIANT ELDRITCH RUNES & MATHEMATICAL SYMBOLS ---
           const glyphStep = (Math.PI * 2) / ring.glyphCount;
-          const fontSize = Math.max(9, Math.round(13 * responsiveScale));
+          const fontSize = Math.max(10, Math.round(14.5 * scale));
           ctx.font = `bold ${fontSize}px "Cinzel", "Cinzel Decorative", monospace, sans-serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
 
           for (let k = 0; k < ring.glyphCount; k++) {
             const angle = k * glyphStep + ring.currentAngle;
-            const x0 = currentRadius * Math.cos(angle);
-            const y0 = currentRadius * Math.sin(angle);
-            const z0 = 0;
+            const x0 = curR * Math.cos(angle);
+            const y0 = curR * Math.sin(angle);
+            const p = project3D(x0, y0, 0, rx, ry, rz);
 
-            const p = project3D(
-              x0,
-              y0,
-              z0,
-              ringRotX,
-              ringRotY,
-              ringRotZ,
-              portraitCenterX,
-              portraitCenterY
-            );
+            const passes = isFrontPass ? p.z >= -10 : p.z < -10;
+            if (!passes) continue;
 
-            const passesFilter = isFrontPass ? p.z >= -10 : p.z < -10;
-            if (!passesFilter) continue;
-
-            // Calculate tangent angle for glyph orientation
-            const nextAngle = angle + 0.05;
+            // Calculate tangent angle for smooth ribbon alignment
             const pNext = project3D(
-              currentRadius * Math.cos(nextAngle),
-              currentRadius * Math.sin(nextAngle),
+              curR * Math.cos(angle + 0.05),
+              curR * Math.sin(angle + 0.05),
               0,
-              ringRotX,
-              ringRotY,
-              ringRotZ,
-              portraitCenterX,
-              portraitCenterY
+              rx,
+              ry,
+              rz
             );
-            const tangentAngle = Math.atan2(pNext.y - p.y, pNext.x - p.x);
+            const tangent = Math.atan2(pNext.y - p.y, pNext.x - p.x);
 
             const symbol = ring.symbols[k % ring.symbols.length];
-            const glyphAlpha = isFrontPass
-              ? Math.min(1.0, 0.55 + p.alpha * 0.45)
-              : 0.38;
 
             ctx.save();
             ctx.translate(p.x, p.y);
-            ctx.rotate(tangentAngle);
+            ctx.rotate(tangent);
             ctx.scale(p.depth, p.depth);
 
-            ctx.shadowColor = ring.colorGlow;
-            ctx.shadowBlur = isFrontPass ? 10 : 3;
-            ctx.fillStyle = isFrontPass
-              ? `rgba(255, 237, 213, ${glyphAlpha})`
-              : `rgba(249, 115, 22, ${glyphAlpha})`;
+            if (isFrontPass) {
+              ctx.globalCompositeOperation = 'lighter';
 
-            ctx.fillText(symbol, 0, 0);
+              // Layer 1: Fiery Orange Outer Halo
+              ctx.shadowColor = ring.colorTheme.glow;
+              ctx.shadowBlur = 14;
+              ctx.fillStyle = `rgba(249, 115, 22, ${Math.min(1.0, 0.7 + p.alpha * 0.3)})`;
+              ctx.fillText(symbol, 0, 0);
 
-            // Optional center dot / telemetry tick between glyphs
-            if (isFrontPass && k % 2 === 0) {
-              ctx.beginPath();
-              ctx.arc(10, 0, 1.2, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(251, 191, 36, ${glyphAlpha * 0.8})`;
-              ctx.fill();
+              // Layer 2: White-Hot Golden Core Glyph
+              ctx.shadowColor = '#fbbf24';
+              ctx.shadowBlur = 5;
+              ctx.fillStyle = ring.colorTheme.core;
+              ctx.fillText(symbol, 0, 0);
+
+              // Connecting telemetry micro-dot between runes
+              if (k % 2 === 0) {
+                ctx.beginPath();
+                ctx.arc(11, 0, 1.4, 0, Math.PI * 2);
+                ctx.fillStyle = '#fde68a';
+                ctx.shadowColor = '#f59e0b';
+                ctx.shadowBlur = 6;
+                ctx.fill();
+              }
+            } else {
+              // Back Depth: Subtle ambient rune
+              ctx.shadowColor = '#ea580c';
+              ctx.shadowBlur = 3;
+              ctx.fillStyle = 'rgba(234, 88, 12, 0.45)';
+              ctx.fillText(symbol, 0, 0);
             }
 
             ctx.restore();
           }
 
-          // --- Draw Glowing Orbital Particles / Sparks along Ribbon ---
-          for (const part of ring.particles) {
+          // --- PASS D: FIERY ORBITAL SPARKS & EMBER TRAILS ---
+          ctx.save();
+          if (isFrontPass) {
+            ctx.globalCompositeOperation = 'lighter';
+          }
+
+          for (const spark of ring.sparks) {
             if (!reducedMotion) {
-              part.progress = (part.progress + part.speed + 1) % 1;
+              spark.progress = (spark.progress + spark.speed + 1) % 1;
             }
 
-            const pAngle = part.progress * Math.PI * 2 + ring.currentAngle;
-            const pRadius = currentRadius + part.offsetRadius * responsiveScale;
-            const x0 = pRadius * Math.cos(pAngle);
-            const y0 = pRadius * Math.sin(pAngle);
-            const z0 = 0;
-
+            const pAngle = spark.progress * Math.PI * 2 + ring.currentAngle;
+            const pRadius = curR + spark.offset * scale;
             const p = project3D(
-              x0,
-              y0,
-              z0,
-              ringRotX,
-              ringRotY,
-              ringRotZ,
-              portraitCenterX,
-              portraitCenterY
+              pRadius * Math.cos(pAngle),
+              pRadius * Math.sin(pAngle),
+              0,
+              rx,
+              ry,
+              rz
             );
 
-            const passesFilter = isFrontPass ? p.z >= -10 : p.z < -10;
-            if (!passesFilter) continue;
+            const passes = isFrontPass ? p.z >= -10 : p.z < -10;
+            if (!passes) continue;
 
-            const partPulse = (Math.sin(time * 6 + part.phase) + 1) * 0.5;
-            const pAlpha = isFrontPass
-              ? Math.min(1.0, (part.alpha + 0.3 * partPulse) * p.alpha)
-              : part.alpha * 0.4;
+            const pulseVal = (Math.sin(time * 5 + spark.pulsePhase) + 1) * 0.5;
+            const sparkAlpha = isFrontPass
+              ? Math.min(1.0, (spark.alpha + 0.3 * pulseVal))
+              : spark.alpha * 0.35;
 
-            ctx.save();
+            // Draw spark trailing streak
+            const pTail = project3D(
+              pRadius * Math.cos(pAngle - spark.tailLength * Math.sign(spark.speed)),
+              pRadius * Math.sin(pAngle - spark.tailLength * Math.sign(spark.speed)),
+              0,
+              rx,
+              ry,
+              rz
+            );
+
             ctx.beginPath();
-            ctx.arc(p.x, p.y, part.size * p.depth * responsiveScale, 0, Math.PI * 2);
-            ctx.fillStyle = isFrontPass ? '#ffffff' : '#f97316';
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(pTail.x, pTail.y);
+            ctx.strokeStyle = isFrontPass
+              ? `rgba(251, 191, 36, ${sparkAlpha * 0.6})`
+              : `rgba(234, 88, 12, ${sparkAlpha * 0.3})`;
+            ctx.lineWidth = spark.size * 0.6 * p.depth * scale;
+            ctx.stroke();
+
+            // Core hot spark head
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, spark.size * p.depth * scale, 0, Math.PI * 2);
+            ctx.fillStyle = isFrontPass ? '#fffbeb' : '#f97316';
             ctx.shadowColor = '#f97316';
-            ctx.shadowBlur = isFrontPass ? 12 : 4;
-            ctx.globalAlpha = pAlpha;
+            ctx.shadowBlur = isFrontPass ? 14 : 4;
+            ctx.globalAlpha = sparkAlpha;
             ctx.fill();
 
-            // Flare ring around prominent front sparks
-            if (isFrontPass && part.size > 2.5) {
+            // Solar flare ring on prominent sparks
+            if (isFrontPass && spark.size > 2.6) {
               ctx.beginPath();
-              ctx.arc(p.x, p.y, part.size * 2.2 * p.depth * responsiveScale, 0, Math.PI * 2);
-              ctx.strokeStyle = `rgba(251, 191, 36, ${pAlpha * 0.45})`;
+              ctx.arc(p.x, p.y, spark.size * 2.4 * p.depth * scale, 0, Math.PI * 2);
+              ctx.strokeStyle = `rgba(254, 240, 138, ${sparkAlpha * 0.5})`;
               ctx.lineWidth = 1;
               ctx.stroke();
             }
-            ctx.restore();
           }
+          ctx.restore();
         }
       }
 
