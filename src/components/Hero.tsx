@@ -1,6 +1,5 @@
 import React from 'react';
 import { Github, Linkedin, Mail } from 'lucide-react';
-import { HeroOrbitalRings } from './HeroOrbitalRings';
 
 const XIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, className = "" }) => (
   <svg
@@ -12,50 +11,6 @@ const XIcon: React.FC<{ size?: number; className?: string }> = ({ size = 18, cla
   >
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
   </svg>
-);
-
-const SacredGeometryGlyph: React.FC<{ className?: string }> = ({ className = "" }) => (
-  <div className={`relative flex items-center justify-center select-none pointer-events-none ${className}`} title="Sacred Geometry Tao Mandala">
-    <svg
-      viewBox="0 0 160 160"
-      className="w-28 h-28 text-accent-orange/75 animate-spin-slow drop-shadow-[0_0_12px_rgba(249,115,22,0.4)]"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.2"
-    >
-      {/* Concentric rings */}
-      <circle cx="80" cy="80" r="74" strokeDasharray="4 3" opacity="0.6" />
-      <circle cx="80" cy="80" r="66" strokeWidth="1.4" opacity="0.9" />
-      <circle cx="80" cy="80" r="52" opacity="0.75" />
-      <circle cx="80" cy="80" r="34" opacity="0.85" />
-      <circle cx="80" cy="80" r="16" strokeWidth="1.5" opacity="0.95" />
-      
-      {/* Sacred geometry triangles & hexagram */}
-      <polygon points="80,14 137,113 23,113" opacity="0.8" />
-      <polygon points="80,146 23,47 137,47" opacity="0.8" />
-      <rect x="44" y="44" width="72" height="72" transform="rotate(45 80 80)" opacity="0.65" />
-      
-      {/* Telemetry cardinal axes */}
-      <line x1="6" y1="80" x2="154" y2="80" opacity="0.5" strokeDasharray="3 3" />
-      <line x1="80" y1="6" x2="80" y2="154" opacity="0.5" strokeDasharray="3 3" />
-      
-      {/* Orbital nodes */}
-      <circle cx="18" cy="80" r="3.2" fill="currentColor" />
-      <circle cx="142" cy="80" r="3.2" fill="currentColor" />
-      <circle cx="80" cy="18" r="3.2" fill="currentColor" />
-      <circle cx="80" cy="142" r="3.2" fill="currentColor" />
-      <circle cx="80" cy="80" r="4.5" fill="currentColor" />
-    </svg>
-    
-    {/* Left adjacent telemetry nodes */}
-    <div className="absolute -left-7 top-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 opacity-70 text-accent-orange">
-      <div className="w-2 h-2 rounded-sm border border-accent-orange bg-accent-orange/20" />
-      <div className="w-0.5 h-3 bg-accent-orange/50" />
-      <div className="w-1.5 h-1.5 rounded-full bg-accent-orange" />
-      <div className="w-0.5 h-3 bg-accent-orange/50" />
-      <div className="w-2 h-2 rounded-sm border border-accent-orange bg-accent-orange/20" />
-    </div>
-  </div>
 );
 
 const InteractiveDotMatrix: React.FC = () => {
@@ -170,9 +125,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/40 z-[2]" />
         <div className="hidden md:block absolute inset-0 bg-radial from-transparent via-transparent to-bg-dark/70 z-[2]" />
       </div>
-
-      {/* 3D Living Mathematical Doctor Strange Orbital Rings around Portrait */}
-      <HeroOrbitalRings />
 
       <div className="max-w-[1600px] w-full mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-12 relative z-10 flex items-center min-h-[calc(100vh-84px)]">
         {/* Left Content Column */}
@@ -307,19 +259,16 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
           </div>
 
           {/* Description Paragraph & Quote */}
-          {/* Desktop Version (md and up): Original description + quote + sacred geometry glyph */}
+          {/* Desktop Version (md and up): Original description + long quote with clean border */}
           <div className="hidden md:block mb-6 animate-item" style={{ ['--delay' as any]: '1.5s' }}>
             <p className="text-[0.90rem] sm:text-[1.05rem] leading-[1.65] text-[#d4d4d8] font-normal max-w-[560px] mb-4">
               Turning ideas into digital reality. I build clean, efficient and impactful solutions for the web.
             </p>
             
-            <div className="flex items-center gap-6 max-w-[620px]">
-              <div className="border-l-2 border-white/35 pl-3.5 py-1">
-                <p className="text-[0.82rem] sm:text-[0.88rem] text-slate-300 italic font-normal leading-[1.6]">
-                  “Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth”
-                </p>
-              </div>
-              <SacredGeometryGlyph className="hidden xl:flex shrink-0 ml-2" />
+            <div className="border-l-2 border-white/35 pl-3.5 py-1 max-w-[580px]">
+              <p className="text-[0.82rem] sm:text-[0.88rem] text-slate-300 italic font-normal leading-[1.6]">
+                “Life is very short so enjoy every moment, follow your passion and love, be kinder to everyone, be a learner, keep your smile because that is most valuable thing and keep growing because life means growth”
+              </p>
             </div>
           </div>
 
