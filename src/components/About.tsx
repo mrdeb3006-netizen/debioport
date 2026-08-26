@@ -1,27 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Sparkles, Terminal, Coffee, Code2 } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 const InteractivePortraitCard: React.FC = () => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState({ x: 0, y: 0 }); // -1 to 1
+  const [coords, setCoords] = useState({ x: 0, y: 0 }); // normalized -1 to +1
   const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
   const [isHovered, setIsHovered] = useState(false);
-  const [targetRot, setTargetRot] = useState({ rx: 0, ry: 0 });
-  const [currentRot, setCurrentRot] = useState({ rx: 0, ry: 0 });
+  const [targetState, setTargetState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
+  const [currentState, setCurrentState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
 
-  // Smooth animation frame loop for organic spring dampening
+  // High-precision organic damping physics loop (buttery smooth 60fps)
   useEffect(() => {
     let animFrame: number;
     const updatePhysics = () => {
-      setCurrentRot((prev) => ({
-        rx: prev.rx + (targetRot.rx - prev.rx) * 0.12,
-        ry: prev.ry + (targetRot.ry - prev.ry) * 0.12,
+      setCurrentState((prev) => ({
+        rx: prev.rx + (targetState.rx - prev.rx) * 0.08,
+        ry: prev.ry + (targetState.ry - prev.ry) * 0.08,
+        tx: prev.tx + (targetState.tx - prev.tx) * 0.08,
+        ty: prev.ty + (targetState.ty - prev.ty) * 0.08,
       }));
       animFrame = requestAnimationFrame(updatePhysics);
     };
     animFrame = requestAnimationFrame(updatePhysics);
     return () => cancelAnimationFrame(animFrame);
-  }, [targetRot]);
+  }, [targetState]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -29,13 +31,15 @@ const InteractivePortraitCard: React.FC = () => {
     const x = (e.clientX - rect.left) / rect.width; // 0 to 1
     const y = (e.clientY - rect.top) / rect.height; // 0 to 1
 
-    const normX = (x - 0.5) * 2; // -1 to 1
-    const normY = (y - 0.5) * 2; // -1 to 1
+    const normX = (x - 0.5) * 2; // -1 to +1
+    const normY = (y - 0.5) * 2; // -1 to +1
 
     setCoords({ x: normX, y: normY });
-    setTargetRot({
-      rx: -normY * 20, // dynamic 3D tilt up/down
-      ry: normX * 20,  // dynamic 3D tilt left/right
+    setTargetState({
+      rx: -normY * 8.5,  // Subtle, refined vertical tilt (luxury feel, no extreme warp)
+      ry: normX * 8.5,   // Subtle, refined horizontal tilt
+      tx: normX * 6,     // Magnetic micro-translation
+      ty: normY * 6,
     });
     setGlare({
       x: x * 100,
@@ -51,7 +55,7 @@ const InteractivePortraitCard: React.FC = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
     setCoords({ x: 0, y: 0 });
-    setTargetRot({ rx: 0, ry: 0 });
+    setTargetState({ rx: 0, ry: 0, tx: 0, ty: 0 });
     setGlare((prev) => ({ ...prev, opacity: 0 }));
   };
 
@@ -61,112 +65,95 @@ const InteractivePortraitCard: React.FC = () => {
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full max-w-[360px] md:max-w-full mx-auto md:mx-0 select-none group/portrait cursor-grab active:cursor-grabbing"
-      style={{ perspective: 1200 }}
+      className="relative w-full max-w-[360px] md:max-w-full mx-auto md:mx-0 select-none group/portrait cursor-pointer"
+      style={{ perspective: 1400 }}
     >
-      {/* Ambient Dynamic Cursor-Reactive Neon Glow */}
+      {/* Soft Atmospheric Ambient Backlight (Gentle & Diffused) */}
       <div
-        className="absolute -inset-4 bg-gradient-to-tr from-accent-orange/20 via-amber-500/15 to-transparent rounded-3xl blur-2xl transition-all duration-700 pointer-events-none"
+        className="absolute -inset-6 rounded-3xl blur-3xl transition-all duration-700 pointer-events-none"
         style={{
-          opacity: isHovered ? 0.85 : 0.35,
-          transform: `translate(${coords.x * 24}px, ${coords.y * 24}px) scale(${isHovered ? 1.08 : 1})`,
+          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.18) 0%, rgba(249, 115, 22, 0.08) 50%, transparent 80%)',
+          opacity: isHovered ? 0.9 : 0.4,
+          transform: `translate(${currentState.tx * 2}px, ${currentState.ty * 2}px) scale(${isHovered ? 1.05 : 1})`,
         }}
       />
 
-      {/* 3D Main Card Container */}
+      {/* Main Glassmorphic Portrait Frame */}
       <div
-        className="relative rounded-3xl overflow-hidden border border-white/15 bg-bg-surface backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] transition-all duration-200"
+        className="relative rounded-3xl overflow-hidden border bg-[#0d0e12]/95 backdrop-blur-2xl transition-all duration-300"
         style={{
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${currentRot.rx}deg) rotateY(${currentRot.ry}deg) translateZ(${isHovered ? 25 : 0}px)`,
-          borderColor: isHovered ? 'rgba(249, 115, 22, 0.5)' : 'rgba(255, 255, 255, 0.1)',
+          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${isHovered ? 12 : 0}px)`,
+          borderColor: isHovered ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.12)',
+          boxShadow: isHovered
+            ? '0 30px 70px -15px rgba(0, 0, 0, 0.9), 0 0 45px -10px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+            : '0 20px 50px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
-        {/* Dynamic Interactive Specular Light Lens Glare */}
+        {/* Prismatic Specular Light Glare (Realistic Glass Reflection) */}
         <div
-          className="absolute inset-0 z-30 pointer-events-none transition-opacity duration-300 rounded-3xl"
+          className="absolute inset-0 z-30 pointer-events-none transition-opacity duration-500 rounded-3xl"
           style={{
             opacity: glare.opacity,
-            background: `radial-gradient(circle 340px at ${glare.x}% ${glare.y}%, rgba(249, 115, 22, 0.35), rgba(255, 255, 255, 0.18) 25%, transparent 70%)`,
+            background: `radial-gradient(circle 420px at ${glare.x}% ${glare.y}%, rgba(255, 255, 255, 0.22) 0%, rgba(251, 191, 36, 0.12) 35%, rgba(14, 165, 233, 0.04) 65%, transparent 85%)`,
           }}
         />
 
-        {/* Cyberpunk HUD Corner Brackets */}
-        <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-accent-orange/60 z-20 pointer-events-none transition-transform duration-300 group-hover/portrait:scale-110" />
-        <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-accent-orange/60 z-20 pointer-events-none transition-transform duration-300 group-hover/portrait:scale-110" />
-        <div className="absolute bottom-16 left-3 w-4 h-4 border-b-2 border-l-2 border-accent-orange/40 z-20 pointer-events-none transition-transform duration-300 group-hover/portrait:scale-110" />
-        <div className="absolute bottom-16 right-3 w-4 h-4 border-b-2 border-r-2 border-accent-orange/40 z-20 pointer-events-none transition-transform duration-300 group-hover/portrait:scale-110" />
+        {/* Diagonal Soft Sheen Highlight */}
+        <div
+          className="absolute inset-0 z-25 pointer-events-none opacity-0 group-hover/portrait:opacity-30 transition-opacity duration-700 bg-gradient-to-tr from-transparent via-white/10 to-transparent"
+          style={{
+            transform: `translate(${coords.x * 30}px, ${coords.y * 30}px)`,
+          }}
+        />
 
-        {/* Portrait Image Stage */}
-        <div className="relative aspect-[3/4] w-full overflow-hidden bg-black">
+        {/* Portrait Image Stage with Natural Counter-Parallax */}
+        <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#090a0f]">
           <img
             src="/about-portrait.jpg"
             alt="Debendranath Bera Portrait"
-            className="w-full h-full object-cover object-center filter brightness-105 contrast-105 transition-transform duration-300 ease-out will-change-transform"
+            className="w-full h-full object-cover object-center filter brightness-105 contrast-105 transition-transform duration-500 ease-out will-change-transform"
             style={{
-              transform: `scale(${isHovered ? 1.1 : 1.02}) translate(${coords.x * -12}px, ${coords.y * -12}px)`,
+              transform: `scale(${isHovered ? 1.05 : 1}) translate(${coords.x * -6}px, ${coords.y * -6}px)`,
             }}
           />
 
-          {/* Cinematic Lighting Vignette */}
-          <div className="absolute inset-0 bg-gradient-to-t from-bg-surface via-transparent to-black/20 opacity-80 pointer-events-none" />
+          {/* Cinematic Editorial Gradient Fade */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0e12] via-transparent to-black/25 opacity-90 pointer-events-none" />
 
-          {/* Floating HUD Badge 1: Top-Left Available Pill */}
+          {/* Minimalist Floating Status Pill */}
           <div
-            className="absolute top-4 left-4 z-20 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 shadow-xl transition-transform duration-300"
+            className="absolute top-4 left-4 z-20 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 shadow-xl transition-transform duration-300"
             style={{
-              transform: `translateZ(45px) translate(${coords.x * 10}px, ${coords.y * 10}px)`,
+              transform: `translateZ(25px) translate(${coords.x * 4}px, ${coords.y * 4}px)`,
             }}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
-            <span className="font-mono text-[0.7rem] font-bold text-slate-100 tracking-wider uppercase">
+            <span className="font-mono text-[0.72rem] font-bold text-slate-100 tracking-wider uppercase">
               AVAILABLE TO BUILD
             </span>
           </div>
 
-          {/* Floating HUD Badge 2: Top-Right Dynamic Cursor Telemetry Tracker */}
+          {/* Refined Monogram Watermark on Corner */}
           <div
-            className="absolute top-4 right-4 z-20 hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-amber-500/30 text-accent-orange font-mono text-[0.66rem] font-bold shadow-xl transition-transform duration-300"
+            className="absolute top-4 right-4 z-20 px-2.5 py-1 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 font-mono text-[0.68rem] font-semibold tracking-widest uppercase transition-transform duration-300"
             style={{
-              transform: `translateZ(40px) translate(${coords.x * -8}px, ${coords.y * -8}px)`,
+              transform: `translateZ(20px) translate(${coords.x * -4}px, ${coords.y * -4}px)`,
             }}
           >
-            <Terminal size={11} />
-            <span>
-              {isHovered
-                ? `TILT: ${Math.round(currentRot.ry)}° / ${Math.round(currentRot.rx)}°`
-                : 'INTERACTIVE 3D'}
-            </span>
-          </div>
-
-          {/* Floating Pill Tags: Pop Out in 3D over Photo on Hover */}
-          <div
-            className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-center gap-2 transition-all duration-300"
-            style={{
-              transform: `translateZ(50px) translate(${coords.x * 12}px, ${coords.y * 12}px)`,
-              opacity: isHovered ? 1 : 0.85,
-            }}
-          >
-            <span className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-white/15 text-slate-200 font-mono text-[0.68rem] font-bold flex items-center gap-1 shadow-md">
-              <Code2 size={11} className="text-accent-orange" />
-              <span>Java • Python</span>
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-white/15 text-slate-200 font-mono text-[0.68rem] font-bold flex items-center gap-1 shadow-md">
-              <Coffee size={11} className="text-amber-400" />
-              <span>Coffee &amp; Philosophy</span>
-            </span>
+            DB • 2026
           </div>
         </div>
 
-        {/* Bottom Card Intel & Caption */}
+        {/* Bottom Card Caption & Monogram */}
         <div
-          className="p-5 pt-3.5 bg-bg-surface relative z-20 flex flex-col gap-1 border-t border-white/[0.08]"
+          className="p-5 pt-3 bg-[#0d0e12] relative z-20 flex flex-col gap-1 border-t border-white/[0.08]"
           style={{
-            transform: `translateZ(30px)`,
+            transform: `translateZ(15px)`,
           }}
         >
           <div className="flex items-center justify-between">
-            <h3 className="font-cinzel text-lg font-bold text-white tracking-wide flex items-center gap-2">
+            <h3 className="font-cinzel text-lg font-bold text-white tracking-wide flex items-center gap-1.5">
               <span>DEBENDRANATH</span>
               <span className="text-accent-orange font-extrabold">BERA</span>
             </h3>
