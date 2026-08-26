@@ -107,27 +107,19 @@ const InteractivePortraitCard: React.FC = () => {
           }}
         />
 
-        {/* Portrait Image Stage with Natural Counter-Parallax */}
+        {/* Portrait Image Stage */}
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#090a0f]">
           <img
             src="/about-portrait.jpg"
             alt="Debendranath Bera Portrait"
-            className="w-full h-full object-cover object-center filter brightness-105 contrast-105 transition-transform duration-500 ease-out will-change-transform"
-            style={{
-              transform: `scale(${isHovered ? 1.05 : 1}) translate(${coords.x * -6}px, ${coords.y * -6}px)`,
-            }}
+            className="w-full h-full object-cover object-center filter brightness-105 contrast-105"
           />
 
           {/* Cinematic Editorial Gradient Fade */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0e12] via-transparent to-black/25 opacity-90 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0e12] via-transparent to-black/20 opacity-85 pointer-events-none" />
 
-          {/* Minimalist Floating Status Pill */}
-          <div
-            className="absolute top-4 left-4 z-20 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 shadow-xl transition-transform duration-300"
-            style={{
-              transform: `translateZ(25px) translate(${coords.x * 4}px, ${coords.y * 4}px)`,
-            }}
-          >
+          {/* Minimalist Status Pill */}
+          <div className="absolute top-4 left-4 z-20 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/65 backdrop-blur-xl border border-white/20 shadow-xl">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
             <span className="font-mono text-[0.72rem] font-bold text-slate-100 tracking-wider uppercase">
               AVAILABLE TO BUILD
@@ -135,12 +127,7 @@ const InteractivePortraitCard: React.FC = () => {
           </div>
 
           {/* Refined Monogram Watermark on Corner */}
-          <div
-            className="absolute top-4 right-4 z-20 px-2.5 py-1 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 font-mono text-[0.68rem] font-semibold tracking-widest uppercase transition-transform duration-300"
-            style={{
-              transform: `translateZ(20px) translate(${coords.x * -4}px, ${coords.y * -4}px)`,
-            }}
-          >
+          <div className="absolute top-4 right-4 z-20 px-2.5 py-1 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 font-mono text-[0.68rem] font-semibold tracking-widest uppercase">
             DB • 2026
           </div>
         </div>
