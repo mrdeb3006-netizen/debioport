@@ -16,7 +16,7 @@ interface TimelineMilestone {
   badge?: string;
   description: string;
   highlights?: string[];
-  languages?: { name: string; level: string; badge: string; detail: string }[];
+  languages?: { name: string; level: string; badge: string; detail: string; nativeScript: string }[];
 }
 
 export const Experience: React.FC = () => {
@@ -113,9 +113,9 @@ export const Experience: React.FC = () => {
       description:
         'Effective multilingual communication across diverse technical, collaborative, and global settings.',
       languages: [
-        { name: 'English', level: 'Fluent', badge: 'Fluent', detail: 'Technical & Professional' },
-        { name: 'Hindi', level: 'Fluent', badge: 'Fluent', detail: 'Conversational & Fluent' },
-        { name: 'Bengali', level: 'Native', badge: 'Native', detail: 'Mother Tongue' },
+        { name: 'English', level: 'Fluent', badge: 'Fluent', detail: 'Technical & Professional', nativeScript: 'English' },
+        { name: 'Hindi', level: 'Fluent', badge: 'Fluent', detail: 'Conversational & Fluent', nativeScript: 'हिन्दी' },
+        { name: 'Bengali', level: 'Native', badge: 'Native', detail: 'Mother Tongue', nativeScript: 'বাংলা' },
       ],
     },
   ];
@@ -193,8 +193,8 @@ export const Experience: React.FC = () => {
       const containerRect = timelineContainerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Start beam when container top enters 75% of viewport, reach 100% when bottom reaches 35% of viewport
-      const triggerStart = windowHeight * 0.75;
+      // Start beam as container enters viewport smoothly
+      const triggerStart = windowHeight * 0.78;
       const totalScrollDistance = containerRect.height + (triggerStart - windowHeight * 0.35);
       const scrolled = triggerStart - containerRect.top;
 
@@ -205,8 +205,7 @@ export const Experience: React.FC = () => {
       const newActive = milestoneRefs.current.map((el) => {
         if (!el) return false;
         const rect = el.getBoundingClientRect();
-        // Node lights up as it crosses 68% of screen height
-        return rect.top <= windowHeight * 0.68;
+        return rect.top <= windowHeight * 0.70;
       });
 
       setActiveMilestones(newActive);
@@ -219,7 +218,7 @@ export const Experience: React.FC = () => {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
-    handleScroll(); // Initial computation
+    handleScroll();
 
     return () => {
       window.removeEventListener('scroll', onScroll);
@@ -238,61 +237,61 @@ export const Experience: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="pt-16 md:pt-20 pb-8 md:pb-10 px-4 sm:px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden"
+      className="pt-16 md:pt-24 pb-8 md:pb-12 px-4 sm:px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden selection:bg-accent-orange/30"
       id="journey"
     >
       {/* Cinematic Ambient Radial Glow */}
       <div
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-accent-orange/[0.035] rounded-full blur-[140px] pointer-events-none"
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-accent-orange/[0.04] rounded-full blur-[150px] pointer-events-none"
         aria-hidden="true"
       />
 
-      <div className="max-w-[1300px] mx-auto relative z-10">
+      <div className="max-w-[1340px] mx-auto relative z-10">
         
         {/* Section Header */}
-        <div className="mb-12 md:mb-16" style={getSlideUpStyle(0.15)}>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-accent-orange/10 border border-accent-orange/30 text-accent-orange font-mono text-[0.72rem] font-bold uppercase tracking-wider mb-3">
-            <GraduationCap size={13} />
+        <div className="mb-14 md:mb-20" style={getSlideUpStyle(0.15)}>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-orange/10 border border-accent-orange/30 text-accent-orange font-mono text-[0.74rem] font-bold uppercase tracking-wider mb-4 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+            <GraduationCap size={14} />
             <span>Academic &amp; Growth Timeline</span>
           </div>
-          <h2 className="font-display text-[clamp(2.2rem,4vw,3.6rem)] font-black text-white leading-[1.15] mb-2 uppercase tracking-[0.02em]">
+          <h2 className="font-display text-[clamp(2.4rem,4.5vw,4.0rem)] font-black text-white leading-[1.12] mb-3 uppercase tracking-[0.02em]">
             MY JOURNEY<span className="text-accent-orange">.</span>
           </h2>
-          <p className="text-[1.02rem] text-text-secondary max-w-[700px] leading-[1.6]">
+          <p className="text-[1.05rem] text-text-secondary max-w-[720px] leading-[1.65]">
             Academic milestones, national achievements, distinctions, and technical foundations from school to Computer Science Engineering.
           </p>
         </div>
 
         {/* ========================================================================= */}
-        {/* CINEMATIC VERTICAL SCROLL-DRIVEN GLOWING TIMELINE                          */}
+        {/* CINEMATIC VERTICAL GLOWING TIMELINE (Matches Reference Screenshot)        */}
         {/* ========================================================================= */}
-        <div ref={timelineContainerRef} className="relative mb-20">
+        <div ref={timelineContainerRef} className="relative mb-24">
           
           {/* Desktop Timeline Layout (>= 768px) */}
           <div className="hidden md:block relative">
             
-            {/* 1. Base Dim Background Track */}
+            {/* 1. Base Dim Optical Guide Line */}
             <div
-              className="absolute left-[200px] lg:left-[220px] top-6 bottom-6 w-[2px] bg-white/[0.08] rounded-full"
+              className="absolute left-[200px] lg:left-[220px] top-6 bottom-6 w-[2px] bg-white/[0.07] rounded-full"
               aria-hidden="true"
             />
 
-            {/* 2. Active Glowing Laser / Light Beam (Drawn continuously with Scroll) */}
+            {/* 2. Primary Glowing Optical Filament Beam */}
             <div
-              className="absolute left-[200px] lg:left-[220px] top-6 w-[2px] bg-gradient-to-b from-accent-orange via-amber-400 to-accent-orange rounded-full shadow-[0_0_16px_rgba(249,115,22,0.9),0_0_30px_rgba(249,115,22,0.5)] transition-[height] duration-75 ease-out z-10"
+              className="absolute left-[200px] lg:left-[220px] top-6 w-[2px] bg-gradient-to-b from-accent-orange via-amber-400 to-accent-orange rounded-full shadow-[0_0_16px_rgba(249,115,22,0.9),0_0_30px_rgba(249,115,22,0.45)] transition-[height] duration-75 ease-out z-10"
               style={{
                 height: `calc(${Math.min(scrollProgress * 100, 100)}% - 24px)`,
               }}
               aria-hidden="true"
             >
-              {/* Leading Spark Head particle at the tip of the drawn beam */}
+              {/* Photon Spark particle at the leading tip of the drawn beam */}
               {scrollProgress > 0.02 && scrollProgress < 0.98 && (
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_20px_#f97316,0_0_35px_#f97316] animate-pulse" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_24px_#f97316,0_0_40px_#f97316] animate-pulse" />
               )}
             </div>
 
             {/* Milestones List */}
-            <div className="space-y-14 lg:space-y-18">
+            <div className="space-y-12 lg:space-y-16">
               {timelineMilestones.map((item, idx) => {
                 const isReached = activeMilestones[idx] || false;
                 const isHovered = hoveredNode === idx;
@@ -304,23 +303,21 @@ export const Experience: React.FC = () => {
                     ref={(el) => { milestoneRefs.current[idx] = el; }}
                     onMouseEnter={() => setHoveredNode(idx)}
                     onMouseLeave={() => setHoveredNode(null)}
-                    className={`grid grid-cols-[200px_1fr] lg:grid-cols-[220px_1fr] gap-0 items-start group relative transition-all duration-500 ${
-                      isHighlighted ? 'opacity-100' : 'opacity-40'
-                    }`}
+                    className="grid grid-cols-[200px_1fr] lg:grid-cols-[220px_1fr] gap-0 items-start group relative transition-all duration-500"
                   >
                     {/* Left Column: Date & Period Tag (Right-Aligned to Timeline) */}
-                    <div className="pr-8 text-right pt-1 select-none transition-all duration-300">
+                    <div className="pr-8 lg:pr-10 text-right pt-2 select-none">
                       <div
-                        className={`font-mono text-[0.88rem] lg:text-[0.96rem] font-extrabold tracking-wider uppercase transition-colors duration-300 ${
+                        className={`font-cinzel text-[1.05rem] lg:text-[1.18rem] font-bold tracking-[0.06em] uppercase transition-all duration-500 ${
                           isHighlighted
-                            ? 'text-white drop-shadow-[0_0_10px_rgba(249,115,22,0.4)]'
-                            : 'text-white/40'
+                            ? 'text-white drop-shadow-[0_0_12px_rgba(249,115,22,0.45)]'
+                            : 'text-white/35'
                         }`}
                       >
                         {item.year}
                       </div>
                       <div
-                        className={`font-mono text-[0.70rem] lg:text-[0.75rem] font-bold tracking-widest uppercase mt-0.5 transition-colors duration-300 ${
+                        className={`font-mono text-[0.68rem] lg:text-[0.72rem] font-extrabold tracking-[0.16em] uppercase mt-1 transition-colors duration-500 ${
                           isHighlighted ? 'text-accent-orange' : 'text-text-muted'
                         }`}
                       >
@@ -328,100 +325,117 @@ export const Experience: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Timeline Node (Directly centered over the vertical line) */}
-                    <div className="absolute left-[200px] lg:left-[220px] top-2 -translate-x-1/2 z-20 flex items-center justify-center pointer-events-none">
+                    {/* Timeline Multi-Layer Optical Node */}
+                    <div className="absolute left-[200px] lg:left-[220px] top-4 -translate-x-1/2 z-20 flex items-center justify-center pointer-events-none">
                       <div
-                        className={`w-6 h-6 rounded-full transition-all duration-500 flex items-center justify-center ${
+                        className={`w-7 h-7 rounded-full transition-all duration-500 flex items-center justify-center ${
                           isHighlighted
-                            ? 'bg-accent-orange/20 border-2 border-accent-orange scale-110 shadow-[0_0_20px_rgba(249,115,22,0.95),0_0_35px_rgba(249,115,22,0.4)]'
-                            : 'bg-[#09090b] border-2 border-white/20'
+                            ? 'bg-[#0e0f18]/90 border-2 border-accent-orange scale-110 shadow-[0_0_22px_rgba(249,115,22,0.9),0_0_40px_rgba(249,115,22,0.35)]'
+                            : 'bg-[#09090b] border-2 border-white/15'
                         }`}
                       >
-                        {/* Inner Core Light */}
+                        {/* Middle Metallic Ring */}
                         <div
-                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                            isHighlighted
-                              ? 'bg-accent-orange scale-110 shadow-[0_0_8px_#f97316]'
-                              : 'bg-white/30'
+                          className={`w-3.5 h-3.5 rounded-full border transition-all duration-300 flex items-center justify-center ${
+                            isHighlighted ? 'border-amber-400 bg-accent-orange/20' : 'border-white/20'
                           }`}
-                        />
+                        >
+                          {/* Inner Core Gem */}
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                              isHighlighted
+                                ? 'bg-accent-orange shadow-[0_0_8px_#f97316]'
+                                : 'bg-white/30'
+                            }`}
+                          />
+                        </div>
                       </div>
                     </div>
 
-                    {/* Right Column: Title, Subtitle, Description & Highlights */}
-                    <div className="pl-8 lg:pl-10 transition-transform duration-500">
-                      
-                      {/* Badge Pill & Title */}
-                      <div className="flex items-center gap-3 mb-1.5 flex-wrap">
-                        <h3
-                          className={`font-display text-[1.45rem] lg:text-[1.9rem] font-black uppercase tracking-[0.02em] leading-tight transition-colors duration-300 ${
-                            isHighlighted
-                              ? 'text-white group-hover:text-accent-orange'
-                              : 'text-white/60'
-                          }`}
-                        >
-                          {item.title}
-                        </h3>
-                        {item.badge && (
-                          <span
-                            className={`font-mono text-[0.68rem] font-bold px-2.5 py-0.5 rounded-full border uppercase tracking-wider transition-all duration-300 ${
-                              isHighlighted
-                                ? 'text-accent-orange bg-accent-orange/15 border-accent-orange/30 shadow-sm'
-                                : 'text-text-muted bg-white/[0.02] border-white/10'
+                    {/* Right Column: Specular Glass Card with Headline & Highlights */}
+                    <div className="pl-8 lg:pl-10">
+                      <div
+                        className={`specular-card relative rounded-2xl md:rounded-3xl p-6 sm:p-7 md:p-8 bg-gradient-to-br from-[#12131c]/90 via-[#0e0f18]/85 to-[#09090e]/95 border transition-all duration-500 ${
+                          isHighlighted
+                            ? 'border-accent-orange/40 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_25px_rgba(249,115,22,0.1)] translate-x-0 opacity-100'
+                            : 'border-white/[0.06] opacity-40 translate-x-2'
+                        }`}
+                      >
+                        {/* Title & Badge */}
+                        <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+                          <h3
+                            className={`font-display text-[1.35rem] sm:text-[1.65rem] lg:text-[1.95rem] font-black uppercase tracking-[0.02em] leading-tight transition-colors duration-300 ${
+                              isHighlighted ? 'text-white group-hover:text-accent-orange' : 'text-white/70'
                             }`}
                           >
-                            {item.badge}
-                          </span>
+                            {item.title}
+                          </h3>
+                          {item.badge && (
+                            <span
+                              className={`font-mono text-[0.68rem] font-bold px-3 py-1 rounded-full border uppercase tracking-wider transition-all duration-300 shrink-0 ${
+                                isHighlighted
+                                  ? 'text-accent-orange bg-accent-orange/15 border-accent-orange/30 shadow-sm'
+                                  : 'text-text-muted bg-white/[0.02] border-white/10'
+                              }`}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Subtitle / Institution Pill */}
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-accent-orange/10 border border-accent-orange/25 font-mono text-[0.76rem] lg:text-[0.82rem] font-bold text-accent-orange uppercase tracking-wider mb-3.5">
+                          <span>▹</span>
+                          <span>{item.subtitle}</span>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-[0.92rem] lg:text-[0.98rem] text-zinc-300 leading-[1.7] max-w-[760px] mb-4 font-normal">
+                          {item.description}
+                        </p>
+
+                        {/* Highlights (Rendered as refined glowing micro-rows) */}
+                        {item.highlights && (
+                          <div className="flex flex-col gap-2 pt-2 border-t border-white/[0.06]">
+                            {item.highlights.map((h, hIdx) => (
+                              <div
+                                key={hIdx}
+                                className="flex items-start gap-2.5 text-[0.85rem] lg:text-[0.88rem] text-slate-300 py-1.5 px-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-accent-orange/30 hover:bg-accent-orange/[0.04] transition-all"
+                              >
+                                <span className="text-accent-orange text-xs mt-0.5">◆</span>
+                                <span className="leading-relaxed">{h}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Languages (If Last Milestone) */}
+                        {item.languages && (
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/[0.06]">
+                            {item.languages.map((lang, lIdx) => (
+                              <div
+                                key={lIdx}
+                                className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-accent-orange/40 hover:bg-accent-orange/[0.04] transition-all flex flex-col gap-1 text-center"
+                              >
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <span className="font-display font-bold text-[0.95rem] text-white">
+                                    {lang.name}
+                                  </span>
+                                  <span className="text-[0.72rem] text-accent-orange font-mono">
+                                    ({lang.nativeScript})
+                                  </span>
+                                </div>
+                                <span className="font-mono text-[0.70rem] text-accent-orange font-semibold">
+                                  {lang.badge}
+                                </span>
+                                <span className="text-[0.74rem] text-text-muted">
+                                  {lang.detail}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         )}
                       </div>
-
-                      {/* Subtitle / Institution */}
-                      <div className="font-mono text-[0.80rem] lg:text-[0.88rem] font-bold tracking-wider uppercase mb-3 flex items-center gap-2">
-                        <span className={isHighlighted ? 'text-accent-orange' : 'text-text-muted'}>▹</span>
-                        <span className={isHighlighted ? 'text-text-secondary' : 'text-text-muted'}>
-                          {item.subtitle}
-                        </span>
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-[0.92rem] lg:text-[1.0rem] text-slate-300 leading-relaxed max-w-[760px] mb-3.5 font-normal">
-                        {item.description}
-                      </p>
-
-                      {/* Highlights */}
-                      {item.highlights && (
-                        <div className="flex flex-col gap-1.5 max-w-[760px] pt-1">
-                          {item.highlights.map((h, hIdx) => (
-                            <div key={hIdx} className="flex items-start gap-2.5 text-[0.86rem] lg:text-[0.90rem] text-slate-300">
-                              <span className="text-accent-orange text-xs mt-0.5">●</span>
-                              <span className="leading-relaxed">{h}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Languages (If Last Milestone) */}
-                      {item.languages && (
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-[760px] pt-2">
-                          {item.languages.map((lang, lIdx) => (
-                            <div
-                              key={lIdx}
-                              className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-accent-orange/40 transition-colors flex flex-col gap-1"
-                            >
-                              <span className="font-display font-bold text-[0.95rem] text-white">
-                                {lang.name}
-                              </span>
-                              <span className="font-mono text-[0.72rem] text-accent-orange font-semibold">
-                                {lang.badge}
-                              </span>
-                              <span className="text-[0.75rem] text-text-muted">
-                                {lang.detail}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
                     </div>
                   </div>
                 );
@@ -430,15 +444,15 @@ export const Experience: React.FC = () => {
           </div>
 
           {/* Mobile Timeline Layout (< 768px) */}
-          <div className="block md:hidden relative pl-6">
+          <div className="block md:hidden relative pl-5">
             
-            {/* 1. Base Dim Background Track */}
+            {/* 1. Base Dim Line */}
             <div
-              className="absolute left-[11px] top-4 bottom-4 w-[2px] bg-white/[0.08] rounded-full"
+              className="absolute left-[11px] top-4 bottom-4 w-[2px] bg-white/[0.07] rounded-full"
               aria-hidden="true"
             />
 
-            {/* 2. Active Glowing Laser / Light Beam (Mobile Scroll-Driven) */}
+            {/* 2. Active Glowing Laser Beam */}
             <div
               className="absolute left-[11px] top-4 w-[2px] bg-gradient-to-b from-accent-orange via-amber-400 to-accent-orange rounded-full shadow-[0_0_14px_rgba(249,115,22,0.9)] transition-[height] duration-75 ease-out z-10"
               style={{
@@ -448,7 +462,7 @@ export const Experience: React.FC = () => {
             />
 
             {/* Mobile Milestones List */}
-            <div className="space-y-12">
+            <div className="space-y-10">
               {timelineMilestones.map((item, idx) => {
                 const isReached = activeMilestones[idx] || false;
 
@@ -461,7 +475,7 @@ export const Experience: React.FC = () => {
                     }`}
                   >
                     {/* Timeline Node */}
-                    <div className="absolute -left-[14px] top-1.5 z-20 flex items-center justify-center pointer-events-none">
+                    <div className="absolute -left-[14px] top-3 z-20 flex items-center justify-center pointer-events-none">
                       <div
                         className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 ${
                           isReached
@@ -477,75 +491,78 @@ export const Experience: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Date & Tag */}
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span
-                        className={`font-mono text-[0.78rem] font-bold uppercase ${
-                          isReached ? 'text-accent-orange' : 'text-white/50'
+                    {/* Mobile Specular Glass Card */}
+                    <div className="specular-card rounded-2xl p-5 bg-[#0e0f18]/90 border border-white/[0.08] shadow-lg">
+                      {/* Date & Tag */}
+                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                        <span
+                          className={`font-cinzel text-[0.88rem] font-bold uppercase ${
+                            isReached ? 'text-accent-orange' : 'text-white/50'
+                          }`}
+                        >
+                          {item.year}
+                        </span>
+                        <span className="text-white/30 text-xs">•</span>
+                        <span className="font-mono text-[0.68rem] text-text-muted uppercase">
+                          {item.periodTag}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3
+                        className={`font-display text-[1.22rem] font-black uppercase tracking-[0.02em] leading-snug mb-1.5 ${
+                          isReached ? 'text-white' : 'text-white/70'
                         }`}
                       >
-                        {item.year}
-                      </span>
-                      <span className="text-white/30 text-xs">•</span>
-                      <span className="font-mono text-[0.68rem] text-text-muted uppercase">
-                        {item.periodTag}
-                      </span>
-                    </div>
+                        {item.title}
+                      </h3>
 
-                    {/* Title */}
-                    <h3
-                      className={`font-display text-[1.25rem] font-black uppercase tracking-[0.02em] leading-snug mb-1 ${
-                        isReached ? 'text-white' : 'text-white/70'
-                      }`}
-                    >
-                      {item.title}
-                    </h3>
-
-                    {/* Subtitle */}
-                    <div className="font-mono text-[0.78rem] text-text-secondary uppercase mb-2.5">
-                      {item.subtitle}
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-[0.88rem] text-slate-300 leading-relaxed mb-3 font-normal">
-                      {item.description}
-                    </p>
-
-                    {/* Highlights */}
-                    {item.highlights && (
-                      <div className="flex flex-col gap-1.5">
-                        {item.highlights.map((h, hIdx) => (
-                          <div key={hIdx} className="flex items-start gap-2 text-[0.82rem] text-slate-300">
-                            <span className="text-accent-orange text-xs mt-0.5">●</span>
-                            <span className="leading-relaxed">{h}</span>
-                          </div>
-                        ))}
+                      {/* Subtitle */}
+                      <div className="font-mono text-[0.74rem] text-accent-orange uppercase mb-3">
+                        {item.subtitle}
                       </div>
-                    )}
 
-                    {/* Languages */}
-                    {item.languages && (
-                      <div className="grid grid-cols-1 gap-2 pt-2">
-                        {item.languages.map((lang, lIdx) => (
-                          <div
-                            key={lIdx}
-                            className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between"
-                          >
-                            <div className="flex flex-col">
-                              <span className="font-bold text-[0.88rem] text-white">
-                                {lang.name}
-                              </span>
-                              <span className="text-[0.72rem] text-text-muted">
-                                {lang.detail}
+                      {/* Description */}
+                      <p className="text-[0.88rem] text-slate-300 leading-relaxed mb-3 font-normal">
+                        {item.description}
+                      </p>
+
+                      {/* Highlights */}
+                      {item.highlights && (
+                        <div className="flex flex-col gap-1.5 pt-2 border-t border-white/[0.06]">
+                          {item.highlights.map((h, hIdx) => (
+                            <div key={hIdx} className="flex items-start gap-2 text-[0.82rem] text-slate-300">
+                              <span className="text-accent-orange text-xs mt-0.5">◆</span>
+                              <span className="leading-relaxed">{h}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Languages */}
+                      {item.languages && (
+                        <div className="grid grid-cols-1 gap-2 pt-2 border-t border-white/[0.06]">
+                          {item.languages.map((lang, lIdx) => (
+                            <div
+                              key={lIdx}
+                              className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between"
+                            >
+                              <div className="flex flex-col">
+                                <span className="font-bold text-[0.88rem] text-white">
+                                  {lang.name} ({lang.nativeScript})
+                                </span>
+                                <span className="text-[0.72rem] text-text-muted">
+                                  {lang.detail}
+                                </span>
+                              </div>
+                              <span className="font-mono text-[0.70rem] text-accent-orange font-semibold">
+                                {lang.badge}
                               </span>
                             </div>
-                            <span className="font-mono text-[0.70rem] text-accent-orange font-semibold">
-                              {lang.badge}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })}
