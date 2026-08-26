@@ -109,8 +109,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         aria-hidden="true"
       >
-        {/* Glowing Orange Celestial Eclipse Ring behind the head/silhouette */}
-        <div className="absolute top-[8%] right-[-10%] sm:right-[3%] md:right-[6%] lg:right-[8%] w-[330px] sm:w-[440px] md:w-[520px] h-[330px] sm:h-[440px] md:h-[520px] rounded-full border-2 border-orange-500/50 shadow-[0_0_100px_rgba(249,115,22,0.5)] pointer-events-none z-[2] opacity-90" />
         
         {/* Subtle Diagonal Laser Accent Streak Lines */}
         <div className="absolute top-8 -left-24 w-[500px] h-[1.5px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent rotate-[-35deg] pointer-events-none z-[2]" />
