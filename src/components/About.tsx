@@ -97,7 +97,7 @@ const InteractivePortraitCard: React.FC = () => {
   return (
     <div
       ref={cardRef}
-      className="relative w-full max-w-[260px] md:max-w-[290px] lg:max-w-[320px] mx-auto md:mx-0 select-none group/portrait cursor-pointer"
+      className="relative w-full max-w-[290px] md:max-w-[330px] lg:max-w-[365px] mx-auto md:mx-0 select-none group/portrait cursor-pointer"
       style={{ perspective: 1400 }}
     >
       {/* Ambient Glow */}
@@ -123,7 +123,7 @@ const InteractivePortraitCard: React.FC = () => {
         }}
       >
         {/* Portrait Image */}
-        <div className="relative aspect-[3/3.8] w-full overflow-hidden bg-[#090a0f]">
+        <div className="relative aspect-[3/3.9] w-full overflow-hidden bg-[#090a0f]">
           <img
             src="/about-portrait.jpg"
             alt="Debendranath Bera Portrait"
@@ -223,7 +223,7 @@ export const About: React.FC = () => {
         </div>
 
         {/* Compact Split Layout: Portrait Card + Story & Bento Blocks */}
-        <div className="grid grid-cols-1 md:grid-cols-[270px_1fr] lg:grid-cols-[310px_1fr] xl:grid-cols-[330px_1fr] gap-6 md:gap-8 lg:gap-10 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[340px_1fr] xl:grid-cols-[370px_1fr] gap-6 md:gap-8 lg:gap-10 items-start">
           
           {/* Left Column: Interactive 3D Cursor-Physics Portrait Card */}
           <div style={getSlideUpStyle(0.18)}>
