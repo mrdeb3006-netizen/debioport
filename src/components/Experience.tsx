@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
   Trophy,
   Medal,
   Shield,
   Star,
   GraduationCap,
+  ChevronLeft,
+  ChevronRight,
+  Award,
 } from 'lucide-react';
 
 interface TimelineMilestone {
@@ -17,6 +20,323 @@ interface TimelineMilestone {
   description: string;
   highlights?: string[];
 }
+
+interface AchievementCard {
+  id: string;
+  category: string;
+  badge: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: React.ElementType;
+  highlights: string[];
+}
+
+const StackedAchievementDeck: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const achievements: AchievementCard[] = [
+    {
+      id: 'iit-honour',
+      category: 'ACADEMIC EXCELLENCE',
+      badge: 'IIT KGP HONOUR',
+      title: 'Awarded by IIT Kharagpur Professor',
+      subtitle: 'Exceptional Result & Class 10th School Topper',
+      description:
+        'Felicitated and awarded by an esteemed professor from Indian Institute of Technology (IIT) Kharagpur in recognition of exceptional academic performance and ranking as the School Topper in Class 10.',
+      icon: Trophy,
+      highlights: [
+        'Rank #1 School Topper with 88.71% in Secondary Board',
+        'Felicitated by distinguished IIT Kharagpur faculty',
+        'Demonstrated foundational brilliance in mathematics & sciences',
+      ],
+    },
+    {
+      id: 'karate-bronze',
+      category: 'NATIONAL SPORTS • MARTIAL ARTS',
+      badge: '2X NATIONAL BRONZE',
+      title: '2x Bronze Medalist • All India Karate Championship',
+      subtitle: 'All India Level Club Karate Championship',
+      description:
+        'Secured two Bronze Medals at the prestigious All India Level Club Karate Championship, demonstrating elite competitive Karate combat discipline, Kumite reflexes, and tactical ring composure against top martial arts athletes nationwide.',
+      icon: Medal,
+      highlights: [
+        'Two-time Bronze Medalist at All-India Championship Level',
+        'High-intensity Kumite combat sparring & tactical execution',
+        'Competitive athletics composure against top national contenders',
+      ],
+    },
+    {
+      id: 'karate-brown-belt',
+      category: 'MARTIAL ARTS MASTERY',
+      badge: 'BROWN BELT SENIOR',
+      title: 'Karate Brown Belt',
+      subtitle: 'Senior Grade Martial Arts Mastery',
+      description:
+        'Earned the senior Karate Brown Belt grade following years of rigorous traditional martial arts training, advanced Kata technical mastery, physical conditioning, and full-contact Kumite sparring.',
+      icon: Shield,
+      highlights: [
+        'Senior Grade Brown Belt qualification in Shotokan/Goju Karate',
+        '6+ years of disciplined conditioning, Kata & Kumite',
+        'Deep mental focus, agility, stamina & tactical precision',
+      ],
+    },
+    {
+      id: 'school-topper',
+      category: 'SCHOLASTIC DISTINCTION',
+      badge: 'RANK #1 TOPPER',
+      title: 'School Topper & Science Distinction',
+      subtitle: 'Jadavpur High School • Secondary Board',
+      description:
+        'Ranked #1 as the Secondary Examination School Topper at Jadavpur High School with 88.71%, earning institutional commendations and scientific excellence distinctions.',
+      icon: Award,
+      highlights: [
+        'Rank #1 among all secondary graduation candidates',
+        '88.71% aggregate with distinctions across Science & Math',
+        'Institutional commendation for academic excellence',
+      ],
+    },
+  ];
+
+  const total = achievements.length;
+
+  const nextCard = useCallback(() => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActiveIndex((prev) => (prev + 1) % total);
+      setIsTransitioning(false);
+    }, 600);
+  }, [isTransitioning, total]);
+
+  const prevCard = useCallback(() => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActiveIndex((prev) => (prev - 1 + total) % total);
+      setIsTransitioning(false);
+    }, 600);
+  }, [isTransitioning, total]);
+
+  const goToCard = (index: number) => {
+    if (isTransitioning || index === activeIndex) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActiveIndex(index);
+      setIsTransitioning(false);
+    }, 600);
+  };
+
+  // Continuous auto-cycle loop (pauses when user hovers)
+  useEffect(() => {
+    if (isHovered) {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+      return;
+    }
+
+    autoPlayRef.current = setInterval(() => {
+      nextCard();
+    }, 3800);
+
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [isHovered, nextCard]);
+
+  return (
+    <div
+      className="relative w-full max-w-[860px] mx-auto pt-6 pb-8 select-none"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* 3D Stack Container */}
+      <div
+        className="relative h-[430px] sm:h-[390px] md:h-[360px] w-full flex items-center justify-center"
+        style={{ perspective: 1600 }}
+      >
+        {achievements.map((item, index) => {
+          const IconComponent = item.icon;
+          
+          // Slot position relative to active front card (0 = front, 1 = behind, 2 = 2nd behind, etc.)
+          const slot = (index - activeIndex + total) % total;
+          const isFront = slot === 0;
+          const isOutgoing = isFront && isTransitioning;
+
+          // Compute 3D stacked transform properties
+          let transformStyle = '';
+          let zIndex = 30 - slot * 5;
+          let opacity = 1;
+          let filter = 'none';
+
+          if (isOutgoing) {
+            // Outgoing animation: flies upward and forward, then glides to the back
+            transformStyle =
+              'translate3d(0, -95px, 80px) rotateX(-12deg) rotateZ(-3.5deg) scale(1.03)';
+            zIndex = 50;
+            opacity = 0.85;
+            filter = 'blur(1px)';
+          } else if (slot === 0) {
+            // Front Active Card
+            transformStyle = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
+            zIndex = 40;
+            opacity = 1;
+          } else if (slot === 1) {
+            // 1st Card Behind
+            const yOffset = isHovered ? 26 : 20;
+            const rot = isHovered ? 2.5 : 1.8;
+            transformStyle = `translate3d(0, ${yOffset}px, -50px) rotateX(2deg) rotateZ(${rot}deg) scale(0.95)`;
+            opacity = 0.88;
+            filter = 'blur(0.3px)';
+          } else if (slot === 2) {
+            // 2nd Card Behind
+            const yOffset = isHovered ? 50 : 38;
+            const rot = isHovered ? -2.5 : -1.8;
+            transformStyle = `translate3d(0, ${yOffset}px, -100px) rotateX(4deg) rotateZ(${rot}deg) scale(0.90)`;
+            opacity = 0.65;
+            filter = 'blur(0.8px)';
+          } else {
+            // Deepest Card in Stack
+            const yOffset = isHovered ? 72 : 54;
+            transformStyle = `translate3d(0, ${yOffset}px, -150px) rotateX(6deg) rotateZ(1deg) scale(0.85)`;
+            opacity = 0.4;
+            filter = 'blur(1.5px)';
+          }
+
+          return (
+            <div
+              key={item.id}
+              onClick={() => !isFront && goToCard(index)}
+              className={`absolute top-0 w-full max-w-[760px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0c0d13]/95 backdrop-blur-2xl transition-all duration-[650ms] ${
+                !isFront ? 'cursor-pointer hover:border-amber-400/40' : 'cursor-default'
+              }`}
+              style={{
+                transform: transformStyle,
+                zIndex,
+                opacity,
+                filter,
+                transitionTimingFunction: 'cubic-bezier(0.2, 0.9, 0.3, 1.15)',
+                willChange: 'transform, opacity, filter',
+                borderColor: isFront
+                  ? 'rgba(245, 158, 11, 0.5)'
+                  : 'rgba(255, 255, 255, 0.1)',
+                boxShadow: isFront
+                  ? '0 30px 70px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
+                  : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+              }}
+            >
+              {/* Active Ambient Golden Edge Sheen */}
+              {isFront && (
+                <div
+                  className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+                  aria-hidden="true"
+                />
+              )}
+
+              {/* Card Header: Category Tag & Icon */}
+              <div className="flex items-center justify-between gap-3 mb-3.5">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider">
+                    {item.badge}
+                  </span>
+                  <span className="font-mono text-[0.66rem] text-zinc-500 uppercase tracking-widest hidden sm:inline">
+                    {item.category}
+                  </span>
+                </div>
+
+                <div className="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.2)]">
+                  <IconComponent size={20} />
+                </div>
+              </div>
+
+              {/* Card Title */}
+              <h4 className="font-display text-[1.25rem] sm:text-[1.5rem] md:text-[1.65rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
+                {item.title}
+              </h4>
+
+              {/* Subtitle with Amber Accent */}
+              <div className="font-mono text-[0.80rem] sm:text-[0.85rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
+                <span>▹</span>
+                <span>{item.subtitle}</span>
+              </div>
+
+              {/* Description */}
+              <p className="text-[0.88rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[680px]">
+                {item.description}
+              </p>
+
+              {/* Key Bullet Highlights */}
+              <div className="flex flex-col gap-1.5 pt-2 border-t border-white/[0.06]">
+                {item.highlights.map((highlight, hIdx) => (
+                  <div
+                    key={hIdx}
+                    className="flex items-start gap-2.5 text-[0.82rem] sm:text-[0.86rem] text-zinc-300"
+                  >
+                    <span className="text-accent-orange text-xs mt-0.5">●</span>
+                    <span className="leading-tight">{highlight}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footnote Indicator */}
+              <div className="pt-3 mt-3 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500">
+                <span>VERIFIED RECOGNITION</span>
+                <div className="flex items-center gap-1 text-accent-orange font-bold">
+                  <Star size={11} fill="currentColor" />
+                  <span>HONOUR</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Interactive Controls & Pagination Indicators */}
+      <div className="mt-8 flex items-center justify-between max-w-[760px] mx-auto px-2">
+        {/* Step Indicator Pills */}
+        <div className="flex items-center gap-2">
+          {achievements.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goToCard(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                i === activeIndex
+                  ? 'w-8 bg-gradient-to-r from-amber-400 to-accent-orange shadow-[0_0_10px_rgba(251,191,36,0.7)]'
+                  : 'w-2 bg-white/20 hover:bg-white/40'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+          <span className="font-mono text-[0.70rem] text-zinc-500 ml-2">
+            0{activeIndex + 1} / 0{total}
+          </span>
+        </div>
+
+        {/* Next / Prev Navigation Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={prevCard}
+            disabled={isTransitioning}
+            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50"
+            aria-label="Previous Achievement"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            onClick={nextCard}
+            disabled={isTransitioning}
+            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50"
+            aria-label="Next Achievement"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const Experience: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -89,48 +409,6 @@ export const Experience: React.FC = () => {
     },
   ];
 
-  const otherAchievements = [
-    {
-      id: 'iit',
-      category: 'ACADEMIC EXCELLENCE',
-      badge: 'IIT KGP HONOUR',
-      title: 'Awarded by IIT Kharagpur Professor',
-      subtitle: 'Exceptional Result & Class 10th School Topper',
-      description:
-        'Felicitated and awarded by an esteemed professor from Indian Institute of Technology (IIT) Kharagpur in recognition of exceptional academic performance and ranking as the School Topper in Class 10.',
-      icon: Trophy,
-      accentGlow: 'bg-[#0f1019]/90',
-      borderColor: 'border-white/[0.08] hover:border-accent-orange/50',
-      badgeColor: 'text-accent-orange bg-accent-orange/10 border-accent-orange/30',
-    },
-    {
-      id: 'medals',
-      category: 'NATIONAL SPORTS • KARATE',
-      badge: '2X KARATE BRONZE',
-      title: '2x Bronze Medalist • All India Karate Championship',
-      subtitle: 'All India Level Club Karate Championship',
-      description:
-        'Secured two Bronze Medals at the prestigious All India Level Club Karate Championship, demonstrating elite competitive Karate combat discipline, Kumite reflexes, and tactical ring composure against top martial arts athletes nationwide.',
-      icon: Medal,
-      accentGlow: 'bg-[#0f1019]/90',
-      borderColor: 'border-white/[0.08] hover:border-accent-orange/50',
-      badgeColor: 'text-accent-orange bg-accent-orange/10 border-accent-orange/30',
-    },
-    {
-      id: 'karate',
-      category: 'MARTIAL ARTS',
-      badge: 'BROWN BELT',
-      title: 'Karate Brown Belt',
-      subtitle: 'Senior Grade Martial Arts Mastery',
-      description:
-        'Earned the senior Karate Brown Belt grade following years of rigorous traditional martial arts training, advanced Kata technical mastery, physical conditioning, and full-contact Kumite sparring.',
-      icon: Shield,
-      accentGlow: 'bg-[#0f1019]/90',
-      borderColor: 'border-white/[0.08] hover:border-accent-orange/50',
-      badgeColor: 'text-accent-orange bg-accent-orange/10 border-accent-orange/30',
-    },
-  ];
-
   // Section Entrance Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -166,7 +444,6 @@ export const Experience: React.FC = () => {
     };
 
     const updateDOM = () => {
-      // Snappy, hyper-reactive 0.45 damping for instant tracking without sluggish delay
       currentProgress += (targetProgress - currentProgress) * 0.45;
       if (Math.abs(targetProgress - currentProgress) < 0.001) {
         currentProgress = targetProgress;
@@ -470,65 +747,23 @@ export const Experience: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* OTHER ACHIEVEMENTS: Sports, Martial Arts & Academic Honors Grid          */}
+        {/* OTHER ACHIEVEMENTS: 3D Stacked Deck of Cards with Physics Shuffling      */}
         {/* ========================================================================= */}
-        <div>
-          <div className="flex items-center gap-3 mb-6 pt-8 border-t border-white/[0.08]">
+        <div className="pt-6 border-t border-white/[0.08]">
+          <div className="flex items-center gap-3 mb-8">
             <Trophy className="text-accent-orange" size={22} />
             <div>
-              <h3 className="font-display text-[1.4rem] md:text-[1.65rem] font-black text-white uppercase tracking-wide">
+              <h3 className="font-display text-[1.3rem] md:text-[1.55rem] font-black text-white uppercase tracking-wide">
                 OTHER ACHIEVEMENTS &amp; HONORS
               </h3>
-              <p className="text-[0.88rem] text-text-muted">
+              <p className="text-[0.85rem] text-text-muted">
                 National-level competitive sports, martial arts excellence, and premier institutional recognitions.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {otherAchievements.map((ach) => {
-              const IconComponent = ach.icon;
-              return (
-                <div
-                  key={ach.id}
-                  className={`specular-card backdrop-blur-[16px] border ${ach.borderColor} ${ach.accentGlow} rounded-2xl p-6 md:p-7 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] group`}
-                >
-                  <div>
-                    {/* Header Pill & Icon */}
-                    <div className="flex items-center justify-between gap-2 mb-3.5">
-                      <span className={`font-mono text-[0.72rem] font-bold px-2.5 py-0.5 rounded-full border ${ach.badgeColor} uppercase tracking-wider`}>
-                        {ach.badge}
-                      </span>
-                      <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-accent-orange group-hover:scale-110 group-hover:border-accent-orange/40 transition-transform">
-                        <IconComponent size={18} />
-                      </div>
-                    </div>
-
-                    {/* Achievement Title */}
-                    <h4 className="font-display text-[1.15rem] font-bold text-white leading-snug mb-1">
-                      {ach.title}
-                    </h4>
-
-                    {/* Subtitle */}
-                    <div className="text-[0.82rem] text-accent-orange font-mono font-medium mb-3">
-                      {ach.subtitle}
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-[0.88rem] text-text-secondary leading-relaxed">
-                      {ach.description}
-                    </p>
-                  </div>
-
-                  {/* Footnote Indicator */}
-                  <div className="pt-3 mt-4 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.7rem] text-text-muted">
-                    <span>{ach.category}</span>
-                    <Star size={12} className="text-accent-orange" />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {/* Interactive 3D Stacked Deck */}
+          <StackedAchievementDeck />
         </div>
 
       </div>
