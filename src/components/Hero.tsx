@@ -181,19 +181,12 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
   return (
     <section className="relative min-h-screen w-full flex items-center pt-[84px] overflow-hidden bg-bg-dark" id="home">
-      {/* Full-bleed aura video with a portrait fallback for unsupported playback. */}
-      <div className="absolute inset-0 z-[1] overflow-hidden bg-bg-dark pointer-events-none" aria-hidden="true">
-        <video
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-80"
-          autoPlay
-          muted
-          playsInline
-          preload="metadata"
-          poster="/hero-bg.jpg"
-        >
-          <source src="/aura-animation.mp4" type="video/mp4" />
-        </video>
-
+      {/* Background Portrait Image (The First Photo) */}
+      <div
+        className="absolute inset-0 w-full h-full bg-no-repeat bg-[88%_center] sm:bg-[80%_center] md:bg-[80%_center] lg:bg-[85%_center] bg-cover z-[1] pointer-events-none"
+        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+        aria-hidden="true"
+      >
         {/* Subtle Diagonal Laser Accent Streak Lines (Mobile only) */}
         <div className="md:hidden absolute top-8 -left-24 w-[500px] h-[1.5px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent rotate-[-35deg] pointer-events-none z-[2]" />
         <div className="md:hidden absolute bottom-16 -right-24 w-[600px] h-[1.5px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent rotate-[-35deg] pointer-events-none z-[2]" />
