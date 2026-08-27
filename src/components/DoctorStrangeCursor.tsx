@@ -156,8 +156,13 @@ export const DoctorStrangeCursor: React.FC = () => {
   }, []);
 
   return (
-    <div id="magic-cursor-container" className="cursor-layer pointer-events-none" aria-hidden="true">
-      <canvas ref={canvasRef} id="magic-cursor-canvas" className="pointer-events-none" />
+    <div
+      id="magic-cursor-container"
+      className="cursor-layer pointer-events-none fixed inset-0 z-[2147483647] overflow-hidden"
+      style={{ zIndex: 2147483647 }}
+      aria-hidden="true"
+    >
+      <canvas ref={canvasRef} id="magic-cursor-canvas" className="pointer-events-none absolute inset-0 w-full h-full" />
     </div>
   );
 };

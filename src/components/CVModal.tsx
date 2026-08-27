@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 interface CVModalProps {
@@ -8,6 +8,24 @@ interface CVModalProps {
 
 export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose }) => {
   const [downloaded, setDownloaded] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   const handleDownload = () => {
     const cvText = `=====================================================

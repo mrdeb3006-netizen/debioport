@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Project } from '../types';
 import { Code, Github, ExternalLink, Copy, Check, Terminal, FileCode2, Cpu, CheckCircle2 } from 'lucide-react';
@@ -167,6 +167,24 @@ except KeyboardInterrupt:
   };
 
   const project = projectId ? projectDetails[projectId] : null;
+
+  useEffect(() => {
+    if (!project) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [project, onClose]);
 
   const handleCopyCode = () => {
     if (project?.sourceCode) {
