@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
   Trophy,
   Medal,
@@ -11,6 +11,9 @@ import {
   BookOpen,
   Compass,
   Crown,
+  ChevronLeft,
+  ChevronRight,
+  MousePointer,
 } from 'lucide-react';
 
 interface TimelineMilestone {
@@ -161,263 +164,25 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 };
 
 /* ========================================================================= */
-/* ULTRA-LUXURY SCROLL-REVEAL HONORS CARD                                    */
+/* ULTRA-LUXURY 3D SCROLL-STACKED HONORS DECK                                */
 /* ========================================================================= */
-interface HonorScrollCardProps {
-  item: AchievementCard;
-  index: number;
-}
+const ScrollStackedHonorsDeck: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const progressBarRef = useRef<HTMLDivElement | null>(null);
+  const progressTextRef = useRef<HTMLSpanElement | null>(null);
+  const badgeTextRef = useRef<HTMLSpanElement | null>(null);
+  const categoryTextRef = useRef<HTMLSpanElement | null>(null);
+  const footerTextRef = useRef<HTMLSpanElement | null>(null);
+  const pillsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
-const HonorScrollCard: React.FC<HonorScrollCardProps> = ({ item, index }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const IconComponent = item.icon;
+  const targetProgressRef = useRef(0);
+  const currentProgressRef = useRef(0);
+  const animFrameRef = useRef<number | null>(null);
+  const activeIndexRef = useRef(0);
+  const touchStartY = useRef<number | null>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px',
-      }
-    );
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        setMousePos(null);
-      }}
-      className="honor-scroll-card group relative w-full max-w-[1180px] mx-auto rounded-2xl sm:rounded-3xl border border-white/[0.08] p-5 sm:p-6 md:py-6 md:px-8 lg:py-6 lg:px-9 bg-[#0c0d16]/90 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.65)] hover:border-amber-400/45 hover:shadow-[0_25px_65px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.15)] hover:-translate-y-1.5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden"
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible
-          ? 'translateY(0px) scale(1) rotateX(0deg)'
-          : 'translateY(45px) scale(0.96) rotateX(6deg)',
-        transitionDelay: `${index * 80}ms`,
-      }}
-    >
-      {/* Interactive Cursor Spotlight Glow */}
-      {mousePos && (
-        <div
-          className="absolute pointer-events-none transition-opacity duration-300 w-[420px] h-[420px] rounded-full blur-3xl opacity-15 bg-amber-400 transform -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: `${mousePos.x}px`,
-            top: `${mousePos.y}px`,
-          }}
-        />
-      )}
-
-      {/* Top Prismatic Golden Edge Reflection */}
-      <div
-        className={`absolute -top-px left-8 right-8 h-[2px] transition-opacity duration-500 ${
-          isHovered || isVisible
-            ? 'opacity-100 bg-gradient-to-r from-transparent via-amber-400 to-transparent'
-            : 'opacity-30 bg-gradient-to-r from-transparent via-white/20 to-transparent'
-        }`}
-        aria-hidden="true"
-      />
-
-      {/* Subtle Background Mesh Grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.025)_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none opacity-30" />
-
-      {/* Giant Stylized Index Watermark */}
-      <div
-        className="absolute top-2 right-4 font-display font-black text-[3.6rem] sm:text-[4.6rem] lg:text-[5.2rem] leading-none select-none pointer-events-none transition-all duration-500 text-white/[0.03] group-hover:text-amber-400/[0.08]"
-        aria-hidden="true"
-      >
-        0{index + 1}
-      </div>
-
-      {/* Card Content Layout: 2 Columns */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-5 sm:gap-6 items-center relative z-10">
-        
-        {/* Left Column: Details & Verified Highlights */}
-        <div>
-          {/* Header Chips */}
-          <div className="flex items-center justify-between gap-2.5 mb-2.5 flex-wrap">
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="font-mono text-[0.68rem] sm:text-[0.74rem] font-black px-3.5 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
-                <CheckCircle2 size={12} />
-                <span>{item.badge}</span>
-              </span>
-              <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
-                {item.category}
-              </span>
-              <span className="text-white/20 text-xs hidden sm:inline">•</span>
-              <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
-                {item.yearTag}
-              </span>
-            </div>
-          </div>
-
-          {/* Title */}
-          <h4 className="font-display text-[1.25rem] sm:text-[1.55rem] md:text-[1.75rem] font-black text-white leading-snug mb-1 tracking-[0.01em] group-hover:text-amber-300 transition-colors duration-200">
-            {item.title}
-          </h4>
-
-          {/* Monospace Subtitle */}
-          <div className="font-mono text-[0.76rem] sm:text-[0.84rem] font-bold text-amber-400 tracking-wide uppercase mb-2.5 flex items-center gap-1.5">
-            <span className="text-accent-orange">▹</span>
-            <span>{item.subtitle}</span>
-          </div>
-
-          {/* Description */}
-          <p className="text-[0.86rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-3.5 font-normal max-w-[850px]">
-            {item.description}
-          </p>
-
-          {/* Bullet Highlights */}
-          <div className="flex flex-col gap-1.5 sm:gap-2 pt-2.5 border-t border-white/[0.08] max-w-[850px]">
-            {item.highlights.map((highlight, hIdx) => (
-              <div
-                key={hIdx}
-                className="flex items-start gap-2.5 text-[0.82rem] sm:text-[0.88rem] text-zinc-300 group/item"
-              >
-                <span className="text-accent-orange text-xs mt-0.5 shrink-0 group-hover/item:text-amber-400 transition-colors">◆</span>
-                <span className="leading-snug">{highlight}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right Column: Hologram Emblem Medallion */}
-        <div className="hidden md:flex flex-col items-center justify-center p-4 sm:p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch justify-self-center w-full group-hover:border-amber-400/30 transition-all duration-300">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-2.5 transition-transform duration-300 group-hover:scale-110">
-            <IconComponent size={28} />
-          </div>
-          <div className="font-display text-[1.35rem] font-black text-white leading-none mb-1">
-            {item.statNumber}
-          </div>
-          <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase mb-1.5">
-            {item.statLabel}
-          </div>
-          <div className="inline-flex items-center gap-1 text-[0.62rem] font-mono text-zinc-400 pt-1.5 border-t border-white/[0.06] w-full justify-center">
-            <Star size={11} className="text-amber-400" fill="currentColor" />
-            <span>VERIFIED RECOGNITION</span>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Footnote Status Bar */}
-      <div className="pt-2.5 mt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.66rem] text-zinc-500 flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <Sparkles size={11} className="text-amber-400" />
-          <span>SCHOLASTIC &amp; SPORTS RECOGNITION</span>
-        </div>
-        <div className="flex items-center gap-1 text-accent-orange font-bold">
-          <span>HONOR 0{index + 1} OF 05</span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ========================================================================= */
-/* MAIN EXPERIENCE & JOURNEY COMPONENT                                       */
-/* ========================================================================= */
-export const Experience: React.FC = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const timelineRef = useRef<HTMLDivElement | null>(null);
-  const desktopBeamRef = useRef<HTMLDivElement | null>(null);
-  const desktopSparkRef = useRef<HTMLDivElement | null>(null);
-  const mobileBeamRef = useRef<HTMLDivElement | null>(null);
-  const mobileSparkRef = useRef<HTMLDivElement | null>(null);
-
-  const [isVisible, setIsVisible] = useState(false);
-
-  const timelineMilestones: TimelineMilestone[] = [
-    {
-      id: 'btech-cse',
-      year: '2026 — PRESENT',
-      periodTag: 'CURRENT DEGREE',
-      icon: GraduationCap,
-      title: 'B.TECH IN COMPUTER SCIENCE & ENGINEERING',
-      subtitle: 'FUTURE INSTITUTE OF ENGINEERING AND MANAGEMENT (FIEM)',
-      badge: 'ACTIVE UNDERGRADUATE',
-      description:
-        'Pursuing Computer Science & Engineering with intensive focus on Data Structures & Algorithms (DSA), Java Object-Oriented Programming (OOP), software system design, and practical software development.',
-      highlights: [
-        'Mastering core algorithms, data structures & computational problem solving.',
-        'Learning Java OOP and practicing algorithmic optimization daily.',
-        'Active development in Python, desktop automation experiments, and modern web software.',
-      ],
-    },
-    {
-      id: 'class-12',
-      year: '2024 — 2026',
-      periodTag: 'HIGHER SECONDARY',
-      icon: BookOpen,
-      title: 'CLASS 12 — SCIENCE STREAM',
-      subtitle: 'JADAVPUR VIDYAPITH',
-      badge: '77.81% SCORE',
-      description:
-        'Completed Higher Secondary Science education with 77.81%, establishing robust analytical foundations in advanced mathematics, logical reasoning, and scientific methodology.',
-      highlights: [
-        'Advanced Physics, Chemistry, and Higher Mathematics.',
-        'Rigorous quantitative problem solving and analytical thinking.',
-      ],
-    },
-    {
-      id: 'class-10',
-      year: '2024',
-      periodTag: 'SECONDARY SCHOOL',
-      icon: Award,
-      title: 'CLASS 10 — SECONDARY SCHOOL',
-      subtitle: 'JADAVPUR HIGH SCHOOL',
-      badge: '88.71% TOPPER',
-      description:
-        'Graduated as School Topper with 88.71%, demonstrating academic excellence and a deep passion for science, mathematics, and logic.',
-      highlights: [
-        'Ranked as Class 10 School Topper with 88.71%.',
-        'Built early foundations in computational thinking and scientific inquiry.',
-      ],
-    },
-    {
-      id: 'jadavpur-high-school',
-      year: '2018 — 2024',
-      periodTag: 'SCHOOLING YEARS',
-      icon: Compass,
-      title: 'JADAVPUR HIGH SCHOOL',
-      subtitle: 'FOUNDATIONAL & SECONDARY EDUCATION',
-      badge: 'ALUMNUS & TOPPER',
-      description:
-        'Completed foundational and secondary schooling at Jadavpur High School, cultivating academic rigor, discipline, and a deep-seated interest in mathematics, science, and technology.',
-      highlights: [
-        'Six years of foundational academic and extracurricular growth (Class 5 to Class 10).',
-        'School Topper in secondary board examination with 88.71% (Rank #1).',
-        'Awarded academic honors and recognition for excellence in science.',
-      ],
-    },
-  ];
-
-  const achievementCards: AchievementCard[] = [
+  const achievements: AchievementCard[] = [
     {
       id: 'jhs-counselling-honour',
       category: 'INSTITUTIONAL COMMENDATION',
@@ -506,6 +271,529 @@ export const Experience: React.FC = () => {
         'Ranked #1 among all secondary graduation candidates across the institution',
         '88.71% aggregate score with distinctions across Science & Higher Mathematics',
         'Awarded institutional honors for academic dedication and scientific inquiry',
+      ],
+    },
+  ];
+
+  const total = achievements.length;
+
+  // Direct DOM Update Engine (0ms Reflow, Pure GPU Compositing)
+  const renderDeckFrame = useCallback(
+    (p: number) => {
+      const virtualPos = p * (total - 1);
+      const activeIdx = Math.min(Math.round(virtualPos), total - 1);
+      activeIndexRef.current = activeIdx;
+
+      // Update progress track & percentage at the upper side
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${Math.max(p * 100, 6)}%`;
+      }
+      if (progressTextRef.current) {
+        progressTextRef.current.textContent = `${Math.round(p * 100)}%`;
+      }
+
+      // Update HUD labels
+      if (badgeTextRef.current) {
+        badgeTextRef.current.textContent = `HONOR 0${activeIdx + 1} / 0${total}`;
+      }
+      if (categoryTextRef.current) {
+        categoryTextRef.current.textContent = achievements[activeIdx].category;
+      }
+      if (footerTextRef.current) {
+        footerTextRef.current.textContent = `0${activeIdx + 1} / 0${total} COMPLETED`;
+      }
+
+      // Update pill buttons
+      pillsRef.current.forEach((btn, i) => {
+        if (!btn) return;
+        if (i === activeIdx) {
+          btn.style.background = 'linear-gradient(to right, #fbbf24, #f97316)';
+          btn.style.color = '#000000';
+          btn.style.boxShadow = '0 0 15px rgba(251,191,36,0.6)';
+          btn.style.transform = 'scale(1.06)';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = '#a1a1aa';
+          btn.style.boxShadow = 'none';
+          btn.style.transform = 'scale(1.0)';
+        }
+      });
+
+      // Direct GPU Transform & Opacity on each Card DOM Element
+      cardsRef.current.forEach((cardEl, idx) => {
+        if (!cardEl) return;
+        const delta = idx - virtualPos;
+
+        let transform = '';
+        let opacity = 1;
+        let zIndex = 20;
+
+        if (delta > 0) {
+          // Card rising from below
+          if (delta >= 1) {
+            const extra = delta - 1;
+            transform = `translate3d(0, ${110 + extra * 30}%, 80px) rotateX(12deg) scale(0.92)`;
+            opacity = 0;
+            zIndex = 10;
+          } else {
+            const yPercent = delta * 105;
+            const rotX = delta * 10;
+            const scale = 0.94 + (1 - delta) * 0.06;
+            transform = `translate3d(0, ${yPercent}%, ${40 * (1 - delta)}px) rotateX(${rotX}deg) scale(${scale})`;
+            opacity = Math.min(1, (1 - delta) * 1.8);
+            zIndex = 30 + idx * 4;
+          }
+        } else {
+          // Card active or stacking underneath
+          const depth = -delta;
+          if (depth < 0.12) {
+            transform = 'translate3d(0, 0, 0) rotateX(0deg) scale(1)';
+            opacity = 1;
+            zIndex = 40;
+          } else {
+            const yOffset = -depth * 18;
+            const zOffset = -depth * 65;
+            const rotX = -depth * 2.0;
+            const scale = Math.max(0.86, 1 - depth * 0.045);
+            transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
+            opacity = Math.max(0.25, 1 - depth * 0.25);
+            zIndex = 30 + idx * 4 - Math.round(depth * 5);
+          }
+        }
+
+        const isFront = activeIdx === idx;
+
+        cardEl.style.transform = transform;
+        cardEl.style.opacity = `${opacity}`;
+        cardEl.style.zIndex = `${zIndex}`;
+        cardEl.style.borderColor = isFront ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.1)';
+        cardEl.style.boxShadow = isFront
+          ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+          : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
+        cardEl.style.pointerEvents = isFront || Math.abs(delta) < 0.8 ? 'auto' : 'none';
+      });
+    },
+    [total, achievements]
+  );
+
+  // 144Hz Smooth Lerp Loop
+  useEffect(() => {
+    const updatePhysics = () => {
+      const diff = targetProgressRef.current - currentProgressRef.current;
+      currentProgressRef.current += diff * 0.15;
+
+      if (Math.abs(diff) < 0.0003) {
+        currentProgressRef.current = targetProgressRef.current;
+      }
+
+      renderDeckFrame(currentProgressRef.current);
+
+      if (Math.abs(targetProgressRef.current - currentProgressRef.current) > 0.0002) {
+        animFrameRef.current = requestAnimationFrame(updatePhysics);
+      } else {
+        animFrameRef.current = null;
+      }
+    };
+
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const stickyTop = window.innerWidth >= 768 ? 90 : 80;
+      const totalDistance = rect.height - windowHeight;
+
+      if (totalDistance <= 0) return;
+
+      const scrolled = stickyTop - rect.top;
+      const rawProgress = scrolled / totalDistance;
+      const clamped = Math.min(Math.max(rawProgress, 0), 1);
+
+      targetProgressRef.current = clamped;
+
+      if (!animFrameRef.current) {
+        animFrameRef.current = requestAnimationFrame(updatePhysics);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
+    };
+  }, [renderDeckFrame]);
+
+  // Jump to specific card smoothly
+  const jumpToCard = useCallback(
+    (index: number) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerTop = window.scrollY + rect.top;
+      const totalDistance = rect.height - window.innerHeight;
+      const targetProgress = index / (total - 1);
+      const stickyTop = window.innerWidth >= 768 ? 90 : 80;
+      const targetScrollY = containerTop + targetProgress * totalDistance - stickyTop;
+
+      window.scrollTo({
+        top: Math.max(0, targetScrollY),
+        behavior: 'smooth',
+      });
+    },
+    [total]
+  );
+
+  const nextCard = () => {
+    const nextIdx = Math.min(activeIndexRef.current + 1, total - 1);
+    jumpToCard(nextIdx);
+  };
+
+  const prevCard = () => {
+    const prevIdx = Math.max(activeIndexRef.current - 1, 0);
+    jumpToCard(prevIdx);
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          nextCard();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          prevCard();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Touch swipe support on mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY.current === null) return;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diff = touchStartY.current - touchEndY;
+
+    if (Math.abs(diff) > 45) {
+      if (diff > 0) {
+        nextCard();
+      } else {
+        prevCard();
+      }
+    }
+    touchStartY.current = null;
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative h-[280vh] sm:h-[320vh] w-full"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Sticky Viewport Window */}
+      <div className="sticky top-[80px] md:top-[90px] h-[calc(100vh-100px)] min-h-[560px] sm:min-h-[600px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1180px] mx-auto px-2 sm:px-4 select-none">
+        
+        {/* Top Interactive HUD Bar with Live Percentage Progress */}
+        <div className="flex items-center justify-between gap-4 mb-2.5 pb-2.5 border-b border-white/[0.08] relative z-40 flex-wrap">
+          
+          {/* Active Card Badge & Category Tag */}
+          <div className="flex items-center gap-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.70rem] sm:text-[0.75rem] font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+              <Trophy size={13} className="text-accent-orange" />
+              <span ref={badgeTextRef}>HONOR 01 / 0{total}</span>
+            </div>
+
+            <span ref={categoryTextRef} className="font-mono text-[0.68rem] text-zinc-400 hidden md:inline uppercase tracking-wider">
+              {achievements[0].category}
+            </span>
+          </div>
+
+          {/* Center: Live Scroll Progress Track & Percentage Indicator */}
+          <div className="flex items-center gap-2.5 flex-1 max-w-[280px] sm:max-w-[340px] mx-2 sm:mx-4">
+            <div className="h-2 w-full bg-white/[0.08] rounded-full overflow-hidden p-0.5 border border-white/[0.06]">
+              <div
+                ref={progressBarRef}
+                className="h-full bg-gradient-to-r from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_12px_#fbbf24]"
+                style={{ width: '6%' }}
+              />
+            </div>
+            <div className="font-mono text-[0.72rem] sm:text-[0.78rem] text-amber-400 font-black shrink-0 px-2 py-0.5 rounded-md bg-amber-400/10 border border-amber-400/25 min-w-[44px] text-center shadow-[0_0_10px_rgba(251,191,36,0.15)]">
+              <span ref={progressTextRef}>0%</span>
+            </div>
+          </div>
+
+          {/* Right: Step Pills & Tactile Navigation Buttons */}
+          <div className="flex items-center gap-2.5">
+            {/* Step Pills */}
+            <div className="hidden sm:flex items-center gap-1.5 bg-white/[0.03] p-1 rounded-full border border-white/[0.08]">
+              {achievements.map((_, i) => (
+                <button
+                  key={i}
+                  ref={(el) => {
+                    pillsRef.current[i] = el;
+                  }}
+                  onClick={() => jumpToCard(i)}
+                  className={`px-2.5 py-0.5 rounded-full font-mono text-[0.66rem] font-black transition-all duration-200 cursor-pointer ${
+                    i === 0
+                      ? 'bg-gradient-to-r from-amber-400 to-accent-orange text-black shadow-[0_0_15px_rgba(251,191,36,0.6)] scale-105'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
+                  }`}
+                  aria-label={`Jump to achievement ${i + 1}`}
+                >
+                  0{i + 1}
+                </button>
+              ))}
+            </div>
+
+            {/* Next / Prev Arrow Buttons */}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={prevCard}
+                className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer shadow-md"
+                aria-label="Previous Achievement"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={nextCard}
+                className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer shadow-md"
+                aria-label="Next Achievement"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 3D Physical Stacking Cards Stage */}
+        <div
+          className="relative flex-1 w-full flex items-center justify-center"
+          style={{ perspective: 1800 }}
+        >
+          {achievements.map((item, idx) => {
+            const IconComponent = item.icon;
+
+            return (
+              <div
+                key={item.id}
+                ref={(el) => {
+                  cardsRef.current[idx] = el;
+                }}
+                onClick={() => jumpToCard(idx)}
+                className="achievement-scroll-card absolute w-full max-w-[1180px] rounded-2xl sm:rounded-3xl border p-5 sm:p-6 md:py-6 md:px-8 lg:py-6 lg:px-9 bg-[#0c0d16] overflow-hidden cursor-pointer"
+                style={{
+                  willChange: 'transform, opacity',
+                  transform: idx === 0 ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 110%, 80px) scale(0.92)',
+                  opacity: idx === 0 ? 1 : 0,
+                  zIndex: idx === 0 ? 40 : 10,
+                  borderColor: idx === 0 ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.1)',
+                  boxShadow: idx === 0
+                    ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+                    : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+                }}
+              >
+                {/* Active Golden Edge Sheen */}
+                <div
+                  className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+                  aria-hidden="true"
+                />
+
+                {/* Giant Stylized Index Watermark */}
+                <div
+                  className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.5rem] leading-none select-none pointer-events-none text-white/[0.03]"
+                  aria-hidden="true"
+                >
+                  0{idx + 1}
+                </div>
+
+                {/* Card Content Layout: 2 Columns */}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-5 sm:gap-6 items-center relative z-10">
+                  
+                  {/* Left Column: Details & Highlights */}
+                  <div>
+                    {/* Header Chips */}
+                    <div className="flex items-center gap-2.5 mb-2.5 flex-wrap">
+                      <span className="font-mono text-[0.68rem] sm:text-[0.74rem] font-black px-3.5 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
+                        <CheckCircle2 size={12} />
+                        <span>{item.badge}</span>
+                      </span>
+                      <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
+                        {item.category}
+                      </span>
+                      <span className="text-white/20 text-xs hidden sm:inline">•</span>
+                      <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
+                        {item.yearTag}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h4 className="font-display text-[1.25rem] sm:text-[1.55rem] md:text-[1.75rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
+                      {item.title}
+                    </h4>
+
+                    {/* Monospace Subtitle */}
+                    <div className="font-mono text-[0.76rem] sm:text-[0.84rem] font-bold text-amber-400 tracking-wide uppercase mb-2.5 flex items-center gap-1.5">
+                      <span className="text-accent-orange">▹</span>
+                      <span>{item.subtitle}</span>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-[0.86rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-3.5 font-normal max-w-[850px]">
+                      {item.description}
+                    </p>
+
+                    {/* Bullet Highlights */}
+                    <div className="flex flex-col gap-1.5 sm:gap-2 pt-2.5 border-t border-white/[0.08] max-w-[850px]">
+                      {item.highlights.map((highlight, hIdx) => (
+                        <div
+                          key={hIdx}
+                          className="flex items-start gap-2.5 text-[0.82rem] sm:text-[0.88rem] text-zinc-300"
+                        >
+                          <span className="text-accent-orange text-xs mt-0.5 shrink-0">◆</span>
+                          <span className="leading-snug">{highlight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Hologram Emblem Medallion */}
+                  <div className="hidden md:flex flex-col items-center justify-center p-4 sm:p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch justify-self-center w-full">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-2.5">
+                      <IconComponent size={28} />
+                    </div>
+                    <div className="font-display text-[1.35rem] font-black text-white leading-none mb-1">
+                      {item.statNumber}
+                    </div>
+                    <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase mb-1.5">
+                      {item.statLabel}
+                    </div>
+                    <div className="inline-flex items-center gap-1 text-[0.62rem] font-mono text-zinc-400 pt-1.5 border-t border-white/[0.06] w-full justify-center">
+                      <Star size={11} className="text-amber-400" fill="currentColor" />
+                      <span>VERIFIED RECOGNITION</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Footnote Status Bar */}
+                <div className="pt-2.5 mt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.66rem] text-zinc-500 flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={11} className="text-amber-400" />
+                    <span>SCHOLASTIC &amp; SPORTS RECOGNITION</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-accent-orange font-bold">
+                    <span>HONOR 0{idx + 1} OF 05</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Bottom Navigation Hint Bar */}
+        <div className="flex items-center justify-between text-zinc-400 text-xs font-mono pt-2 border-t border-white/[0.08] relative z-40">
+          <div className="flex items-center gap-2">
+            <MousePointer size={12} className="text-accent-orange animate-bounce" />
+            <span>SCROLL DOWN TO PROGRESS • ARROW KEYS TO NAVIGATE</span>
+          </div>
+          <span ref={footerTextRef} className="text-zinc-400 font-bold">
+            01 / 0{total} COMPLETED
+          </span>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+/* ========================================================================= */
+/* MAIN EXPERIENCE & JOURNEY COMPONENT                                       */
+/* ========================================================================= */
+export const Experience: React.FC = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const timelineRef = useRef<HTMLDivElement | null>(null);
+  const desktopBeamRef = useRef<HTMLDivElement | null>(null);
+  const desktopSparkRef = useRef<HTMLDivElement | null>(null);
+  const mobileBeamRef = useRef<HTMLDivElement | null>(null);
+  const mobileSparkRef = useRef<HTMLDivElement | null>(null);
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const timelineMilestones: TimelineMilestone[] = [
+    {
+      id: 'btech-cse',
+      year: '2026 — PRESENT',
+      periodTag: 'CURRENT DEGREE',
+      icon: GraduationCap,
+      title: 'B.TECH IN COMPUTER SCIENCE & ENGINEERING',
+      subtitle: 'FUTURE INSTITUTE OF ENGINEERING AND MANAGEMENT (FIEM)',
+      badge: 'ACTIVE UNDERGRADUATE',
+      description:
+        'Pursuing Computer Science & Engineering with intensive focus on Data Structures & Algorithms (DSA), Java Object-Oriented Programming (OOP), software system design, and practical software development.',
+      highlights: [
+        'Mastering core algorithms, data structures & computational problem solving.',
+        'Learning Java OOP and practicing algorithmic optimization daily.',
+        'Active development in Python, desktop automation experiments, and modern web software.',
+      ],
+    },
+    {
+      id: 'class-12',
+      year: '2024 — 2026',
+      periodTag: 'HIGHER SECONDARY',
+      icon: BookOpen,
+      title: 'CLASS 12 — SCIENCE STREAM',
+      subtitle: 'JADAVPUR VIDYAPITH',
+      badge: '77.81% SCORE',
+      description:
+        'Completed Higher Secondary Science education with 77.81%, establishing robust analytical foundations in advanced mathematics, logical reasoning, and scientific methodology.',
+      highlights: [
+        'Advanced Physics, Chemistry, and Higher Mathematics.',
+        'Rigorous quantitative problem solving and analytical thinking.',
+      ],
+    },
+    {
+      id: 'class-10',
+      year: '2024',
+      periodTag: 'SECONDARY SCHOOL',
+      icon: Award,
+      title: 'CLASS 10 — SECONDARY SCHOOL',
+      subtitle: 'JADAVPUR HIGH SCHOOL',
+      badge: '88.71% TOPPER',
+      description:
+        'Graduated as School Topper with 88.71%, demonstrating academic excellence and a deep passion for science, mathematics, and logic.',
+      highlights: [
+        'Ranked as Class 10 School Topper with 88.71%.',
+        'Built early foundations in computational thinking and scientific inquiry.',
+      ],
+    },
+    {
+      id: 'jadavpur-high-school',
+      year: '2018 — 2024',
+      periodTag: 'SCHOOLING YEARS',
+      icon: Compass,
+      title: 'JADAVPUR HIGH SCHOOL',
+      subtitle: 'FOUNDATIONAL & SECONDARY EDUCATION',
+      badge: 'ALUMNUS & TOPPER',
+      description:
+        'Completed foundational and secondary schooling at Jadavpur High School, cultivating academic rigor, discipline, and a deep-seated interest in mathematics, science, and technology.',
+      highlights: [
+        'Six years of foundational academic and extracurricular growth (Class 5 to Class 10).',
+        'School Topper in secondary board examination with 88.71% (Rank #1).',
+        'Awarded academic honors and recognition for excellence in science.',
       ],
     },
   ];
@@ -805,7 +1093,7 @@ export const Experience: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* OTHER ACHIEVEMENTS: ULTRA-LUXURY SCROLL-REVEAL SHOWCASE                    */}
+        {/* OTHER ACHIEVEMENTS: 3D SCROLL-DRIVEN STACKING DECK                        */}
         {/* ========================================================================= */}
         <div className="pt-8 border-t border-white/[0.08]">
           <div className="flex items-center gap-3.5 mb-8 max-w-[1180px] mx-auto">
@@ -822,12 +1110,8 @@ export const Experience: React.FC = () => {
             </div>
           </div>
 
-          {/* Sequential Scroll-Driven 3D Cards Stream */}
-          <div className="space-y-6 sm:space-y-7">
-            {achievementCards.map((item, idx) => (
-              <HonorScrollCard key={item.id} item={item} index={idx} />
-            ))}
-          </div>
+          {/* 3D Physical Stacking Deck with Upper Percentage Progress */}
+          <ScrollStackedHonorsDeck />
         </div>
 
       </div>
