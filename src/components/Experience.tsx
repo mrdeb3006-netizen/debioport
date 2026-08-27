@@ -75,13 +75,12 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
         setIsHovered(false);
         setMousePos(null);
       }}
-      className="milestone-glass-card group relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-9 transition-[border-color,box-shadow,transform] duration-300 overflow-hidden border border-white/[0.08] bg-[#0c0d16] shadow-[0_20px_50px_rgba(0,0,0,0.65)] hover:border-amber-400/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.12)] hover:-translate-y-1"
-      style={{ willChange: 'border-color, box-shadow, transform' }}
+      className="milestone-glass-card group relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-9 transition-all duration-500 overflow-hidden border border-white/[0.08] bg-[#0c0d16]/85 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.65)] hover:border-amber-400/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.12)] hover:-translate-y-1"
     >
       {/* Interactive Cursor Spotlight Glow */}
       {mousePos && (
         <div
-          className="absolute pointer-events-none transition-opacity duration-200 w-[380px] h-[380px] rounded-full blur-3xl opacity-15 bg-amber-400 transform -translate-x-1/2 -translate-y-1/2"
+          className="absolute pointer-events-none transition-opacity duration-300 w-[380px] h-[380px] rounded-full blur-3xl opacity-15 bg-amber-400 transform -translate-x-1/2 -translate-y-1/2"
           style={{
             left: `${mousePos.x}px`,
             top: `${mousePos.y}px`,
@@ -91,7 +90,7 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 
       {/* Top Prismatic Golden Edge Reflection */}
       <div
-        className={`absolute -top-px left-8 right-8 h-[1.5px] transition-opacity duration-300 ${
+        className={`absolute -top-px left-8 right-8 h-[1.5px] transition-opacity duration-500 ${
           isHovered
             ? 'opacity-100 bg-gradient-to-r from-transparent via-amber-400 to-transparent'
             : 'opacity-40 bg-gradient-to-r from-transparent via-white/20 to-transparent'
@@ -104,7 +103,7 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 
       {/* Giant Stylized Index Watermark */}
       <div
-        className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.4rem] leading-none select-none pointer-events-none transition-all duration-300 text-white/[0.03] group-hover:text-amber-400/[0.08] group-hover:scale-105"
+        className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.4rem] leading-none select-none pointer-events-none transition-all duration-500 text-white/[0.03] group-hover:text-amber-400/[0.08] group-hover:scale-105"
         aria-hidden="true"
       >
         0{index + 1}
@@ -166,7 +165,7 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 };
 
 /* ========================================================================= */
-/* ULTRA-FAST 144Hz DIRECT-DOM 3D STACKED HONORS SHOWCASE                    */
+/* PRO-LEVEL SCROLL-DRIVEN 3D STACKED HONORS SHOWCASE (DIRECT-DOM GPU ENGINE)*/
 /* ========================================================================= */
 const ScrollStackedHonorsDeck: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -825,7 +824,7 @@ export const Experience: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // 144Hz Hyper-Reactive GPU-Accelerated Scroll Beam with Liquid Damping
+  // 144Hz Hyper-Reactive GPU-Accelerated Scroll Beam (0ms Reflow, Zero Layout Thrashing)
   useEffect(() => {
     let animId: number;
     let targetProgress = 0;
@@ -860,9 +859,8 @@ export const Experience: React.FC = () => {
     };
 
     const updateDOM = () => {
-      // Liquid damping for butter-smooth laser beam glide
-      currentProgress += (targetProgress - currentProgress) * 0.18;
-      if (Math.abs(targetProgress - currentProgress) < 0.0005) {
+      currentProgress += (targetProgress - currentProgress) * 0.45;
+      if (Math.abs(targetProgress - currentProgress) < 0.001) {
         currentProgress = targetProgress;
       }
 
@@ -901,7 +899,6 @@ export const Experience: React.FC = () => {
 
           const node = row.querySelector<HTMLElement>('.timeline-node-circle');
           const year = row.querySelector<HTMLElement>('.timeline-row-year');
-          const card = row.querySelector<HTMLElement>('.milestone-glass-card');
 
           const isReached = clamped >= offsetFraction - 0.03;
 
@@ -916,16 +913,10 @@ export const Experience: React.FC = () => {
             year.style.color = isReached ? '#fbbf24' : '#a1a1aa';
             year.style.textShadow = isReached ? '0 0 14px rgba(251,191,36,0.65)' : 'none';
           }
-          if (card) {
-            card.style.borderColor = isReached ? 'rgba(251,191,36,0.35)' : 'rgba(255,255,255,0.08)';
-            card.style.boxShadow = isReached
-              ? '0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(245,158,11,0.1)'
-              : '0 15px 35px rgba(0,0,0,0.6)';
-          }
         });
       }
 
-      if (Math.abs(targetProgress - currentProgress) > 0.0004) {
+      if (Math.abs(targetProgress - currentProgress) > 0.0005) {
         animId = requestAnimationFrame(updateDOM);
       }
     };
