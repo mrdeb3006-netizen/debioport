@@ -476,10 +476,15 @@ export const DarvesChat: React.FC = () => {
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
-                  className="btn-primary w-10 h-10 rounded-xl p-0 justify-center disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 shrink-0 ${
+                    input.trim() && !isTyping
+                      ? 'bg-accent-orange text-black hover:bg-orange-400 active:scale-95 shadow-[0_0_15px_rgba(249,115,22,0.4)] cursor-pointer'
+                      : 'bg-white/10 text-slate-400 border border-white/10 opacity-70 cursor-not-allowed'
+                  }`}
                   aria-label="Send Message"
+                  title="Send Message"
                 >
-                  <Send size={16} />
+                  <Send size={17} className={input.trim() && !isTyping ? 'text-black' : 'text-slate-400'} />
                 </button>
               </form>
             </>
