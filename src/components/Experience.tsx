@@ -75,7 +75,7 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
         setIsHovered(false);
         setMousePos(null);
       }}
-      className="milestone-glass-card group relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-9 transition-all duration-500 overflow-hidden border border-white/[0.08] bg-[#0c0d16]/85 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.65)] hover:border-amber-400/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.12)] hover:-translate-y-1"
+      className="milestone-glass-card group relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-9 transition-[border-color,box-shadow,transform] duration-500 overflow-hidden border border-white/[0.08] bg-[#0c0d16]/85 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.65)] hover:border-amber-400/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.12)] hover:-translate-y-1"
     >
       {/* Interactive Cursor Spotlight Glow */}
       {mousePos && (
@@ -165,15 +165,19 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 };
 
 /* ========================================================================= */
-/* PRO-LEVEL SCROLL-DRIVEN 3D STACKED HONORS DECK                           */
+/* PRO-LEVEL SCROLL-DRIVEN 3D STACKED HONORS DECK (SILKY LERP PHYSICS)       */
 /* ========================================================================= */
 const ScrollStackedHonorsDeck: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [smoothProgress, setSmoothProgress] = useState(0);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
   const touchStartY = useRef<number | null>(null);
+
+  const targetProgressRef = useRef(0);
+  const currentProgressRef = useRef(0);
+  const animFrameRef = useRef<number | null>(null);
 
   const achievements: AchievementCard[] = [
     {
@@ -270,9 +274,30 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
   const total = achievements.length;
 
-  // Track scroll progress inside the pinned container
+  // Ultra-Smooth 120Hz/144Hz rAF Physics Loop
   useEffect(() => {
-    let animId: number;
+    const updatePhysics = () => {
+      const diff = targetProgressRef.current - currentProgressRef.current;
+      // Damped lerp factor for ultra-silky fluid interpolation
+      currentProgressRef.current += diff * 0.12;
+
+      if (Math.abs(diff) < 0.0004) {
+        currentProgressRef.current = targetProgressRef.current;
+      }
+
+      const p = currentProgressRef.current;
+      setSmoothProgress(p);
+
+      const virtualPos = p * (total - 1);
+      const activeIdx = Math.min(Math.round(virtualPos), total - 1);
+      setActiveCardIndex(activeIdx);
+
+      if (Math.abs(targetProgressRef.current - currentProgressRef.current) > 0.0002) {
+        animFrameRef.current = requestAnimationFrame(updatePhysics);
+      } else {
+        animFrameRef.current = null;
+      }
+    };
 
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -287,12 +312,11 @@ const ScrollStackedHonorsDeck: React.FC = () => {
       const rawProgress = scrolled / totalDistance;
       const clamped = Math.min(Math.max(rawProgress, 0), 1);
 
-      setScrollProgress(clamped);
+      targetProgressRef.current = clamped;
 
-      // Active card index determination
-      const virtualPos = clamped * (total - 1);
-      const activeIdx = Math.min(Math.round(virtualPos), total - 1);
-      setActiveCardIndex(activeIdx);
+      if (!animFrameRef.current) {
+        animFrameRef.current = requestAnimationFrame(updatePhysics);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -302,7 +326,9 @@ const ScrollStackedHonorsDeck: React.FC = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
-      cancelAnimationFrame(animId);
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
     };
   }, [total]);
 
@@ -414,12 +440,12 @@ const ScrollStackedHonorsDeck: React.FC = () => {
           <div className="hidden lg:flex items-center gap-2 flex-1 max-w-[280px] mx-4">
             <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden p-0.5">
               <div
-                className="h-full bg-gradient-to-r from-amber-400 via-accent-orange to-amber-500 rounded-full transition-all duration-150 shadow-[0_0_10px_#fbbf24]"
-                style={{ width: `${Math.max(scrollProgress * 100, 6)}%` }}
+                className="h-full bg-gradient-to-r from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_10px_#fbbf24]"
+                style={{ width: `${Math.max(smoothProgress * 100, 6)}%` }}
               />
             </div>
             <span className="font-mono text-[0.66rem] text-zinc-400 font-bold shrink-0">
-              {Math.round(scrollProgress * 100)}%
+              {Math.round(smoothProgress * 100)}%
             </span>
           </div>
 
@@ -431,7 +457,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                 <button
                   key={i}
                   onClick={() => jumpToCard(i)}
-                  className={`px-2.5 py-0.5 rounded-full font-mono text-[0.66rem] font-black transition-all duration-300 cursor-pointer ${
+                  className={`px-2.5 py-0.5 rounded-full font-mono text-[0.66rem] font-black transition-[background-color,color,transform,box-shadow] duration-200 cursor-pointer ${
                     activeCardIndex === i
                       ? 'bg-gradient-to-r from-amber-400 to-accent-orange text-black shadow-[0_0_15px_rgba(251,191,36,0.6)] scale-105'
                       : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
@@ -475,8 +501,8 @@ const ScrollStackedHonorsDeck: React.FC = () => {
           {achievements.map((item, idx) => {
             const IconComponent = item.icon;
             
-            // Continuous float position from scroll progress: [0 .. total - 1]
-            const virtualPos = scrollProgress * (total - 1);
+            // Continuous float position from smooth physics progress: [0 .. total - 1]
+            const virtualPos = smoothProgress * (total - 1);
             const delta = idx - virtualPos;
 
             let transform = '';
@@ -502,18 +528,18 @@ const ScrollStackedHonorsDeck: React.FC = () => {
             } else {
               // Card is active or sunk into the stack
               const depth = -delta; // depth >= 0
-              if (depth < 0.15) {
+              if (depth < 0.12) {
                 transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
                 opacity = 1;
                 zIndex = 40;
               } else {
-                const yOffset = -depth * 20;
-                const zOffset = -depth * 70;
-                const rotX = -depth * 2.5;
+                const yOffset = -depth * 18;
+                const zOffset = -depth * 65;
+                const rotX = -depth * 2.2;
                 const scale = Math.max(0.86, 1 - depth * 0.045);
                 transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-                opacity = Math.max(0.2, 1 - depth * 0.28);
-                filter = `blur(${Math.min(depth * 1.0, 2.5)}px)`;
+                opacity = Math.max(0.2, 1 - depth * 0.26);
+                filter = `blur(${Math.min(depth * 0.8, 2.2)}px)`;
                 zIndex = 30 + idx * 4 - Math.round(depth * 5);
               }
             }
@@ -524,7 +550,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
               <div
                 key={item.id}
                 onClick={() => !isFront && jumpToCard(idx)}
-                className={`achievement-scroll-card absolute w-full max-w-[1020px] rounded-2xl sm:rounded-3xl border p-5 sm:p-7 md:p-8 lg:p-9 bg-[#0b0c14]/95 backdrop-blur-2xl transition-all duration-300 ease-out overflow-hidden ${
+                className={`achievement-scroll-card absolute w-full max-w-[1020px] rounded-2xl sm:rounded-3xl border p-5 sm:p-7 md:p-8 lg:p-9 bg-[#0b0c14]/95 backdrop-blur-2xl transition-[border-color,box-shadow] duration-300 overflow-hidden ${
                   !isFront ? 'cursor-pointer hover:border-amber-400/50' : 'cursor-default'
                 }`}
                 style={{
@@ -770,7 +796,7 @@ export const Experience: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // 144Hz Hyper-Reactive GPU-Accelerated Scroll Beam (0ms Reflow, Zero Layout Thrashing)
+  // 144Hz Hyper-Reactive GPU-Accelerated Scroll Beam with Liquid Damping
   useEffect(() => {
     let animId: number;
     let targetProgress = 0;
@@ -805,8 +831,9 @@ export const Experience: React.FC = () => {
     };
 
     const updateDOM = () => {
-      currentProgress += (targetProgress - currentProgress) * 0.45;
-      if (Math.abs(targetProgress - currentProgress) < 0.001) {
+      // Liquid damping for butter-smooth laser beam glide
+      currentProgress += (targetProgress - currentProgress) * 0.14;
+      if (Math.abs(targetProgress - currentProgress) < 0.0005) {
         currentProgress = targetProgress;
       }
 
@@ -869,7 +896,7 @@ export const Experience: React.FC = () => {
         });
       }
 
-      if (Math.abs(targetProgress - currentProgress) > 0.0005) {
+      if (Math.abs(targetProgress - currentProgress) > 0.0004) {
         animId = requestAnimationFrame(updateDOM);
       }
     };
