@@ -137,12 +137,40 @@ const PhysicalShuffleDeck: React.FC = () => {
   const [deckOrder, setDeckOrder] = useState<number[]>(() => achievements.map((_, i) => i));
   const [isHovered, setIsHovered] = useState(false);
   const [isDealing, setIsDealing] = useState(false);
+  const [deckHeight, setDeckHeight] = useState<number>(460);
+  const frontCardRef = useRef<HTMLDivElement | null>(null);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const dealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => () => {
     if (dealTimerRef.current) clearTimeout(dealTimerRef.current);
   }, []);
+
+  // Dynamically measure active front card height to ensure 100% zero bottom cut-off on any screen/device
+  useEffect(() => {
+    const measureHeight = () => {
+      if (frontCardRef.current) {
+        const height = frontCardRef.current.offsetHeight;
+        if (height > 0) {
+          // 28px top anchor + 40px buffer for 3D card tilt & bottom shadow clearance
+          setDeckHeight(height + 68);
+        }
+      }
+    };
+
+    measureHeight();
+
+    const ro = new ResizeObserver(measureHeight);
+    if (frontCardRef.current) {
+      ro.observe(frontCardRef.current);
+    }
+    window.addEventListener('resize', measureHeight);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measureHeight);
+    };
+  }, [deckOrder]);
 
   // Physical "Swipe & Re-deal to Back" Shuffle Execution
   const shuffleNext = useCallback(() => {
@@ -210,10 +238,13 @@ const PhysicalShuffleDeck: React.FC = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 3D Physical Deck Container */}
+      {/* 3D Physical Deck Container - Dynamically sized to active card + responsive fallbacks */}
       <div
-        className="relative min-h-[440px] sm:min-h-[380px] md:min-h-[350px] w-full flex items-center justify-center py-2"
-        style={{ perspective: 1800 }}
+        className="relative w-full flex items-center justify-center py-2 transition-[min-height] duration-300 ease-out min-h-[600px] sm:min-h-[520px] md:min-h-[480px] lg:min-h-[460px]"
+        style={{
+          perspective: 1800,
+          minHeight: `${Math.max(deckHeight, 460)}px`,
+        }}
       >
         {/* Flanking Side Arrows for Direct Manual Shuffling */}
         <button
@@ -296,8 +327,9 @@ const PhysicalShuffleDeck: React.FC = () => {
           return (
             <div
               key={item.id}
+              ref={isFront ? frontCardRef : null}
               onClick={() => !isFront && bringToFront(achIdx)}
-              className={`achievement-deck-card absolute top-6 w-full max-w-[1000px] rounded-2xl sm:rounded-3xl border p-6 sm:p-7 md:p-8 bg-[#0c0d14]/95 backdrop-blur-2xl ${
+              className={`achievement-deck-card absolute top-5 sm:top-6 w-full max-w-[1000px] rounded-2xl sm:rounded-3xl border p-5 sm:p-7 md:p-8 bg-[#0c0d14]/95 backdrop-blur-2xl ${
                 !isFront ? 'cursor-pointer hover:border-amber-400/50' : 'cursor-default'
               }`}
               style={{
@@ -322,14 +354,14 @@ const PhysicalShuffleDeck: React.FC = () => {
               )}
 
               {/* Responsive 2-Column Wide Card Layout */}
-              <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-6 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-4 sm:gap-6 items-center">
                 
                 {/* Left Area: Content, Badges & Highlights */}
                 <div>
                   {/* Category Pill Bar & Top Shuffle Arrow Button */}
-                  <div className="flex items-center justify-between gap-2.5 mb-3 flex-wrap">
+                  <div className="flex items-center justify-between gap-2.5 mb-2.5 sm:mb-3 flex-wrap">
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="font-mono text-[0.70rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="font-mono text-[0.68rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5">
                         <CheckCircle2 size={12} />
                         <span>{item.badge}</span>
                       </span>
@@ -350,7 +382,7 @@ const PhysicalShuffleDeck: React.FC = () => {
                           shuffleNext();
                         }}
                         disabled={isDealing}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/35 hover:border-amber-400/70 text-amber-400 hover:text-amber-300 text-[0.70rem] font-mono font-bold uppercase tracking-wider transition-all duration-200 active:scale-95 group/shufbtn shadow-[0_0_15px_rgba(245,158,11,0.15)] ml-auto"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/35 hover:border-amber-400/70 text-amber-400 hover:text-amber-300 text-[0.68rem] sm:text-[0.70rem] font-mono font-bold uppercase tracking-wider transition-all duration-200 active:scale-95 group/shufbtn shadow-[0_0_15px_rgba(245,158,11,0.15)] ml-auto cursor-pointer"
                         title="Click arrow to shuffle next card"
                         aria-label="Shuffle to next card"
                       >
@@ -362,30 +394,30 @@ const PhysicalShuffleDeck: React.FC = () => {
                   </div>
 
                   {/* Title */}
-                  <h4 className="font-display text-[1.35rem] sm:text-[1.65rem] md:text-[1.85rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
+                  <h4 className="font-display text-[1.25rem] sm:text-[1.55rem] md:text-[1.8rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
                     {item.title}
                   </h4>
 
                   {/* Monospace Subtitle */}
-                  <div className="font-mono text-[0.80rem] sm:text-[0.86rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
+                  <div className="font-mono text-[0.76rem] sm:text-[0.84rem] font-bold text-amber-400 tracking-wide uppercase mb-2 sm:mb-2.5 flex items-center gap-1.5">
                     <span>▹</span>
                     <span>{item.subtitle}</span>
                   </div>
 
                   {/* Description */}
-                  <p className="text-[0.88rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[740px]">
+                  <p className="text-[0.85rem] sm:text-[0.91rem] text-zinc-300 leading-relaxed mb-3 sm:mb-4 font-normal max-w-[740px]">
                     {item.description}
                   </p>
 
                   {/* Bullet Highlights */}
-                  <div className="flex flex-col gap-1.5 pt-2.5 border-t border-white/[0.06] max-w-[740px]">
+                  <div className="flex flex-col gap-1.5 sm:gap-2 pt-2.5 border-t border-white/[0.06] max-w-[740px]">
                     {item.highlights.map((highlight, hIdx) => (
                       <div
                         key={hIdx}
-                        className="flex items-start gap-2 text-[0.82rem] sm:text-[0.86rem] text-zinc-300"
+                        className="flex items-start gap-2 text-[0.80rem] sm:text-[0.85rem] text-zinc-300"
                       >
-                        <span className="text-accent-orange text-xs mt-0.5">●</span>
-                        <span className="leading-tight">{highlight}</span>
+                        <span className="text-accent-orange text-xs mt-0.5 shrink-0">●</span>
+                        <span className="leading-snug">{highlight}</span>
                       </div>
                     ))}
                   </div>
@@ -415,7 +447,7 @@ const PhysicalShuffleDeck: React.FC = () => {
                         shuffleNext();
                       }}
                       disabled={isDealing}
-                      className="mt-3 w-full py-1.5 px-2 rounded-xl bg-gradient-to-r from-amber-400/15 to-accent-orange/15 hover:from-amber-400/25 hover:to-accent-orange/25 border border-amber-400/30 hover:border-amber-400/60 text-amber-300 text-[0.66rem] font-mono font-bold flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 group/tile-shuf"
+                      className="mt-3 w-full py-1.5 px-2 rounded-xl bg-gradient-to-r from-amber-400/15 to-accent-orange/15 hover:from-amber-400/25 hover:to-accent-orange/25 border border-amber-400/30 hover:border-amber-400/60 text-amber-300 text-[0.66rem] font-mono font-bold flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 group/tile-shuf cursor-pointer"
                       title="Shuffle to next card"
                       aria-label="Shuffle to next card"
                     >
@@ -428,7 +460,7 @@ const PhysicalShuffleDeck: React.FC = () => {
               </div>
 
               {/* Footnote Bar with quick arrows */}
-              <div className="pt-3 mt-4 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500">
+              <div className="pt-2.5 sm:pt-3 mt-3 sm:mt-4 border-t border-white/[0.04] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500 flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <span>3D PHYSICAL SHUFFLE DECK</span>
                   {isFront && (
@@ -448,7 +480,7 @@ const PhysicalShuffleDeck: React.FC = () => {
                           shufflePrev();
                         }}
                         disabled={isDealing}
-                        className="w-6 h-6 rounded-md bg-white/[0.06] hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/40 text-zinc-300 hover:text-amber-300 flex items-center justify-center transition-all duration-200 active:scale-90"
+                        className="w-6 h-6 rounded-md bg-white/[0.06] hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/40 text-zinc-300 hover:text-amber-300 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer"
                         aria-label="Previous card"
                         title="Previous card"
                       >
@@ -460,7 +492,7 @@ const PhysicalShuffleDeck: React.FC = () => {
                           shuffleNext();
                         }}
                         disabled={isDealing}
-                        className="w-6 h-6 rounded-md bg-white/[0.06] hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/40 text-zinc-300 hover:text-amber-300 flex items-center justify-center transition-all duration-200 active:scale-90"
+                        className="w-6 h-6 rounded-md bg-white/[0.06] hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/40 text-zinc-300 hover:text-amber-300 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer"
                         aria-label="Next card"
                         title="Next card"
                       >
@@ -475,15 +507,15 @@ const PhysicalShuffleDeck: React.FC = () => {
         })}
       </div>
 
-      {/* Navigation Controls & Pagination */}
-      <div className="mt-8 flex items-center justify-between max-w-[1000px] mx-auto px-2">
+      {/* Navigation Controls & Pagination with guaranteed clean clearance */}
+      <div className="mt-8 sm:mt-10 flex items-center justify-between max-w-[1000px] mx-auto px-2 relative z-20">
         {/* Step Indicator Pills */}
         <div className="flex items-center gap-2">
           {achievements.map((_, i) => (
             <button
               key={i}
               onClick={() => bringToFront(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                 deckOrder[0] === i
                   ? 'w-10 bg-gradient-to-r from-amber-400 to-accent-orange shadow-[0_0_12px_rgba(251,191,36,0.7)]'
                   : 'w-2.5 bg-white/20 hover:bg-white/40'
@@ -501,7 +533,7 @@ const PhysicalShuffleDeck: React.FC = () => {
           <button
             onClick={shufflePrev}
             disabled={isDealing}
-            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50"
+            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
             aria-label="Previous Achievement"
           >
             <ChevronLeft size={18} />
@@ -509,7 +541,7 @@ const PhysicalShuffleDeck: React.FC = () => {
           <button
             onClick={shuffleNext}
             disabled={isDealing}
-            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50"
+            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
             aria-label="Next Achievement"
           >
             <ChevronRight size={18} />
@@ -721,7 +753,7 @@ export const Experience: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="pt-20 md:pt-28 pb-12 md:pb-16 px-4 sm:px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden selection:bg-accent-orange/30"
+      className="pt-20 md:pt-28 pb-16 md:pb-24 px-4 sm:px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden selection:bg-accent-orange/30"
       id="journey"
     >
       {/* Cinematic Ambient Golden Bloom */}

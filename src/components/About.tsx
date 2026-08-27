@@ -15,10 +15,11 @@ interface InteractivePortraitCardProps {
 const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVisible }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const targetStateRef = useRef({ rx: 0, ry: 0, tx: 0, ty: 0 });
-  const [currentState, setCurrentState] = useState({ rx: 0, ry: 0, tx: 0, ty: 0 });
+  const [glarePos, setGlarePos] = useState({ x: 50, y: 50 });
+  const targetStateRef = useRef({ rx: 0, ry: 0, rz: 0, tx: 0, ty: 0, tz: 0 });
+  const [currentState, setCurrentState] = useState({ rx: 0, ry: 0, rz: 0, tx: 0, ty: 0, tz: 0 });
 
-  // 60fps physics loop with organic ambient wave + cursor tracking
+  // 60/120fps physics loop with organic multi-harmonic floating levitation + cursor reaction
   useEffect(() => {
     let animFrame: number;
     const startTime = performance.now();
@@ -26,22 +27,28 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
     const updatePhysics = (now: number) => {
       const elapsed = (now - startTime) / 1000;
 
-      // Ambient idle wave
-      const idleRx = Math.sin(elapsed * 1.8) * 2.5;
-      const idleRy = Math.cos(elapsed * 1.4) * 2.2;
-      const idleTy = Math.sin(elapsed * 2.2) * 4.0;
+      // Multi-harmonic gentle organic floating wave
+      const floatY = Math.sin(elapsed * 1.6) * 6.5;
+      const floatX = Math.cos(elapsed * 1.2) * 2.8;
+      const floatRx = Math.sin(elapsed * 1.4) * 2.6;
+      const floatRy = Math.cos(elapsed * 1.1) * 2.4;
+      const floatRz = Math.sin(elapsed * 0.9) * 1.2;
 
-      const targetState = targetStateRef.current;
-      const effectiveTargetRx = targetState.rx !== 0 ? targetState.rx : idleRx;
-      const effectiveTargetRy = targetState.ry !== 0 ? targetState.ry : idleRy;
-      const effectiveTargetTx = targetState.tx;
-      const effectiveTargetTy = targetState.ty !== 0 ? targetState.ty : idleTy;
+      const target = targetStateRef.current;
+      const effectiveRx = target.rx + floatRx;
+      const effectiveRy = target.ry + floatRy;
+      const effectiveRz = target.rz + floatRz;
+      const effectiveTx = target.tx + floatX;
+      const effectiveTy = target.ty + floatY;
+      const effectiveTz = target.tz;
 
       setCurrentState((prev) => ({
-        rx: prev.rx + (effectiveTargetRx - prev.rx) * 0.22,
-        ry: prev.ry + (effectiveTargetRy - prev.ry) * 0.22,
-        tx: prev.tx + (effectiveTargetTx - prev.tx) * 0.22,
-        ty: prev.ty + (effectiveTargetTy - prev.ty) * 0.22,
+        rx: prev.rx + (effectiveRx - prev.rx) * 0.16,
+        ry: prev.ry + (effectiveRy - prev.ry) * 0.16,
+        rz: prev.rz + (effectiveRz - prev.rz) * 0.16,
+        tx: prev.tx + (effectiveTx - prev.tx) * 0.16,
+        ty: prev.ty + (effectiveTy - prev.ty) * 0.16,
+        tz: prev.tz + (effectiveTz - prev.tz) * 0.16,
       }));
 
       animFrame = requestAnimationFrame(updatePhysics);
@@ -51,7 +58,7 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
     return () => cancelAnimationFrame(animFrame);
   }, []);
 
-  // Section-wide cursor tracking
+  // Section & Window Cursor Tracking with Proximity & Direct Hover Amplification
   useEffect(() => {
     const handleGlobalMouseMove = (e: MouseEvent) => {
       if (!cardRef.current) return;
@@ -59,34 +66,44 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
       const cardCenterX = rect.left + rect.width / 2;
       const cardCenterY = rect.top + rect.height / 2;
 
+      // Normalized coordinates from center (-1 to 1)
       const distX = (e.clientX - cardCenterX) / (window.innerWidth * 0.5);
       const distY = (e.clientY - cardCenterY) / (window.innerHeight * 0.5);
 
-      const clampedX = Math.max(-1, Math.min(1, distX));
-      const clampedY = Math.max(-1, Math.min(1, distY));
+      const clampedX = Math.max(-1.2, Math.min(1.2, distX));
+      const clampedY = Math.max(-1.2, Math.min(1.2, distY));
 
       const isInside =
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom;
+        e.clientX >= rect.left - 30 &&
+        e.clientX <= rect.right + 30 &&
+        e.clientY >= rect.top - 30 &&
+        e.clientY <= rect.bottom + 30;
 
       setIsHovered(isInside);
 
-      const multiplier = isInside ? 16 : 10;
-      const shiftMult = isInside ? 12 : 6;
+      // Card-relative glare position (0% - 100%)
+      const localX = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      const localY = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+      setGlarePos({ x: localX, y: localY });
+
+      // Reactive rotation & 3D translation
+      const rotMultiplier = isInside ? 20 : 12;
+      const shiftMultiplier = isInside ? 14 : 7;
+      const zElevation = isInside ? 35 : 10;
 
       targetStateRef.current = {
-        rx: -clampedY * multiplier,
-        ry: clampedX * multiplier,
-        tx: clampedX * shiftMult,
-        ty: clampedY * shiftMult,
+        rx: -clampedY * rotMultiplier,
+        ry: clampedX * rotMultiplier,
+        rz: clampedX * -1.8,
+        tx: clampedX * shiftMultiplier,
+        ty: clampedY * shiftMultiplier,
+        tz: zElevation,
       };
     };
 
     const handleMouseLeaveWindow = () => {
       setIsHovered(false);
-      targetStateRef.current = { rx: 0, ry: 0, tx: 0, ty: 0 };
+      targetStateRef.current = { rx: 0, ry: 0, rz: 0, tx: 0, ty: 0, tz: 0 };
     };
 
     window.addEventListener('mousemove', handleGlobalMouseMove, { passive: true });
@@ -98,16 +115,22 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
     };
   }, []);
 
+  // Dynamic 3D Cast Shadow offset
+  const shadowX = -currentState.ry * 2.2;
+  const shadowY = Math.max(15, currentState.rx * 2.2 + 25);
+  const shadowBlur = isHovered ? 60 : 38;
+  const shadowSpread = isHovered ? -5 : -10;
+
   return (
     <div
       ref={cardRef}
-      className="relative w-full max-w-[290px] md:max-w-[330px] lg:max-w-[365px] mx-auto md:mx-0 select-none group/portrait cursor-pointer"
+      className="relative w-full max-w-[290px] md:max-w-[330px] lg:max-w-[365px] mx-auto md:mx-0 select-none group/portrait cursor-pointer py-4"
       style={{
-        perspective: 1400,
+        perspective: 1600,
         opacity: isVisible ? 1 : 0,
         transform: isVisible
-          ? 'translateY(0px) scale(1) rotateX(0deg)'
-          : 'translateY(95px) scale(0.68) rotateX(20deg)',
+          ? 'translateY(0px) scale(1)'
+          : 'translateY(80px) scale(0.75)',
         filter: isVisible ? 'blur(0px)' : 'blur(10px)',
         transition: isVisible
           ? 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 1.4s cubic-bezier(0.18, 0.95, 0.32, 1.25) 0.1s, filter 1.0s ease-out 0.1s'
@@ -115,65 +138,155 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
         willChange: 'transform, opacity, filter',
       }}
     >
-      {/* Ambient Glow */}
+      {/* LAYER -1: 3D Volumetric Depth Aura & Ambient Glowing Backlight */}
       <div
-        className="absolute -inset-4 rounded-3xl blur-2xl transition-all duration-300 pointer-events-none"
+        className="absolute -inset-6 rounded-3xl blur-3xl pointer-events-none transition-opacity duration-500"
         style={{
-          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(249, 115, 22, 0.1) 50%, transparent 75%)',
-          opacity: isHovered ? 1 : 0.5,
-          transform: `translate(${currentState.tx * 2}px, ${currentState.ty * 2}px) scale(${isHovered ? 1.05 : 1})`,
+          background: 'radial-gradient(circle at center, rgba(245, 158, 11, 0.28) 0%, rgba(249, 115, 22, 0.16) 40%, rgba(6, 182, 212, 0.08) 70%, transparent 85%)',
+          opacity: isHovered ? 1 : 0.6,
+          transform: `translate3d(${currentState.tx * 1.8}px, ${currentState.ty * 1.8}px, -40px) scale(${isHovered ? 1.15 : 1.0})`,
         }}
       />
 
-      {/* Main 3D Frame (Responsive to cursor tilt & magnetic micro-shift) */}
+      {/* LAYER 0: Ambient Cyber Orbit Geometry Ring */}
       <div
-        className="relative rounded-2xl overflow-hidden border bg-[#0d0e12] backdrop-blur-2xl transition-all duration-150"
+        className="absolute -inset-3 rounded-2xl border border-amber-400/20 pointer-events-none transition-all duration-300"
         style={{
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${isHovered ? 14 : 0}px)`,
-          borderColor: isHovered ? 'rgba(245, 158, 11, 0.65)' : 'rgba(255, 255, 255, 0.15)',
-          boxShadow: isHovered
-            ? '0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 35px -5px rgba(245, 158, 11, 0.3)'
-            : '0 15px 35px -10px rgba(0, 0, 0, 0.75), 0 0 18px -5px rgba(245, 158, 11, 0.1)',
+          transform: `rotateX(${currentState.rx * 0.7}deg) rotateY(${currentState.ry * 0.7}deg) translate3d(${currentState.tx * 0.6}px, ${currentState.ty * 0.6}px, -20px)`,
+          opacity: isHovered ? 0.8 : 0.3,
+        }}
+      />
+
+      {/* MAIN 3D MULTI-TIER CHASSIS (Floats in 3D with dynamic rotation, lift, and cast shadow) */}
+      <div
+        className="relative rounded-2xl md:rounded-3xl p-2.5 sm:p-3 bg-[#0c0d14]/90 backdrop-blur-2xl border transition-all duration-200"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) rotateZ(${currentState.rz}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${currentState.tz}px)`,
+          borderColor: isHovered ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.12)',
+          boxShadow: `
+            ${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, 0.92),
+            0 0 35px -5px rgba(245, 158, 11, ${isHovered ? 0.35 : 0.12}),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.6)
+          `,
         }}
       >
-        {/* Portrait Image */}
-        <div className="relative aspect-[3/3.9] w-full overflow-hidden bg-[#090a0f]">
+        {/* Specular Interactive Glass Reflection Sheen */}
+        <div
+          className="absolute inset-0 rounded-2xl md:rounded-3xl pointer-events-none z-30 transition-opacity duration-300 overflow-hidden"
+          style={{
+            background: `radial-gradient(circle 240px at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, ${isHovered ? 0.18 : 0.06}), transparent 80%)`,
+            opacity: isHovered ? 1 : 0.4,
+          }}
+        />
+
+        {/* Top Edge Golden Laser Flare */}
+        <div
+          className="absolute -top-px left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none z-30"
+          style={{
+            transform: 'translateZ(10px)',
+            opacity: isHovered ? 1 : 0.5,
+          }}
+        />
+
+        {/* 3D FLOATING CORNER TARGETING ACCENTS (+35px Z) */}
+        <div
+          className="absolute -top-1.5 -left-1.5 w-4 h-4 border-t-2 border-l-2 border-amber-400 pointer-events-none z-30 transition-transform duration-300"
+          style={{ transform: `translateZ(${isHovered ? 38 : 20}px)` }}
+        />
+        <div
+          className="absolute -top-1.5 -right-1.5 w-4 h-4 border-t-2 border-r-2 border-amber-400 pointer-events-none z-30 transition-transform duration-300"
+          style={{ transform: `translateZ(${isHovered ? 38 : 20}px)` }}
+        />
+        <div
+          className="absolute -bottom-1.5 -left-1.5 w-4 h-4 border-b-2 border-l-2 border-amber-400 pointer-events-none z-30 transition-transform duration-300"
+          style={{ transform: `translateZ(${isHovered ? 38 : 20}px)` }}
+        />
+        <div
+          className="absolute -bottom-1.5 -right-1.5 w-4 h-4 border-b-2 border-r-2 border-amber-400 pointer-events-none z-30 transition-transform duration-300"
+          style={{ transform: `translateZ(${isHovered ? 38 : 20}px)` }}
+        />
+
+        {/* LAYER 1: FLOATING PORTRAIT CANVAS PLATE (+28px Z) */}
+        <div
+          className="relative aspect-[3/3.85] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#07080c] border border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.8)] group/photo"
+          style={{
+            transformStyle: 'preserve-3d',
+            transform: `translateZ(${isHovered ? 28 : 16}px)`,
+            transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          {/* Portrait Image with Smooth Scale & Grade */}
           <img
             src="/about-portrait.jpg"
             alt="Debendranath Bera Portrait"
-            className="w-full h-full object-cover object-center filter brightness-105 contrast-105"
+            className="w-full h-full object-cover object-center filter brightness-105 contrast-105 transition-transform duration-700 group-hover/portrait:scale-[1.04]"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0e12] via-transparent to-black/20 opacity-80 pointer-events-none" />
+          {/* Vignette & Cinematic Gradients */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c0d14] via-black/20 to-black/30 opacity-75 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 via-transparent to-cyan-500/10 pointer-events-none opacity-60" />
 
-          {/* Status Pill */}
-          <div className="absolute top-3 left-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/65 backdrop-blur-xl border border-white/20 shadow-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
-            <span className="font-mono text-[0.65rem] font-bold text-slate-100 tracking-wider uppercase">
+          {/* Dynamic Light Sweep on Hover */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-0 group-hover/portrait:opacity-100 transition-opacity duration-700"
+            style={{
+              background: 'linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.12) 48%, rgba(245, 158, 11, 0.15) 52%, transparent 65%)',
+            }}
+          />
+
+          {/* LAYER 2: FLOATING STATUS BEACON (+52px Z) */}
+          <div
+            className="absolute top-3 left-3 z-30 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/75 backdrop-blur-xl border border-emerald-400/30 shadow-[0_4px_16px_rgba(0,0,0,0.7),0_0_12px_rgba(52,211,153,0.3)] transition-transform duration-300"
+            style={{
+              transform: `translateZ(${isHovered ? 52 : 32}px)`,
+            }}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+            <span className="font-mono text-[0.66rem] font-extrabold text-emerald-300 tracking-wider uppercase">
               AVAILABLE TO BUILD
             </span>
           </div>
 
-          <div className="absolute top-3 right-3 z-20 px-2 py-0.5 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 font-mono text-[0.62rem] font-semibold tracking-widest uppercase">
+          {/* LAYER 2: FLOATING IDENTITY BADGE (+48px Z) */}
+          <div
+            className="absolute top-3 right-3 z-30 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-white/20 text-amber-300 font-mono text-[0.62rem] font-bold tracking-widest uppercase shadow-md transition-transform duration-300"
+            style={{
+              transform: `translateZ(${isHovered ? 48 : 30}px)`,
+            }}
+          >
             DB • 2026
+          </div>
+
+          {/* Floating Subtle Holographic Grid Line at Bottom of Photo */}
+          <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[0.60rem] font-mono text-zinc-400 tracking-wider z-20 pointer-events-none">
+            <span className="text-amber-400/80 font-bold">PORTFOLIO.V2</span>
+            <span className="text-zinc-500">SYS // ONLINE</span>
           </div>
         </div>
 
-        {/* Caption */}
-        <div className="p-3.5 bg-[#0d0e12] relative z-20 flex flex-col gap-0.5 border-t border-white/[0.08]">
+        {/* LAYER 3: ELEVATED BOTTOM NAMEPLATE & TITLE HUD (+34px Z) */}
+        <div
+          className="mt-2.5 px-3 py-2.5 rounded-xl bg-[#090a0f]/90 border border-white/[0.08] relative z-20 flex flex-col gap-0.5 shadow-inner transition-transform duration-300"
+          style={{
+            transform: `translateZ(${isHovered ? 34 : 18}px)`,
+          }}
+        >
           <div className="flex items-center justify-between">
-            <h3 className="font-cinzel text-[0.95rem] font-bold text-white tracking-wide flex items-center gap-1">
+            <h3 className="font-cinzel text-[0.98rem] font-bold text-white tracking-wide flex items-center gap-1.5">
               <span>DEBENDRANATH</span>
-              <span className="text-accent-orange font-extrabold">BERA</span>
+              <span className="text-accent-orange font-black">BERA</span>
             </h3>
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-accent-orange/15 border border-accent-orange/30 font-mono text-[0.62rem] text-accent-orange font-bold">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-orange/15 border border-accent-orange/35 font-mono text-[0.62rem] text-accent-orange font-bold shadow-[0_0_10px_rgba(249,115,22,0.2)]">
               <Sparkles size={9} />
               <span>ABOUT</span>
             </span>
           </div>
-          <p className="text-[0.74rem] text-text-muted font-medium">
-            Developer • Problem Solver • Thinker
+          <p className="text-[0.74rem] text-zinc-400 font-mono font-medium flex items-center gap-1">
+            <span className="text-amber-400 font-bold">▹</span>
+            <span>Developer • Problem Solver • Thinker</span>
           </p>
         </div>
 
