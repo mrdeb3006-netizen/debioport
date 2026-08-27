@@ -648,13 +648,33 @@ export const Experience: React.FC = () => {
     let animId: number;
     let targetProgress = 0;
     let currentProgress = 0;
+    let desktopBeamHeight = 0;
+    let mobileBeamHeight = 0;
     let rowOffsets: number[] = [];
 
     const measureOffsets = () => {
       if (!timelineRef.current) return;
       const totalH = timelineRef.current.offsetHeight || 1;
+
+      if (desktopBeamRef.current) {
+        desktopBeamHeight = desktopBeamRef.current.offsetHeight;
+      }
+      if (mobileBeamRef.current) {
+        mobileBeamHeight = mobileBeamRef.current.offsetHeight;
+      }
+
+      if (!desktopBeamHeight) {
+        desktopBeamHeight = Math.max(totalH - 32, 1);
+      }
+      if (!mobileBeamHeight) {
+        mobileBeamHeight = Math.max(totalH - 24, 1);
+      }
+
       const rows = timelineRef.current.querySelectorAll<HTMLElement>('.timeline-row-item');
-      rowOffsets = Array.from(rows).map((r) => r.offsetTop / totalH);
+      rowOffsets = Array.from(rows).map((r) => {
+        if (r.offsetHeight === 0) return 0;
+        return r.offsetTop / totalH;
+      });
     };
 
     const updateDOM = () => {
@@ -665,26 +685,28 @@ export const Experience: React.FC = () => {
 
       const clamped = Math.min(Math.max(currentProgress, 0.02), 1);
 
-      // 1. GPU scaleY transform on desktop beam (composite layer only)
+      // Usable beam lengths (exact unscaled height of the beam line)
+      const dHeight = desktopBeamHeight || (desktopBeamRef.current?.offsetHeight ?? (timelineRef.current ? timelineRef.current.offsetHeight - 32 : 800));
+      const mHeight = mobileBeamHeight || (mobileBeamRef.current?.offsetHeight ?? (timelineRef.current ? timelineRef.current.offsetHeight - 24 : 800));
+
+      // 1. GPU scaleY transform on desktop beam & perfectly synchronized leading spark dot
       if (desktopBeamRef.current) {
         desktopBeamRef.current.style.transform = `scaleY(${clamped})`;
       }
-      if (desktopSparkRef.current && timelineRef.current) {
-        const totalHeight = timelineRef.current.offsetHeight || 800;
-        const sparkY = totalHeight * clamped;
-        desktopSparkRef.current.style.transform = `translate3d(-50%, ${sparkY}px, 0)`;
-        desktopSparkRef.current.style.opacity = clamped > 0.03 && clamped < 0.98 ? '1' : '0.4';
+      if (desktopSparkRef.current) {
+        const sparkY = dHeight * clamped;
+        desktopSparkRef.current.style.transform = `translate3d(-50%, calc(${sparkY}px - 50%), 0)`;
+        desktopSparkRef.current.style.opacity = clamped > 0.02 && clamped < 0.99 ? '1' : '0.4';
       }
 
-      // 2. GPU scaleY transform on mobile beam
+      // 2. GPU scaleY transform on mobile beam & perfectly synchronized leading spark dot
       if (mobileBeamRef.current) {
         mobileBeamRef.current.style.transform = `scaleY(${clamped})`;
       }
-      if (mobileSparkRef.current && timelineRef.current) {
-        const totalHeight = timelineRef.current.offsetHeight || 800;
-        const sparkY = totalHeight * clamped;
-        mobileSparkRef.current.style.transform = `translate3d(-50%, ${sparkY}px, 0)`;
-        mobileSparkRef.current.style.opacity = clamped > 0.03 && clamped < 0.98 ? '1' : '0.4';
+      if (mobileSparkRef.current) {
+        const sparkY = mHeight * clamped;
+        mobileSparkRef.current.style.transform = `translate3d(-50%, calc(${sparkY}px - 50%), 0)`;
+        mobileSparkRef.current.style.opacity = clamped > 0.02 && clamped < 0.99 ? '1' : '0.4';
       }
 
       // 3. Update active node states using pre-computed relative offsets
@@ -692,6 +714,8 @@ export const Experience: React.FC = () => {
         const rows = timelineRef.current.querySelectorAll<HTMLElement>('.timeline-row-item');
         rows.forEach((row, i) => {
           const offsetFraction = rowOffsets[i] || 0;
+          if (offsetFraction === 0 && row.offsetHeight === 0) return;
+
           const node = row.querySelector<HTMLElement>('.timeline-node-circle');
           const title = row.querySelector<HTMLElement>('.timeline-row-title');
           const year = row.querySelector<HTMLElement>('.timeline-row-year');
@@ -791,14 +815,14 @@ export const Experience: React.FC = () => {
             
             {/* 1. Base Subtle Guide Line */}
             <div
-              className="absolute left-[190px] lg:left-[210px] top-4 bottom-4 w-[2px] bg-white/[0.08] rounded-full pointer-events-none"
+              className="absolute left-[190px] lg:left-[210px] -translate-x-1/2 top-4 bottom-4 w-[2px] bg-white/[0.08] rounded-full pointer-events-none"
               aria-hidden="true"
             />
 
             {/* 2. Active Glowing Golden Laser Beam (GPU-Accelerated scaleY) */}
             <div
               ref={desktopBeamRef}
-              className="absolute left-[190px] lg:left-[210px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_18px_rgba(245,158,11,0.95),0_0_35px_rgba(249,115,22,0.6)] origin-top pointer-events-none z-10"
+              className="absolute left-[190px] lg:left-[210px] -translate-x-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_18px_rgba(245,158,11,0.95),0_0_35px_rgba(249,115,22,0.6)] origin-top pointer-events-none z-10"
               style={{ transform: 'scaleY(0.04)', willChange: 'transform' }}
               aria-hidden="true"
             />
@@ -807,7 +831,7 @@ export const Experience: React.FC = () => {
             <div
               ref={desktopSparkRef}
               className="absolute left-[190px] lg:left-[210px] top-4 w-4 h-4 rounded-full bg-white shadow-[0_0_15px_#ffffff,0_0_25px_#fbbf24,0_0_45px_#f97316] pointer-events-none z-20 transition-opacity duration-200"
-              style={{ transform: 'translate3d(-50%, 0, 0)', willChange: 'transform, opacity' }}
+              style={{ transform: 'translate3d(-50%, -50%, 0)', willChange: 'transform, opacity' }}
               aria-hidden="true"
             />
 
@@ -880,18 +904,18 @@ export const Experience: React.FC = () => {
           </div>
 
           {/* Mobile Timeline Layout (< 768px) */}
-          <div className="block md:hidden relative pl-6">
+          <div className="block md:hidden relative">
             
             {/* Base Line */}
             <div
-              className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-white/[0.08] rounded-full pointer-events-none"
+              className="absolute left-[12px] -translate-x-1/2 top-3 bottom-3 w-[2px] bg-white/[0.08] rounded-full pointer-events-none"
               aria-hidden="true"
             />
 
             {/* Mobile Active Laser Beam (scaleY GPU) */}
             <div
               ref={mobileBeamRef}
-              className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_14px_rgba(245,158,11,0.85)] origin-top pointer-events-none z-10"
+              className="absolute left-[12px] -translate-x-1/2 top-3 bottom-3 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_14px_rgba(245,158,11,0.85)] origin-top pointer-events-none z-10"
               style={{ transform: 'scaleY(0.04)', willChange: 'transform' }}
               aria-hidden="true"
             />
@@ -899,18 +923,18 @@ export const Experience: React.FC = () => {
             {/* Mobile Photon Spark Particle */}
             <div
               ref={mobileSparkRef}
-              className="absolute left-[11px] top-3 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_20px_#fbbf24] pointer-events-none z-20 transition-opacity duration-200"
-              style={{ transform: 'translate3d(-50%, 0, 0)', willChange: 'transform, opacity' }}
+              className="absolute left-[12px] top-3 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_20px_#fbbf24] pointer-events-none z-20 transition-opacity duration-200"
+              style={{ transform: 'translate3d(-50%, -50%, 0)', willChange: 'transform, opacity' }}
               aria-hidden="true"
             />
 
             {/* Mobile Milestones */}
             <div className="space-y-12">
               {timelineMilestones.map((item) => (
-                <div key={item.id} className="timeline-row-item relative pl-6">
+                <div key={item.id} className="timeline-row-item relative pl-8 sm:pl-9">
                   
                   {/* Node */}
-                  <div className="absolute -left-[14px] top-1 z-20 flex items-center justify-center pointer-events-none">
+                  <div className="absolute left-[12px] -translate-x-1/2 top-1 z-20 flex items-center justify-center pointer-events-none">
                     <div className="timeline-node-circle w-5 h-5 rounded-full bg-[#09090b] border-2 border-white/20 flex items-center justify-center transition-all duration-200">
                       <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                     </div>
