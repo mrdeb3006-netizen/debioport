@@ -168,6 +168,7 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 /* ========================================================================= */
 const ScrollStackedHonorsDeck: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const stickyRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   const progressTextRef = useRef<HTMLSpanElement | null>(null);
@@ -319,7 +320,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         }
       });
 
-      // Smooth Hermite / Smoothstep easing for liquid motion
+      // Smooth Hermite / Smoothstep easing for liquid motion in BOTH directions (down & up)
       const smoothstep = (t: number) => {
         const c = Math.max(0, Math.min(1, t));
         return c * c * (3 - 2 * c);
@@ -336,7 +337,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         let filter = 'none';
 
         if (delta > 0) {
-          // Card rising from below with smoothstep curve
+          // Card below: gracefully glides up when scrolling down, slides down when scrolling up
           if (delta >= 1) {
             const extra = delta - 1;
             transform = `translate3d(0, ${110 + extra * 25}%, 60px) rotateX(10deg) scale(0.92)`;
@@ -349,7 +350,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
             const scale = 0.94 + (1 - ease) * 0.06;
             const zOffset = 35 * (1 - ease);
             transform = `translate3d(0, ${yPercent}%, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-            opacity = Math.min(1, (1 - ease) * 2.0);
+            opacity = Math.min(1, Math.max(0, (1 - ease) * 2.2));
             zIndex = 30 + idx * 4;
           }
         } else {
@@ -361,9 +362,9 @@ const ScrollStackedHonorsDeck: React.FC = () => {
           const rotX = -easeDepth * 1.8;
           const scale = Math.max(0.87, 1 - easeDepth * 0.04);
           transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-          opacity = Math.max(0.25, 1 - easeDepth * 0.22);
+          opacity = Math.max(0.2, 1 - easeDepth * 0.22);
           zIndex = 30 + idx * 4 - Math.round(depth * 5);
-          filter = depth > 0.1 ? `blur(${Math.min(depth * 0.7, 2.0)}px)` : 'none';
+          filter = depth > 0.08 ? `blur(${Math.min(depth * 0.7, 2.0)}px)` : 'none';
         }
 
         const isFront = activeIdx === idx;
@@ -376,20 +377,20 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         cardEl.style.boxShadow = isFront
           ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
           : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
-        cardEl.style.pointerEvents = isFront || Math.abs(delta) < 0.8 ? 'auto' : 'none';
+        cardEl.style.pointerEvents = isFront ? 'auto' : 'none';
       });
     },
     [total, achievements]
   );
 
-  // 144Hz Smooth Lerp Loop & Initial Mount Frame Execution
+  // 144Hz Smooth Bidirectional Lerp Loop & Initial Mount Frame Execution
   useEffect(() => {
     // Immediate frame 0 paint on mount
     renderDeckFrame(0);
 
     const updatePhysics = () => {
       const diff = targetProgressRef.current - currentProgressRef.current;
-      currentProgressRef.current += diff * 0.12;
+      currentProgressRef.current += diff * 0.16;
 
       if (Math.abs(diff) < 0.0001) {
         currentProgressRef.current = targetProgressRef.current;
@@ -409,7 +410,8 @@ const ScrollStackedHonorsDeck: React.FC = () => {
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const stickyTop = window.innerWidth >= 768 ? 90 : 80;
-      const totalDistance = rect.height - windowHeight;
+      const stickyH = stickyRef.current?.offsetHeight || (windowHeight - 100);
+      const totalDistance = rect.height - stickyH;
 
       if (totalDistance <= 0) return;
 
@@ -443,7 +445,9 @@ const ScrollStackedHonorsDeck: React.FC = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const containerTop = window.scrollY + rect.top;
-      const totalDistance = rect.height - window.innerHeight;
+      const windowHeight = window.innerHeight;
+      const stickyH = stickyRef.current?.offsetHeight || (windowHeight - 100);
+      const totalDistance = rect.height - stickyH;
       const targetProgress = index / (total - 1);
       const stickyTop = window.innerWidth >= 768 ? 90 : 80;
       const targetScrollY = containerTop + targetProgress * totalDistance - stickyTop;
@@ -514,7 +518,10 @@ const ScrollStackedHonorsDeck: React.FC = () => {
       onTouchEnd={handleTouchEnd}
     >
       {/* Sticky Viewport Window */}
-      <div className="sticky top-[80px] md:top-[90px] h-[calc(100vh-100px)] min-h-[560px] sm:min-h-[600px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1180px] mx-auto px-2 sm:px-4 select-none">
+      <div
+        ref={stickyRef}
+        className="sticky top-[80px] md:top-[90px] h-[calc(100vh-100px)] min-h-[560px] sm:min-h-[600px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1180px] mx-auto px-2 sm:px-4 select-none"
+      >
         
         {/* Top Interactive HUD Bar with Live Percentage Progress */}
         <div className="flex items-center justify-between gap-4 mb-2.5 pb-2.5 border-b border-white/[0.08] relative z-40 flex-wrap">
