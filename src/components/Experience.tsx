@@ -320,10 +320,10 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         }
       });
 
-      // Smooth Hermite / Smoothstep easing for liquid motion in BOTH directions (down & up)
-      const smoothstep = (t: number) => {
+      // Ultra-smooth quintic smootherstep curve (zero 1st & 2nd derivative discontinuity)
+      const smootherstep = (t: number) => {
         const c = Math.max(0, Math.min(1, t));
-        return c * c * (3 - 2 * c);
+        return c * c * c * (c * (c * 6 - 15) + 10);
       };
 
       // Direct GPU Transform & Opacity on each Card DOM Element
@@ -337,34 +337,34 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         let filter = 'none';
 
         if (delta > 0) {
-          // Card below: gracefully glides up when scrolling down, slides down when scrolling up
+          // Card below: ultra-smooth quintic glide in/out
           if (delta >= 1) {
             const extra = delta - 1;
-            transform = `translate3d(0, ${110 + extra * 25}%, 60px) rotateX(10deg) scale(0.92)`;
+            transform = `translate3d(0, ${108 + extra * 22}%, 50px) rotateX(8deg) scale(0.93)`;
             opacity = 0;
             zIndex = 10;
           } else {
-            const ease = smoothstep(delta);
-            const yPercent = ease * 102;
-            const rotX = ease * 8.5;
+            const ease = smootherstep(delta);
+            const yPercent = ease * 100;
+            const rotX = ease * 7.5;
             const scale = 0.94 + (1 - ease) * 0.06;
-            const zOffset = 35 * (1 - ease);
+            const zOffset = 30 * (1 - ease);
             transform = `translate3d(0, ${yPercent}%, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-            opacity = Math.min(1, Math.max(0, (1 - ease) * 2.2));
+            opacity = Math.min(1, Math.max(0, (1 - ease) * 2.4));
             zIndex = 30 + idx * 4;
           }
         } else {
-          // Card active or smoothly stacking underneath
+          // Card active or smoothly receding into background stack
           const depth = -delta;
-          const easeDepth = smoothstep(Math.min(depth, 1.0)) + Math.max(0, depth - 1.0);
-          const yOffset = -easeDepth * 16;
-          const zOffset = -easeDepth * 55;
-          const rotX = -easeDepth * 1.8;
-          const scale = Math.max(0.87, 1 - easeDepth * 0.04);
+          const easeDepth = smootherstep(Math.min(depth, 1.0)) + Math.max(0, depth - 1.0);
+          const yOffset = -easeDepth * 14;
+          const zOffset = -easeDepth * 48;
+          const rotX = -easeDepth * 1.4;
+          const scale = Math.max(0.88, 1 - easeDepth * 0.035);
           transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-          opacity = Math.max(0.2, 1 - easeDepth * 0.22);
+          opacity = Math.max(0.25, 1 - easeDepth * 0.20);
           zIndex = 30 + idx * 4 - Math.round(depth * 5);
-          filter = depth > 0.08 ? `blur(${Math.min(depth * 0.7, 2.0)}px)` : 'none';
+          filter = depth > 0.08 ? `blur(${Math.min(depth * 0.5, 1.8)}px)` : 'none';
         }
 
         const isFront = activeIdx === idx;
@@ -383,22 +383,22 @@ const ScrollStackedHonorsDeck: React.FC = () => {
     [total, achievements]
   );
 
-  // 144Hz Smooth Bidirectional Lerp Loop & Initial Mount Frame Execution
+  // 144Hz Silky-Smooth Bidirectional Lerp Loop & Initial Mount Frame Execution
   useEffect(() => {
     // Immediate frame 0 paint on mount
     renderDeckFrame(0);
 
     const updatePhysics = () => {
       const diff = targetProgressRef.current - currentProgressRef.current;
-      currentProgressRef.current += diff * 0.16;
+      currentProgressRef.current += diff * 0.14;
 
-      if (Math.abs(diff) < 0.0001) {
+      if (Math.abs(diff) < 0.00008) {
         currentProgressRef.current = targetProgressRef.current;
       }
 
       renderDeckFrame(currentProgressRef.current);
 
-      if (Math.abs(targetProgressRef.current - currentProgressRef.current) > 0.0001) {
+      if (Math.abs(targetProgressRef.current - currentProgressRef.current) > 0.00008) {
         animFrameRef.current = requestAnimationFrame(updatePhysics);
       } else {
         animFrameRef.current = null;
