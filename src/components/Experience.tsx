@@ -510,10 +510,10 @@ const ScrollStackedHonorsDeck: React.FC = () => {
       onTouchEnd={handleTouchEnd}
     >
       {/* Sticky Viewport Window */}
-      <div className="sticky top-[80px] md:top-[90px] h-[calc(100dvh-100px)] min-h-[540px] sm:min-h-[580px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1100px] mx-auto px-2 sm:px-4 select-none">
+      <div className="sticky top-[80px] md:top-[90px] h-[calc(100dvh-100px)] min-h-[480px] sm:min-h-[520px] max-h-[720px] flex flex-col justify-between py-2.5 max-w-[1240px] mx-auto px-2 sm:px-4 select-none">
         
         {/* Top Interactive HUD Bar */}
-        <div className="flex items-center justify-between gap-4 mb-3 pb-3 border-b border-white/[0.08] relative z-40 flex-wrap">
+        <div className="flex items-center justify-between gap-4 mb-2.5 pb-2.5 border-b border-white/[0.08] relative z-40 flex-wrap">
           
           {/* Active Card Badge & Category Tag */}
           <div className="flex items-center gap-3">
@@ -528,7 +528,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
           </div>
 
           {/* Center: Live Scroll Progress Track */}
-          <div className="hidden lg:flex items-center gap-2 flex-1 max-w-[280px] mx-4">
+          <div className="hidden lg:flex items-center gap-2 flex-1 max-w-[320px] mx-4">
             <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden p-0.5">
               <div
                 ref={progressBarRef}
@@ -596,7 +596,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                 key={item.id}
                 ref={(el) => (cardsRef.current[idx] = el)}
                 onClick={() => jumpToCard(idx)}
-                className="achievement-scroll-card absolute w-full max-w-[1020px] rounded-2xl sm:rounded-3xl border p-5 sm:p-7 md:p-8 lg:p-9 bg-[#0c0d16] overflow-hidden cursor-pointer"
+                className="achievement-scroll-card absolute w-full max-w-[1180px] rounded-2xl sm:rounded-3xl border p-4 sm:p-5 md:py-5 md:px-7 lg:py-5 lg:px-8 bg-[#0c0d16] overflow-hidden cursor-pointer shadow-xl"
                 style={{
                   willChange: 'transform, opacity',
                   transform: idx === 0 ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 110%, 80px) scale(0.92)',
@@ -604,8 +604,8 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                   zIndex: idx === 0 ? 40 : 10,
                   borderColor: idx === 0 ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.1)',
                   boxShadow: idx === 0
-                    ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
-                    : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+                    ? '0 25px 70px -15px rgba(0, 0, 0, 0.95), 0 0 30px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+                    : '0 15px 35px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
                 }}
               >
                 {/* Active Golden Edge Sheen */}
@@ -616,58 +616,58 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
                 {/* Giant Stylized Index Watermark */}
                 <div
-                  className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.5rem] leading-none select-none pointer-events-none text-white/[0.03]"
+                  className="absolute top-1.5 right-4 font-display font-black text-[3.2rem] sm:text-[4.2rem] lg:text-[4.8rem] leading-none select-none pointer-events-none text-white/[0.03]"
                   aria-hidden="true"
                 >
                   0{idx + 1}
                 </div>
 
                 {/* Card Content Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-5 sm:gap-6 items-center relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_190px] gap-4 sm:gap-5 items-center relative z-10">
                   
                   {/* Left Column: Details & Highlights */}
                   <div>
                     {/* Header Chips */}
-                    <div className="flex items-center justify-between gap-2.5 mb-3 flex-wrap">
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <span className="font-mono text-[0.68rem] sm:text-[0.74rem] font-black px-3.5 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
-                          <CheckCircle2 size={12} />
+                    <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-mono text-[0.66rem] sm:text-[0.72rem] font-black px-3 py-0.5 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
+                          <CheckCircle2 size={11} />
                           <span>{item.badge}</span>
                         </span>
-                        <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
+                        <span className="font-mono text-[0.64rem] text-zinc-400 uppercase tracking-widest font-medium">
                           {item.category}
                         </span>
                         <span className="text-white/20 text-xs hidden sm:inline">•</span>
-                        <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
+                        <span className="font-mono text-[0.64rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
                           {item.yearTag}
                         </span>
                       </div>
                     </div>
 
                     {/* Title */}
-                    <h4 className="font-display text-[1.25rem] sm:text-[1.55rem] md:text-[1.8rem] font-black text-white leading-snug mb-1.5 tracking-[0.01em]">
+                    <h4 className="font-display text-[1.2rem] sm:text-[1.45rem] md:text-[1.65rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
                       {item.title}
                     </h4>
 
                     {/* Monospace Subtitle */}
-                    <div className="font-mono text-[0.76rem] sm:text-[0.84rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
+                    <div className="font-mono text-[0.74rem] sm:text-[0.80rem] font-bold text-amber-400 tracking-wide uppercase mb-2 flex items-center gap-1.5">
                       <span className="text-accent-orange">▹</span>
                       <span>{item.subtitle}</span>
                     </div>
 
                     {/* Description */}
-                    <p className="text-[0.86rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[740px]">
+                    <p className="text-[0.84rem] sm:text-[0.90rem] text-zinc-300 leading-relaxed mb-2.5 font-normal max-w-[850px]">
                       {item.description}
                     </p>
 
                     {/* Bullet Highlights */}
-                    <div className="flex flex-col gap-1.5 sm:gap-2 pt-3 border-t border-white/[0.08] max-w-[740px]">
+                    <div className="flex flex-col gap-1 sm:gap-1.5 pt-2 border-t border-white/[0.08] max-w-[850px]">
                       {item.highlights.map((highlight, hIdx) => (
                         <div
                           key={hIdx}
-                          className="flex items-start gap-2.5 text-[0.82rem] sm:text-[0.88rem] text-zinc-300"
+                          className="flex items-start gap-2 text-[0.80rem] sm:text-[0.85rem] text-zinc-300"
                         >
-                          <span className="text-accent-orange text-xs mt-1 shrink-0">◆</span>
+                          <span className="text-accent-orange text-xs mt-0.5 shrink-0">◆</span>
                           <span className="leading-snug">{highlight}</span>
                         </div>
                       ))}
@@ -675,18 +675,18 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                   </div>
 
                   {/* Right Column: Hologram Emblem Medallion */}
-                  <div className="hidden md:flex flex-col items-center justify-center p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-3">
-                      <IconComponent size={30} />
+                  <div className="hidden md:flex flex-col items-center justify-center p-3.5 sm:p-4 rounded-xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch justify-self-center w-full">
+                    <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.25)] mb-2">
+                      <IconComponent size={26} />
                     </div>
-                    <div className="font-display text-[1.4rem] font-black text-white leading-none mb-1">
+                    <div className="font-display text-[1.25rem] font-black text-white leading-none mb-1">
                       {item.statNumber}
                     </div>
-                    <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase mb-2">
+                    <div className="font-mono text-[0.60rem] font-bold text-accent-orange tracking-wider uppercase mb-1.5">
                       {item.statLabel}
                     </div>
-                    <div className="inline-flex items-center gap-1 text-[0.64rem] font-mono text-zinc-400 pt-2 border-t border-white/[0.06] w-full justify-center">
-                      <Star size={11} className="text-amber-400" fill="currentColor" />
+                    <div className="inline-flex items-center gap-1 text-[0.60rem] font-mono text-zinc-400 pt-1.5 border-t border-white/[0.06] w-full justify-center">
+                      <Star size={10} className="text-amber-400" fill="currentColor" />
                       <span>VERIFIED RECOGNITION</span>
                     </div>
                   </div>
@@ -694,14 +694,14 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                 </div>
 
                 {/* Footnote Status Bar */}
-                <div className="pt-3 mt-3.5 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500 flex-wrap gap-2">
+                <div className="pt-2 mt-2.5 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.64rem] text-zinc-500 flex-wrap gap-2">
                   <div className="flex items-center gap-2">
-                    <Layers size={12} className="text-amber-400" />
+                    <Layers size={11} className="text-amber-400" />
                     <span>SCROLL-DRIVEN 3D SHOWCASE</span>
                     <span className="text-zinc-400 hidden sm:inline">• SCROLL DOWN TO REVEAL NEXT HONOR</span>
                   </div>
                   <div className="flex items-center gap-1 text-accent-orange font-bold">
-                    <Sparkles size={11} />
+                    <Sparkles size={10} />
                     <span>ACHIEVEMENT 0{idx + 1} OF 0{total}</span>
                   </div>
                 </div>
@@ -711,9 +711,9 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         </div>
 
         {/* Bottom Interactive Scroll Helper Hint */}
-        <div className="flex items-center justify-between font-mono text-[0.68rem] text-zinc-500 pt-2 px-1 border-t border-white/[0.04]">
+        <div className="flex items-center justify-between font-mono text-[0.66rem] text-zinc-500 pt-2 px-1 border-t border-white/[0.04]">
           <div className="flex items-center gap-2">
-            <MousePointer size={12} className="text-accent-orange animate-bounce" />
+            <MousePointer size={11} className="text-accent-orange animate-bounce" />
             <span>SCROLL DOWN TO PROGRESS • ARROW KEYS TO NAVIGATE</span>
           </div>
           <span ref={footerTextRef} className="text-zinc-400 font-bold">
