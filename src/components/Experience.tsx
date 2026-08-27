@@ -164,9 +164,105 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 };
 
 /* ========================================================================= */
-/* ULTRA-LUXURY 3D SCROLL-STACKED HONORS DECK                                */
+/* ACHIEVEMENTS & HONORS DATA                                                */
 /* ========================================================================= */
-const ScrollStackedHonorsDeck: React.FC = () => {
+const achievementsData: AchievementCard[] = [
+  {
+    id: 'jhs-counselling-honour',
+    category: 'INSTITUTIONAL COMMENDATION',
+    badge: 'COUNSELLING COMMITTEE HONOUR',
+    yearTag: 'JADAVPUR HIGH SCHOOL',
+    statNumber: 'HONOUR',
+    statLabel: 'COUNSELLING COMMITTEE',
+    title: 'Jadavpur High School Counselling Committee Honour',
+    subtitle: 'Institutional Commendation & Academic Guidance Felicitation',
+    description:
+      'Felicitated and honored by the esteemed Jadavpur High School Counselling Committee in recognition of scholastic excellence, discipline, and exemplary performance as the Secondary School Topper.',
+    icon: Award,
+    highlights: [
+      'Felicitated in person by the Jadavpur High School Counselling Committee for scholastic distinction',
+      'Recognized for exceptional academic consistency, moral discipline, and secondary school leadership',
+      'Honored by school mentors for dedication, diligence, and academic brilliance in science & mathematics',
+    ],
+  },
+  {
+    id: 'iit-kgp-consultant-honour',
+    category: 'ENGINEERING & ALUMNI HONOUR',
+    badge: 'IIT KGP ALUMNUS HONOUR',
+    yearTag: 'CONSULTANT ENGINEER AWARD',
+    statNumber: 'IIT KGP',
+    statLabel: 'CONSULTANT ENGINEER',
+    title: 'Awarded by IIT Kharagpur Passed Out Consultant Engineer',
+    subtitle: 'Distinguished IIT Kharagpur Alumnus & Senior Consultant Felicitation',
+    description:
+      'Felicitated and awarded a prestigious commendation in person by an esteemed IIT Kharagpur passed out Consultant Engineer in recognition of academic brilliance, analytical rigor, and scholastic excellence in Class 10.',
+    icon: Trophy,
+    highlights: [
+      'Felicitated in person by an IIT Kharagpur alumnus and practicing Consultant Engineer',
+      'Recognized for sharp analytical aptitude, problem-solving skills, and academic brilliance',
+      'Awarded for ranking as the #1 School Topper with 88.71% in the Secondary Board Examination',
+    ],
+  },
+  {
+    id: 'karate-bronze',
+    category: 'NATIONAL SPORTS • MARTIAL ARTS',
+    badge: '2X NATIONAL BRONZE',
+    yearTag: 'ALL INDIA CHAMPIONSHIP',
+    statNumber: '2X BRONZE',
+    statLabel: 'NATIONAL LEVEL',
+    title: '2x Bronze Medalist • All India Karate Championship',
+    subtitle: 'All India Level Club Karate Championship',
+    description:
+      'Secured two Bronze Medals at the prestigious All India Level Club Karate Championship, demonstrating competitive Karate combat discipline, rapid Kumite reflexes, and tactical ring composure against top martial arts athletes nationwide.',
+    icon: Medal,
+    highlights: [
+      'Two-time Bronze Medalist at All-India Club Karate Championship Level',
+      'High-intensity competitive Kumite combat sparring & tactical execution',
+      'Demonstrated athletic discipline, physical stamina and composure under pressure',
+    ],
+  },
+  {
+    id: 'karate-brown-belt',
+    category: 'MARTIAL ARTS MASTERY',
+    badge: 'BROWN BELT SENIOR',
+    yearTag: 'SENIOR GRADE MASTERY',
+    statNumber: 'BROWN BELT',
+    statLabel: 'SENIOR GRADE',
+    title: 'Karate Brown Belt Senior Grade',
+    subtitle: 'Advanced Martial Arts Conditioning & Sparring',
+    description:
+      'Earned the senior Karate Brown Belt grade following years of rigorous traditional martial arts training, advanced Kata technical mastery, physical conditioning, and full-contact Kumite sparring.',
+    icon: Shield,
+    highlights: [
+      'Senior Grade Brown Belt qualification in traditional Karate discipline',
+      '6+ years of disciplined conditioning, advanced Kata forms & full-contact sparring',
+      'Cultivated mental focus, physical endurance, agility & situational awareness',
+    ],
+  },
+  {
+    id: 'school-topper',
+    category: 'SCHOLASTIC DISTINCTION',
+    badge: 'RANK #1 TOPPER',
+    yearTag: 'SECONDARY EXCELLENCE',
+    statNumber: '88.71%',
+    statLabel: 'BOARD SCORE',
+    title: 'School Topper & Science Distinction',
+    subtitle: 'Jadavpur High School • Secondary Board',
+    description:
+      'Ranked #1 as the Secondary Examination School Topper at Jadavpur High School with 88.71%, earning institutional commendations and scientific excellence distinctions.',
+    icon: Crown,
+    highlights: [
+      'Ranked #1 among all secondary graduation candidates across the institution',
+      '88.71% aggregate score with distinctions across Science & Higher Mathematics',
+      'Awarded institutional honors for academic dedication and scientific inquiry',
+    ],
+  },
+];
+
+/* ========================================================================= */
+/* ULTRA-LUXURY 3D SCROLL-STACKED HONORS DECK (DESKTOP: >= 768px)            */
+/* ========================================================================= */
+const DesktopScrollStackedHonorsDeck: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const stickyRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -181,101 +277,8 @@ const ScrollStackedHonorsDeck: React.FC = () => {
   const currentProgressRef = useRef(0);
   const animFrameRef = useRef<number | null>(null);
   const activeIndexRef = useRef(0);
-  const touchStartY = useRef<number | null>(null);
 
-  const achievements: AchievementCard[] = [
-    {
-      id: 'jhs-counselling-honour',
-      category: 'INSTITUTIONAL COMMENDATION',
-      badge: 'COUNSELLING COMMITTEE HONOUR',
-      yearTag: 'JADAVPUR HIGH SCHOOL',
-      statNumber: 'HONOUR',
-      statLabel: 'COUNSELLING COMMITTEE',
-      title: 'Jadavpur High School Counselling Committee Honour',
-      subtitle: 'Institutional Commendation & Academic Guidance Felicitation',
-      description:
-        'Felicitated and honored by the esteemed Jadavpur High School Counselling Committee in recognition of scholastic excellence, discipline, and exemplary performance as the Secondary School Topper.',
-      icon: Award,
-      highlights: [
-        'Felicitated in person by the Jadavpur High School Counselling Committee for scholastic distinction',
-        'Recognized for exceptional academic consistency, moral discipline, and secondary school leadership',
-        'Honored by school mentors for dedication, diligence, and academic brilliance in science & mathematics',
-      ],
-    },
-    {
-      id: 'iit-kgp-consultant-honour',
-      category: 'ENGINEERING & ALUMNI HONOUR',
-      badge: 'IIT KGP ALUMNUS HONOUR',
-      yearTag: 'CONSULTANT ENGINEER AWARD',
-      statNumber: 'IIT KGP',
-      statLabel: 'CONSULTANT ENGINEER',
-      title: 'Awarded by IIT Kharagpur Passed Out Consultant Engineer',
-      subtitle: 'Distinguished IIT Kharagpur Alumnus & Senior Consultant Felicitation',
-      description:
-        'Felicitated and awarded a prestigious commendation in person by an esteemed IIT Kharagpur passed out Consultant Engineer in recognition of academic brilliance, analytical rigor, and scholastic excellence in Class 10.',
-      icon: Trophy,
-      highlights: [
-        'Felicitated in person by an IIT Kharagpur alumnus and practicing Consultant Engineer',
-        'Recognized for sharp analytical aptitude, problem-solving skills, and academic brilliance',
-        'Awarded for ranking as the #1 School Topper with 88.71% in the Secondary Board Examination',
-      ],
-    },
-    {
-      id: 'karate-bronze',
-      category: 'NATIONAL SPORTS • MARTIAL ARTS',
-      badge: '2X NATIONAL BRONZE',
-      yearTag: 'ALL INDIA CHAMPIONSHIP',
-      statNumber: '2X BRONZE',
-      statLabel: 'NATIONAL LEVEL',
-      title: '2x Bronze Medalist • All India Karate Championship',
-      subtitle: 'All India Level Club Karate Championship',
-      description:
-        'Secured two Bronze Medals at the prestigious All India Level Club Karate Championship, demonstrating competitive Karate combat discipline, rapid Kumite reflexes, and tactical ring composure against top martial arts athletes nationwide.',
-      icon: Medal,
-      highlights: [
-        'Two-time Bronze Medalist at All-India Club Karate Championship Level',
-        'High-intensity competitive Kumite combat sparring & tactical execution',
-        'Demonstrated athletic discipline, physical stamina and composure under pressure',
-      ],
-    },
-    {
-      id: 'karate-brown-belt',
-      category: 'MARTIAL ARTS MASTERY',
-      badge: 'BROWN BELT SENIOR',
-      yearTag: 'SENIOR GRADE MASTERY',
-      statNumber: 'BROWN BELT',
-      statLabel: 'SENIOR GRADE',
-      title: 'Karate Brown Belt Senior Grade',
-      subtitle: 'Advanced Martial Arts Conditioning & Sparring',
-      description:
-        'Earned the senior Karate Brown Belt grade following years of rigorous traditional martial arts training, advanced Kata technical mastery, physical conditioning, and full-contact Kumite sparring.',
-      icon: Shield,
-      highlights: [
-        'Senior Grade Brown Belt qualification in traditional Karate discipline',
-        '6+ years of disciplined conditioning, advanced Kata forms & full-contact sparring',
-        'Cultivated mental focus, physical endurance, agility & situational awareness',
-      ],
-    },
-    {
-      id: 'school-topper',
-      category: 'SCHOLASTIC DISTINCTION',
-      badge: 'RANK #1 TOPPER',
-      yearTag: 'SECONDARY EXCELLENCE',
-      statNumber: '88.71%',
-      statLabel: 'BOARD SCORE',
-      title: 'School Topper & Science Distinction',
-      subtitle: 'Jadavpur High School • Secondary Board',
-      description:
-        'Ranked #1 as the Secondary Examination School Topper at Jadavpur High School with 88.71%, earning institutional commendations and scientific excellence distinctions.',
-      icon: Crown,
-      highlights: [
-        'Ranked #1 among all secondary graduation candidates across the institution',
-        '88.71% aggregate score with distinctions across Science & Higher Mathematics',
-        'Awarded institutional honors for academic dedication and scientific inquiry',
-      ],
-    },
-  ];
-
+  const achievements = achievementsData;
   const total = achievements.length;
 
   // Direct DOM Update Engine (0ms Reflow, Pure GPU Compositing)
@@ -401,10 +404,11 @@ const ScrollStackedHonorsDeck: React.FC = () => {
     };
 
     const handleScroll = () => {
+      if (window.innerWidth < 768) return;
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      const stickyTop = window.innerWidth >= 768 ? 90 : 80;
+      const stickyTop = 90;
       const stickyH = stickyRef.current?.offsetHeight || (windowHeight - 100);
       const totalDistance = rect.height - stickyH;
 
@@ -444,7 +448,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
       const stickyH = stickyRef.current?.offsetHeight || (windowHeight - 100);
       const totalDistance = rect.height - stickyH;
       const targetProgress = index / (total - 1);
-      const stickyTop = window.innerWidth >= 768 ? 90 : 80;
+      const stickyTop = 90;
       const targetScrollY = containerTop + targetProgress * totalDistance - stickyTop;
 
       window.scrollTo({
@@ -468,6 +472,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (window.innerWidth < 768) return;
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       if (rect.top < window.innerHeight && rect.bottom > 0) {
@@ -485,45 +490,21 @@ const ScrollStackedHonorsDeck: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Touch swipe support on mobile
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartY.current === null) return;
-    const touchEndY = e.changedTouches[0].clientY;
-    const diff = touchStartY.current - touchEndY;
-
-    if (Math.abs(diff) > 45) {
-      if (diff > 0) {
-        nextCard();
-      } else {
-        prevCard();
-      }
-    }
-    touchStartY.current = null;
-  };
-
   return (
     <div
       ref={containerRef}
-      className="relative h-[320vh] sm:h-[360vh] md:h-[400vh] w-full"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      className="relative h-[360vh] md:h-[400vh] w-full"
     >
       {/* Sticky Viewport Window */}
       <div
         ref={stickyRef}
-        className="sticky top-[80px] md:top-[90px] h-[calc(100vh-100px)] min-h-[560px] sm:min-h-[600px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1180px] mx-auto px-2 sm:px-4 select-none"
+        className="sticky top-[90px] h-[calc(100vh-100px)] min-h-[600px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1180px] mx-auto px-2 sm:px-4 select-none"
       >
-        
         {/* Top Interactive HUD Bar with Live Percentage Progress */}
         <div className="flex items-center justify-between gap-4 mb-2.5 pb-2.5 border-b border-white/[0.08] relative z-40 flex-wrap">
-          
           {/* Active Card Badge & Category Tag */}
           <div className="flex items-center gap-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.70rem] sm:text-[0.75rem] font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.75rem] font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(249,115,22,0.15)]">
               <Trophy size={13} className="text-accent-orange" />
               <span ref={badgeTextRef}>HONOR 01 / 0{total}</span>
             </div>
@@ -534,7 +515,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
           </div>
 
           {/* Center: Live Scroll Progress Track & Percentage Indicator */}
-          <div className="flex items-center gap-2.5 flex-1 max-w-[280px] sm:max-w-[340px] mx-2 sm:mx-4">
+          <div className="flex items-center gap-2.5 flex-1 max-w-[340px] mx-4">
             <div className="h-2 w-full bg-white/[0.08] rounded-full overflow-hidden p-0.5 border border-white/[0.06]">
               <div
                 ref={progressBarRef}
@@ -542,7 +523,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                 style={{ width: '6%' }}
               />
             </div>
-            <div className="font-mono text-[0.72rem] sm:text-[0.78rem] text-amber-400 font-black shrink-0 px-2 py-0.5 rounded-md bg-amber-400/10 border border-amber-400/25 min-w-[44px] text-center shadow-[0_0_10px_rgba(251,191,36,0.15)]">
+            <div className="font-mono text-[0.78rem] text-amber-400 font-black shrink-0 px-2 py-0.5 rounded-md bg-amber-400/10 border border-amber-400/25 min-w-[44px] text-center shadow-[0_0_10px_rgba(251,191,36,0.15)]">
               <span ref={progressTextRef}>0%</span>
             </div>
           </div>
@@ -550,7 +531,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
           {/* Right: Step Pills & Tactile Navigation Buttons */}
           <div className="flex items-center gap-2.5">
             {/* Step Pills */}
-            <div className="hidden sm:flex items-center gap-1.5 bg-white/[0.03] p-1 rounded-full border border-white/[0.08]">
+            <div className="flex items-center gap-1.5 bg-white/[0.03] p-1 rounded-full border border-white/[0.08]">
               {achievements.map((_, i) => (
                 <button
                   key={i}
@@ -605,7 +586,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                   cardsRef.current[idx] = el;
                 }}
                 onClick={() => jumpToCard(idx)}
-                className="achievement-scroll-card absolute w-full max-w-[1180px] rounded-2xl sm:rounded-3xl border p-5 sm:p-6 md:py-6 md:px-8 lg:py-6 lg:px-9 bg-[#0c0d16] overflow-hidden cursor-pointer"
+                className="achievement-scroll-card absolute w-full max-w-[1180px] rounded-3xl border py-6 px-9 bg-[#0c0d16] overflow-hidden cursor-pointer"
                 style={{
                   willChange: 'transform, opacity',
                   transform: idx === 0 ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 110%, 80px) scale(0.92)',
@@ -625,54 +606,53 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
                 {/* Giant Stylized Index Watermark */}
                 <div
-                  className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.5rem] leading-none select-none pointer-events-none text-white/[0.03]"
+                  className="absolute top-2 right-4 font-display font-black text-[5.5rem] leading-none select-none pointer-events-none text-white/[0.03]"
                   aria-hidden="true"
                 >
                   0{idx + 1}
                 </div>
 
                 {/* Card Content Layout: 2 Columns */}
-                <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-5 sm:gap-6 items-center relative z-10">
-                  
+                <div className="grid grid-cols-[1fr_210px] gap-6 items-center relative z-10">
                   {/* Left Column: Details & Highlights */}
                   <div>
                     {/* Header Chips */}
                     <div className="flex items-center gap-2.5 mb-2.5 flex-wrap">
-                      <span className="font-mono text-[0.68rem] sm:text-[0.74rem] font-black px-3.5 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
+                      <span className="font-mono text-[0.74rem] font-black px-3.5 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
                         <CheckCircle2 size={12} />
                         <span>{item.badge}</span>
                       </span>
                       <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
                         {item.category}
                       </span>
-                      <span className="text-white/20 text-xs hidden sm:inline">•</span>
-                      <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
+                      <span className="text-white/20 text-xs">•</span>
+                      <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider">
                         {item.yearTag}
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h4 className="font-display text-[1.25rem] sm:text-[1.55rem] md:text-[1.75rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
+                    <h4 className="font-display text-[1.75rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
                       {item.title}
                     </h4>
 
                     {/* Monospace Subtitle */}
-                    <div className="font-mono text-[0.76rem] sm:text-[0.84rem] font-bold text-amber-400 tracking-wide uppercase mb-2.5 flex items-center gap-1.5">
+                    <div className="font-mono text-[0.84rem] font-bold text-amber-400 tracking-wide uppercase mb-2.5 flex items-center gap-1.5">
                       <span className="text-accent-orange">▹</span>
                       <span>{item.subtitle}</span>
                     </div>
 
                     {/* Description */}
-                    <p className="text-[0.86rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-3.5 font-normal max-w-[850px]">
+                    <p className="text-[0.93rem] text-zinc-300 leading-relaxed mb-3.5 font-normal max-w-[850px]">
                       {item.description}
                     </p>
 
                     {/* Bullet Highlights */}
-                    <div className="flex flex-col gap-1.5 sm:gap-2 pt-2.5 border-t border-white/[0.08] max-w-[850px]">
+                    <div className="flex flex-col gap-2 pt-2.5 border-t border-white/[0.08] max-w-[850px]">
                       {item.highlights.map((highlight, hIdx) => (
                         <div
                           key={hIdx}
-                          className="flex items-start gap-2.5 text-[0.82rem] sm:text-[0.88rem] text-zinc-300"
+                          className="flex items-start gap-2.5 text-[0.88rem] text-zinc-300"
                         >
                           <span className="text-accent-orange text-xs mt-0.5 shrink-0">◆</span>
                           <span className="leading-snug">{highlight}</span>
@@ -682,8 +662,8 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                   </div>
 
                   {/* Right Column: Hologram Emblem Medallion */}
-                  <div className="hidden md:flex flex-col items-center justify-center p-4 sm:p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch justify-self-center w-full">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-2.5">
+                  <div className="flex flex-col items-center justify-center p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch justify-self-center w-full">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-2.5">
                       <IconComponent size={28} />
                     </div>
                     <div className="font-display text-[1.35rem] font-black text-white leading-none mb-1">
@@ -697,7 +677,6 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                       <span>VERIFIED RECOGNITION</span>
                     </div>
                   </div>
-
                 </div>
 
                 {/* Footnote Status Bar */}
@@ -725,9 +704,236 @@ const ScrollStackedHonorsDeck: React.FC = () => {
             01 / 0{total} COMPLETED
           </span>
         </div>
-
       </div>
     </div>
+  );
+};
+
+/* ========================================================================= */
+/* ULTRA-LUXURY INTERACTIVE HONORS SHOWCASE (MOBILE: < 768px)                */
+/* Completely natural document flow: zero scroll-trapping up or down         */
+/* ========================================================================= */
+const MobileHonorsDeck: React.FC = () => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const achievements = achievementsData;
+  const total = achievements.length;
+  const current = achievements[activeIdx];
+  const IconComponent = current.icon;
+
+  const nextCard = () => {
+    setActiveIdx((prev) => (prev + 1) % total);
+  };
+
+  const prevCard = () => {
+    setActiveIdx((prev) => (prev - 1 + total) % total);
+  };
+
+  // Horizontal-only swipe detection (never interferes with vertical page scrolling)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const diffX = touchStartX.current - e.changedTouches[0].clientX;
+    const diffY = touchStartY.current - e.changedTouches[0].clientY;
+
+    // Only swipe cards horizontally when user intentionally drags sideways
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+      if (diffX > 0) {
+        nextCard();
+      } else {
+        prevCard();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  return (
+    <div
+      className="w-full flex flex-col gap-4 py-2"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Top HUD Controls: Badge, Step Pills & Next/Prev Arrows */}
+      <div className="flex items-center justify-between gap-2.5 pb-3 border-b border-white/[0.08] flex-wrap">
+        {/* Active Badge */}
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.70rem] font-bold uppercase tracking-wider shadow-[0_0_12px_rgba(249,115,22,0.15)]">
+          <Trophy size={13} className="text-accent-orange" />
+          <span>HONOR 0{activeIdx + 1} / 0{total}</span>
+        </div>
+
+        {/* Navigation Step Pills & Arrows */}
+        <div className="flex items-center gap-1.5">
+          {/* Pills */}
+          <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/[0.08]">
+            {achievements.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setActiveIdx(i)}
+                className={`px-2.5 py-0.5 rounded-full font-mono text-[0.68rem] font-black transition-all duration-300 cursor-pointer ${
+                  i === activeIdx
+                    ? 'bg-gradient-to-r from-amber-400 to-accent-orange text-black shadow-[0_0_12px_rgba(251,191,36,0.6)] scale-105'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+                aria-label={`View honor 0${i + 1}`}
+              >
+                0{i + 1}
+              </button>
+            ))}
+          </div>
+
+          {/* Arrows */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={prevCard}
+              className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer shadow-md"
+              aria-label="Previous Honor"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={nextCard}
+              className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer shadow-md"
+              aria-label="Next Honor"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Luxury Active Honor Card */}
+      <div
+        key={current.id}
+        className="relative w-full rounded-2xl border border-amber-400/40 p-5 sm:p-6 bg-[#0c0d16]/95 backdrop-blur-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(245,158,11,0.1)] transition-all duration-300 animate-fade-in"
+      >
+        {/* Top Active Sheen */}
+        <div
+          className="absolute -top-px left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+          aria-hidden="true"
+        />
+
+        {/* Giant Watermark */}
+        <div
+          className="absolute top-2 right-4 font-display font-black text-[3.8rem] leading-none select-none pointer-events-none text-white/[0.03]"
+          aria-hidden="true"
+        >
+          0{activeIdx + 1}
+        </div>
+
+        {/* Header Tags */}
+        <div className="flex items-center gap-2 mb-3 flex-wrap relative z-10">
+          <span className="font-mono text-[0.68rem] font-black px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
+            <CheckCircle2 size={12} />
+            <span>{current.badge}</span>
+          </span>
+          <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
+            {current.category}
+          </span>
+        </div>
+
+        {/* Card Title */}
+        <h4 className="font-display text-[1.22rem] sm:text-[1.4rem] font-black text-white leading-snug mb-1 tracking-[0.01em] relative z-10">
+          {current.title}
+        </h4>
+
+        {/* Subtitle */}
+        <div className="font-mono text-[0.76rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5 relative z-10">
+          <span className="text-accent-orange">▹</span>
+          <span>{current.subtitle}</span>
+        </div>
+
+        {/* Description */}
+        <p className="text-[0.88rem] text-zinc-300 leading-relaxed mb-4 font-normal relative z-10">
+          {current.description}
+        </p>
+
+        {/* Bullet Highlights */}
+        <div className="flex flex-col gap-2 pt-3 border-t border-white/[0.08] relative z-10 mb-4">
+          {current.highlights.map((highlight, hIdx) => (
+            <div
+              key={hIdx}
+              className="flex items-start gap-2.5 text-[0.82rem] text-zinc-300"
+            >
+              <span className="text-accent-orange text-xs mt-0.5 shrink-0">◆</span>
+              <span className="leading-snug">{highlight}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Verified Badge / Emblem Banner */}
+        <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between gap-3 relative z-10">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-400/15 border border-amber-400/30 text-amber-400 flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.2)] shrink-0">
+              <IconComponent size={20} />
+            </div>
+            <div>
+              <div className="font-display text-[1.1rem] font-black text-white leading-tight">
+                {current.statNumber}
+              </div>
+              <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase">
+                {current.statLabel}
+              </div>
+            </div>
+          </div>
+
+          <div className="inline-flex items-center gap-1 text-[0.62rem] font-mono text-zinc-400 shrink-0">
+            <Star size={11} className="text-amber-400" fill="currentColor" />
+            <span>VERIFIED RECOGNITION</span>
+          </div>
+        </div>
+
+        {/* Card Footnote */}
+        <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.66rem] text-zinc-500 relative z-10">
+          <div className="flex items-center gap-1.5">
+            <Sparkles size={11} className="text-amber-400" />
+            <span>SCHOLASTIC &amp; SPORTS RECOGNITION</span>
+          </div>
+          <div className="text-accent-orange font-bold">
+            HONOR 0{activeIdx + 1} OF 0{total}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Hint */}
+      <div className="flex items-center justify-between text-zinc-400 text-[0.72rem] font-mono pt-1">
+        <div className="flex items-center gap-1.5 text-zinc-400">
+          <span className="text-accent-orange">↔</span>
+          <span>SWIPE HORIZONTALLY OR TAP PILLS TO BROWSE</span>
+        </div>
+        <span className="text-amber-400 font-bold">
+          0{activeIdx + 1} / 0{total}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+/* ========================================================================= */
+/* COMPOSITE HONORS DECK (DISPATCHES DESKTOP VS MOBILE SHOWCASE)             */
+/* ========================================================================= */
+const ScrollStackedHonorsDeck: React.FC = () => {
+  return (
+    <>
+      {/* Desktop (>= 768px): 3D Physical Scroll-Stacked Deck */}
+      <div className="hidden md:block">
+        <DesktopScrollStackedHonorsDeck />
+      </div>
+
+      {/* Mobile (< 768px): Ultra-Luxury Interactive Showcase with zero scroll-trapping */}
+      <div className="block md:hidden">
+        <MobileHonorsDeck />
+      </div>
+    </>
   );
 };
 
@@ -976,10 +1182,9 @@ export const Experience: React.FC = () => {
         
         {/* Section Header */}
         <div
-          className="mb-12 md:mb-16 transition-all duration-700 ease-out"
+          className="mb-12 md:mb-16 transition-opacity duration-600 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0px)' : 'translateY(24px)',
           }}
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-orange/10 border border-accent-orange/30 text-accent-orange font-mono text-[0.72rem] font-bold uppercase tracking-wider mb-3.5 shadow-[0_0_15px_rgba(249,115,22,0.15)]">

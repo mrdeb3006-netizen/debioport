@@ -39,12 +39,17 @@
 
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
   background-color: var(--bg-dark);
   color: var(--text-primary);
   font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (pointer: fine) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

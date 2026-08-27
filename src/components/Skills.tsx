@@ -102,10 +102,9 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
         
         {/* Section Header with Fluid Fade-Up Entrance */}
         <div
-          className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 transition-all duration-700 ease-out"
+          className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 transition-opacity duration-500 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0px)' : 'translateY(24px)',
           }}
         >
           <div>
@@ -128,8 +127,8 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className={`relative rounded-3xl p-6 md:p-12 border border-white/[0.08] bg-[#0c0d16]/85 backdrop-blur-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-700 delay-150 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          className={`relative rounded-3xl p-6 md:p-12 border border-white/[0.08] bg-[#0c0d16]/85 backdrop-blur-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-opacity duration-600 delay-100 ${
+            isVisible ? 'opacity-100' : 'opacity-0'
           }`}
         >
           {/* Subtle Ambient Grid Watermark */}
@@ -155,13 +154,13 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
               return (
                 <div
                   key={skill.label}
-                  className={`transition-all duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                  className={`transition-all duration-400 ease-out ${
                     isVisible
-                      ? 'opacity-100 translate-y-0 scale-100'
-                      : 'opacity-0 translate-y-6 scale-90'
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-95'
                   } ${skill.floatClass}`}
                   style={{
-                    transitionDelay: isVisible ? `${idx * 45}ms` : '0ms',
+                    transitionDelay: isVisible ? `${idx * 30}ms` : '0ms',
                     animationDelay: skill.delay,
                   }}
                 >

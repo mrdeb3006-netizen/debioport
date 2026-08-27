@@ -124,10 +124,10 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
         opacity: isVisible ? 1 : 0,
         transform: isVisible
           ? 'translateY(0px) scale(1)'
-          : 'translateY(80px) scale(0.75)',
-        filter: isVisible ? 'blur(0px)' : 'blur(10px)',
+          : 'translateY(24px) scale(0.95)',
+        filter: isVisible ? 'blur(0px)' : 'blur(8px)',
         transition: isVisible
-          ? 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 1.4s cubic-bezier(0.18, 0.95, 0.32, 1.25) 0.1s, filter 1.0s ease-out 0.1s'
+          ? 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, filter 0.8s ease-out 0.1s'
           : 'opacity 0.35s ease-out, transform 0.35s ease-out, filter 0.35s ease-out',
         willChange: 'transform, opacity, filter',
       }}
@@ -241,11 +241,12 @@ export const About: React.FC = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
       },
       {
         threshold: 0.1,
-        rootMargin: '0px 0px -30px 0px',
       }
     );
 
