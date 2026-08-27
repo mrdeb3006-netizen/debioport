@@ -66,9 +66,27 @@ body {
   body {
     cursor: none; /* Doctor Strange Magic Ring Cursor handles desktop mouse */
   }
-  a, button, input, textarea, select, [role="button"] {
+  a, button, [role="button"], .cursor-pointer {
     cursor: none;
   }
+  input, textarea, [contenteditable="true"] {
+    cursor: text !important;
+    user-select: text !important;
+    -webkit-user-select: text !important;
+  }
+  select {
+    cursor: pointer !important;
+  }
+}
+
+::selection {
+  background-color: rgba(249, 115, 22, 0.4);
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: rgba(249, 115, 22, 0.4);
+  color: #ffffff;
 }
 
 /* --- Top HUD Scroll Progress Bar --- */

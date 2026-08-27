@@ -55,17 +55,28 @@ export const DoctorStrangeCursor: React.FC = () => {
         ring.x = mouse.x;
         ring.y = mouse.y;
       }
-      targetAlpha = 1;
 
       // Ultra-lightweight interactive target detection
       const target = e.target as HTMLElement | null;
       if (target) {
-        const interactive = target.closest('a, button, input, textarea, select, .interactive-skill-tag, .social-icon-btn, .nav-link, [role="button"], .cursor-pointer');
+        // If mouse is over any editable text field, hide magic cursor so native I-beam text selection works smoothly
+        const isTextInput = !!target.closest('input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable="true"]');
+        if (isTextInput) {
+          targetAlpha = 0;
+          isHovering = false;
+          return;
+        }
+
+        targetAlpha = 1;
+
+        const interactive = target.closest('a, button, select, input[type="button"], input[type="submit"], .interactive-skill-tag, .social-icon-btn, .nav-link, [role="button"], .cursor-pointer');
         const hovering = !!interactive;
         if (hovering !== isHovering) {
           isHovering = hovering;
           targetRadius = isHovering ? 24 : (isClicking ? 10 : 14);
         }
+      } else {
+        targetAlpha = 1;
       }
     };
 
