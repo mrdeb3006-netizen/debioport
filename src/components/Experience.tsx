@@ -336,32 +336,32 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         let zIndex = 20;
 
         if (delta > 0) {
-          // Card below: instantaneous, silky glide in/out
+          // Card below: graceful, silky float into view
           if (delta >= 1) {
             const extra = delta - 1;
-            transform = `translate3d(0, ${105 + extra * 20}%, 40px) rotateX(6deg) scale(0.94)`;
+            transform = `translate3d(0, ${105 + extra * 20}%, 45px) rotateX(7deg) scale(0.93)`;
             opacity = 0;
             zIndex = 10;
           } else {
             const ease = smootherstep(delta);
             const yPercent = ease * 100;
-            const rotX = ease * 6.5;
+            const rotX = ease * 7.0;
             const scale = 0.94 + (1 - ease) * 0.06;
-            const zOffset = 25 * (1 - ease);
+            const zOffset = 30 * (1 - ease);
             transform = `translate3d(0, ${yPercent}%, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-            opacity = Math.min(1, Math.max(0, (1 - ease) * 2.5));
+            opacity = Math.min(1, Math.max(0, (1 - ease) * 2.2));
             zIndex = 30 + idx * 4;
           }
         } else {
           // Card active or smoothly receding into background stack
           const depth = -delta;
           const easeDepth = smootherstep(Math.min(depth, 1.0)) + Math.max(0, depth - 1.0);
-          const yOffset = -easeDepth * 12;
-          const zOffset = -easeDepth * 40;
-          const rotX = -easeDepth * 1.2;
-          const scale = Math.max(0.89, 1 - easeDepth * 0.035);
+          const yOffset = -easeDepth * 14;
+          const zOffset = -easeDepth * 45;
+          const rotX = -easeDepth * 1.5;
+          const scale = Math.max(0.88, 1 - easeDepth * 0.035);
           transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-          opacity = Math.max(0.25, 1 - easeDepth * 0.20);
+          opacity = Math.max(0.3, 1 - easeDepth * 0.22);
           zIndex = 30 + idx * 4 - Math.round(depth * 5);
         }
 
@@ -377,14 +377,15 @@ const ScrollStackedHonorsDeck: React.FC = () => {
     [total, achievements]
   );
 
-  // 144Hz Zero-Lag Responsive Bidirectional Lerp Loop & Initial Mount Frame Execution
+  // 144Hz Silky-Smooth Bidirectional Lerp Loop & Initial Mount Frame Execution
   useEffect(() => {
     // Immediate frame 0 paint on mount
     renderDeckFrame(0);
 
     const updatePhysics = () => {
       const diff = targetProgressRef.current - currentProgressRef.current;
-      currentProgressRef.current += diff * 0.35;
+      // Balanced fluid momentum: smooth, soft, and responsive
+      currentProgressRef.current += diff * 0.20;
 
       if (Math.abs(diff) < 0.0001) {
         currentProgressRef.current = targetProgressRef.current;
