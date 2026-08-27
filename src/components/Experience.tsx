@@ -10,11 +10,11 @@ import {
   Award,
   Sparkles,
   CheckCircle2,
-  ArrowRight,
-  Shuffle,
   BookOpen,
   Compass,
   Layers,
+  Crown,
+  MousePointer,
 } from 'lucide-react';
 
 interface TimelineMilestone {
@@ -44,7 +44,7 @@ interface AchievementCard {
 }
 
 /* ========================================================================= */
-/* ULTRA-LUXURY INTERACTIVE MILESTONE CARD                                   */
+/* ULTRA-LUXURY INTERACTIVE MILESTONE CARD (TIMELINE)                        */
 /* ========================================================================= */
 interface MilestoneCardProps {
   item: TimelineMilestone;
@@ -165,9 +165,16 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 };
 
 /* ========================================================================= */
-/* 3D PHYSICAL SHUFFLE DECK COMPONENT (OTHER ACHIEVEMENTS)                    */
+/* PRO-LEVEL SCROLL-DRIVEN 3D STACKED HONORS DECK                           */
 /* ========================================================================= */
-const PhysicalShuffleDeck: React.FC = () => {
+const ScrollStackedHonorsDeck: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
   const achievements: AchievementCard[] = [
     {
       id: 'jhs-counselling-honour',
@@ -252,7 +259,7 @@ const PhysicalShuffleDeck: React.FC = () => {
       subtitle: 'Jadavpur High School • Secondary Board',
       description:
         'Ranked #1 as the Secondary Examination School Topper at Jadavpur High School with 88.71%, earning institutional commendations and scientific excellence distinctions.',
-      icon: Award,
+      icon: Crown,
       highlights: [
         'Ranked #1 among all secondary graduation candidates across the institution',
         '88.71% aggregate score with distinctions across Science & Higher Mathematics',
@@ -262,361 +269,407 @@ const PhysicalShuffleDeck: React.FC = () => {
   ];
 
   const total = achievements.length;
-  const [deckOrder, setDeckOrder] = useState<number[]>(() => achievements.map((_, i) => i));
-  const [isHovered, setIsHovered] = useState(false);
-  const [isDealing, setIsDealing] = useState(false);
-  const [deckHeight, setDeckHeight] = useState<number>(480);
-  const frontCardRef = useRef<HTMLDivElement | null>(null);
-  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const dealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => () => {
-    if (dealTimerRef.current) clearTimeout(dealTimerRef.current);
-  }, []);
-
-  // Dynamically measure active front card height to ensure zero bottom cut-off
+  // Track scroll within the pinned container
   useEffect(() => {
-    const measureHeight = () => {
-      if (frontCardRef.current) {
-        const height = frontCardRef.current.offsetHeight;
-        if (height > 0) {
-          setDeckHeight(height + 60);
-        }
+    let animId: number;
+
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const totalDistance = rect.height - windowHeight;
+
+      if (totalDistance <= 0) return;
+
+      const scrolled = -rect.top;
+      const rawProgress = scrolled / totalDistance;
+      const clamped = Math.min(Math.max(rawProgress, 0), 1);
+
+      setScrollProgress(clamped);
+
+      // Active card index determination
+      const virtualPos = clamped * (total - 1);
+      const activeIdx = Math.min(Math.round(virtualPos), total - 1);
+      setActiveCardIndex(activeIdx);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      cancelAnimationFrame(animId);
+    };
+  }, [total]);
+
+  // Jump to specific card by scrolling smoothly to its target offset
+  const jumpToCard = useCallback(
+    (index: number) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerTop = window.scrollY + rect.top;
+      const totalDistance = rect.height - window.innerHeight;
+      const targetProgress = index / (total - 1);
+      const targetScrollY = containerTop + targetProgress * totalDistance;
+
+      window.scrollTo({
+        top: targetScrollY,
+        behavior: 'smooth',
+      });
+    },
+    [total]
+  );
+
+  const nextCard = useCallback(() => {
+    const nextIdx = Math.min(activeCardIndex + 1, total - 1);
+    jumpToCard(nextIdx);
+  }, [activeCardIndex, total, jumpToCard]);
+
+  const prevCard = useCallback(() => {
+    const prevIdx = Math.max(activeCardIndex - 1, 0);
+    jumpToCard(prevIdx);
+  }, [activeCardIndex, jumpToCard]);
+
+  // Touch Swipe Handlers for Mobile Gesture Support
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY.current === null) return;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diff = touchStartY.current - touchEndY;
+
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        nextCard();
+      } else {
+        prevCard();
+      }
+    }
+    touchStartY.current = null;
+  };
+
+  // Keyboard left/right arrow navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isHovered) return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        nextCard();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        prevCard();
       }
     };
 
-    measureHeight();
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isHovered, nextCard, prevCard]);
 
-    const ro = new ResizeObserver(measureHeight);
-    if (frontCardRef.current) {
-      ro.observe(frontCardRef.current);
-    }
-    window.addEventListener('resize', measureHeight);
-
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', measureHeight);
-    };
-  }, [deckOrder]);
-
-  // Physical "Swipe & Re-deal to Back" Shuffle Execution
-  const shuffleNext = useCallback(() => {
-    if (isDealing) return;
-    setIsDealing(true);
-
-    dealTimerRef.current = setTimeout(() => {
-      setDeckOrder((prev) => {
-        const [first, ...rest] = prev;
-        return [...rest, first];
-      });
-      setIsDealing(false);
-    }, 650);
-  }, [isDealing]);
-
-  const shufflePrev = useCallback(() => {
-    if (isDealing) return;
-    setIsDealing(true);
-
-    dealTimerRef.current = setTimeout(() => {
-      setDeckOrder((prev) => {
-        const last = prev[prev.length - 1];
-        const rest = prev.slice(0, prev.length - 1);
-        return [last, ...rest];
-      });
-      setIsDealing(false);
-    }, 650);
-  }, [isDealing]);
-
-  const bringToFront = (targetIndex: number) => {
-    if (isDealing || deckOrder[0] === targetIndex) return;
-    setIsDealing(true);
-
-    dealTimerRef.current = setTimeout(() => {
-      setDeckOrder((prev) => {
-        const itemPos = prev.indexOf(targetIndex);
-        if (itemPos === -1) return prev;
-        return [...prev.slice(itemPos), ...prev.slice(0, itemPos)];
-      });
-      setIsDealing(false);
-    }, 650);
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
   };
-
-  // Continuous auto-shuffle timer
-  useEffect(() => {
-    if (isHovered) {
-      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
-      return;
-    }
-
-    autoPlayRef.current = setInterval(() => {
-      shuffleNext();
-    }, 5000);
-
-    return () => {
-      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
-    };
-  }, [isHovered, shuffleNext]);
 
   return (
     <div
-      className="relative w-full max-w-[1060px] mx-auto select-none pt-4 pb-4"
+      ref={containerRef}
+      className="relative h-[280vh] sm:h-[320vh] w-full"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setMousePos(null);
+      }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
-      {/* 3D Physical Deck Container */}
-      <div
-        className="relative w-full flex items-center justify-center py-2 transition-[min-height] duration-300 ease-out min-h-[580px] sm:min-h-[500px] md:min-h-[460px]"
-        style={{
-          perspective: 1800,
-          minHeight: `${Math.max(deckHeight, 460)}px`,
-        }}
-      >
-        {/* Flanking Side Arrows for Direct Manual Shuffling */}
-        <button
-          onClick={shufflePrev}
-          disabled={isDealing}
-          className="absolute -left-2 sm:-left-4 md:-left-7 top-1/2 -translate-y-1/2 z-50 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#0a0b12]/95 backdrop-blur-xl border border-white/20 hover:border-amber-400 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-90 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(245,158,11,0.25)] disabled:opacity-30 disabled:cursor-not-allowed group/deck-prev cursor-pointer"
-          aria-label="Previous Achievement Card"
-          title="Previous Card"
+      {/* Sticky Viewport Window */}
+      <div className="sticky top-[80px] md:top-[90px] h-[calc(100vh-100px)] min-h-[560px] sm:min-h-[600px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1100px] mx-auto px-2 sm:px-4 select-none">
+        
+        {/* Top Interactive HUD Bar */}
+        <div className="flex items-center justify-between gap-4 mb-3 pb-3 border-b border-white/[0.08] relative z-40 flex-wrap">
+          
+          {/* Active Card Badge & Scroll Indicator */}
+          <div className="flex items-center gap-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.70rem] sm:text-[0.75rem] font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+              <Trophy size={13} className="text-accent-orange" />
+              <span>HONOR 0{activeCardIndex + 1} / 0{total}</span>
+            </div>
+
+            <span className="font-mono text-[0.68rem] text-zinc-400 hidden md:inline uppercase tracking-wider">
+              {achievements[activeCardIndex].category}
+            </span>
+          </div>
+
+          {/* Center: Live Scroll Progress Track */}
+          <div className="hidden lg:flex items-center gap-2 flex-1 max-w-[280px] mx-4">
+            <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden p-0.5">
+              <div
+                className="h-full bg-gradient-to-r from-amber-400 via-accent-orange to-amber-500 rounded-full transition-all duration-150 shadow-[0_0_10px_#fbbf24]"
+                style={{ width: `${Math.max(scrollProgress * 100, 6)}%` }}
+              />
+            </div>
+            <span className="font-mono text-[0.66rem] text-zinc-400 font-bold shrink-0">
+              {Math.round(scrollProgress * 100)}%
+            </span>
+          </div>
+
+          {/* Right: Step Pills & Tactile Navigation Buttons */}
+          <div className="flex items-center gap-2.5">
+            {/* Step Pills */}
+            <div className="flex items-center gap-1.5 bg-white/[0.03] p-1 rounded-full border border-white/[0.08]">
+              {achievements.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => jumpToCard(i)}
+                  className={`px-2.5 py-0.5 rounded-full font-mono text-[0.66rem] font-black transition-all duration-300 cursor-pointer ${
+                    activeCardIndex === i
+                      ? 'bg-gradient-to-r from-amber-400 to-accent-orange text-black shadow-[0_0_15px_rgba(251,191,36,0.6)] scale-105'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
+                  }`}
+                  aria-label={`Jump to achievement ${i + 1}`}
+                >
+                  0{i + 1}
+                </button>
+              ))}
+            </div>
+
+            {/* Next / Prev Arrow Buttons */}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={prevCard}
+                disabled={activeCardIndex === 0}
+                className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-md"
+                aria-label="Previous Achievement"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={nextCard}
+                disabled={activeCardIndex === total - 1}
+                className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-md"
+                aria-label="Next Achievement"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* 3D Physical Stacking Cards Stage */}
+        <div
+          onMouseMove={handleMouseMove}
+          className="relative flex-1 w-full flex items-center justify-center"
+          style={{ perspective: 1800 }}
         >
-          <ChevronLeft size={22} className="transition-transform duration-200 group-hover/deck-prev:-translate-x-0.5" />
-        </button>
+          {achievements.map((item, idx) => {
+            const IconComponent = item.icon;
+            
+            // Continuous float position from scroll progress: [0 .. total - 1]
+            const virtualPos = scrollProgress * (total - 1);
+            const delta = idx - virtualPos;
 
-        <button
-          onClick={shuffleNext}
-          disabled={isDealing}
-          className="absolute -right-2 sm:-right-4 md:-right-7 top-1/2 -translate-y-1/2 z-50 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#0a0b12]/95 backdrop-blur-xl border border-white/20 hover:border-amber-400 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-90 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(245,158,11,0.25)] disabled:opacity-30 disabled:cursor-not-allowed group/deck-next cursor-pointer"
-          aria-label="Next / Shuffle Achievement Card"
-          title="Next Card"
-        >
-          <ChevronRight size={22} className="transition-transform duration-200 group-hover/deck-next:translate-x-0.5" />
-        </button>
+            let transform = '';
+            let opacity = 1;
+            let zIndex = 20;
+            let filter = 'none';
 
-        {deckOrder.map((achIdx, slotPosition) => {
-          const item = achievements[achIdx];
-          const IconComponent = item.icon;
-          const isFront = slotPosition === 0;
+            if (delta > 0) {
+              // Card is coming from below
+              if (delta >= 1) {
+                // Far below
+                const extra = delta - 1;
+                transform = `translate3d(0, ${110 + extra * 30}%, 80px) rotateX(14deg) scale(0.92)`;
+                opacity = 0;
+                zIndex = 10;
+              } else {
+                // Smoothly rising into view
+                const yPercent = delta * 105;
+                const rotX = delta * 12;
+                const scale = 0.94 + (1 - delta) * 0.06;
+                transform = `translate3d(0, ${yPercent}%, ${40 * (1 - delta)}px) rotateX(${rotX}deg) scale(${scale})`;
+                opacity = Math.min(1, (1 - delta) * 1.8);
+                zIndex = 30 + idx * 4;
+              }
+            } else {
+              // Card is active or sunk into the stack
+              const depth = -delta; // depth >= 0
+              if (depth < 0.15) {
+                // Active Front Card
+                transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
+                opacity = 1;
+                zIndex = 40;
+              } else {
+                // Receding into stack behind
+                const yOffset = -depth * 20;
+                const zOffset = -depth * 70;
+                const rotX = -depth * 2.5;
+                const scale = Math.max(0.86, 1 - depth * 0.045);
+                transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
+                opacity = Math.max(0.2, 1 - depth * 0.28);
+                filter = `blur(${Math.min(depth * 1.0, 2.5)}px)`;
+                zIndex = 30 + idx * 4 - Math.round(depth * 5);
+              }
+            }
 
-          // Slot-based 3D Physical Deck Positioning
-          let transform = '';
-          let zIndex = 40 - slotPosition * 8;
-          let opacity = 1;
-          let filter = 'none';
+            const isFront = activeCardIndex === idx;
 
-          if (isFront && isDealing) {
-            transform =
-              'translate3d(112%, -30px, 140px) rotateY(-22deg) rotateZ(10deg) scale(0.9)';
-            opacity = 0.08;
-            zIndex = 50;
-            filter = 'blur(1.5px)';
-          } else if (slotPosition === 0) {
-            transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
-            opacity = 1;
-            zIndex = 35;
-          } else if (slotPosition === 1) {
-            const yOffset = isHovered ? -24 : -16;
-            const xOffset = isHovered ? 18 : 10;
-            const rot = isHovered ? 2.2 : 1.2;
-            transform = `translate3d(${xOffset}px, ${yOffset}px, -60px) rotateZ(${rot}deg) scale(0.96)`;
-            opacity = 0.85;
-            filter = 'blur(0.4px)';
-          } else if (slotPosition === 2) {
-            const yOffset = isHovered ? -44 : -30;
-            const xOffset = isHovered ? -16 : -8;
-            const rot = isHovered ? -2.0 : -1.0;
-            transform = `translate3d(${xOffset}px, ${yOffset}px, -120px) rotateZ(${rot}deg) scale(0.92)`;
-            opacity = 0.6;
-            filter = 'blur(0.8px)';
-          } else if (slotPosition === 3) {
-            const yOffset = isHovered ? -64 : -44;
-            const xOffset = isHovered ? 12 : 6;
-            const rot = isHovered ? 1.6 : 0.6;
-            transform = `translate3d(${xOffset}px, ${yOffset}px, -180px) rotateZ(${rot}deg) scale(0.88)`;
-            opacity = 0.35;
-            filter = 'blur(1.2px)';
-          } else {
-            const yOffset = isHovered ? -80 : -56;
-            const xOffset = isHovered ? -8 : -4;
-            const rot = isHovered ? -1.2 : -0.4;
-            transform = `translate3d(${xOffset}px, ${yOffset}px, -240px) rotateZ(${rot}deg) scale(0.84)`;
-            opacity = 0.2;
-            filter = 'blur(1.5px)';
-          }
+            return (
+              <div
+                key={item.id}
+                onClick={() => !isFront && jumpToCard(idx)}
+                className={`achievement-scroll-card absolute w-full max-w-[1020px] rounded-2xl sm:rounded-3xl border p-5 sm:p-7 md:p-8 lg:p-9 bg-[#0b0c14]/95 backdrop-blur-2xl transition-all duration-300 ease-out overflow-hidden ${
+                  !isFront ? 'cursor-pointer hover:border-amber-400/50' : 'cursor-default'
+                }`}
+                style={{
+                  transform,
+                  opacity,
+                  zIndex,
+                  filter,
+                  pointerEvents: isFront || Math.abs(delta) < 0.8 ? 'auto' : 'none',
+                  borderColor: isFront
+                    ? 'rgba(245, 158, 11, 0.45)'
+                    : 'rgba(255, 255, 255, 0.1)',
+                  boxShadow: isFront
+                    ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+                    : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+                  willChange: 'transform, opacity, filter',
+                }}
+              >
+                {/* Dynamic Mouse Spotlight on Front Card */}
+                {isFront && mousePos && (
+                  <div
+                    className="absolute pointer-events-none transition-opacity duration-300 w-[420px] h-[420px] rounded-full blur-3xl opacity-20 bg-amber-400 transform -translate-x-1/2 -translate-y-1/2"
+                    style={{
+                      left: `${mousePos.x}px`,
+                      top: `${mousePos.y}px`,
+                    }}
+                  />
+                )}
 
-          return (
-            <div
-              key={item.id}
-              ref={isFront ? frontCardRef : null}
-              onClick={() => !isFront && bringToFront(achIdx)}
-              className={`achievement-deck-card absolute top-5 sm:top-6 w-full max-w-[1000px] rounded-2xl sm:rounded-3xl border p-5 sm:p-7 md:p-8 bg-[#0c0d16]/95 backdrop-blur-2xl transition-all duration-300 ${
-                !isFront ? 'cursor-pointer hover:border-amber-400/50' : 'cursor-default'
-              }`}
-              style={{
-                transform,
-                opacity,
-                zIndex,
-                filter,
-                borderColor: isFront
-                  ? 'rgba(245, 158, 11, 0.45)'
-                  : 'rgba(255, 255, 255, 0.1)',
-                boxShadow: isFront
-                  ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.14)'
-                  : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-              }}
-            >
-              {/* Active Golden Edge Sheen */}
-              {isFront && (
+                {/* Active Golden Edge Sheen */}
+                {isFront && (
+                  <div
+                    className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+                    aria-hidden="true"
+                  />
+                )}
+
+                {/* Giant Stylized Index Watermark */}
                 <div
-                  className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+                  className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.5rem] leading-none select-none pointer-events-none transition-all duration-500 text-white/[0.03] group-hover:text-amber-400/[0.08]"
                   aria-hidden="true"
-                />
-              )}
+                >
+                  0{idx + 1}
+                </div>
 
-              {/* Responsive 2-Column Card Layout */}
-              <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-5 sm:gap-6 items-center">
-                
-                {/* Left Area: Content, Badges & Highlights */}
-                <div>
-                  {/* Category Pill Bar */}
-                  <div className="flex items-center justify-between gap-2.5 mb-3 flex-wrap">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="font-mono text-[0.68rem] sm:text-[0.74rem] font-bold px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5">
-                        <CheckCircle2 size={12} />
-                        <span>{item.badge}</span>
-                      </span>
-                      <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
-                        {item.category}
-                      </span>
-                      <span className="text-white/20 text-xs hidden sm:inline">•</span>
-                      <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
-                        {item.yearTag}
-                      </span>
+                {/* Card Content Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_210px] gap-5 sm:gap-6 items-center relative z-10">
+                  
+                  {/* Left Column: Details & Highlights */}
+                  <div>
+                    {/* Header Chips */}
+                    <div className="flex items-center justify-between gap-2.5 mb-3 flex-wrap">
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        <span className="font-mono text-[0.68rem] sm:text-[0.74rem] font-black px-3.5 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
+                          <CheckCircle2 size={12} />
+                          <span>{item.badge}</span>
+                        </span>
+                        <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
+                          {item.category}
+                        </span>
+                        <span className="text-white/20 text-xs hidden sm:inline">•</span>
+                        <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider hidden sm:inline">
+                          {item.yearTag}
+                        </span>
+                      </div>
                     </div>
 
-                    {isFront && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          shuffleNext();
-                        }}
-                        disabled={isDealing}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/35 hover:border-amber-400/70 text-amber-400 hover:text-amber-300 text-[0.68rem] font-mono font-bold uppercase tracking-wider transition-all duration-200 active:scale-95 group/shufbtn shadow-[0_0_15px_rgba(245,158,11,0.15)] ml-auto cursor-pointer"
-                        title="Shuffle to next card"
-                        aria-label="Shuffle to next card"
-                      >
-                        <Shuffle size={11} className="text-amber-400" />
-                        <span>Shuffle</span>
-                        <ArrowRight size={13} className="transition-transform duration-200 group-hover/shufbtn:translate-x-1 text-accent-orange" />
-                      </button>
-                    )}
+                    {/* Title */}
+                    <h4 className="font-display text-[1.25rem] sm:text-[1.55rem] md:text-[1.8rem] font-black text-white leading-snug mb-1.5 tracking-[0.01em]">
+                      {item.title}
+                    </h4>
+
+                    {/* Monospace Subtitle */}
+                    <div className="font-mono text-[0.76rem] sm:text-[0.84rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5">
+                      <span className="text-accent-orange">▹</span>
+                      <span>{item.subtitle}</span>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-[0.86rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-4 font-normal max-w-[740px]">
+                      {item.description}
+                    </p>
+
+                    {/* Bullet Highlights */}
+                    <div className="flex flex-col gap-1.5 sm:gap-2 pt-3 border-t border-white/[0.08] max-w-[740px]">
+                      {item.highlights.map((highlight, hIdx) => (
+                        <div
+                          key={hIdx}
+                          className="flex items-start gap-2.5 text-[0.82rem] sm:text-[0.88rem] text-zinc-300"
+                        >
+                          <span className="text-accent-orange text-xs mt-1 shrink-0">◆</span>
+                          <span className="leading-snug">{highlight}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Title */}
-                  <h4 className="font-display text-[1.25rem] sm:text-[1.55rem] md:text-[1.8rem] font-black text-white leading-snug mb-1 tracking-[0.01em]">
-                    {item.title}
-                  </h4>
-
-                  {/* Monospace Subtitle */}
-                  <div className="font-mono text-[0.76rem] sm:text-[0.84rem] font-bold text-amber-400 tracking-wide uppercase mb-2.5 flex items-center gap-1.5">
-                    <span>▹</span>
-                    <span>{item.subtitle}</span>
+                  {/* Right Column: Hologram Emblem Medallion */}
+                  <div className="hidden md:flex flex-col items-center justify-center p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-3 transition-transform duration-300 hover:scale-105">
+                      <IconComponent size={30} />
+                    </div>
+                    <div className="font-display text-[1.4rem] font-black text-white leading-none mb-1">
+                      {item.statNumber}
+                    </div>
+                    <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase mb-2">
+                      {item.statLabel}
+                    </div>
+                    <div className="inline-flex items-center gap-1 text-[0.64rem] font-mono text-zinc-400 pt-2 border-t border-white/[0.06] w-full justify-center">
+                      <Star size={11} className="text-amber-400" fill="currentColor" />
+                      <span>VERIFIED RECOGNITION</span>
+                    </div>
                   </div>
 
-                  {/* Description */}
-                  <p className="text-[0.86rem] sm:text-[0.93rem] text-zinc-300 leading-relaxed mb-3.5 font-normal max-w-[740px]">
-                    {item.description}
-                  </p>
-
-                  {/* Bullet Highlights */}
-                  <div className="flex flex-col gap-1.5 sm:gap-2 pt-2.5 border-t border-white/[0.08] max-w-[740px]">
-                    {item.highlights.map((highlight, hIdx) => (
-                      <div
-                        key={hIdx}
-                        className="flex items-start gap-2 text-[0.82rem] sm:text-[0.88rem] text-zinc-300"
-                      >
-                        <span className="text-accent-orange text-xs mt-0.5 shrink-0">●</span>
-                        <span className="leading-snug">{highlight}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
-                {/* Right Area: Hologram Emblem Tile */}
-                <div className="hidden md:flex flex-col items-center justify-center p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-3">
-                    <IconComponent size={30} />
+                {/* Footnote Status Bar */}
+                <div className="pt-3 mt-3.5 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500 flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <Layers size={12} className="text-amber-400" />
+                    <span>SCROLL-DRIVEN 3D SHOWCASE</span>
+                    <span className="text-zinc-400 hidden sm:inline">• SCROLL DOWN TO REVEAL NEXT HONOR</span>
                   </div>
-                  <div className="font-display text-[1.4rem] font-black text-white leading-none mb-1">
-                    {item.statNumber}
+                  <div className="flex items-center gap-1 text-accent-orange font-bold">
+                    <Sparkles size={11} />
+                    <span>ACHIEVEMENT 0{idx + 1} OF 0{total}</span>
                   </div>
-                  <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase mb-2">
-                    {item.statLabel}
-                  </div>
-                  <div className="inline-flex items-center gap-1 text-[0.64rem] font-mono text-zinc-400 pt-2 border-t border-white/[0.06] w-full justify-center">
-                    <Star size={11} className="text-amber-400" fill="currentColor" />
-                    <span>VERIFIED RECOGNITION</span>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Footnote Bar */}
-              <div className="pt-3 mt-3.5 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.68rem] text-zinc-500 flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <Layers size={12} className="text-amber-400" />
-                  <span>3D PHYSICAL SHUFFLE DECK</span>
-                  <span className="text-zinc-400 hidden sm:inline">• CLICK CARDS OR CONTROLS TO SHUFFLE</span>
-                </div>
-                <div className="flex items-center gap-1 text-accent-orange font-bold">
-                  <Sparkles size={11} />
-                  <span>DECK 0{achIdx + 1} OF 0{total}</span>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      {/* Navigation Controls & Step Indicators */}
-      <div className="mt-8 flex items-center justify-between max-w-[1000px] mx-auto px-2 relative z-20">
-        {/* Step Indicator Pills */}
-        <div className="flex items-center gap-2">
-          {achievements.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => bringToFront(i)}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                deckOrder[0] === i
-                  ? 'w-10 bg-gradient-to-r from-amber-400 to-accent-orange shadow-[0_0_12px_rgba(251,191,36,0.7)]'
-                  : 'w-2.5 bg-white/20 hover:bg-white/40'
-              }`}
-              aria-label={`Deal card ${i + 1}`}
-            />
-          ))}
-          <span className="font-mono text-[0.72rem] text-zinc-500 ml-2">
-            0{deckOrder[0] + 1} / 0{total}
+        {/* Bottom Interactive Scroll Helper Hint */}
+        <div className="flex items-center justify-between font-mono text-[0.68rem] text-zinc-500 pt-2 px-1 border-t border-white/[0.04]">
+          <div className="flex items-center gap-2">
+            <MousePointer size={12} className="text-accent-orange animate-bounce" />
+            <span>SCROLL DOWN TO PROGRESS • ARROW KEYS TO NAVIGATE</span>
+          </div>
+          <span className="text-zinc-400 font-bold">
+            0{activeCardIndex + 1} / 0{total} COMPLETED
           </span>
         </div>
 
-        {/* Next / Prev Navigation Buttons */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={shufflePrev}
-            disabled={isDealing}
-            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
-            aria-label="Previous Achievement"
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <button
-            onClick={shuffleNext}
-            disabled={isDealing}
-            className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.12] hover:border-amber-400/50 hover:bg-amber-400/10 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
-            aria-label="Next Achievement"
-          >
-            <ChevronRight size={18} />
-          </button>
-        </div>
       </div>
     </div>
   );
@@ -995,7 +1048,7 @@ export const Experience: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* OTHER ACHIEVEMENTS: 3D Physical Card Shuffler                             */}
+        {/* OTHER ACHIEVEMENTS: PRO-LEVEL SCROLL-DRIVEN 3D STACKED SHOWCASE           */}
         {/* ========================================================================= */}
         <div className="pt-8 border-t border-white/[0.08]">
           <div className="flex items-center gap-3.5 mb-8">
@@ -1012,8 +1065,8 @@ export const Experience: React.FC = () => {
             </div>
           </div>
 
-          {/* 3D Physical Shuffler Deck */}
-          <PhysicalShuffleDeck />
+          {/* Pro Scroll-Driven Stacking Cards */}
+          <ScrollStackedHonorsDeck />
         </div>
 
       </div>
