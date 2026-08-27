@@ -15,7 +15,6 @@ interface InteractivePortraitCardProps {
 const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVisible }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [glarePos, setGlarePos] = useState({ x: 50, y: 50 });
   const targetStateRef = useRef({ rx: 0, ry: 0, rz: 0, tx: 0, ty: 0, tz: 0 });
   const [currentState, setCurrentState] = useState({ rx: 0, ry: 0, rz: 0, tx: 0, ty: 0, tz: 0 });
 
@@ -80,11 +79,6 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
         e.clientY <= rect.bottom + 30;
 
       setIsHovered(isInside);
-
-      // Card-relative glare position (0% - 100%)
-      const localX = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-      const localY = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
-      setGlarePos({ x: localX, y: localY });
 
       // Reactive rotation & 3D translation
       const rotMultiplier = isInside ? 20 : 12;
@@ -152,14 +146,7 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
           `,
         }}
       >
-        {/* Specular Interactive Glass Reflection Sheen */}
-        <div
-          className="absolute inset-0 rounded-2xl md:rounded-3xl pointer-events-none z-30 transition-opacity duration-300 overflow-hidden"
-          style={{
-            background: `radial-gradient(circle 240px at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, ${isHovered ? 0.14 : 0.04}), transparent 80%)`,
-            opacity: isHovered ? 1 : 0.5,
-          }}
-        />
+
 
         {/* 3D FLOATING CORNER TARGETING ACCENTS (+35px Z) */}
         <div

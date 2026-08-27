@@ -89,12 +89,12 @@ export const Skills: React.FC<SkillsProps> = ({ activeFilter, onSelectFilter }) 
           className="relative rounded-3xl p-6 md:p-12 border border-white/[0.08] bg-[#0c0d16]/80 backdrop-blur-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
         >
           {/* Subtle Ambient Grid Watermark */}
-          <div className="absolute inset-0 bg-[radial-gradient(rgba(249,115,22,0.04)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
+          <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
 
           {/* Interactive Proximity Spotlight */}
           {mousePos && (
             <div
-              className="absolute pointer-events-none transition-opacity duration-300 w-[360px] h-[360px] rounded-full blur-3xl opacity-20 bg-accent-orange/20 transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute pointer-events-none transition-opacity duration-300 w-[320px] h-[320px] rounded-full blur-3xl opacity-15 bg-white/[0.06] transform -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: `${mousePos.x}px`,
                 top: `${mousePos.y}px`,

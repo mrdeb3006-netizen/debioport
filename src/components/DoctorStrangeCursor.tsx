@@ -125,26 +125,26 @@ export const DoctorStrangeCursor: React.FC = () => {
         ctx.arc(ring.x, ring.y, currentRadius, 0, Math.PI * 2);
         
         if (isHovering) {
-          ctx.fillStyle = 'rgba(249, 115, 22, 0.08)';
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
           ctx.fill();
-          ctx.strokeStyle = 'rgba(249, 115, 22, 0.8)';
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
           ctx.lineWidth = 1.5;
-          ctx.shadowColor = 'rgba(249, 115, 22, 0.4)';
-          ctx.shadowBlur = 8;
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
         } else {
-          ctx.strokeStyle = 'rgba(249, 115, 22, 0.45)';
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
           ctx.lineWidth = 1.2;
-          ctx.shadowColor = 'rgba(249, 115, 22, 0.2)';
-          ctx.shadowBlur = 4;
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
         }
         ctx.stroke();
 
         // 2. Crisp Center Dot (Follows pointer directly with zero lag)
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, isHovering ? 2.5 : 2, 0, Math.PI * 2);
-        ctx.fillStyle = isHovering ? '#f97316' : '#ffffff';
-        ctx.shadowColor = 'rgba(249, 115, 22, 0.7)';
-        ctx.shadowBlur = isHovering ? 6 : 3;
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
         ctx.fill();
 
         ctx.restore();
