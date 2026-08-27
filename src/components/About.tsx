@@ -118,8 +118,8 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
   // Dynamic 3D Cast Shadow offset
   const shadowX = -currentState.ry * 2.2;
   const shadowY = Math.max(15, currentState.rx * 2.2 + 25);
-  const shadowBlur = isHovered ? 60 : 38;
-  const shadowSpread = isHovered ? -5 : -10;
+  const shadowBlur = isHovered ? 55 : 35;
+  const shadowSpread = isHovered ? -4 : -8;
 
   return (
     <div
@@ -138,37 +138,16 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
         willChange: 'transform, opacity, filter',
       }}
     >
-      {/* LAYER -1: 3D Volumetric Depth Aura & Ambient Glowing Backlight */}
-      <div
-        className="absolute -inset-6 rounded-3xl blur-3xl pointer-events-none transition-opacity duration-500"
-        style={{
-          background: 'radial-gradient(circle at center, rgba(245, 158, 11, 0.28) 0%, rgba(249, 115, 22, 0.16) 40%, rgba(6, 182, 212, 0.08) 70%, transparent 85%)',
-          opacity: isHovered ? 1 : 0.6,
-          transform: `translate3d(${currentState.tx * 1.8}px, ${currentState.ty * 1.8}px, -40px) scale(${isHovered ? 1.15 : 1.0})`,
-        }}
-      />
-
-      {/* LAYER 0: Ambient Cyber Orbit Geometry Ring */}
-      <div
-        className="absolute -inset-3 rounded-2xl border border-amber-400/20 pointer-events-none transition-all duration-300"
-        style={{
-          transformStyle: 'preserve-3d',
-          transform: `rotateX(${currentState.rx * 0.7}deg) rotateY(${currentState.ry * 0.7}deg) translate3d(${currentState.tx * 0.6}px, ${currentState.ty * 0.6}px, -20px)`,
-          opacity: isHovered ? 0.8 : 0.3,
-        }}
-      />
-
       {/* MAIN 3D MULTI-TIER CHASSIS (Floats in 3D with dynamic rotation, lift, and cast shadow) */}
       <div
-        className="relative rounded-2xl md:rounded-3xl p-2.5 sm:p-3 bg-[#0c0d14]/90 backdrop-blur-2xl border transition-all duration-200"
+        className="relative rounded-2xl md:rounded-3xl p-2.5 sm:p-3 bg-[#0c0d14]/95 backdrop-blur-2xl border transition-all duration-200"
         style={{
           transformStyle: 'preserve-3d',
           transform: `rotateX(${currentState.rx}deg) rotateY(${currentState.ry}deg) rotateZ(${currentState.rz}deg) translate3d(${currentState.tx}px, ${currentState.ty}px, ${currentState.tz}px)`,
-          borderColor: isHovered ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.12)',
+          borderColor: isHovered ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.10)',
           boxShadow: `
-            ${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, 0.92),
-            0 0 35px -5px rgba(245, 158, 11, ${isHovered ? 0.35 : 0.12}),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2),
+            ${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, 0.95),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15),
             inset 0 -1px 0 rgba(0, 0, 0, 0.6)
           `,
         }}
@@ -177,35 +156,26 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
         <div
           className="absolute inset-0 rounded-2xl md:rounded-3xl pointer-events-none z-30 transition-opacity duration-300 overflow-hidden"
           style={{
-            background: `radial-gradient(circle 240px at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, ${isHovered ? 0.18 : 0.06}), transparent 80%)`,
-            opacity: isHovered ? 1 : 0.4,
-          }}
-        />
-
-        {/* Top Edge Golden Laser Flare */}
-        <div
-          className="absolute -top-px left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none z-30"
-          style={{
-            transform: 'translateZ(10px)',
+            background: `radial-gradient(circle 240px at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, ${isHovered ? 0.14 : 0.04}), transparent 80%)`,
             opacity: isHovered ? 1 : 0.5,
           }}
         />
 
         {/* 3D FLOATING CORNER TARGETING ACCENTS (+35px Z) */}
         <div
-          className="absolute -top-1.5 -left-1.5 w-4 h-4 border-t-2 border-l-2 border-amber-400 pointer-events-none z-30 transition-transform duration-300"
+          className="absolute -top-1.5 -left-1.5 w-4 h-4 border-t-2 border-l-2 border-white/40 pointer-events-none z-30 transition-transform duration-300"
           style={{ transform: `translateZ(${isHovered ? 38 : 20}px)` }}
         />
         <div
-          className="absolute -top-1.5 -right-1.5 w-4 h-4 border-t-2 border-r-2 border-amber-400 pointer-events-none z-30 transition-transform duration-300"
+          className="absolute -top-1.5 -right-1.5 w-4 h-4 border-t-2 border-r-2 border-white/40 pointer-events-none z-30 transition-transform duration-300"
           style={{ transform: `translateZ(${isHovered ? 38 : 20}px)` }}
         />
         <div
-          className="absolute -bottom-1.5 -left-1.5 w-4 h-4 border-b-2 border-l-2 border-amber-400 pointer-events-none z-30 transition-transform duration-300"
+          className="absolute -bottom-1.5 -left-1.5 w-4 h-4 border-b-2 border-l-2 border-white/40 pointer-events-none z-30 transition-transform duration-300"
           style={{ transform: `translateZ(${isHovered ? 38 : 20}px)` }}
         />
         <div
-          className="absolute -bottom-1.5 -right-1.5 w-4 h-4 border-b-2 border-r-2 border-amber-400 pointer-events-none z-30 transition-transform duration-300"
+          className="absolute -bottom-1.5 -right-1.5 w-4 h-4 border-b-2 border-r-2 border-white/40 pointer-events-none z-30 transition-transform duration-300"
           style={{ transform: `translateZ(${isHovered ? 38 : 20}px)` }}
         />
 
@@ -218,28 +188,16 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
             transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
-          {/* Portrait Image with Smooth Scale & Grade */}
+          {/* Natural Unaltered Portrait Image */}
           <img
             src="/about-portrait.jpg"
             alt="Debendranath Bera Portrait"
-            className="w-full h-full object-cover object-center filter brightness-105 contrast-105 transition-transform duration-700 group-hover/portrait:scale-[1.04]"
-          />
-
-          {/* Vignette & Cinematic Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0c0d14] via-black/20 to-black/30 opacity-75 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 via-transparent to-cyan-500/10 pointer-events-none opacity-60" />
-
-          {/* Dynamic Light Sweep on Hover */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-0 group-hover/portrait:opacity-100 transition-opacity duration-700"
-            style={{
-              background: 'linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.12) 48%, rgba(245, 158, 11, 0.15) 52%, transparent 65%)',
-            }}
+            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover/portrait:scale-[1.03]"
           />
 
           {/* LAYER 2: FLOATING STATUS BEACON (+52px Z) */}
           <div
-            className="absolute top-3 left-3 z-30 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/75 backdrop-blur-xl border border-emerald-400/30 shadow-[0_4px_16px_rgba(0,0,0,0.7),0_0_12px_rgba(52,211,153,0.3)] transition-transform duration-300"
+            className="absolute top-3 left-3 z-30 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/80 backdrop-blur-xl border border-emerald-400/30 shadow-[0_4px_16px_rgba(0,0,0,0.7)] transition-transform duration-300"
             style={{
               transform: `translateZ(${isHovered ? 52 : 32}px)`,
             }}
@@ -252,18 +210,12 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
 
           {/* LAYER 2: FLOATING IDENTITY BADGE (+48px Z) */}
           <div
-            className="absolute top-3 right-3 z-30 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-white/20 text-amber-300 font-mono text-[0.62rem] font-bold tracking-widest uppercase shadow-md transition-transform duration-300"
+            className="absolute top-3 right-3 z-30 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-xl border border-white/20 text-white/90 font-mono text-[0.62rem] font-bold tracking-widest uppercase shadow-md transition-transform duration-300"
             style={{
               transform: `translateZ(${isHovered ? 48 : 30}px)`,
             }}
           >
             DB • 2026
-          </div>
-
-          {/* Floating Subtle Holographic Grid Line at Bottom of Photo */}
-          <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[0.60rem] font-mono text-zinc-400 tracking-wider z-20 pointer-events-none">
-            <span className="text-amber-400/80 font-bold">PORTFOLIO.V2</span>
-            <span className="text-zinc-500">SYS // ONLINE</span>
           </div>
         </div>
 
@@ -279,13 +231,13 @@ const InteractivePortraitCard: React.FC<InteractivePortraitCardProps> = ({ isVis
               <span>DEBENDRANATH</span>
               <span className="text-accent-orange font-black">BERA</span>
             </h3>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-orange/15 border border-accent-orange/35 font-mono text-[0.62rem] text-accent-orange font-bold shadow-[0_0_10px_rgba(249,115,22,0.2)]">
-              <Sparkles size={9} />
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.06] border border-white/15 font-mono text-[0.62rem] text-zinc-300 font-bold">
+              <Sparkles size={9} className="text-accent-orange" />
               <span>ABOUT</span>
             </span>
           </div>
           <p className="text-[0.74rem] text-zinc-400 font-mono font-medium flex items-center gap-1">
-            <span className="text-amber-400 font-bold">▹</span>
+            <span className="text-accent-orange font-bold">▹</span>
             <span>Developer • Problem Solver • Thinker</span>
           </p>
         </div>
