@@ -270,7 +270,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
   const total = achievements.length;
 
-  // Track scroll within the pinned container
+  // Track scroll progress inside the pinned container
   useEffect(() => {
     let animId: number;
 
@@ -278,11 +278,12 @@ const ScrollStackedHonorsDeck: React.FC = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
+      const stickyTop = window.innerWidth >= 768 ? 90 : 80;
       const totalDistance = rect.height - windowHeight;
 
       if (totalDistance <= 0) return;
 
-      const scrolled = -rect.top;
+      const scrolled = stickyTop - rect.top;
       const rawProgress = scrolled / totalDistance;
       const clamped = Math.min(Math.max(rawProgress, 0), 1);
 
@@ -310,13 +311,14 @@ const ScrollStackedHonorsDeck: React.FC = () => {
     (index: number) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const containerTop = window.scrollY + rect.top;
+      const stickyTop = window.innerWidth >= 768 ? 90 : 80;
+      const containerScrollTop = window.scrollY + rect.top - stickyTop;
       const totalDistance = rect.height - window.innerHeight;
       const targetProgress = index / (total - 1);
-      const targetScrollY = containerTop + targetProgress * totalDistance;
+      const targetScrollY = containerScrollTop + targetProgress * totalDistance;
 
       window.scrollTo({
-        top: targetScrollY,
+        top: Math.max(0, targetScrollY),
         behavior: 'smooth',
       });
     },
@@ -391,12 +393,12 @@ const ScrollStackedHonorsDeck: React.FC = () => {
       onTouchEnd={handleTouchEnd}
     >
       {/* Sticky Viewport Window */}
-      <div className="sticky top-[80px] md:top-[90px] h-[calc(100vh-100px)] min-h-[560px] sm:min-h-[600px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1100px] mx-auto px-2 sm:px-4 select-none">
+      <div className="sticky top-[80px] md:top-[90px] h-[calc(100dvh-100px)] min-h-[540px] sm:min-h-[580px] max-h-[820px] flex flex-col justify-between py-3 max-w-[1100px] mx-auto px-2 sm:px-4 select-none">
         
         {/* Top Interactive HUD Bar */}
         <div className="flex items-center justify-between gap-4 mb-3 pb-3 border-b border-white/[0.08] relative z-40 flex-wrap">
           
-          {/* Active Card Badge & Scroll Indicator */}
+          {/* Active Card Badge & Category Tag */}
           <div className="flex items-center gap-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.70rem] sm:text-[0.75rem] font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(249,115,22,0.15)]">
               <Trophy size={13} className="text-accent-orange" />
@@ -485,13 +487,11 @@ const ScrollStackedHonorsDeck: React.FC = () => {
             if (delta > 0) {
               // Card is coming from below
               if (delta >= 1) {
-                // Far below
                 const extra = delta - 1;
                 transform = `translate3d(0, ${110 + extra * 30}%, 80px) rotateX(14deg) scale(0.92)`;
                 opacity = 0;
                 zIndex = 10;
               } else {
-                // Smoothly rising into view
                 const yPercent = delta * 105;
                 const rotX = delta * 12;
                 const scale = 0.94 + (1 - delta) * 0.06;
@@ -503,12 +503,10 @@ const ScrollStackedHonorsDeck: React.FC = () => {
               // Card is active or sunk into the stack
               const depth = -delta; // depth >= 0
               if (depth < 0.15) {
-                // Active Front Card
                 transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
                 opacity = 1;
                 zIndex = 40;
               } else {
-                // Receding into stack behind
                 const yOffset = -depth * 20;
                 const zOffset = -depth * 70;
                 const rotX = -depth * 2.5;
@@ -534,7 +532,6 @@ const ScrollStackedHonorsDeck: React.FC = () => {
                   opacity,
                   zIndex,
                   filter,
-                  pointerEvents: isFront || Math.abs(delta) < 0.8 ? 'auto' : 'none',
                   borderColor: isFront
                     ? 'rgba(245, 158, 11, 0.45)'
                     : 'rgba(255, 255, 255, 0.1)',
@@ -848,6 +845,7 @@ export const Experience: React.FC = () => {
 
           const node = row.querySelector<HTMLElement>('.timeline-node-circle');
           const year = row.querySelector<HTMLElement>('.timeline-row-year');
+          const card = row.querySelector<HTMLElement>('.milestone-glass-card');
 
           const isReached = clamped >= offsetFraction - 0.03;
 
@@ -861,6 +859,12 @@ export const Experience: React.FC = () => {
           if (year) {
             year.style.color = isReached ? '#fbbf24' : '#a1a1aa';
             year.style.textShadow = isReached ? '0 0 14px rgba(251,191,36,0.65)' : 'none';
+          }
+          if (card) {
+            card.style.borderColor = isReached ? 'rgba(251,191,36,0.35)' : 'rgba(255,255,255,0.08)';
+            card.style.boxShadow = isReached
+              ? '0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(245,158,11,0.1)'
+              : '0 15px 35px rgba(0,0,0,0.6)';
           }
         });
       }
@@ -903,7 +907,7 @@ export const Experience: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="pt-20 md:pt-28 pb-16 md:pb-24 px-4 sm:px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden selection:bg-accent-orange/30"
+      className="pt-20 md:pt-28 pb-16 md:pb-24 px-4 sm:px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-x-clip selection:bg-accent-orange/30"
       id="journey"
     >
       {/* Cinematic Ambient Golden Bloom */}
