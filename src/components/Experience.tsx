@@ -75,12 +75,13 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
         setIsHovered(false);
         setMousePos(null);
       }}
-      className="milestone-glass-card group relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-9 transition-[border-color,box-shadow,transform] duration-500 overflow-hidden border border-white/[0.08] bg-[#0c0d16]/85 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.65)] hover:border-amber-400/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.12)] hover:-translate-y-1"
+      className="milestone-glass-card group relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-9 transition-[border-color,box-shadow,transform] duration-300 overflow-hidden border border-white/[0.08] bg-[#0c0d16] shadow-[0_20px_50px_rgba(0,0,0,0.65)] hover:border-amber-400/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.12)] hover:-translate-y-1"
+      style={{ willChange: 'border-color, box-shadow, transform' }}
     >
       {/* Interactive Cursor Spotlight Glow */}
       {mousePos && (
         <div
-          className="absolute pointer-events-none transition-opacity duration-300 w-[380px] h-[380px] rounded-full blur-3xl opacity-15 bg-amber-400 transform -translate-x-1/2 -translate-y-1/2"
+          className="absolute pointer-events-none transition-opacity duration-200 w-[380px] h-[380px] rounded-full blur-3xl opacity-15 bg-amber-400 transform -translate-x-1/2 -translate-y-1/2"
           style={{
             left: `${mousePos.x}px`,
             top: `${mousePos.y}px`,
@@ -90,7 +91,7 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 
       {/* Top Prismatic Golden Edge Reflection */}
       <div
-        className={`absolute -top-px left-8 right-8 h-[1.5px] transition-opacity duration-500 ${
+        className={`absolute -top-px left-8 right-8 h-[1.5px] transition-opacity duration-300 ${
           isHovered
             ? 'opacity-100 bg-gradient-to-r from-transparent via-amber-400 to-transparent'
             : 'opacity-40 bg-gradient-to-r from-transparent via-white/20 to-transparent'
@@ -103,7 +104,7 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 
       {/* Giant Stylized Index Watermark */}
       <div
-        className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.4rem] leading-none select-none pointer-events-none transition-all duration-500 text-white/[0.03] group-hover:text-amber-400/[0.08] group-hover:scale-105"
+        className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.4rem] leading-none select-none pointer-events-none transition-all duration-300 text-white/[0.03] group-hover:text-amber-400/[0.08] group-hover:scale-105"
         aria-hidden="true"
       >
         0{index + 1}
@@ -165,19 +166,24 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ item, index }) => {
 };
 
 /* ========================================================================= */
-/* PRO-LEVEL SCROLL-DRIVEN 3D STACKED HONORS DECK (SILKY LERP PHYSICS)       */
+/* ULTRA-FAST 144Hz DIRECT-DOM 3D STACKED HONORS SHOWCASE                    */
 /* ========================================================================= */
 const ScrollStackedHonorsDeck: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [smoothProgress, setSmoothProgress] = useState(0);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
-  const touchStartY = useRef<number | null>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const progressBarRef = useRef<HTMLDivElement | null>(null);
+  const progressTextRef = useRef<HTMLSpanElement | null>(null);
+  const badgeTextRef = useRef<HTMLSpanElement | null>(null);
+  const categoryTextRef = useRef<HTMLSpanElement | null>(null);
+  const footerTextRef = useRef<HTMLSpanElement | null>(null);
+  const pillsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
   const animFrameRef = useRef<number | null>(null);
+  const activeIndexRef = useRef(0);
+  const isHoveredRef = useRef(false);
+  const touchStartY = useRef<number | null>(null);
 
   const achievements: AchievementCard[] = [
     {
@@ -274,23 +280,116 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
   const total = achievements.length;
 
-  // Ultra-Smooth 120Hz/144Hz rAF Physics Loop
+  // Direct DOM Update Engine (0ms Reflow, Pure GPU Compositing)
+  const renderDeckFrame = useCallback(
+    (p: number) => {
+      const virtualPos = p * (total - 1);
+      const activeIdx = Math.min(Math.round(virtualPos), total - 1);
+      activeIndexRef.current = activeIdx;
+
+      // Update progress track
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${Math.max(p * 100, 6)}%`;
+      }
+      if (progressTextRef.current) {
+        progressTextRef.current.textContent = `${Math.round(p * 100)}%`;
+      }
+
+      // Update HUD labels
+      if (badgeTextRef.current) {
+        badgeTextRef.current.textContent = `HONOR 0${activeIdx + 1} / 0${total}`;
+      }
+      if (categoryTextRef.current) {
+        categoryTextRef.current.textContent = achievements[activeIdx].category;
+      }
+      if (footerTextRef.current) {
+        footerTextRef.current.textContent = `0${activeIdx + 1} / 0${total} COMPLETED`;
+      }
+
+      // Update pill buttons
+      pillsRef.current.forEach((btn, i) => {
+        if (!btn) return;
+        if (i === activeIdx) {
+          btn.style.background = 'linear-gradient(to right, #fbbf24, #f97316)';
+          btn.style.color = '#000000';
+          btn.style.boxShadow = '0 0 15px rgba(251,191,36,0.6)';
+          btn.style.transform = 'scale(1.06)';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = '#a1a1aa';
+          btn.style.boxShadow = 'none';
+          btn.style.transform = 'scale(1.0)';
+        }
+      });
+
+      // Direct GPU Transform & Opacity on each Card DOM Element
+      cardsRef.current.forEach((cardEl, idx) => {
+        if (!cardEl) return;
+        const delta = idx - virtualPos;
+
+        let transform = '';
+        let opacity = 1;
+        let zIndex = 20;
+
+        if (delta > 0) {
+          // Card rising from below
+          if (delta >= 1) {
+            const extra = delta - 1;
+            transform = `translate3d(0, ${110 + extra * 30}%, 80px) rotateX(12deg) scale(0.92)`;
+            opacity = 0;
+            zIndex = 10;
+          } else {
+            const yPercent = delta * 105;
+            const rotX = delta * 10;
+            const scale = 0.94 + (1 - delta) * 0.06;
+            transform = `translate3d(0, ${yPercent}%, ${40 * (1 - delta)}px) rotateX(${rotX}deg) scale(${scale})`;
+            opacity = Math.min(1, (1 - delta) * 1.8);
+            zIndex = 30 + idx * 4;
+          }
+        } else {
+          // Card active or stacking underneath
+          const depth = -delta;
+          if (depth < 0.12) {
+            transform = 'translate3d(0, 0, 0) rotateX(0deg) scale(1)';
+            opacity = 1;
+            zIndex = 40;
+          } else {
+            const yOffset = -depth * 18;
+            const zOffset = -depth * 65;
+            const rotX = -depth * 2.0;
+            const scale = Math.max(0.86, 1 - depth * 0.045);
+            transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
+            opacity = Math.max(0.25, 1 - depth * 0.25);
+            zIndex = 30 + idx * 4 - Math.round(depth * 5);
+          }
+        }
+
+        const isFront = activeIdx === idx;
+
+        cardEl.style.transform = transform;
+        cardEl.style.opacity = `${opacity}`;
+        cardEl.style.zIndex = `${zIndex}`;
+        cardEl.style.borderColor = isFront ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.1)';
+        cardEl.style.boxShadow = isFront
+          ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+          : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
+        cardEl.style.pointerEvents = isFront || Math.abs(delta) < 0.8 ? 'auto' : 'none';
+      });
+    },
+    [total, achievements]
+  );
+
+  // 144Hz Smooth Lerp Loop
   useEffect(() => {
     const updatePhysics = () => {
       const diff = targetProgressRef.current - currentProgressRef.current;
-      // Damped lerp factor for ultra-silky fluid interpolation
-      currentProgressRef.current += diff * 0.12;
+      currentProgressRef.current += diff * 0.15;
 
-      if (Math.abs(diff) < 0.0004) {
+      if (Math.abs(diff) < 0.0003) {
         currentProgressRef.current = targetProgressRef.current;
       }
 
-      const p = currentProgressRef.current;
-      setSmoothProgress(p);
-
-      const virtualPos = p * (total - 1);
-      const activeIdx = Math.min(Math.round(virtualPos), total - 1);
-      setActiveCardIndex(activeIdx);
+      renderDeckFrame(currentProgressRef.current);
 
       if (Math.abs(targetProgressRef.current - currentProgressRef.current) > 0.0002) {
         animFrameRef.current = requestAnimationFrame(updatePhysics);
@@ -330,9 +429,9 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         cancelAnimationFrame(animFrameRef.current);
       }
     };
-  }, [total]);
+  }, [renderDeckFrame]);
 
-  // Jump to specific card by scrolling smoothly to its target offset
+  // Jump to specific card by scrolling smoothly
   const jumpToCard = useCallback(
     (index: number) => {
       if (!containerRef.current) return;
@@ -352,14 +451,14 @@ const ScrollStackedHonorsDeck: React.FC = () => {
   );
 
   const nextCard = useCallback(() => {
-    const nextIdx = Math.min(activeCardIndex + 1, total - 1);
+    const nextIdx = Math.min(activeIndexRef.current + 1, total - 1);
     jumpToCard(nextIdx);
-  }, [activeCardIndex, total, jumpToCard]);
+  }, [total, jumpToCard]);
 
   const prevCard = useCallback(() => {
-    const prevIdx = Math.max(activeCardIndex - 1, 0);
+    const prevIdx = Math.max(activeIndexRef.current - 1, 0);
     jumpToCard(prevIdx);
-  }, [activeCardIndex, jumpToCard]);
+  }, [jumpToCard]);
 
   // Touch Swipe Handlers for Mobile Gesture Support
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -381,10 +480,10 @@ const ScrollStackedHonorsDeck: React.FC = () => {
     touchStartY.current = null;
   };
 
-  // Keyboard left/right arrow navigation
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isHovered) return;
+      if (!isHoveredRef.current) return;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         nextCard();
@@ -396,24 +495,17 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isHovered, nextCard, prevCard]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
+  }, [nextCard, prevCard]);
 
   return (
     <div
       ref={containerRef}
       className="relative h-[280vh] sm:h-[320vh] w-full"
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => {
+        isHoveredRef.current = true;
+      }}
       onMouseLeave={() => {
-        setIsHovered(false);
-        setMousePos(null);
+        isHoveredRef.current = false;
       }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -428,11 +520,11 @@ const ScrollStackedHonorsDeck: React.FC = () => {
           <div className="flex items-center gap-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.70rem] sm:text-[0.75rem] font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(249,115,22,0.15)]">
               <Trophy size={13} className="text-accent-orange" />
-              <span>HONOR 0{activeCardIndex + 1} / 0{total}</span>
+              <span ref={badgeTextRef}>HONOR 01 / 0{total}</span>
             </div>
 
-            <span className="font-mono text-[0.68rem] text-zinc-400 hidden md:inline uppercase tracking-wider">
-              {achievements[activeCardIndex].category}
+            <span ref={categoryTextRef} className="font-mono text-[0.68rem] text-zinc-400 hidden md:inline uppercase tracking-wider">
+              {achievements[0].category}
             </span>
           </div>
 
@@ -440,12 +532,13 @@ const ScrollStackedHonorsDeck: React.FC = () => {
           <div className="hidden lg:flex items-center gap-2 flex-1 max-w-[280px] mx-4">
             <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden p-0.5">
               <div
+                ref={progressBarRef}
                 className="h-full bg-gradient-to-r from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_10px_#fbbf24]"
-                style={{ width: `${Math.max(smoothProgress * 100, 6)}%` }}
+                style={{ width: '6%' }}
               />
             </div>
-            <span className="font-mono text-[0.66rem] text-zinc-400 font-bold shrink-0">
-              {Math.round(smoothProgress * 100)}%
+            <span ref={progressTextRef} className="font-mono text-[0.66rem] text-zinc-400 font-bold shrink-0">
+              0%
             </span>
           </div>
 
@@ -456,9 +549,10 @@ const ScrollStackedHonorsDeck: React.FC = () => {
               {achievements.map((_, i) => (
                 <button
                   key={i}
+                  ref={(el) => (pillsRef.current[i] = el)}
                   onClick={() => jumpToCard(i)}
-                  className={`px-2.5 py-0.5 rounded-full font-mono text-[0.66rem] font-black transition-[background-color,color,transform,box-shadow] duration-200 cursor-pointer ${
-                    activeCardIndex === i
+                  className={`px-2.5 py-0.5 rounded-full font-mono text-[0.66rem] font-black transition-all duration-200 cursor-pointer ${
+                    i === 0
                       ? 'bg-gradient-to-r from-amber-400 to-accent-orange text-black shadow-[0_0_15px_rgba(251,191,36,0.6)] scale-105'
                       : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
                   }`}
@@ -473,16 +567,14 @@ const ScrollStackedHonorsDeck: React.FC = () => {
             <div className="flex items-center gap-1">
               <button
                 onClick={prevCard}
-                disabled={activeCardIndex === 0}
-                className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-md"
+                className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer shadow-md"
                 aria-label="Previous Achievement"
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={nextCard}
-                disabled={activeCardIndex === total - 1}
-                className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-md"
+                className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer shadow-md"
                 aria-label="Next Achievement"
               >
                 <ChevronRight size={16} />
@@ -494,101 +586,38 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
         {/* 3D Physical Stacking Cards Stage */}
         <div
-          onMouseMove={handleMouseMove}
           className="relative flex-1 w-full flex items-center justify-center"
           style={{ perspective: 1800 }}
         >
           {achievements.map((item, idx) => {
             const IconComponent = item.icon;
-            
-            // Continuous float position from smooth physics progress: [0 .. total - 1]
-            const virtualPos = smoothProgress * (total - 1);
-            const delta = idx - virtualPos;
-
-            let transform = '';
-            let opacity = 1;
-            let zIndex = 20;
-            let filter = 'none';
-
-            if (delta > 0) {
-              // Card is coming from below
-              if (delta >= 1) {
-                const extra = delta - 1;
-                transform = `translate3d(0, ${110 + extra * 30}%, 80px) rotateX(14deg) scale(0.92)`;
-                opacity = 0;
-                zIndex = 10;
-              } else {
-                const yPercent = delta * 105;
-                const rotX = delta * 12;
-                const scale = 0.94 + (1 - delta) * 0.06;
-                transform = `translate3d(0, ${yPercent}%, ${40 * (1 - delta)}px) rotateX(${rotX}deg) scale(${scale})`;
-                opacity = Math.min(1, (1 - delta) * 1.8);
-                zIndex = 30 + idx * 4;
-              }
-            } else {
-              // Card is active or sunk into the stack
-              const depth = -delta; // depth >= 0
-              if (depth < 0.12) {
-                transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1)';
-                opacity = 1;
-                zIndex = 40;
-              } else {
-                const yOffset = -depth * 18;
-                const zOffset = -depth * 65;
-                const rotX = -depth * 2.2;
-                const scale = Math.max(0.86, 1 - depth * 0.045);
-                transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-                opacity = Math.max(0.2, 1 - depth * 0.26);
-                filter = `blur(${Math.min(depth * 0.8, 2.2)}px)`;
-                zIndex = 30 + idx * 4 - Math.round(depth * 5);
-              }
-            }
-
-            const isFront = activeCardIndex === idx;
 
             return (
               <div
                 key={item.id}
-                onClick={() => !isFront && jumpToCard(idx)}
-                className={`achievement-scroll-card absolute w-full max-w-[1020px] rounded-2xl sm:rounded-3xl border p-5 sm:p-7 md:p-8 lg:p-9 bg-[#0b0c14]/95 backdrop-blur-2xl transition-[border-color,box-shadow] duration-300 overflow-hidden ${
-                  !isFront ? 'cursor-pointer hover:border-amber-400/50' : 'cursor-default'
-                }`}
+                ref={(el) => (cardsRef.current[idx] = el)}
+                onClick={() => jumpToCard(idx)}
+                className="achievement-scroll-card absolute w-full max-w-[1020px] rounded-2xl sm:rounded-3xl border p-5 sm:p-7 md:p-8 lg:p-9 bg-[#0c0d16] overflow-hidden cursor-pointer"
                 style={{
-                  transform,
-                  opacity,
-                  zIndex,
-                  filter,
-                  borderColor: isFront
-                    ? 'rgba(245, 158, 11, 0.45)'
-                    : 'rgba(255, 255, 255, 0.1)',
-                  boxShadow: isFront
+                  willChange: 'transform, opacity',
+                  transform: idx === 0 ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 110%, 80px) scale(0.92)',
+                  opacity: idx === 0 ? 1 : 0,
+                  zIndex: idx === 0 ? 40 : 10,
+                  borderColor: idx === 0 ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.1)',
+                  boxShadow: idx === 0
                     ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
                     : '0 20px 45px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-                  willChange: 'transform, opacity, filter',
                 }}
               >
-                {/* Dynamic Mouse Spotlight on Front Card */}
-                {isFront && mousePos && (
-                  <div
-                    className="absolute pointer-events-none transition-opacity duration-300 w-[420px] h-[420px] rounded-full blur-3xl opacity-20 bg-amber-400 transform -translate-x-1/2 -translate-y-1/2"
-                    style={{
-                      left: `${mousePos.x}px`,
-                      top: `${mousePos.y}px`,
-                    }}
-                  />
-                )}
-
                 {/* Active Golden Edge Sheen */}
-                {isFront && (
-                  <div
-                    className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
-                    aria-hidden="true"
-                  />
-                )}
+                <div
+                  className="absolute -top-px left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
+                  aria-hidden="true"
+                />
 
                 {/* Giant Stylized Index Watermark */}
                 <div
-                  className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.5rem] leading-none select-none pointer-events-none transition-all duration-500 text-white/[0.03] group-hover:text-amber-400/[0.08]"
+                  className="absolute top-2 right-4 font-display font-black text-[3.8rem] sm:text-[4.8rem] lg:text-[5.5rem] leading-none select-none pointer-events-none text-white/[0.03]"
                   aria-hidden="true"
                 >
                   0{idx + 1}
@@ -648,7 +677,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
                   {/* Right Column: Hologram Emblem Medallion */}
                   <div className="hidden md:flex flex-col items-center justify-center p-5 rounded-2xl bg-white/[0.025] border border-white/[0.08] text-center self-stretch">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-3 transition-transform duration-300 hover:scale-105">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-accent-orange/20 border border-amber-400/35 flex items-center justify-center text-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.25)] mb-3">
                       <IconComponent size={30} />
                     </div>
                     <div className="font-display text-[1.4rem] font-black text-white leading-none mb-1">
@@ -688,8 +717,8 @@ const ScrollStackedHonorsDeck: React.FC = () => {
             <MousePointer size={12} className="text-accent-orange animate-bounce" />
             <span>SCROLL DOWN TO PROGRESS • ARROW KEYS TO NAVIGATE</span>
           </div>
-          <span className="text-zinc-400 font-bold">
-            0{activeCardIndex + 1} / 0{total} COMPLETED
+          <span ref={footerTextRef} className="text-zinc-400 font-bold">
+            01 / 0{total} COMPLETED
           </span>
         </div>
 
@@ -832,7 +861,7 @@ export const Experience: React.FC = () => {
 
     const updateDOM = () => {
       // Liquid damping for butter-smooth laser beam glide
-      currentProgress += (targetProgress - currentProgress) * 0.14;
+      currentProgress += (targetProgress - currentProgress) * 0.18;
       if (Math.abs(targetProgress - currentProgress) < 0.0005) {
         currentProgress = targetProgress;
       }
