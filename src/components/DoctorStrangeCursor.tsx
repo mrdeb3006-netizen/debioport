@@ -120,29 +120,29 @@ export const DoctorStrangeCursor: React.FC = () => {
         ctx.save();
         ctx.globalAlpha = currentAlpha;
 
-        // 1. Smooth Outer Trailing Ring
+        // 1. Smooth Outer Trailing Ring (Crisp Vibrant Orange)
         ctx.beginPath();
         ctx.arc(ring.x, ring.y, currentRadius, 0, Math.PI * 2);
         
         if (isHovering) {
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+          ctx.fillStyle = 'rgba(249, 115, 22, 0.12)';
           ctx.fill();
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+          ctx.strokeStyle = '#f97316';
           ctx.lineWidth = 1.5;
           ctx.shadowColor = 'transparent';
           ctx.shadowBlur = 0;
         } else {
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-          ctx.lineWidth = 1.2;
+          ctx.strokeStyle = 'rgba(249, 115, 22, 0.75)';
+          ctx.lineWidth = 1.3;
           ctx.shadowColor = 'transparent';
           ctx.shadowBlur = 0;
         }
         ctx.stroke();
 
-        // 2. Crisp Center Dot (Follows pointer directly with zero lag)
+        // 2. Crisp Center Dot (Vibrant Orange)
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, isHovering ? 2.5 : 2, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = '#f97316';
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
         ctx.fill();
