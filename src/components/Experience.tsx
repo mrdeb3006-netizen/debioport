@@ -319,6 +319,12 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         }
       });
 
+      // Smooth Hermite / Smoothstep easing for liquid motion
+      const smoothstep = (t: number) => {
+        const c = Math.max(0, Math.min(1, t));
+        return c * c * (3 - 2 * c);
+      };
+
       // Direct GPU Transform & Opacity on each Card DOM Element
       cardsRef.current.forEach((cardEl, idx) => {
         if (!cardEl) return;
@@ -330,38 +336,34 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         let filter = 'none';
 
         if (delta > 0) {
-          // Card rising from below
+          // Card rising from below with smoothstep curve
           if (delta >= 1) {
             const extra = delta - 1;
-            transform = `translate3d(0, ${110 + extra * 30}%, 80px) rotateX(12deg) scale(0.92)`;
+            transform = `translate3d(0, ${110 + extra * 25}%, 60px) rotateX(10deg) scale(0.92)`;
             opacity = 0;
             zIndex = 10;
           } else {
-            const yPercent = delta * 105;
-            const rotX = delta * 10;
-            const scale = 0.94 + (1 - delta) * 0.06;
-            transform = `translate3d(0, ${yPercent}%, ${40 * (1 - delta)}px) rotateX(${rotX}deg) scale(${scale})`;
-            opacity = Math.min(1, (1 - delta) * 1.8);
+            const ease = smoothstep(delta);
+            const yPercent = ease * 102;
+            const rotX = ease * 8.5;
+            const scale = 0.94 + (1 - ease) * 0.06;
+            const zOffset = 35 * (1 - ease);
+            transform = `translate3d(0, ${yPercent}%, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
+            opacity = Math.min(1, (1 - ease) * 2.0);
             zIndex = 30 + idx * 4;
           }
         } else {
-          // Card active or stacking underneath
+          // Card active or smoothly stacking underneath
           const depth = -delta;
-          if (depth < 0.12) {
-            transform = 'translate3d(0, 0, 0) rotateX(0deg) scale(1)';
-            opacity = 1;
-            zIndex = 40;
-            filter = 'none';
-          } else {
-            const yOffset = -depth * 18;
-            const zOffset = -depth * 65;
-            const rotX = -depth * 2.0;
-            const scale = Math.max(0.86, 1 - depth * 0.045);
-            transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
-            opacity = Math.max(0.25, 1 - depth * 0.25);
-            zIndex = 30 + idx * 4 - Math.round(depth * 5);
-            filter = `blur(${Math.min(depth * 0.7, 2.2)}px)`;
-          }
+          const easeDepth = smoothstep(Math.min(depth, 1.0)) + Math.max(0, depth - 1.0);
+          const yOffset = -easeDepth * 16;
+          const zOffset = -easeDepth * 55;
+          const rotX = -easeDepth * 1.8;
+          const scale = Math.max(0.87, 1 - easeDepth * 0.04);
+          transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
+          opacity = Math.max(0.25, 1 - easeDepth * 0.22);
+          zIndex = 30 + idx * 4 - Math.round(depth * 5);
+          filter = depth > 0.1 ? `blur(${Math.min(depth * 0.7, 2.0)}px)` : 'none';
         }
 
         const isFront = activeIdx === idx;
@@ -387,15 +389,15 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 
     const updatePhysics = () => {
       const diff = targetProgressRef.current - currentProgressRef.current;
-      currentProgressRef.current += diff * 0.15;
+      currentProgressRef.current += diff * 0.12;
 
-      if (Math.abs(diff) < 0.0003) {
+      if (Math.abs(diff) < 0.0001) {
         currentProgressRef.current = targetProgressRef.current;
       }
 
       renderDeckFrame(currentProgressRef.current);
 
-      if (Math.abs(targetProgressRef.current - currentProgressRef.current) > 0.0002) {
+      if (Math.abs(targetProgressRef.current - currentProgressRef.current) > 0.0001) {
         animFrameRef.current = requestAnimationFrame(updatePhysics);
       } else {
         animFrameRef.current = null;
@@ -507,7 +509,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative h-[280vh] sm:h-[320vh] w-full"
+      className="relative h-[320vh] sm:h-[360vh] md:h-[400vh] w-full"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
