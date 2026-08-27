@@ -289,7 +289,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         progressBarRef.current.style.width = `${Math.max(p * 100, 6)}%`;
       }
       if (progressTextRef.current) {
-        progressTextRef.current.textContent = `${Math.round(p * 100)}%`;
+        progressTextRef.current.textContent = `${Math.min(100, Math.max(0, Math.round(p * 100)))}%`;
       }
 
       // Update HUD labels
@@ -327,6 +327,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         let transform = '';
         let opacity = 1;
         let zIndex = 20;
+        let filter = 'none';
 
         if (delta > 0) {
           // Card rising from below
@@ -350,6 +351,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
             transform = 'translate3d(0, 0, 0) rotateX(0deg) scale(1)';
             opacity = 1;
             zIndex = 40;
+            filter = 'none';
           } else {
             const yOffset = -depth * 18;
             const zOffset = -depth * 65;
@@ -358,6 +360,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
             transform = `translate3d(0, ${yOffset}px, ${zOffset}px) rotateX(${rotX}deg) scale(${scale})`;
             opacity = Math.max(0.25, 1 - depth * 0.25);
             zIndex = 30 + idx * 4 - Math.round(depth * 5);
+            filter = `blur(${Math.min(depth * 0.7, 2.2)}px)`;
           }
         }
 
@@ -366,6 +369,7 @@ const ScrollStackedHonorsDeck: React.FC = () => {
         cardEl.style.transform = transform;
         cardEl.style.opacity = `${opacity}`;
         cardEl.style.zIndex = `${zIndex}`;
+        cardEl.style.filter = filter;
         cardEl.style.borderColor = isFront ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.1)';
         cardEl.style.boxShadow = isFront
           ? '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
@@ -376,8 +380,11 @@ const ScrollStackedHonorsDeck: React.FC = () => {
     [total, achievements]
   );
 
-  // 144Hz Smooth Lerp Loop
+  // 144Hz Smooth Lerp Loop & Initial Mount Frame Execution
   useEffect(() => {
+    // Immediate frame 0 paint on mount
+    renderDeckFrame(0);
+
     const updatePhysics = () => {
       const diff = targetProgressRef.current - currentProgressRef.current;
       currentProgressRef.current += diff * 0.15;
