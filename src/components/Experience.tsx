@@ -955,7 +955,7 @@ export const Experience: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="pt-20 md:pt-28 pb-16 md:pb-24 px-4 sm:px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-hidden selection:bg-accent-orange/30"
+      className="pt-20 md:pt-28 pb-16 md:pb-24 px-4 sm:px-6 md:px-12 lg:px-16 relative bg-bg-dark overflow-visible selection:bg-accent-orange/30"
       id="journey"
     >
       {/* Cinematic Ambient Golden Bloom */}
