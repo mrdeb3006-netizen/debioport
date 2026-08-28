@@ -857,18 +857,18 @@ export const OtherWorks: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-10 border-b-2 border-[#e7e5e4]">
           <div>
             {/* Thematic Maritime Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-900/10 border border-cyan-500/30 text-cyan-800 font-mono text-[0.70rem] font-bold uppercase tracking-wider mb-2.5 shadow-xs">
+            <div className="animate-water-float-fast inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-900/10 border border-cyan-500/30 text-cyan-800 font-mono text-[0.70rem] font-bold uppercase tracking-wider mb-2.5 shadow-xs">
               <Waves size={13} className="text-cyan-700 animate-pulse" />
               <span>SHIPWRECK ARCHIVE • ORIGINALS &amp; ESSAYS</span>
             </div>
 
-            <h2 className="font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08]">
+            <h2 className="animate-water-float-title inline-block font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08]">
               SHIP WRECK.
             </h2>
           </div>
 
           {/* Minimal Telemetry Tag */}
-          <div className="flex items-center gap-6 self-start md:self-end pt-1">
+          <div className="animate-water-float-slow flex items-center gap-6 self-start md:self-end pt-1">
             <div className="border-l-2 border-[#d6d3d1] pl-4">
               <span className="block font-serifDisplay text-2xl font-black text-[#18181b]">{String(photos.length).padStart(2, '0')}</span>
               <span className="font-mono text-[0.75rem] font-semibold text-[#78716c] uppercase tracking-wider">Original Captures</span>
@@ -885,7 +885,7 @@ export const OtherWorks: React.FC = () => {
             SUBSECTION 1: PHOTOGRAPHY (AUTOMATIC SIDE-WISE SLIDESHOW)
             ========================================================================= */}
         <div className="mb-14">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div className="animate-water-float-slow flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
                 <Camera size={20} className="text-[#f59e0b]" />
@@ -926,9 +926,9 @@ export const OtherWorks: React.FC = () => {
             </div>
           </div>
 
-          {/* Side-Wise Continuous Cycle Slideshow Viewport */}
+          {/* Side-Wise Continuous Cycle Slideshow Viewport (Floating Water Card) */}
           <div
-            className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden bg-[#f5f5f4] border-2 border-[#e7e5e4] shadow-[0_8px_30px_rgba(0,0,0,0.06)] group"
+            className="animate-water-float-card relative w-full rounded-2xl md:rounded-3xl overflow-hidden bg-[#f5f5f4]/95 backdrop-blur-xs border-2 border-[#e7e5e4] shadow-[0_8px_30px_rgba(0,0,0,0.06)] group transition-all duration-500 hover:shadow-[0_20px_45px_rgba(6,182,212,0.14)]"
           >
             {/* Horizontal Slide Carousel Track */}
             <div
@@ -942,7 +942,7 @@ export const OtherWorks: React.FC = () => {
                   onClick={() => setActivePhoto(photo)}
                 >
                   {/* Photo Display Card with Adaptive Frame Architecture (Zero Cropping) */}
-                  <div className="w-full lg:w-[58%] h-[360px] sm:h-[440px] md:h-[500px] lg:h-[530px] relative rounded-2xl overflow-hidden shadow-[0_14px_40px_rgba(0,0,0,0.18)] bg-[#09090b] group/img flex items-center justify-center">
+                  <div className="animate-water-float-med w-full lg:w-[58%] h-[360px] sm:h-[440px] md:h-[500px] lg:h-[530px] relative rounded-2xl overflow-hidden shadow-[0_14px_40px_rgba(0,0,0,0.18)] bg-[#09090b] group/img flex items-center justify-center">
                     {/* Ambient Blurred Background matching natural photo colors */}
                     <img
                       src={photo.imageSrc}
@@ -977,7 +977,7 @@ export const OtherWorks: React.FC = () => {
                   </div>
 
                   {/* Photo Intel & Details (Side-wise) */}
-                  <div className="w-full lg:w-[42%] flex flex-col justify-between py-2 text-[#18181b]">
+                  <div className="animate-water-float-slow w-full lg:w-[42%] flex flex-col justify-between py-2 text-[#18181b]">
                     <div>
                       <div className="flex items-center gap-2 mb-2.5">
                         <span className="font-mono text-[0.75rem] font-bold px-3 py-1 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#fde68a] uppercase">
@@ -1057,7 +1057,7 @@ export const OtherWorks: React.FC = () => {
             SUBSECTION 2: PHILOSOPHY & RESEARCH PAPER
             ========================================================================= */}
         <div>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div className="animate-water-float-med flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
                 <BookOpen size={20} className="text-[#f59e0b]" />
@@ -1073,14 +1073,14 @@ export const OtherWorks: React.FC = () => {
             </div>
 
             {/* Quick Status Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#fef3c7] border border-[#f59e0b]/40 text-[#92400e] font-mono text-[0.74rem] font-bold uppercase tracking-wider self-start sm:self-auto shadow-xs">
+            <div className="animate-water-float-fast inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#fef3c7] border border-[#f59e0b]/40 text-[#92400e] font-mono text-[0.74rem] font-bold uppercase tracking-wider self-start sm:self-auto shadow-xs">
               <Sparkles size={13} className="text-[#d97706]" />
               <span>PUBLISHED PAPER • 10 PAGES</span>
             </div>
           </div>
 
-          {/* Editorial Research Paper Presentation Card */}
-          <div className="w-full rounded-2xl md:rounded-3xl bg-white border-2 border-[#e7e5e4] p-6 sm:p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.05)] relative overflow-hidden transition-all duration-300 hover:shadow-[0_16px_45px_rgba(0,0,0,0.08)]">
+          {/* Editorial Research Paper Presentation Card (Floating Water Card) */}
+          <div className="animate-water-float-card-alt w-full rounded-2xl md:rounded-3xl bg-white/95 backdrop-blur-xs border-2 border-[#e7e5e4] p-6 sm:p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.05)] relative overflow-hidden transition-all duration-500 hover:shadow-[0_20px_50px_rgba(20,184,166,0.14)]">
             
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
@@ -1093,7 +1093,7 @@ export const OtherWorks: React.FC = () => {
                     setReaderInitialPage(1);
                     setPhilosophyModalOpen(true);
                   }}
-                  className="group/cover relative w-full max-w-[340px] sm:max-w-[380px] aspect-[1/1.414] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] shadow-[0_20px_45px_rgba(15,23,42,0.22)] border border-slate-800/20 bg-[#1e293b]"
+                  className="animate-water-float-med group/cover relative w-full max-w-[340px] sm:max-w-[380px] aspect-[1/1.414] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] shadow-[0_20px_45px_rgba(15,23,42,0.22)] border border-slate-800/20 bg-[#1e293b]"
                   title="Click to read full paper"
                 >
                   {/* Subtle Book Spine & Gradient Lighting */}
@@ -1132,7 +1132,7 @@ export const OtherWorks: React.FC = () => {
                 </div>
 
                 {/* Quick Page Jump Thumbnails Strip */}
-                <div className="w-full max-w-[380px] mt-4 pt-3 border-t border-[#e7e5e4] flex flex-col gap-2">
+                <div className="animate-water-float-slow w-full max-w-[380px] mt-4 pt-3 border-t border-[#e7e5e4] flex flex-col gap-2">
                   <div className="flex items-center justify-between text-[0.75rem] font-mono text-[#78716c]">
                     <span className="font-semibold uppercase tracking-wider">Explore Pages</span>
                     <span>1 to 10</span>
@@ -1163,7 +1163,7 @@ export const OtherWorks: React.FC = () => {
                 
                 <div>
                   {/* Category & Date Metadata Tags */}
-                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                  <div className="animate-water-float-med flex flex-wrap items-center gap-2 mb-3">
                     <span className="font-mono text-[0.72rem] font-bold px-3 py-1 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#fde68a] uppercase">
                       Research Paper
                     </span>
@@ -1177,10 +1177,10 @@ export const OtherWorks: React.FC = () => {
                   </div>
 
                   {/* Main Title & Subtitle */}
-                  <h4 className="font-serifDisplay text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#18181b] tracking-tight leading-[1.18] mb-2">
+                  <h4 className="animate-water-float-title inline-block font-serifDisplay text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#18181b] tracking-tight leading-[1.18] mb-2">
                     THE GAME OF DOPAMINE
                   </h4>
-                  <p className="font-serifDisplay text-[1.05rem] sm:text-[1.15rem] italic text-[#b45309] font-semibold mb-3">
+                  <p className="animate-water-float-slow font-serifDisplay text-[1.05rem] sm:text-[1.15rem] italic text-[#b45309] font-semibold mb-3">
                     From the Inner Push to Inner Freedom
                   </p>
 
@@ -1189,7 +1189,7 @@ export const OtherWorks: React.FC = () => {
                   </p>
 
                   {/* Central Proposition Featured Quote Callout */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-[#fafaf9] border-l-4 border-[#b45309] border-y border-r border-[#e7e5e4] mb-6 shadow-2xs">
+                  <div className="animate-water-float-slow p-4 sm:p-5 rounded-2xl bg-[#fafaf9]/90 backdrop-blur-xs border-l-4 border-[#b45309] border-y border-r border-[#e7e5e4] mb-6 shadow-2xs">
                     <div className="flex items-center gap-2 mb-1.5">
                       <Feather size={14} className="text-[#b45309]" />
                       <span className="font-mono text-[0.72rem] font-bold text-[#92400e] uppercase tracking-wider">
@@ -1203,7 +1203,7 @@ export const OtherWorks: React.FC = () => {
 
                   {/* Key Highlights Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="animate-water-float-slow p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>The Dopamine Loop</span>
@@ -1213,7 +1213,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="animate-water-float-med p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '0.8s' }}>
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Bhagavad Gita Wisdom</span>
@@ -1223,7 +1223,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="animate-water-float-med p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '1.6s' }}>
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Mental Strength Protocol</span>
@@ -1233,7 +1233,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="animate-water-float-slow p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '2.4s' }}>
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Formula for Passion</span>
