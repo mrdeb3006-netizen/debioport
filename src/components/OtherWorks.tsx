@@ -21,6 +21,9 @@ import { PhilosophyReaderModal } from './PhilosophyReaderModal';
 /* =========================================================================
    IMMERSIVE FULL-SECTION WATER CANVAS SIMULATION
    ========================================================================= */
+/* =========================================================================
+   IMMERSIVE CINEMATIC OCEAN WATER CANVAS SIMULATION (UPGRADED)
+   ========================================================================= */
 const ShipwreckWaterCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -42,18 +45,39 @@ const ShipwreckWaterCanvas: React.FC = () => {
 
     window.addEventListener('resize', handleResize);
 
-    // Interactive mouse ripples
-    interface Ripple {
+    // -------------------------------------------------------------------------
+    // 1. Interactive Ripple & Shockwave System
+    // -------------------------------------------------------------------------
+    interface WaterRipple {
       x: number;
       y: number;
       radius: number;
       maxRadius: number;
       opacity: number;
       speed: number;
+      lineWidth: number;
+      color: string;
     }
-    const ripples: Ripple[] = [];
+    const ripples: WaterRipple[] = [];
 
-    // Ambient floating oxygen bubbles
+    // -------------------------------------------------------------------------
+    // 2. Cursor Wake Particle System (micro-droplets on mouse movement)
+    // -------------------------------------------------------------------------
+    interface WakeParticle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      alpha: number;
+      life: number;
+      maxLife: number;
+    }
+    const wakeParticles: WakeParticle[] = [];
+
+    // -------------------------------------------------------------------------
+    // 3. Multi-Layered Glassy Oxygen Bubbles
+    // -------------------------------------------------------------------------
     interface Bubble {
       x: number;
       y: number;
@@ -63,39 +87,167 @@ const ShipwreckWaterCanvas: React.FC = () => {
       wobbleAmp: number;
       phase: number;
       baseAlpha: number;
+      depth: number; // 0 (far/small) to 1 (near/crisp)
     }
 
-    const bubbleCount = Math.min(42, Math.max(22, Math.floor(width / 32)));
-    const bubbles: Bubble[] = Array.from({ length: bubbleCount }, () => ({
+    const bubbleCount = Math.min(54, Math.max(28, Math.floor(width / 26)));
+    const bubbles: Bubble[] = Array.from({ length: bubbleCount }, () => {
+      const depth = Math.random();
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: 1.2 + depth * 5.5,
+        speedY: 0.3 + depth * 0.9,
+        wobbleSpeed: 0.015 + Math.random() * 0.025,
+        wobbleAmp: 8 + depth * 22,
+        phase: Math.random() * Math.PI * 2,
+        baseAlpha: 0.2 + depth * 0.5,
+        depth,
+      };
+    });
+
+    // -------------------------------------------------------------------------
+    // 4. Luminescent Marine Plankton / Bio-particles
+    // -------------------------------------------------------------------------
+    interface Plankton {
+      x: number;
+      y: number;
+      radius: number;
+      driftSpeedX: number;
+      driftSpeedY: number;
+      pulseSpeed: number;
+      baseAlpha: number;
+      phase: number;
+      color: string;
+    }
+
+    const planktonCount = Math.min(60, Math.max(30, Math.floor(width / 24)));
+    const planktonColors = [
+      'rgba(6, 182, 212, ', // Cyan
+      'rgba(20, 184, 166, ', // Teal
+      'rgba(56, 189, 248, ', // Sky
+      'rgba(147, 197, 253, ', // Soft Blue
+    ];
+
+    const planktonList: Plankton[] = Array.from({ length: planktonCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      radius: 1.5 + Math.random() * 5,
-      speedY: 0.35 + Math.random() * 0.85,
-      wobbleSpeed: 0.018 + Math.random() * 0.025,
-      wobbleAmp: 10 + Math.random() * 22,
+      radius: 0.8 + Math.random() * 2.2,
+      driftSpeedX: (Math.random() - 0.5) * 0.25,
+      driftSpeedY: -0.1 - Math.random() * 0.25,
+      pulseSpeed: 0.02 + Math.random() * 0.035,
+      baseAlpha: 0.15 + Math.random() * 0.45,
       phase: Math.random() * Math.PI * 2,
-      baseAlpha: 0.18 + Math.random() * 0.38,
+      color: planktonColors[Math.floor(Math.random() * planktonColors.length)],
     }));
 
-    let lastMouseMoveTime = 0;
+    // Pointer Interaction Listeners
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let lastPointerTime = 0;
+
     const handlePointerMove = (e: PointerEvent) => {
       const now = performance.now();
-      if (now - lastMouseMoveTime < 40) return;
-      lastMouseMoveTime = now;
+      const dt = now - lastPointerTime;
+      if (dt < 25) return;
 
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
       if (x >= 0 && x <= width && y >= 0 && y <= height) {
-        if (ripples.length < 20) {
+        const dx = x - lastPointerX;
+        const dy = y - lastPointerY;
+        const speed = Math.sqrt(dx * dx + dy * dy);
+
+        // Spawn gentle water ripple
+        if (speed > 8 && ripples.length < 24) {
           ripples.push({
             x,
             y,
-            radius: 4,
-            maxRadius: 65 + Math.random() * 40,
-            opacity: 0.55,
-            speed: 1.6 + Math.random() * 0.9,
+            radius: 3,
+            maxRadius: 55 + Math.min(speed * 1.5, 60),
+            opacity: Math.min(0.35 + speed * 0.01, 0.7),
+            speed: 1.5 + Math.min(speed * 0.05, 2.2),
+            lineWidth: 1.8,
+            color: 'rgba(2, 132, 199, ',
+          });
+        }
+
+        // Spawn micro-droplets wake
+        if (speed > 12 && wakeParticles.length < 40) {
+          for (let k = 0; k < 2; k++) {
+            wakeParticles.push({
+              x: x + (Math.random() - 0.5) * 12,
+              y: y + (Math.random() - 0.5) * 12,
+              vx: (Math.random() - 0.5) * 1.5 - dx * 0.08,
+              vy: (Math.random() - 0.5) * 1.5 - dy * 0.08 - 0.3,
+              radius: 1 + Math.random() * 2.5,
+              alpha: 0.65,
+              life: 0,
+              maxLife: 35 + Math.random() * 20,
+            });
+          }
+        }
+
+        // Push nearby bubbles slightly
+        for (let i = 0; i < bubbles.length; i++) {
+          const b = bubbles[i];
+          const distSq = (b.x - x) * (b.x - x) + (b.y - y) * (b.y - y);
+          if (distSq < 6400) {
+            const dist = Math.sqrt(distSq) || 1;
+            const push = (1 - dist / 80) * 1.8;
+            b.x += (b.x - x) / dist * push * 3;
+          }
+        }
+      }
+
+      lastPointerX = x;
+      lastPointerY = y;
+      lastPointerTime = now;
+    };
+
+    const handlePointerDown = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      if (x >= 0 && x <= width && y >= 0 && y <= height) {
+        // Multi-ring shockwave on click/tap
+        ripples.push({
+          x,
+          y,
+          radius: 4,
+          maxRadius: 110,
+          opacity: 0.85,
+          speed: 3.2,
+          lineWidth: 2.5,
+          color: 'rgba(6, 182, 212, ',
+        });
+        ripples.push({
+          x,
+          y,
+          radius: 2,
+          maxRadius: 80,
+          opacity: 0.65,
+          speed: 2.2,
+          lineWidth: 1.8,
+          color: 'rgba(2, 132, 199, ',
+        });
+
+        // Burst of micro-bubbles
+        for (let k = 0; k < 6; k++) {
+          const angle = Math.random() * Math.PI * 2;
+          const mag = 1 + Math.random() * 3;
+          wakeParticles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * mag,
+            vy: Math.sin(angle) * mag - 0.5,
+            radius: 1.5 + Math.random() * 3,
+            alpha: 0.8,
+            life: 0,
+            maxLife: 45,
           });
         }
       }
@@ -104,6 +256,7 @@ const ShipwreckWaterCanvas: React.FC = () => {
     const parentElem = canvas.parentElement;
     if (parentElem) {
       parentElem.addEventListener('pointermove', handlePointerMove);
+      parentElem.addEventListener('pointerdown', handlePointerDown);
     }
 
     let time = 0;
@@ -112,92 +265,216 @@ const ShipwreckWaterCanvas: React.FC = () => {
       time += 0.016;
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Water Caustics Shimmer Curves across the entire section height
+      // -----------------------------------------------------------------------
+      // 1. Procedural Multi-Harmonic Caustic Wave Mesh
+      // -----------------------------------------------------------------------
       ctx.save();
-      const waveCount = 6;
-      for (let w = 0; w < waveCount; w++) {
-        const yBase = (height / (waveCount + 1)) * (w + 1);
+      const strandCount = 8;
+      for (let s = 0; s < strandCount; s++) {
+        const yBase = (height / (strandCount + 1)) * (s + 1);
+        const waveSpeed = 0.8 + s * 0.15;
+        const waveAmp = 14 + (s % 3) * 6;
+
         ctx.beginPath();
         ctx.moveTo(0, yBase);
 
-        for (let x = 0; x <= width; x += 20) {
+        for (let x = 0; x <= width; x += 24) {
           const yOffset =
-            Math.sin(x * 0.007 + time * 1.1 + w * 1.4) * 16 +
-            Math.cos(x * 0.014 - time * 0.85 + w * 2.0) * 9;
+            Math.sin(x * 0.006 + time * waveSpeed + s * 1.3) * waveAmp +
+            Math.cos(x * 0.013 - time * 0.7 + s * 2.1) * (waveAmp * 0.55) +
+            Math.sin(x * 0.002 + time * 0.4) * 8;
           ctx.lineTo(x, yBase + yOffset);
         }
 
-        ctx.strokeStyle = `rgba(6, 182, 212, ${0.055 + Math.sin(time + w) * 0.025})`;
-        ctx.lineWidth = 2.4;
+        const alphaWave = 0.045 + Math.sin(time * 1.2 + s) * 0.025;
+        ctx.strokeStyle = s % 2 === 0
+          ? `rgba(6, 182, 212, ${alphaWave})`
+          : `rgba(20, 184, 166, ${alphaWave * 0.85})`;
+        ctx.lineWidth = s % 3 === 0 ? 3.0 : 2.0;
+        ctx.stroke();
+      }
+
+      // Secondary Cross-Caustic Diagonal Filaments (Interference shimmer)
+      const diagCount = 4;
+      for (let d = 0; d < diagCount; d++) {
+        const startX = (width / (diagCount + 1)) * (d + 1) + Math.sin(time * 0.6 + d) * 60;
+        ctx.beginPath();
+        ctx.moveTo(startX, 0);
+
+        for (let y = 0; y <= height; y += 32) {
+          const xOffset = Math.sin(y * 0.008 + time * 0.9 + d * 1.7) * 26;
+          ctx.lineTo(startX + xOffset + (y / height) * 80, y);
+        }
+
+        ctx.strokeStyle = `rgba(56, 189, 248, ${0.03 + Math.sin(time * 0.8 + d) * 0.018})`;
+        ctx.lineWidth = 1.6;
         ctx.stroke();
       }
       ctx.restore();
 
-      // 2. Volumetric Underwater Sunbeams (Light Rays)
+      // -----------------------------------------------------------------------
+      // 2. Volumetric Underwater Sunbeams (Godrays with atmospheric light scatter)
+      // -----------------------------------------------------------------------
       ctx.save();
-      const beamCount = 3;
+      const beamCount = 4;
       for (let b = 0; b < beamCount; b++) {
-        const beamX = (width / 4) * (b + 1) + Math.sin(time * 0.5 + b) * 90;
-        const gradient = ctx.createLinearGradient(beamX, 0, beamX + 220, height);
-        gradient.addColorStop(0, 'rgba(56, 189, 248, 0.04)');
-        gradient.addColorStop(0.45, 'rgba(20, 184, 166, 0.022)');
+        const baseBeamX = (width / (beamCount + 1)) * (b + 1);
+        const sway = Math.sin(time * 0.45 + b * 1.4) * 75;
+        const beamX = baseBeamX + sway;
+        const beamWidthTop = 70 + Math.sin(time * 0.7 + b) * 20;
+        const beamWidthBottom = 260 + Math.cos(time * 0.5 + b) * 50;
+
+        const gradient = ctx.createLinearGradient(beamX, 0, beamX + 180, height);
+        gradient.addColorStop(0, 'rgba(56, 189, 248, 0.055)');
+        gradient.addColorStop(0.35, 'rgba(6, 182, 212, 0.03)');
+        gradient.addColorStop(0.75, 'rgba(20, 184, 166, 0.015)');
         gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
         ctx.beginPath();
-        ctx.moveTo(beamX - 40, 0);
-        ctx.lineTo(beamX + 130, 0);
-        ctx.lineTo(beamX + 340, height);
-        ctx.lineTo(beamX + 170, height);
+        ctx.moveTo(beamX - beamWidthTop * 0.5, 0);
+        ctx.lineTo(beamX + beamWidthTop * 0.5, 0);
+        ctx.lineTo(beamX + 160 + beamWidthBottom * 0.5, height);
+        ctx.lineTo(beamX + 160 - beamWidthBottom * 0.5, height);
         ctx.closePath();
         ctx.fillStyle = gradient;
         ctx.fill();
       }
       ctx.restore();
 
-      // 3. Render and Update Floating Oxygen Bubbles
+      // -----------------------------------------------------------------------
+      // 3. Marine Plankton & Bio-luminescent Snow Particles
+      // -----------------------------------------------------------------------
+      ctx.save();
+      for (let i = 0; i < planktonList.length; i++) {
+        const p = planktonList[i];
+        p.x += p.driftSpeedX + Math.sin(time * 1.1 + p.phase) * 0.35;
+        p.y += p.driftSpeedY;
+        p.phase += p.pulseSpeed;
+
+        if (p.y < -10) {
+          p.y = height + 10;
+          p.x = Math.random() * width;
+        }
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+
+        const currentAlpha = p.baseAlpha * (0.6 + Math.sin(p.phase) * 0.4);
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color}${currentAlpha})`;
+        ctx.fill();
+
+        // Subtle glowing halo around larger particles
+        if (p.radius > 1.8) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius * 2.6, 0, Math.PI * 2);
+          ctx.fillStyle = `${p.color}${currentAlpha * 0.25})`;
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+
+      // -----------------------------------------------------------------------
+      // 4. Realistic 3D Glassy Oxygen Bubbles
+      // -----------------------------------------------------------------------
       for (let i = 0; i < bubbles.length; i++) {
         const b = bubbles[i];
         b.y -= b.speedY;
         b.phase += b.wobbleSpeed;
         const currentX = b.x + Math.sin(b.phase) * b.wobbleAmp;
 
-        if (b.y < -20) {
-          b.y = height + 20 + Math.random() * 30;
+        if (b.y < -25) {
+          b.y = height + 25 + Math.random() * 40;
           b.x = Math.random() * width;
         }
 
         ctx.save();
         ctx.beginPath();
         ctx.arc(currentX, b.y, b.radius, 0, Math.PI * 2);
-        
-        // Bubble ring and inner gloss highlight
-        ctx.strokeStyle = `rgba(14, 165, 233, ${b.baseAlpha * 0.85})`;
-        ctx.lineWidth = 1.3;
+
+        // Outer glassy rim
+        ctx.strokeStyle = `rgba(14, 165, 233, ${b.baseAlpha * 0.9})`;
+        ctx.lineWidth = Math.max(1.0, b.radius * 0.22);
         ctx.stroke();
 
-        ctx.fillStyle = `rgba(6, 182, 212, ${b.baseAlpha * 0.3})`;
+        // Aqua translucent inner gradient
+        const bubbleGrad = ctx.createRadialGradient(
+          currentX - b.radius * 0.3,
+          b.y - b.radius * 0.3,
+          b.radius * 0.1,
+          currentX,
+          b.y,
+          b.radius
+        );
+        bubbleGrad.addColorStop(0, `rgba(255, 255, 255, ${b.baseAlpha * 0.45})`);
+        bubbleGrad.addColorStop(0.5, `rgba(6, 182, 212, ${b.baseAlpha * 0.25})`);
+        bubbleGrad.addColorStop(1, `rgba(2, 132, 199, ${b.baseAlpha * 0.1})`);
+        ctx.fillStyle = bubbleGrad;
         ctx.fill();
 
-        // Specular reflection dot inside bubble
+        // Primary specular reflection highlight (top-left)
         ctx.beginPath();
         ctx.arc(
-          currentX - b.radius * 0.35,
-          b.y - b.radius * 0.35,
-          Math.max(0.6, b.radius * 0.25),
+          currentX - b.radius * 0.36,
+          b.y - b.radius * 0.36,
+          Math.max(0.6, b.radius * 0.28),
           0,
           Math.PI * 2
         );
         ctx.fillStyle = `rgba(255, 255, 255, ${b.baseAlpha * 0.95})`;
         ctx.fill();
 
+        // Secondary bottom ambient bounce
+        if (b.radius > 3) {
+          ctx.beginPath();
+          ctx.arc(
+            currentX + b.radius * 0.3,
+            b.y + b.radius * 0.3,
+            b.radius * 0.18,
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = `rgba(56, 189, 248, ${b.baseAlpha * 0.6})`;
+          ctx.fill();
+        }
+
         ctx.restore();
       }
 
-      // 4. Render and Update Interactive Mouse Water Ripples
+      // -----------------------------------------------------------------------
+      // 5. Wake Particle Stream (Cursor Movement Droplets)
+      // -----------------------------------------------------------------------
+      for (let k = wakeParticles.length - 1; k >= 0; k--) {
+        const wp = wakeParticles[k];
+        wp.x += wp.vx;
+        wp.y += wp.vy;
+        wp.life++;
+        const lifeRatio = 1 - wp.life / wp.maxLife;
+
+        if (lifeRatio <= 0) {
+          wakeParticles.splice(k, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(wp.x, wp.y, wp.radius * (0.6 + lifeRatio * 0.4), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(6, 182, 212, ${wp.alpha * lifeRatio * 0.75})`;
+        ctx.fill();
+        ctx.strokeStyle = `rgba(255, 255, 255, ${wp.alpha * lifeRatio * 0.8})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // -----------------------------------------------------------------------
+      // 6. Interactive Water Ripples & Shockwaves
+      // -----------------------------------------------------------------------
       for (let r = ripples.length - 1; r >= 0; r--) {
         const rip = ripples[r];
         rip.radius += rip.speed;
-        rip.opacity -= 0.009;
+        rip.opacity -= 0.012;
 
         if (rip.opacity <= 0 || rip.radius >= rip.maxRadius) {
           ripples.splice(r, 1);
@@ -207,18 +484,27 @@ const ShipwreckWaterCanvas: React.FC = () => {
         ctx.save();
         ctx.beginPath();
         ctx.arc(rip.x, rip.y, rip.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(2, 132, 199, ${rip.opacity * 0.6})`;
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = `${rip.color}${rip.opacity * 0.75})`;
+        ctx.lineWidth = rip.lineWidth;
         ctx.stroke();
 
-        // Secondary inner ripple echo
-        if (rip.radius > 14) {
+        // Echo harmonics (secondary and tertiary ripple rings)
+        if (rip.radius > 16) {
           ctx.beginPath();
-          ctx.arc(rip.x, rip.y, rip.radius * 0.65, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(20, 184, 166, ${rip.opacity * 0.35})`;
-          ctx.lineWidth = 1.3;
+          ctx.arc(rip.x, rip.y, rip.radius * 0.68, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(20, 184, 166, ${rip.opacity * 0.45})`;
+          ctx.lineWidth = rip.lineWidth * 0.75;
           ctx.stroke();
         }
+
+        if (rip.radius > 32) {
+          ctx.beginPath();
+          ctx.arc(rip.x, rip.y, rip.radius * 0.42, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(56, 189, 248, ${rip.opacity * 0.25})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
         ctx.restore();
       }
 
@@ -232,6 +518,7 @@ const ShipwreckWaterCanvas: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       if (parentElem) {
         parentElem.removeEventListener('pointermove', handlePointerMove);
+        parentElem.removeEventListener('pointerdown', handlePointerDown);
       }
     };
   }, []);
