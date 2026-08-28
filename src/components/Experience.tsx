@@ -1049,8 +1049,10 @@ const ScrollStackedHonorsDeck: React.FC = () => {
 export const Experience: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+  const desktopTrackRef = useRef<HTMLDivElement | null>(null);
   const desktopBeamRef = useRef<HTMLDivElement | null>(null);
   const desktopSparkRef = useRef<HTMLDivElement | null>(null);
+  const mobileTrackRef = useRef<HTMLDivElement | null>(null);
   const mobileBeamRef = useRef<HTMLDivElement | null>(null);
   const mobileSparkRef = useRef<HTMLDivElement | null>(null);
 
@@ -1141,94 +1143,175 @@ export const Experience: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // 144Hz Hyper-Reactive GPU-Accelerated Scroll Beam (0ms Reflow, Zero Layout Thrashing)
+  // 144Hz Synchronized Laser Beam & Milestone Particle Engine (0ms Reflow)
   useEffect(() => {
     let animId: number;
     let targetProgress = 0;
     let currentProgress = 0;
-    let desktopBeamHeight = 0;
-    let mobileBeamHeight = 0;
-    let rowOffsets: number[] = [];
 
-    const measureOffsets = () => {
+    interface LayoutData {
+      isDesktop: boolean;
+      topY: number;
+      bottomY: number;
+      trackHeight: number;
+      nodeFractions: number[];
+    }
+
+    let layoutData: LayoutData = {
+      isDesktop: true,
+      topY: 0,
+      bottomY: 0,
+      trackHeight: 1,
+      nodeFractions: [0, 0.33, 0.66, 1],
+    };
+
+    const measureLayout = () => {
       if (!timelineRef.current) return;
-      const totalH = timelineRef.current.offsetHeight || 1;
+      const isDesktop = window.innerWidth >= 768;
 
-      if (desktopBeamRef.current) {
-        desktopBeamHeight = desktopBeamRef.current.offsetHeight;
-      }
-      if (mobileBeamRef.current) {
-        mobileBeamHeight = mobileBeamRef.current.offsetHeight;
-      }
+      const rowSelector = isDesktop ? '.timeline-row-desktop' : '.timeline-row-mobile';
+      const rows = Array.from(timelineRef.current.querySelectorAll<HTMLElement>(rowSelector));
+      if (rows.length === 0) return;
 
-      if (!desktopBeamHeight) {
-        desktopBeamHeight = Math.max(totalH - 32, 1);
-      }
-      if (!mobileBeamHeight) {
-        mobileBeamHeight = Math.max(totalH - 24, 1);
-      }
+      const containerRect = timelineRef.current.getBoundingClientRect();
 
-      const rows = timelineRef.current.querySelectorAll<HTMLElement>('.timeline-row-item');
-      rowOffsets = Array.from(rows).map((r) => {
-        if (r.offsetHeight === 0) return 0;
-        return r.offsetTop / totalH;
+      // Measure vertical center of each milestone node relative to the container
+      const nodeYs = rows.map((r) => {
+        const nw = r.querySelector<HTMLElement>('.timeline-node-wrap');
+        if (nw) {
+          const rect = nw.getBoundingClientRect();
+          if (rect.height > 0) {
+            return rect.top + rect.height / 2 - containerRect.top;
+          }
+        }
+        return r.offsetTop + (isDesktop ? 36 : 32);
       });
+
+      const topY = nodeYs[0] ?? (isDesktop ? 36 : 32);
+      const bottomY = nodeYs[nodeYs.length - 1] ?? (topY + 600);
+      const trackHeight = Math.max(bottomY - topY, 1);
+
+      const nodeFractions = nodeYs.map((y) => Math.min(Math.max((y - topY) / trackHeight, 0), 1));
+
+      layoutData = {
+        isDesktop,
+        topY,
+        bottomY,
+        trackHeight,
+        nodeFractions,
+      };
+
+      // Set Track and Beam dimensions
+      if (isDesktop) {
+        if (desktopTrackRef.current) {
+          desktopTrackRef.current.style.top = `${topY}px`;
+          desktopTrackRef.current.style.height = `${trackHeight}px`;
+        }
+        if (desktopBeamRef.current) {
+          desktopBeamRef.current.style.top = `${topY}px`;
+          desktopBeamRef.current.style.height = `${trackHeight}px`;
+        }
+        if (desktopSparkRef.current) {
+          desktopSparkRef.current.style.top = `${topY}px`;
+        }
+      } else {
+        if (mobileTrackRef.current) {
+          mobileTrackRef.current.style.top = `${topY}px`;
+          mobileTrackRef.current.style.height = `${trackHeight}px`;
+        }
+        if (mobileBeamRef.current) {
+          mobileBeamRef.current.style.top = `${topY}px`;
+          mobileBeamRef.current.style.height = `${trackHeight}px`;
+        }
+        if (mobileSparkRef.current) {
+          mobileSparkRef.current.style.top = `${topY}px`;
+        }
+      }
     };
 
     const updateDOM = () => {
-      currentProgress += (targetProgress - currentProgress) * 0.45;
-      if (Math.abs(targetProgress - currentProgress) < 0.001) {
+      currentProgress += (targetProgress - currentProgress) * 0.28;
+      if (Math.abs(targetProgress - currentProgress) < 0.0005) {
         currentProgress = targetProgress;
       }
 
-      const clamped = Math.min(Math.max(currentProgress, 0.02), 1);
+      const clamped = Math.min(Math.max(currentProgress, 0), 1);
+      const { isDesktop, trackHeight, nodeFractions } = layoutData;
 
-      // Usable beam lengths
-      const dHeight = desktopBeamHeight || (desktopBeamRef.current?.offsetHeight ?? (timelineRef.current ? timelineRef.current.offsetHeight - 32 : 800));
-      const mHeight = mobileBeamHeight || (mobileBeamRef.current?.offsetHeight ?? (timelineRef.current ? timelineRef.current.offsetHeight - 24 : 800));
-
-      // 1. GPU scaleY transform on desktop beam & perfectly synchronized leading spark dot
-      if (desktopBeamRef.current) {
-        desktopBeamRef.current.style.transform = `scaleY(${clamped})`;
-      }
-      if (desktopSparkRef.current) {
-        const sparkY = dHeight * clamped;
-        desktopSparkRef.current.style.transform = `translate3d(-50%, calc(${sparkY}px - 50%), 0)`;
-        desktopSparkRef.current.style.opacity = clamped > 0.02 && clamped < 0.99 ? '1' : '0.4';
-      }
-
-      // 2. GPU scaleY transform on mobile beam & perfectly synchronized leading spark dot
-      if (mobileBeamRef.current) {
-        mobileBeamRef.current.style.transform = `scaleY(${clamped})`;
-      }
-      if (mobileSparkRef.current) {
-        const sparkY = mHeight * clamped;
-        mobileSparkRef.current.style.transform = `translate3d(-50%, calc(${sparkY}px - 50%), 0)`;
-        mobileSparkRef.current.style.opacity = clamped > 0.02 && clamped < 0.99 ? '1' : '0.4';
+      // 1. Update Laser Beam & Moving Spark
+      if (isDesktop) {
+        if (desktopBeamRef.current) {
+          desktopBeamRef.current.style.transform = `scaleY(${clamped})`;
+        }
+        if (desktopSparkRef.current) {
+          const sparkY = trackHeight * clamped;
+          desktopSparkRef.current.style.transform = `translate3d(-50%, calc(${sparkY}px - 50%), 0)`;
+          desktopSparkRef.current.style.opacity = currentProgress > -0.02 ? '1' : '0.4';
+        }
+      } else {
+        if (mobileBeamRef.current) {
+          mobileBeamRef.current.style.transform = `scaleY(${clamped})`;
+        }
+        if (mobileSparkRef.current) {
+          const sparkY = trackHeight * clamped;
+          mobileSparkRef.current.style.transform = `translate3d(-50%, calc(${sparkY}px - 50%), 0)`;
+          mobileSparkRef.current.style.opacity = currentProgress > -0.02 ? '1' : '0.4';
+        }
       }
 
-      // 3. Update active node states using pre-computed relative offsets
-      if (timelineRef.current && rowOffsets.length > 0) {
-        const rows = timelineRef.current.querySelectorAll<HTMLElement>('.timeline-row-item');
+      // 2. Update Milestone Node and Year states
+      if (timelineRef.current && nodeFractions.length > 0) {
+        const rowSelector = isDesktop ? '.timeline-row-desktop' : '.timeline-row-mobile';
+        const rows = timelineRef.current.querySelectorAll<HTMLElement>(rowSelector);
+
         rows.forEach((row, i) => {
-          const offsetFraction = rowOffsets[i] || 0;
-          if (offsetFraction === 0 && row.offsetHeight === 0) return;
-
-          const node = row.querySelector<HTMLElement>('.timeline-node-circle');
+          const frac = nodeFractions[i] ?? (i / Math.max(rows.length - 1, 1));
+          const nodeCircle = row.querySelector<HTMLElement>('.timeline-node-circle');
+          const nodeCore = row.querySelector<HTMLElement>('.timeline-node-core');
+          const nodeGlow = row.querySelector<HTMLElement>('.timeline-node-glow');
           const year = row.querySelector<HTMLElement>('.timeline-row-year');
 
-          const isReached = clamped >= offsetFraction - 0.03;
+          // Node is active if clamped progress has reached or passed it
+          const isReached = clamped >= frac - 0.015;
 
-          if (node) {
-            node.style.borderColor = isReached ? '#fbbf24' : 'rgba(255,255,255,0.2)';
-            node.style.boxShadow = isReached
-              ? '0 0 24px rgba(251,191,36,0.95), 0 0 45px rgba(249,115,22,0.5)'
-              : 'none';
-            node.style.transform = isReached ? 'scale(1.25)' : 'scale(1.0)';
+          if (nodeCircle) {
+            if (isReached) {
+              nodeCircle.style.borderColor = '#fbbf24';
+              nodeCircle.style.backgroundColor = '#0d0e1a';
+              nodeCircle.style.boxShadow = '0 0 20px rgba(251,191,36,0.85), 0 0 35px rgba(249,115,22,0.45)';
+              nodeCircle.style.transform = 'scale(1.18)';
+            } else {
+              nodeCircle.style.borderColor = 'rgba(255,255,255,0.2)';
+              nodeCircle.style.backgroundColor = '#0a0b12';
+              nodeCircle.style.boxShadow = 'none';
+              nodeCircle.style.transform = 'scale(1.0)';
+            }
           }
+
+          if (nodeCore) {
+            if (isReached) {
+              nodeCore.style.backgroundColor = '#fbbf24';
+              nodeCore.style.boxShadow = '0 0 10px #fbbf24';
+              nodeCore.style.transform = 'scale(1.25)';
+            } else {
+              nodeCore.style.backgroundColor = '#52525b';
+              nodeCore.style.boxShadow = 'none';
+              nodeCore.style.transform = 'scale(1.0)';
+            }
+          }
+
+          if (nodeGlow) {
+            nodeGlow.style.backgroundColor = isReached ? 'rgba(251,191,36,0.25)' : 'transparent';
+          }
+
           if (year) {
-            year.style.color = isReached ? '#fbbf24' : '#a1a1aa';
-            year.style.textShadow = isReached ? '0 0 14px rgba(251,191,36,0.65)' : 'none';
+            if (isReached) {
+              year.style.color = '#fbbf24';
+              year.style.textShadow = '0 0 14px rgba(251,191,36,0.6)';
+            } else {
+              year.style.color = '#71717a';
+              year.style.textShadow = 'none';
+            }
           }
         });
       }
@@ -1240,29 +1323,52 @@ export const Experience: React.FC = () => {
 
     const handleScroll = () => {
       if (!timelineRef.current) return;
-      const rect = timelineRef.current.getBoundingClientRect();
+      const isDesktop = window.innerWidth >= 768;
+      const rowSelector = isDesktop ? '.timeline-row-desktop' : '.timeline-row-mobile';
+      const rows = timelineRef.current.querySelectorAll<HTMLElement>(rowSelector);
+      if (rows.length === 0) return;
+
+      const firstNode = rows[0].querySelector<HTMLElement>('.timeline-node-wrap') || rows[0];
+      const lastNode = rows[rows.length - 1].querySelector<HTMLElement>('.timeline-node-wrap') || rows[rows.length - 1];
+
+      const firstRect = firstNode.getBoundingClientRect();
+      const lastRect = lastNode.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      const start = windowHeight * 0.78;
-      const total = rect.height + (start - windowHeight * 0.3);
-      const scrolled = start - rect.top;
+      // Focus trigger line: at 65% of viewport height
+      const focusLine = windowHeight * 0.65;
+      const totalSpan = lastRect.top - firstRect.top;
 
-      targetProgress = Math.min(Math.max(scrolled / total, 0.03), 1);
+      if (totalSpan > 0) {
+        const scrolled = focusLine - firstRect.top;
+        const progress = scrolled / totalSpan;
+        targetProgress = Math.min(Math.max(progress, 0), 1);
+      }
 
       cancelAnimationFrame(animId);
       animId = requestAnimationFrame(updateDOM);
     };
 
+    const resizeObserver = new ResizeObserver(() => {
+      measureLayout();
+      handleScroll();
+    });
+
+    if (timelineRef.current) {
+      resizeObserver.observe(timelineRef.current);
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', () => {
-      measureOffsets();
+      measureLayout();
       handleScroll();
     }, { passive: true });
 
-    measureOffsets();
+    measureLayout();
     handleScroll();
 
     return () => {
+      resizeObserver.disconnect();
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(animId);
     };
@@ -1313,34 +1419,39 @@ export const Experience: React.FC = () => {
           {/* Desktop Timeline Layout (>= 768px) */}
           <div className="hidden md:block relative">
             
-            {/* 1. Base Subtle Guide Line */}
+            {/* 1. Base Subtle Guide Line (From First Node to Last Node) */}
             <div
-              className="absolute left-[190px] lg:left-[210px] -translate-x-1/2 top-4 bottom-4 w-[2px] bg-white/[0.08] rounded-full pointer-events-none"
+              ref={desktopTrackRef}
+              className="absolute left-[190px] lg:left-[210px] -translate-x-1/2 w-[2px] bg-white/[0.08] rounded-full pointer-events-none"
+              style={{ top: '36px', height: 'calc(100% - 72px)' }}
               aria-hidden="true"
             />
 
             {/* 2. Active Glowing Golden Laser Beam (GPU-Accelerated scaleY) */}
             <div
               ref={desktopBeamRef}
-              className="absolute left-[190px] lg:left-[210px] -translate-x-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_18px_rgba(245,158,11,0.95),0_0_35px_rgba(249,115,22,0.6)] origin-top pointer-events-none z-10"
-              style={{ transform: 'scaleY(0.04)', willChange: 'transform' }}
+              className="absolute left-[190px] lg:left-[210px] -translate-x-1/2 w-[2.5px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.9),0_0_30px_rgba(249,115,22,0.5)] origin-top pointer-events-none z-10"
+              style={{ top: '36px', height: 'calc(100% - 72px)', transform: 'scaleY(0)', willChange: 'transform' }}
               aria-hidden="true"
             />
 
             {/* 3. Leading Radiant Photon Spark Particle */}
             <div
               ref={desktopSparkRef}
-              className="absolute left-[190px] lg:left-[210px] top-4 w-4 h-4 rounded-full bg-white shadow-[0_0_15px_#ffffff,0_0_25px_#fbbf24,0_0_45px_#f97316] pointer-events-none z-20 transition-opacity duration-200"
-              style={{ transform: 'translate3d(-50%, -50%, 0)', willChange: 'transform, opacity' }}
+              className="absolute left-[190px] lg:left-[210px] w-4 h-4 rounded-full pointer-events-none z-30 transition-opacity duration-200"
+              style={{ top: '36px', transform: 'translate3d(-50%, -50%, 0)', willChange: 'transform, opacity' }}
               aria-hidden="true"
-            />
+            >
+              <div className="w-full h-full rounded-full bg-white border-2 border-amber-300 shadow-[0_0_12px_#ffffff,0_0_24px_#fbbf24,0_0_40px_#f97316]" />
+              <div className="absolute -inset-1 rounded-full bg-amber-400/30 animate-ping pointer-events-none" />
+            </div>
 
             {/* Timeline Milestone Rows */}
             <div className="space-y-12 lg:space-y-16">
               {timelineMilestones.map((item, idx) => (
                 <div
                   key={item.id}
-                  className="timeline-row-item grid grid-cols-[190px_1fr] lg:grid-cols-[210px_1fr] gap-0 items-start group relative"
+                  className="timeline-row-desktop grid grid-cols-[190px_1fr] lg:grid-cols-[210px_1fr] gap-0 items-start group relative"
                 >
                   {/* Left Column: Date / Year Tag (Right-Aligned to the Golden Line) */}
                   <div className="pr-8 lg:pr-10 text-right pt-6 select-none">
@@ -1352,10 +1463,11 @@ export const Experience: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Glowing Circular Node (Centered over the Golden Line) */}
-                  <div className="absolute left-[190px] lg:left-[210px] top-7 -translate-x-1/2 z-20 flex items-center justify-center pointer-events-none">
-                    <div className="timeline-node-circle w-7 h-7 rounded-full bg-[#08090f] border-2 border-white/20 transition-all duration-300 flex items-center justify-center shadow-lg">
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_10px_#fbbf24]" />
+                  {/* Glowing Circular Node (Centered over the Line, vertically aligned with header) */}
+                  <div className="timeline-node-wrap absolute left-[190px] lg:left-[210px] top-9 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center pointer-events-none">
+                    <div className="timeline-node-circle relative w-7 h-7 rounded-full bg-[#0a0b12] border-2 border-white/20 transition-all duration-300 flex items-center justify-center shadow-lg">
+                      <div className="timeline-node-core w-2.5 h-2.5 rounded-full bg-zinc-600 transition-all duration-300" />
+                      <div className="timeline-node-glow absolute inset-0 rounded-full bg-amber-400/0 blur-sm transition-all duration-300 pointer-events-none" />
                     </div>
                   </div>
 
@@ -1373,35 +1485,41 @@ export const Experience: React.FC = () => {
             
             {/* Base Line */}
             <div
-              className="absolute left-[14px] -translate-x-1/2 top-4 bottom-4 w-[2px] bg-white/[0.08] rounded-full pointer-events-none"
+              ref={mobileTrackRef}
+              className="absolute left-[16px] -translate-x-1/2 w-[2px] bg-white/[0.08] rounded-full pointer-events-none"
+              style={{ top: '32px', height: 'calc(100% - 64px)' }}
               aria-hidden="true"
             />
 
             {/* Mobile Active Laser Beam (scaleY GPU) */}
             <div
               ref={mobileBeamRef}
-              className="absolute left-[14px] -translate-x-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_14px_rgba(245,158,11,0.85)] origin-top pointer-events-none z-10"
-              style={{ transform: 'scaleY(0.04)', willChange: 'transform' }}
+              className="absolute left-[16px] -translate-x-1/2 w-[2px] bg-gradient-to-b from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_12px_rgba(245,158,11,0.85)] origin-top pointer-events-none z-10"
+              style={{ top: '32px', height: 'calc(100% - 64px)', transform: 'scaleY(0)', willChange: 'transform' }}
               aria-hidden="true"
             />
 
             {/* Mobile Photon Spark Particle */}
             <div
               ref={mobileSparkRef}
-              className="absolute left-[14px] top-4 w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_#ffffff,0_0_20px_#fbbf24] pointer-events-none z-20 transition-opacity duration-200"
-              style={{ transform: 'translate3d(-50%, -50%, 0)', willChange: 'transform, opacity' }}
+              className="absolute left-[16px] w-3.5 h-3.5 rounded-full pointer-events-none z-30 transition-opacity duration-200"
+              style={{ top: '32px', transform: 'translate3d(-50%, -50%, 0)', willChange: 'transform, opacity' }}
               aria-hidden="true"
-            />
+            >
+              <div className="w-full h-full rounded-full bg-white border-2 border-amber-300 shadow-[0_0_10px_#ffffff,0_0_20px_#fbbf24,0_0_30px_#f97316]" />
+              <div className="absolute -inset-1 rounded-full bg-amber-400/30 animate-ping pointer-events-none" />
+            </div>
 
             {/* Mobile Milestones */}
             <div className="space-y-8">
               {timelineMilestones.map((item, idx) => (
-                <div key={item.id} className="timeline-row-item relative pl-9 sm:pl-10">
+                <div key={item.id} className="timeline-row-mobile relative pl-9 sm:pl-10">
                   
                   {/* Node */}
-                  <div className="absolute left-[14px] -translate-x-1/2 top-6 z-20 flex items-center justify-center pointer-events-none">
-                    <div className="timeline-node-circle w-5 h-5 rounded-full bg-[#08090f] border-2 border-white/20 flex items-center justify-center transition-all duration-300">
-                      <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  <div className="timeline-node-wrap absolute left-[16px] top-8 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center pointer-events-none">
+                    <div className="timeline-node-circle relative w-5 h-5 rounded-full bg-[#0a0b12] border-2 border-white/20 flex items-center justify-center transition-all duration-300 shadow-md">
+                      <div className="timeline-node-core w-1.5 h-1.5 rounded-full bg-zinc-600 transition-all duration-300" />
+                      <div className="timeline-node-glow absolute inset-0 rounded-full bg-amber-400/0 blur-sm transition-all duration-300 pointer-events-none" />
                     </div>
                   </div>
 
