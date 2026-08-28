@@ -128,9 +128,7 @@ const MotivationQuoteTypewriter: React.FC<{ isMobile?: boolean }> = ({ isMobile 
 
   if (isMobile) {
     return (
-      <div
-        className="border-l-[3px] border-accent-orange bg-[#111116]/85 backdrop-blur-md rounded-r-xl p-3.5 sm:p-4 border border-white/[0.06] border-l-0 max-w-[580px] mb-6 shadow-sm min-h-[5.6rem] flex items-start"
-      >
+      <div className="border-l-2 border-accent-orange/60 pl-3.5 py-1 max-w-[580px] mb-6 flex items-start">
         <p className="text-[0.84rem] sm:text-[0.90rem] text-slate-300 italic font-normal leading-[1.6]">
           <span className="text-accent-orange font-serif text-base select-none mr-0.5">“</span>
           <span>{displayedText}</span>
@@ -147,7 +145,7 @@ const MotivationQuoteTypewriter: React.FC<{ isMobile?: boolean }> = ({ isMobile 
   }
 
   return (
-    <div className="border-l-2 border-accent-orange/50 pl-3.5 py-1.5 max-w-[620px] min-h-[4.8rem] flex items-start">
+    <div className="border-l-2 border-accent-orange/50 pl-3.5 py-1.5 max-w-[620px] flex items-start">
       <p className="text-[0.82rem] sm:text-[0.88rem] text-slate-300 italic font-normal leading-[1.65]">
         <span className="text-accent-orange font-serif text-base select-none mr-0.5">“</span>
         <span>{displayedText}</span>
