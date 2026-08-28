@@ -259,10 +259,13 @@ const ShipwreckWaterCanvas: React.FC = () => {
       parentElem.addEventListener('pointerdown', handlePointerDown);
     }
 
+    let lastFrameTime = performance.now();
     let time = 0;
 
-    const render = () => {
-      time += 0.016;
+    const render = (now: number) => {
+      const deltaSec = Math.min((now - lastFrameTime) / 1000, 0.04);
+      lastFrameTime = now;
+      time += deltaSec;
       ctx.clearRect(0, 0, width, height);
 
       // -----------------------------------------------------------------------
@@ -942,7 +945,7 @@ export const OtherWorks: React.FC = () => {
                   onClick={() => setActivePhoto(photo)}
                 >
                   {/* Photo Display Card with Adaptive Frame Architecture (Zero Cropping) */}
-                  <div className="animate-water-float-med w-full lg:w-[58%] h-[360px] sm:h-[440px] md:h-[500px] lg:h-[530px] relative rounded-2xl overflow-hidden shadow-[0_14px_40px_rgba(0,0,0,0.18)] bg-[#09090b] group/img flex items-center justify-center">
+                  <div className="w-full lg:w-[58%] h-[360px] sm:h-[440px] md:h-[500px] lg:h-[530px] relative rounded-2xl overflow-hidden shadow-[0_14px_40px_rgba(0,0,0,0.18)] bg-[#09090b] group/img flex items-center justify-center">
                     {/* Ambient Blurred Background matching natural photo colors */}
                     <img
                       src={photo.imageSrc}
@@ -977,7 +980,7 @@ export const OtherWorks: React.FC = () => {
                   </div>
 
                   {/* Photo Intel & Details (Side-wise) */}
-                  <div className="animate-water-float-slow w-full lg:w-[42%] flex flex-col justify-between py-2 text-[#18181b]">
+                  <div className="w-full lg:w-[42%] flex flex-col justify-between py-2 text-[#18181b]">
                     <div>
                       <div className="flex items-center gap-2 mb-2.5">
                         <span className="font-mono text-[0.75rem] font-bold px-3 py-1 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#fde68a] uppercase">
@@ -1093,7 +1096,7 @@ export const OtherWorks: React.FC = () => {
                     setReaderInitialPage(1);
                     setPhilosophyModalOpen(true);
                   }}
-                  className="animate-water-float-med group/cover relative w-full max-w-[340px] sm:max-w-[380px] aspect-[1/1.414] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] shadow-[0_20px_45px_rgba(15,23,42,0.22)] border border-slate-800/20 bg-[#1e293b]"
+                  className="group/cover relative w-full max-w-[340px] sm:max-w-[380px] aspect-[1/1.414] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] shadow-[0_20px_45px_rgba(15,23,42,0.22)] border border-slate-800/20 bg-[#1e293b]"
                   title="Click to read full paper"
                 >
                   {/* Subtle Book Spine & Gradient Lighting */}
@@ -1132,7 +1135,7 @@ export const OtherWorks: React.FC = () => {
                 </div>
 
                 {/* Quick Page Jump Thumbnails Strip */}
-                <div className="animate-water-float-slow w-full max-w-[380px] mt-4 pt-3 border-t border-[#e7e5e4] flex flex-col gap-2">
+                <div className="w-full max-w-[380px] mt-4 pt-3 border-t border-[#e7e5e4] flex flex-col gap-2">
                   <div className="flex items-center justify-between text-[0.75rem] font-mono text-[#78716c]">
                     <span className="font-semibold uppercase tracking-wider">Explore Pages</span>
                     <span>1 to 10</span>
@@ -1163,7 +1166,7 @@ export const OtherWorks: React.FC = () => {
                 
                 <div>
                   {/* Category & Date Metadata Tags */}
-                  <div className="animate-water-float-med flex flex-wrap items-center gap-2 mb-3">
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
                     <span className="font-mono text-[0.72rem] font-bold px-3 py-1 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#fde68a] uppercase">
                       Research Paper
                     </span>
@@ -1177,10 +1180,10 @@ export const OtherWorks: React.FC = () => {
                   </div>
 
                   {/* Main Title & Subtitle */}
-                  <h4 className="animate-water-float-title inline-block font-serifDisplay text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#18181b] tracking-tight leading-[1.18] mb-2">
+                  <h4 className="font-serifDisplay text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#18181b] tracking-tight leading-[1.18] mb-2">
                     THE GAME OF DOPAMINE
                   </h4>
-                  <p className="animate-water-float-slow font-serifDisplay text-[1.05rem] sm:text-[1.15rem] italic text-[#b45309] font-semibold mb-3">
+                  <p className="font-serifDisplay text-[1.05rem] sm:text-[1.15rem] italic text-[#b45309] font-semibold mb-3">
                     From the Inner Push to Inner Freedom
                   </p>
 
@@ -1189,7 +1192,7 @@ export const OtherWorks: React.FC = () => {
                   </p>
 
                   {/* Central Proposition Featured Quote Callout */}
-                  <div className="animate-water-float-slow p-4 sm:p-5 rounded-2xl bg-[#fafaf9]/90 backdrop-blur-xs border-l-4 border-[#b45309] border-y border-r border-[#e7e5e4] mb-6 shadow-2xs">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-[#fafaf9]/90 backdrop-blur-xs border-l-4 border-[#b45309] border-y border-r border-[#e7e5e4] mb-6 shadow-2xs">
                     <div className="flex items-center gap-2 mb-1.5">
                       <Feather size={14} className="text-[#b45309]" />
                       <span className="font-mono text-[0.72rem] font-bold text-[#92400e] uppercase tracking-wider">
@@ -1203,7 +1206,7 @@ export const OtherWorks: React.FC = () => {
 
                   {/* Key Highlights Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                    <div className="animate-water-float-slow p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>The Dopamine Loop</span>
@@ -1213,7 +1216,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="animate-water-float-med p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '0.8s' }}>
+                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Bhagavad Gita Wisdom</span>
@@ -1223,7 +1226,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="animate-water-float-med p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '1.6s' }}>
+                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Mental Strength Protocol</span>
@@ -1233,7 +1236,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="animate-water-float-slow p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '2.4s' }}>
+                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Formula for Passion</span>
