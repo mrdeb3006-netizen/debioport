@@ -945,7 +945,7 @@ export const OtherWorks: React.FC = () => {
                   onClick={() => setActivePhoto(photo)}
                 >
                   {/* Photo Display Card with Adaptive Frame Architecture (Zero Cropping) */}
-                  <div className="w-full lg:w-[58%] h-[360px] sm:h-[440px] md:h-[500px] lg:h-[530px] relative rounded-2xl overflow-hidden shadow-[0_14px_40px_rgba(0,0,0,0.18)] bg-[#09090b] group/img flex items-center justify-center">
+                  <div className="animate-water-float-mockup w-full lg:w-[58%] h-[360px] sm:h-[440px] md:h-[500px] lg:h-[530px] relative rounded-2xl overflow-hidden shadow-[0_14px_40px_rgba(0,0,0,0.18)] bg-[#09090b] group/img flex items-center justify-center">
                     {/* Ambient Blurred Background matching natural photo colors */}
                     <img
                       src={photo.imageSrc}
@@ -1096,7 +1096,7 @@ export const OtherWorks: React.FC = () => {
                     setReaderInitialPage(1);
                     setPhilosophyModalOpen(true);
                   }}
-                  className="group/cover relative w-full max-w-[340px] sm:max-w-[380px] aspect-[1/1.414] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] shadow-[0_20px_45px_rgba(15,23,42,0.22)] border border-slate-800/20 bg-[#1e293b]"
+                  className="animate-water-float-mockup group/cover relative w-full max-w-[340px] sm:max-w-[380px] aspect-[1/1.414] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] shadow-[0_20px_45px_rgba(15,23,42,0.22)] border border-slate-800/20 bg-[#1e293b]"
                   title="Click to read full paper"
                 >
                   {/* Subtle Book Spine & Gradient Lighting */}
@@ -1192,7 +1192,7 @@ export const OtherWorks: React.FC = () => {
                   </p>
 
                   {/* Central Proposition Featured Quote Callout */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-[#fafaf9]/90 backdrop-blur-xs border-l-4 border-[#b45309] border-y border-r border-[#e7e5e4] mb-6 shadow-2xs">
+                  <div className="animate-water-float-med p-4 sm:p-5 rounded-2xl bg-[#fafaf9]/90 backdrop-blur-xs border-l-4 border-[#b45309] border-y border-r border-[#e7e5e4] mb-6 shadow-2xs">
                     <div className="flex items-center gap-2 mb-1.5">
                       <Feather size={14} className="text-[#b45309]" />
                       <span className="font-mono text-[0.72rem] font-bold text-[#92400e] uppercase tracking-wider">
@@ -1206,7 +1206,7 @@ export const OtherWorks: React.FC = () => {
 
                   {/* Key Highlights Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="animate-water-float-med p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '0.2s' }}>
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>The Dopamine Loop</span>
@@ -1216,7 +1216,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="animate-water-float-med p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '0.7s' }}>
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Bhagavad Gita Wisdom</span>
@@ -1226,7 +1226,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="animate-water-float-med p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '1.2s' }}>
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Mental Strength Protocol</span>
@@ -1236,7 +1236,7 @@ export const OtherWorks: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]">
+                    <div className="animate-water-float-med p-3.5 rounded-xl bg-[#f5f5f4] border border-[#e7e5e4]" style={{ animationDelay: '1.7s' }}>
                       <div className="font-mono text-[0.74rem] font-bold text-[#18181b] mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
                         <span>Formula for Passion</span>

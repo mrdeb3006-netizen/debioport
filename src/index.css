@@ -721,81 +721,162 @@ body {
 }
 
 /* ==========================================================================
-   SHIP WRECK - SILKY-SMOOTH BUOYANT WATER FLOATING ANIMATIONS
+   SHIP WRECK - IMMERSIVE BUOYANT OCEAN WAVE FLOATING ANIMATIONS
    ========================================================================== */
-@keyframes waterFloatGentleA {
-  0%, 100% {
+
+/* Primary Wave Floating for Large Cards (Noticeable Heave, Pitch & Sway) */
+@keyframes waterFloatWaveA {
+  0% {
     transform: translate3d(0, 0, 0) rotate(0deg);
+    filter: drop-shadow(0 10px 24px rgba(6, 182, 212, 0.08));
   }
-  50% {
-    transform: translate3d(1px, -5px, 0) rotate(0.2deg);
+  28% {
+    transform: translate3d(5px, -12px, 0) rotate(1.2deg);
+    filter: drop-shadow(0 22px 36px rgba(6, 182, 212, 0.22));
+  }
+  65% {
+    transform: translate3d(-4px, 3px, 0) rotate(-0.9deg);
+    filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.09));
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    filter: drop-shadow(0 10px 24px rgba(6, 182, 212, 0.08));
   }
 }
 
-@keyframes waterFloatGentleB {
-  0%, 100% {
+/* Secondary Alternate Wave Floating for Opposing Phase Cards */
+@keyframes waterFloatWaveB {
+  0% {
     transform: translate3d(0, 0, 0) rotate(0deg);
+    filter: drop-shadow(0 10px 24px rgba(20, 184, 166, 0.08));
   }
-  50% {
-    transform: translate3d(-1px, -6px, 0) rotate(-0.2deg);
+  32% {
+    transform: translate3d(-5px, -14px, 0) rotate(-1.3deg);
+    filter: drop-shadow(0 24px 38px rgba(20, 184, 166, 0.22));
+  }
+  70% {
+    transform: translate3d(4px, 2px, 0) rotate(0.8deg);
+    filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.09));
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    filter: drop-shadow(0 10px 24px rgba(20, 184, 166, 0.08));
   }
 }
 
-@keyframes waterFloatGentleC {
-  0%, 100% {
+/* Floating Words & Headline Titles */
+@keyframes waterFloatWord {
+  0% {
     transform: translate3d(0, 0, 0) rotate(0deg);
+    filter: drop-shadow(0 2px 8px rgba(6, 182, 212, 0.05));
   }
-  50% {
-    transform: translate3d(1px, -3.5px, 0) rotate(0.15deg);
+  35% {
+    transform: translate3d(2px, -8px, 0) rotate(0.6deg);
+    filter: drop-shadow(0 8px 16px rgba(6, 182, 212, 0.20));
+  }
+  75% {
+    transform: translate3d(-2px, 2px, 0) rotate(-0.4deg);
+    filter: drop-shadow(0 2px 6px rgba(6, 182, 212, 0.08));
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    filter: drop-shadow(0 2px 8px rgba(6, 182, 212, 0.05));
   }
 }
 
-@keyframes waterFloatTitle {
-  0%, 100% {
-    transform: translate3d(0, 0, 0);
+/* Floating Maritime Badges & Action Tags */
+@keyframes waterFloatBadge {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
   }
-  50% {
-    transform: translate3d(0, -3.5px, 0);
+  30% {
+    transform: translate3d(3px, -6px, 0) rotate(1.5deg);
+  }
+  70% {
+    transform: translate3d(-2px, 2px, 0) rotate(-1.0deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+/* Floating Mini-Cards & Quotation Blocks */
+@keyframes waterFloatPill {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(2px, -6px, 0) rotate(0.8deg);
+  }
+  68% {
+    transform: translate3d(-2px, 2px, 0) rotate(-0.6deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+/* 3D Book Cover Buoyancy */
+@keyframes waterFloatMockup {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate3d(3px, -10px, 0) rotate(1.8deg);
+  }
+  72% {
+    transform: translate3d(-3px, 3px, 0) rotate(-1.2deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
   }
 }
 
 .animate-water-float-card {
-  animation: waterFloatGentleA 10s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
-  will-change: transform;
+  animation: waterFloatWaveA 5.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform, filter;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
 
 .animate-water-float-card-alt {
-  animation: waterFloatGentleB 11.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite 1.8s;
-  will-change: transform;
+  animation: waterFloatWaveB 6.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: 1.2s;
+  will-change: transform, filter;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
 
 .animate-water-float-title {
-  animation: waterFloatTitle 8.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
-  will-change: transform;
+  animation: waterFloatWord 5.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform, filter;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
 
 .animate-water-float-slow {
-  animation: waterFloatGentleA 10.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
-  will-change: transform;
+  animation: waterFloatWord 6.0s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform, filter;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
 
 .animate-water-float-med {
-  animation: waterFloatGentleB 9s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+  animation: waterFloatPill 4.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   will-change: transform;
   backface-visibility: hidden;
   transform: translateZ(0);
 }
 
 .animate-water-float-fast {
-  animation: waterFloatGentleC 7s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+  animation: waterFloatBadge 4.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.animate-water-float-mockup {
+  animation: waterFloatMockup 5.0s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   will-change: transform;
   backface-visibility: hidden;
   transform: translateZ(0);
