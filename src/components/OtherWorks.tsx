@@ -263,26 +263,6 @@ export const OtherWorks: React.FC = () => {
   const [philosophyModalOpen, setPhilosophyModalOpen] = useState(false);
   const [readerInitialPage, setReaderInitialPage] = useState(1);
   const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  // Dynamic recurring entrance observer on scroll down or up (emerging from water effect)
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   // 15 Authentic User Photographs
   const photos: PhotoItem[] = [
@@ -507,7 +487,6 @@ export const OtherWorks: React.FC = () => {
 
   return (
     <section
-      ref={sectionRef}
       id="ship-wreck"
       className="w-full relative py-14 md:py-20 bg-[#faf9f6] text-[#18181b] border-y-2 border-[#e7e5e4] transition-colors duration-500 overflow-hidden font-main select-none"
     >
@@ -586,27 +565,14 @@ export const OtherWorks: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 relative z-10">
         
         {/* =========================================================================
-            SECTION HEADER: Clean Editorial Title with Surfacing Hydrodynamics
+            SECTION HEADER: Clean Editorial Title
             ========================================================================= */}
-        <div
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-10 border-b-2 border-[#e7e5e4]"
-          style={{
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible
-              ? 'translateY(0px) scale(1) rotateX(0deg)'
-              : 'translateY(42px) scale(0.96) rotateX(6deg)',
-            filter: isVisible ? 'blur(0px)' : 'blur(6px)',
-            transition: isVisible
-              ? 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, filter 0.7s ease-out 0.08s'
-              : 'opacity 0.25s ease-out, transform 0.25s ease-out, filter 0.25s ease-out',
-            perspective: 1000,
-          }}
-        >
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-10 border-b-2 border-[#e7e5e4]">
           <div>
-            {/* Thematic Maritime Surfacing Badge */}
+            {/* Thematic Maritime Badge */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-900/10 border border-cyan-500/30 text-cyan-800 font-mono text-[0.70rem] font-bold uppercase tracking-wider mb-2.5 shadow-xs">
               <Waves size={13} className="text-cyan-700 animate-pulse" />
-              <span>SURFACED FROM THE DEPTHS • SHIPWRECK ARCHIVE</span>
+              <span>SHIPWRECK ARCHIVE • ORIGINALS &amp; ESSAYS</span>
             </div>
 
             <h2 className="font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08]">
@@ -629,22 +595,9 @@ export const OtherWorks: React.FC = () => {
 
 
         {/* =========================================================================
-            SUBSECTION 1: PHOTOGRAPHY (AUTOMATIC SIDE-WISE SLIDESHOW - SURFACING DECK)
+            SUBSECTION 1: PHOTOGRAPHY (AUTOMATIC SIDE-WISE SLIDESHOW)
             ========================================================================= */}
-        <div
-          className="mb-14"
-          style={{
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible
-              ? 'translateY(0px) scale(1) rotateX(0deg)'
-              : 'translateY(55px) scale(0.95) rotateX(6deg)',
-            filter: isVisible ? 'blur(0px)' : 'blur(8px)',
-            transition: isVisible
-              ? 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.2s, filter 0.8s ease-out 0.2s'
-              : 'opacity 0.25s ease-out, transform 0.25s ease-out, filter 0.25s ease-out',
-            perspective: 1200,
-          }}
-        >
+        <div className="mb-14">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
@@ -814,21 +767,9 @@ export const OtherWorks: React.FC = () => {
 
 
         {/* =========================================================================
-            SUBSECTION 2: PHILOSOPHY & RESEARCH PAPER (SALVAGED MANUSCRIPT SURFACING)
+            SUBSECTION 2: PHILOSOPHY & RESEARCH PAPER
             ========================================================================= */}
-        <div
-          style={{
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible
-              ? 'translateY(0px) scale(1) rotateX(0deg)'
-              : 'translateY(65px) scale(0.95) rotateX(6deg)',
-            filter: isVisible ? 'blur(0px)' : 'blur(8px)',
-            transition: isVisible
-              ? 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.32s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.32s, filter 0.8s ease-out 0.32s'
-              : 'opacity 0.25s ease-out, transform 0.25s ease-out, filter 0.25s ease-out',
-            perspective: 1200,
-          }}
-        >
+        <div>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
