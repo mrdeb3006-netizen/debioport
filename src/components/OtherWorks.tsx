@@ -14,9 +14,236 @@ import {
   Calendar,
   ExternalLink,
   Eye,
-  Compass
+  Waves
 } from 'lucide-react';
 import { PhilosophyReaderModal } from './PhilosophyReaderModal';
+
+/* =========================================================================
+   IMMERSIVE FULL-SECTION WATER CANVAS SIMULATION
+   ========================================================================= */
+const ShipwreckWaterCanvas: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = canvas.parentElement?.clientWidth || window.innerWidth);
+    let height = (canvas.height = canvas.parentElement?.clientHeight || window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas || !canvas.parentElement) return;
+      width = canvas.width = canvas.parentElement.clientWidth;
+      height = canvas.height = canvas.parentElement.clientHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Interactive mouse ripples
+    interface Ripple {
+      x: number;
+      y: number;
+      radius: number;
+      maxRadius: number;
+      opacity: number;
+      speed: number;
+    }
+    const ripples: Ripple[] = [];
+
+    // Ambient floating oxygen bubbles
+    interface Bubble {
+      x: number;
+      y: number;
+      radius: number;
+      speedY: number;
+      wobbleSpeed: number;
+      wobbleAmp: number;
+      phase: number;
+      baseAlpha: number;
+    }
+
+    const bubbleCount = Math.min(42, Math.max(22, Math.floor(width / 32)));
+    const bubbles: Bubble[] = Array.from({ length: bubbleCount }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: 1.5 + Math.random() * 5,
+      speedY: 0.35 + Math.random() * 0.85,
+      wobbleSpeed: 0.018 + Math.random() * 0.025,
+      wobbleAmp: 10 + Math.random() * 22,
+      phase: Math.random() * Math.PI * 2,
+      baseAlpha: 0.18 + Math.random() * 0.38,
+    }));
+
+    let lastMouseMoveTime = 0;
+    const handlePointerMove = (e: PointerEvent) => {
+      const now = performance.now();
+      if (now - lastMouseMoveTime < 40) return;
+      lastMouseMoveTime = now;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      if (x >= 0 && x <= width && y >= 0 && y <= height) {
+        if (ripples.length < 20) {
+          ripples.push({
+            x,
+            y,
+            radius: 4,
+            maxRadius: 65 + Math.random() * 40,
+            opacity: 0.55,
+            speed: 1.6 + Math.random() * 0.9,
+          });
+        }
+      }
+    };
+
+    const parentElem = canvas.parentElement;
+    if (parentElem) {
+      parentElem.addEventListener('pointermove', handlePointerMove);
+    }
+
+    let time = 0;
+
+    const render = () => {
+      time += 0.016;
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. Water Caustics Shimmer Curves across the entire section height
+      ctx.save();
+      const waveCount = 6;
+      for (let w = 0; w < waveCount; w++) {
+        const yBase = (height / (waveCount + 1)) * (w + 1);
+        ctx.beginPath();
+        ctx.moveTo(0, yBase);
+
+        for (let x = 0; x <= width; x += 20) {
+          const yOffset =
+            Math.sin(x * 0.007 + time * 1.1 + w * 1.4) * 16 +
+            Math.cos(x * 0.014 - time * 0.85 + w * 2.0) * 9;
+          ctx.lineTo(x, yBase + yOffset);
+        }
+
+        ctx.strokeStyle = `rgba(6, 182, 212, ${0.055 + Math.sin(time + w) * 0.025})`;
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 2. Volumetric Underwater Sunbeams (Light Rays)
+      ctx.save();
+      const beamCount = 3;
+      for (let b = 0; b < beamCount; b++) {
+        const beamX = (width / 4) * (b + 1) + Math.sin(time * 0.5 + b) * 90;
+        const gradient = ctx.createLinearGradient(beamX, 0, beamX + 220, height);
+        gradient.addColorStop(0, 'rgba(56, 189, 248, 0.04)');
+        gradient.addColorStop(0.45, 'rgba(20, 184, 166, 0.022)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+        ctx.beginPath();
+        ctx.moveTo(beamX - 40, 0);
+        ctx.lineTo(beamX + 130, 0);
+        ctx.lineTo(beamX + 340, height);
+        ctx.lineTo(beamX + 170, height);
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 3. Render and Update Floating Oxygen Bubbles
+      for (let i = 0; i < bubbles.length; i++) {
+        const b = bubbles[i];
+        b.y -= b.speedY;
+        b.phase += b.wobbleSpeed;
+        const currentX = b.x + Math.sin(b.phase) * b.wobbleAmp;
+
+        if (b.y < -20) {
+          b.y = height + 20 + Math.random() * 30;
+          b.x = Math.random() * width;
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(currentX, b.y, b.radius, 0, Math.PI * 2);
+        
+        // Bubble ring and inner gloss highlight
+        ctx.strokeStyle = `rgba(14, 165, 233, ${b.baseAlpha * 0.85})`;
+        ctx.lineWidth = 1.3;
+        ctx.stroke();
+
+        ctx.fillStyle = `rgba(6, 182, 212, ${b.baseAlpha * 0.3})`;
+        ctx.fill();
+
+        // Specular reflection dot inside bubble
+        ctx.beginPath();
+        ctx.arc(
+          currentX - b.radius * 0.35,
+          b.y - b.radius * 0.35,
+          Math.max(0.6, b.radius * 0.25),
+          0,
+          Math.PI * 2
+        );
+        ctx.fillStyle = `rgba(255, 255, 255, ${b.baseAlpha * 0.95})`;
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // 4. Render and Update Interactive Mouse Water Ripples
+      for (let r = ripples.length - 1; r >= 0; r--) {
+        const rip = ripples[r];
+        rip.radius += rip.speed;
+        rip.opacity -= 0.009;
+
+        if (rip.opacity <= 0 || rip.radius >= rip.maxRadius) {
+          ripples.splice(r, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(rip.x, rip.y, rip.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(2, 132, 199, ${rip.opacity * 0.6})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Secondary inner ripple echo
+        if (rip.radius > 14) {
+          ctx.beginPath();
+          ctx.arc(rip.x, rip.y, rip.radius * 0.65, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(20, 184, 166, ${rip.opacity * 0.35})`;
+          ctx.lineWidth = 1.3;
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    animationFrameId = requestAnimationFrame(render);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
+      if (parentElem) {
+        parentElem.removeEventListener('pointermove', handlePointerMove);
+      }
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none z-[2]"
+      aria-hidden="true"
+    />
+  );
+};
 
 interface PhotoItem {
   id: string;
@@ -282,10 +509,13 @@ export const OtherWorks: React.FC = () => {
     <section
       ref={sectionRef}
       id="ship-wreck"
-      className="w-full relative py-12 md:py-16 bg-[#faf9f6] text-[#18181b] border-y-2 border-[#e7e5e4] transition-colors duration-500 overflow-hidden font-main"
+      className="w-full relative py-14 md:py-20 bg-[#faf9f6] text-[#18181b] border-y-2 border-[#e7e5e4] transition-colors duration-500 overflow-hidden font-main select-none"
     >
-      {/* Top Ocean Wave Surface Crest (Dual rolling water boundary) */}
-      <div className="absolute top-0 left-0 right-0 h-10 sm:h-12 overflow-hidden pointer-events-none z-20">
+      {/* 1. Full-Section Interactive Ocean Water Simulation Canvas */}
+      <ShipwreckWaterCanvas />
+
+      {/* 2. Top Ocean Wave Surface Boundary */}
+      <div className="absolute top-0 left-0 right-0 h-10 sm:h-14 overflow-hidden pointer-events-none z-20">
         <svg
           className="absolute -top-1 left-0 w-[200%] h-full animate-ocean-wave opacity-25 text-[#0c0d14]"
           viewBox="0 0 1200 120"
@@ -310,26 +540,48 @@ export const OtherWorks: React.FC = () => {
         </svg>
       </div>
 
-      {/* Floating Ocean Depth Bubbles & Atmospheric Light Rays */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
-        {/* Ambient Light Caustic Glow */}
-        <div
-          className="absolute top-1/4 left-1/3 w-[600px] h-[350px] bg-cyan-500/[0.04] rounded-full blur-[140px] animate-caustics"
-        />
-        <div
-          className="absolute bottom-1/3 right-1/4 w-[500px] h-[300px] bg-amber-500/[0.03] rounded-full blur-[130px] animate-caustics"
-          style={{ animationDelay: '4s' }}
-        />
+      {/* 3. Bottom Ocean Seabed Boundary Wave */}
+      <div className="absolute bottom-0 left-0 right-0 h-10 sm:h-14 overflow-hidden pointer-events-none z-20">
+        <svg
+          className="absolute -bottom-1 left-0 w-[200%] h-full animate-ocean-wave opacity-25 text-[#0c0d14]"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0,120 C150,30 350,160 500,75 C650,-10 900,150 1200,90 L1200,120 L0,120 Z"
+            fill="currentColor"
+          />
+        </svg>
+        <svg
+          className="absolute -bottom-1 left-0 w-[200%] h-full animate-ocean-wave-slow opacity-20 text-[#0284c7]"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0,120 C200,60 400,140 600,80 C800,20 1000,130 1200,100 L1200,120 L0,120 Z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
 
-        {/* Translucent Rising Bubbles */}
-        <div className="absolute bottom-8 left-[8%] w-3 h-3 rounded-full border border-cyan-400/40 bg-cyan-400/10 backdrop-blur-xs animate-bubble-rise-1" />
-        <div className="absolute bottom-16 right-[12%] w-4 h-4 rounded-full border border-teal-400/40 bg-teal-400/10 backdrop-blur-xs animate-bubble-rise-2" />
-        <div className="absolute bottom-4 left-[45%] w-2.5 h-2.5 rounded-full border border-cyan-300/40 bg-cyan-300/10 backdrop-blur-xs animate-bubble-rise-3" />
-        <div className="absolute bottom-20 right-[35%] w-3.5 h-3.5 rounded-full border border-amber-400/30 bg-amber-400/10 backdrop-blur-xs animate-bubble-rise-1" style={{ animationDelay: '2s' }} />
+      {/* 4. Dynamic Ambient Ocean Water Currents & Shimmer across entire section */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+        {/* Living Aquatic Gradient Swirls */}
+        <div className="absolute -top-[10%] -left-[10%] w-[70vw] h-[60vh] bg-gradient-to-br from-cyan-400/[0.08] via-teal-500/[0.04] to-transparent rounded-full blur-[140px] animate-caustics" />
+        <div
+          className="absolute top-[40%] -right-[10%] w-[65vw] h-[65vh] bg-gradient-to-bl from-sky-400/[0.07] via-cyan-600/[0.04] to-transparent rounded-full blur-[150px] animate-caustics"
+          style={{ animationDelay: '3.5s' }}
+        />
+        <div
+          className="absolute -bottom-[10%] left-[20%] w-[60vw] h-[50vh] bg-gradient-to-t from-teal-400/[0.08] via-amber-500/[0.02] to-transparent rounded-full blur-[140px] animate-caustics"
+          style={{ animationDelay: '6s' }}
+        />
       </div>
 
       {/* Editorial Watermark Texture & Subtle Grid Lines */}
-      <div className="absolute inset-0 bg-[radial-gradient(#d6d3d1_1px,transparent_1px)] [background-size:28px_28px] opacity-40 pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-[radial-gradient(#d6d3d1_1px,transparent_1px)] [background-size:28px_28px] opacity-35 pointer-events-none z-0" />
 
       <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 relative z-10">
         
@@ -353,7 +605,7 @@ export const OtherWorks: React.FC = () => {
           <div>
             {/* Thematic Maritime Surfacing Badge */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-900/10 border border-cyan-500/30 text-cyan-800 font-mono text-[0.70rem] font-bold uppercase tracking-wider mb-2.5 shadow-xs">
-              <Compass size={12} className="text-cyan-700 animate-spin-slow" />
+              <Waves size={13} className="text-cyan-700 animate-pulse" />
               <span>SURFACED FROM THE DEPTHS • SHIPWRECK ARCHIVE</span>
             </div>
 
