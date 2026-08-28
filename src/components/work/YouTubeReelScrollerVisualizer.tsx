@@ -119,10 +119,10 @@ export const YouTubeReelScrollerVisualizer: React.FC = () => {
       {/* Main Interactive Stage */}
       <div className="flex-1 flex flex-col justify-center my-2.5 overflow-hidden">
         {activeTab === 'simulator' ? (
-          <div className="flex items-center gap-4 h-full">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 h-full overflow-y-auto sm:overflow-hidden">
             
             {/* Simulated Phone Reel Player */}
-            <div className={`w-[180px] sm:w-[220px] h-[190px] rounded-xl bg-gradient-to-b ${currentReel.bgGradient} border border-white/15 p-3 flex flex-col justify-between relative overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.7)] transition-all duration-500`}>
+            <div className={`w-full sm:w-[200px] md:w-[220px] h-[150px] sm:h-[190px] rounded-xl bg-gradient-to-b ${currentReel.bgGradient} border border-white/15 p-2.5 sm:p-3 flex flex-col justify-between relative overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.7)] transition-all duration-500 shrink-0`}>
               
               {/* Progress Line */}
               <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden mb-1">
@@ -157,13 +157,13 @@ export const YouTubeReelScrollerVisualizer: React.FC = () => {
             </div>
 
             {/* Automation Script Stats */}
-            <div className="flex-1 flex flex-col justify-between h-full bg-[#05060b] border border-white/[0.06] rounded-xl p-3 text-[0.72rem] text-slate-300 leading-relaxed">
+            <div className="w-full flex-1 flex flex-col justify-between h-full bg-[#05060b] border border-white/[0.06] rounded-xl p-2.5 sm:p-3 text-[0.72rem] text-slate-300 leading-relaxed">
               <div>
                 <div className="text-accent-cyan font-bold mb-1 flex items-center gap-1.5">
                   <Sparkles size={12} />
                   <span>Script: ytlimit.py Active</span>
                 </div>
-                <p className="text-text-muted text-[0.7rem] mb-2">
+                <p className="text-text-muted text-[0.7rem] mb-2 hidden sm:block">
                   Automating vertical scroll events via Python script to cycle reels seamlessly.
                 </p>
                 <div className="flex flex-col gap-1 text-[0.68rem]">

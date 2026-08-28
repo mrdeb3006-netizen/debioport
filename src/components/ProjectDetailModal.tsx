@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Project } from '../types';
 import { Code, Github, ExternalLink, Copy, Check, Terminal, FileCode2, Cpu, CheckCircle2 } from 'lucide-react';
+import { SnakeWaterGunVisualizer } from './work/SnakeWaterGunVisualizer';
+import { StonePaperScissorVisualizer } from './work/StonePaperScissorVisualizer';
+import { YouTubeReelScrollerVisualizer } from './work/YouTubeReelScrollerVisualizer';
 
 interface ProjectDetailModalProps {
   projectId: string | null;
@@ -225,7 +228,33 @@ except KeyboardInterrupt:
         {/* Drawer Body */}
         <div className="drawer-body p-6 md:p-8 flex flex-col gap-7">
           
-          {/* 1. Overview & Objective */}
+          {/* 1. Live Interactive Engine (Direct Website Access) */}
+          <div className="rounded-2xl overflow-hidden border-2 border-white/10 bg-[#0a0c16] shadow-xl">
+            <div className="h-[38px] bg-[#121422] border-b border-white/10 flex items-center px-4 justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                </div>
+                <span className="ml-2 font-mono text-[0.76rem] font-bold text-accent-cyan flex items-center gap-1.5">
+                  <Terminal size={13} />
+                  <span>DIRECT INTERACTIVE ENGINE</span>
+                </span>
+              </div>
+              <span className="text-[0.68rem] font-mono text-emerald-400 font-bold bg-emerald-500/15 px-2.5 py-0.5 rounded border border-emerald-500/30 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                ONLINE
+              </span>
+            </div>
+            <div className="p-3 sm:p-4 min-h-[260px] flex flex-col justify-center">
+              {project?.id === '01' && <SnakeWaterGunVisualizer />}
+              {project?.id === '02' && <StonePaperScissorVisualizer />}
+              {project?.id === '03' && <YouTubeReelScrollerVisualizer />}
+            </div>
+          </div>
+
+          {/* 2. Overview & Objective */}
           <div>
             <h4 className="font-mono text-[0.78rem] text-accent-orange tracking-[0.14em] mb-2 uppercase flex items-center gap-2">
               <Terminal size={14} />

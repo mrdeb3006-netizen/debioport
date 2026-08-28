@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, Code, Github, FileCode2 } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, Code, Github, Terminal } from 'lucide-react';
+import { SnakeWaterGunVisualizer } from './work/SnakeWaterGunVisualizer';
+import { StonePaperScissorVisualizer } from './work/StonePaperScissorVisualizer';
+import { YouTubeReelScrollerVisualizer } from './work/YouTubeReelScrollerVisualizer';
 
 interface WorkProps {
   onOpenProjectModal: (id: string) => void;
@@ -428,70 +431,39 @@ except KeyboardInterrupt:
                           </div>
                         </div>
 
-                        {/* RIGHT COLUMN: Crystal-Clear High-Contrast Python Code Terminal */}
-                        <div
-                          onClick={() => onOpenProjectModal(proj.id)}
-                          className="w-full h-full min-h-0 flex items-center justify-center cursor-pointer group/card"
-                          title="Click to view detailed case study"
-                        >
-                          <div className="w-full h-full max-h-[360px] md:max-h-[400px] lg:max-h-[440px] bg-[#ffffff] border-2 border-[#881337]/25 rounded-2xl overflow-hidden flex flex-col shadow-lg transition-all duration-300 group-hover/card:border-accent-orange">
+                        {/* RIGHT COLUMN: Direct Interactive Live Project Engine (Direct Website Access) */}
+                        <div className="w-full h-full min-h-0 flex items-center justify-center">
+                          <div className="w-full h-full max-h-[380px] md:max-h-[420px] lg:max-h-[460px] bg-[#0a0c16] border-2 border-[#881337]/35 rounded-2xl overflow-hidden flex flex-col shadow-xl transition-all duration-300 hover:border-accent-orange">
                             
                             {/* Terminal Window Header */}
-                            <div className="h-[40px] bg-[#f8fafc] border-b border-[#e2e8f0] flex items-center px-4 gap-2 shrink-0">
-                              <div className="flex items-center gap-1.5">
-                                <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
-                                <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
-                                <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-                              </div>
-                              <div className="flex items-center gap-2 ml-3">
-                                <FileCode2 size={15} className="text-accent-orange" />
-                                <span className="font-mono text-[0.78rem] font-bold text-[#0f172a]">
-                                  {proj.fileName || 'source.py'}
-                                </span>
-                              </div>
-                              <span className="ml-auto font-mono text-[0.7rem] font-bold text-white bg-[#881337] px-2.5 py-0.5 rounded shadow-xs">
-                                PYTHON LOGIC PREVIEW
-                              </span>
-                            </div>
-
-                            {/* Crisp Clean High-Contrast Syntax Highlighted Code Window */}
-                            <div className="flex-1 p-5 overflow-hidden relative bg-[#ffffff] font-mono text-[0.84rem] font-semibold leading-[1.7] text-[#0f172a]">
-                              <pre className="overflow-hidden">
-                                <code>
-                                  {proj.sourceCode ? (
-                                    proj.sourceCode.split('\n').slice(0, 14).map((line, lIdx) => (
-                                      <div key={lIdx} className="flex gap-4">
-                                        <span className="text-[#94a3b8] font-bold select-none w-5 text-right shrink-0">
-                                          {lIdx + 1}
-                                        </span>
-                                        <span className={
-                                          line.startsWith('#') || line.startsWith("'''") || line.startsWith('"""')
-                                            ? 'text-[#64748b] italic font-normal'
-                                            : line.includes('import ') || line.includes('def ') || line.includes('if ') || line.includes('elif ') || line.includes('else:')
-                                            ? 'text-[#ea580c] font-black'
-                                            : line.includes('print(') || line.includes('input(') || line.includes('random.')
-                                            ? 'text-[#0284c7] font-black'
-                                            : line.includes('"') || line.includes("'")
-                                            ? 'text-[#881337] font-black'
-                                            : 'text-[#0f172a] font-extrabold'
-                                        }>
-                                          {line}
-                                        </span>
-                                      </div>
-                                    ))
-                                  ) : (
-                                    <span># Project source code ready</span>
-                                  )}
-                                </code>
-                              </pre>
-
-                              {/* Subtle Bottom Shade */}
-                              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#ffffff] via-[#ffffff]/90 to-transparent flex items-end justify-center pb-3">
-                                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#881337] text-white text-[0.75rem] font-mono font-bold shadow-md transition-transform duration-300 group-hover/card:scale-105">
-                                  <span>READ FULL CASE STUDY</span>
-                                  <ArrowRight size={12} className="text-accent-orange" />
+                            <div className="h-[40px] bg-[#121422] border-b border-white/[0.08] flex items-center px-4 justify-between shrink-0">
+                              <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                                </div>
+                                <div className="flex items-center gap-2 ml-2">
+                                  <Terminal size={14} className="text-accent-orange" />
+                                  <span className="font-mono text-[0.76rem] font-bold text-slate-200 truncate max-w-[180px] sm:max-w-none">
+                                    {proj.titleBar || `${proj.fileName} (Direct Access)`}
+                                  </span>
                                 </div>
                               </div>
+                              
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-[0.68rem] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  LIVE ENGINE
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Live Interactive Project Visualizer Host */}
+                            <div className="flex-1 p-2 sm:p-3 overflow-hidden bg-[#070811] flex flex-col justify-center">
+                              {proj.id === '01' && <SnakeWaterGunVisualizer />}
+                              {proj.id === '02' && <StonePaperScissorVisualizer />}
+                              {proj.id === '03' && <YouTubeReelScrollerVisualizer />}
                             </div>
                           </div>
                         </div>
@@ -591,20 +563,26 @@ except KeyboardInterrupt:
                   ))}
                 </div>
 
-                <div
-                  onClick={() => onOpenProjectModal(proj.id)}
-                  className="w-full bg-[#ffffff] border-2 border-[#881337]/25 rounded-xl overflow-hidden flex flex-col my-1 shadow-md cursor-pointer"
-                >
-                  <div className="h-[34px] bg-[#f8fafc] border-b border-[#e2e8f0] flex items-center px-3 gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#ff5f56]" />
-                    <span className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
-                    <span className="w-2 h-2 rounded-full bg-[#27c93f]" />
-                    <span className="ml-2 font-mono text-[0.72rem] text-[#0f172a] font-bold">
-                      {proj.fileName}
+                {/* Mobile Direct Interactive Project Engine (Direct Website Access) */}
+                <div className="w-full bg-[#0a0c16] border-2 border-[#881337]/35 rounded-xl overflow-hidden flex flex-col my-1 shadow-lg">
+                  <div className="h-[36px] bg-[#121422] border-b border-white/[0.08] flex items-center px-3 justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#ff5f56]" />
+                      <span className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
+                      <span className="w-2 h-2 rounded-full bg-[#27c93f]" />
+                      <span className="ml-2 font-mono text-[0.72rem] text-slate-200 font-bold">
+                        {proj.fileName}
+                      </span>
+                    </div>
+                    <span className="font-mono text-[0.65rem] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      LIVE
                     </span>
                   </div>
-                  <div className="p-3.5 font-mono text-[0.78rem] font-semibold text-[#0f172a] bg-[#ffffff] line-clamp-6">
-                    <pre><code>{proj.sourceCode?.split('\n').slice(0, 7).join('\n')}</code></pre>
+                  <div className="p-2 bg-[#070811] min-h-[250px] flex flex-col justify-center">
+                    {proj.id === '01' && <SnakeWaterGunVisualizer />}
+                    {proj.id === '02' && <StonePaperScissorVisualizer />}
+                    {proj.id === '03' && <YouTubeReelScrollerVisualizer />}
                   </div>
                 </div>
 
