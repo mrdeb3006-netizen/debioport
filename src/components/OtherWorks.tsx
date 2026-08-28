@@ -13,7 +13,8 @@ import {
   MapPin,
   Calendar,
   ExternalLink,
-  Eye
+  Eye,
+  Compass
 } from 'lucide-react';
 import { PhilosophyReaderModal } from './PhilosophyReaderModal';
 
@@ -35,6 +36,26 @@ export const OtherWorks: React.FC = () => {
   const [philosophyModalOpen, setPhilosophyModalOpen] = useState(false);
   const [readerInitialPage, setReaderInitialPage] = useState(1);
   const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Dynamic recurring entrance observer on scroll down or up (emerging from water effect)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   // 15 Authentic User Photographs
   const photos: PhotoItem[] = [
@@ -259,19 +280,83 @@ export const OtherWorks: React.FC = () => {
 
   return (
     <section
+      ref={sectionRef}
       id="ship-wreck"
-      className="w-full relative py-10 md:py-14 bg-[#faf9f6] text-[#18181b] border-y-2 border-[#e7e5e4] transition-colors duration-500 overflow-hidden font-main"
+      className="w-full relative py-12 md:py-16 bg-[#faf9f6] text-[#18181b] border-y-2 border-[#e7e5e4] transition-colors duration-500 overflow-hidden font-main"
     >
+      {/* Top Ocean Wave Surface Crest (Dual rolling water boundary) */}
+      <div className="absolute top-0 left-0 right-0 h-10 sm:h-12 overflow-hidden pointer-events-none z-20">
+        <svg
+          className="absolute -top-1 left-0 w-[200%] h-full animate-ocean-wave opacity-25 text-[#0c0d14]"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0,0 C150,90 350,-40 500,45 C650,130 900,-30 1200,30 L1200,0 L0,0 Z"
+            fill="currentColor"
+          />
+        </svg>
+        <svg
+          className="absolute -top-1 left-0 w-[200%] h-full animate-ocean-wave-slow opacity-20 text-[#0284c7]"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0,0 C200,60 400,-20 600,40 C800,100 1000,-10 1200,20 L1200,0 L0,0 Z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+
+      {/* Floating Ocean Depth Bubbles & Atmospheric Light Rays */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+        {/* Ambient Light Caustic Glow */}
+        <div
+          className="absolute top-1/4 left-1/3 w-[600px] h-[350px] bg-cyan-500/[0.04] rounded-full blur-[140px] animate-caustics"
+        />
+        <div
+          className="absolute bottom-1/3 right-1/4 w-[500px] h-[300px] bg-amber-500/[0.03] rounded-full blur-[130px] animate-caustics"
+          style={{ animationDelay: '4s' }}
+        />
+
+        {/* Translucent Rising Bubbles */}
+        <div className="absolute bottom-8 left-[8%] w-3 h-3 rounded-full border border-cyan-400/40 bg-cyan-400/10 backdrop-blur-xs animate-bubble-rise-1" />
+        <div className="absolute bottom-16 right-[12%] w-4 h-4 rounded-full border border-teal-400/40 bg-teal-400/10 backdrop-blur-xs animate-bubble-rise-2" />
+        <div className="absolute bottom-4 left-[45%] w-2.5 h-2.5 rounded-full border border-cyan-300/40 bg-cyan-300/10 backdrop-blur-xs animate-bubble-rise-3" />
+        <div className="absolute bottom-20 right-[35%] w-3.5 h-3.5 rounded-full border border-amber-400/30 bg-amber-400/10 backdrop-blur-xs animate-bubble-rise-1" style={{ animationDelay: '2s' }} />
+      </div>
+
       {/* Editorial Watermark Texture & Subtle Grid Lines */}
-      <div className="absolute inset-0 bg-[radial-gradient(#d6d3d1_1px,transparent_1px)] [background-size:28px_28px] opacity-40 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#d6d3d1_1px,transparent_1px)] [background-size:28px_28px] opacity-40 pointer-events-none z-0" />
 
       <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 relative z-10">
         
         {/* =========================================================================
-            SECTION HEADER: Clean Editorial Title
+            SECTION HEADER: Clean Editorial Title with Surfacing Hydrodynamics
             ========================================================================= */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-10 border-b-2 border-[#e7e5e4]">
+        <div
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-10 border-b-2 border-[#e7e5e4]"
+          style={{
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible
+              ? 'translateY(0px) scale(1) rotateX(0deg)'
+              : 'translateY(42px) scale(0.96) rotateX(6deg)',
+            filter: isVisible ? 'blur(0px)' : 'blur(6px)',
+            transition: isVisible
+              ? 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, filter 0.7s ease-out 0.08s'
+              : 'opacity 0.25s ease-out, transform 0.25s ease-out, filter 0.25s ease-out',
+            perspective: 1000,
+          }}
+        >
           <div>
+            {/* Thematic Maritime Surfacing Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-900/10 border border-cyan-500/30 text-cyan-800 font-mono text-[0.70rem] font-bold uppercase tracking-wider mb-2.5 shadow-xs">
+              <Compass size={12} className="text-cyan-700 animate-spin-slow" />
+              <span>SURFACED FROM THE DEPTHS • SHIPWRECK ARCHIVE</span>
+            </div>
+
             <h2 className="font-serifDisplay text-[clamp(2.2rem,3.8vw,3.4rem)] font-black text-[#18181b] tracking-tight leading-[1.08]">
               SHIP WRECK.
             </h2>
@@ -292,9 +377,22 @@ export const OtherWorks: React.FC = () => {
 
 
         {/* =========================================================================
-            SUBSECTION 1: PHOTOGRAPHY (AUTOMATIC SIDE-WISE SLIDESHOW)
+            SUBSECTION 1: PHOTOGRAPHY (AUTOMATIC SIDE-WISE SLIDESHOW - SURFACING DECK)
             ========================================================================= */}
-        <div className="mb-14">
+        <div
+          className="mb-14"
+          style={{
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible
+              ? 'translateY(0px) scale(1) rotateX(0deg)'
+              : 'translateY(55px) scale(0.95) rotateX(6deg)',
+            filter: isVisible ? 'blur(0px)' : 'blur(8px)',
+            transition: isVisible
+              ? 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.2s, filter 0.8s ease-out 0.2s'
+              : 'opacity 0.25s ease-out, transform 0.25s ease-out, filter 0.25s ease-out',
+            perspective: 1200,
+          }}
+        >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
@@ -464,9 +562,21 @@ export const OtherWorks: React.FC = () => {
 
 
         {/* =========================================================================
-            SUBSECTION 2: PHILOSOPHY & RESEARCH PAPER
+            SUBSECTION 2: PHILOSOPHY & RESEARCH PAPER (SALVAGED MANUSCRIPT SURFACING)
             ========================================================================= */}
-        <div>
+        <div
+          style={{
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible
+              ? 'translateY(0px) scale(1) rotateX(0deg)'
+              : 'translateY(65px) scale(0.95) rotateX(6deg)',
+            filter: isVisible ? 'blur(0px)' : 'blur(8px)',
+            transition: isVisible
+              ? 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.32s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.32s, filter 0.8s ease-out 0.32s'
+              : 'opacity 0.25s ease-out, transform 0.25s ease-out, filter 0.25s ease-out',
+            perspective: 1200,
+          }}
+        >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-md">
@@ -702,6 +812,7 @@ export const OtherWorks: React.FC = () => {
         </div>
 
       </div>
+
 
 
       {/* =========================================================================
