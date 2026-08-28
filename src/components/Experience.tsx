@@ -720,15 +720,14 @@ const MobileHonorsDeck: React.FC = () => {
 
   const achievements = achievementsData;
   const total = achievements.length;
-  const current = achievements[activeIdx];
-  const IconComponent = current.icon;
+  const progressPercent = Math.round(((activeIdx + 1) / total) * 100);
 
   const nextCard = () => {
-    setActiveIdx((prev) => (prev + 1) % total);
+    setActiveIdx((prev) => Math.min(prev + 1, total - 1));
   };
 
   const prevCard = () => {
-    setActiveIdx((prev) => (prev - 1 + total) % total);
+    setActiveIdx((prev) => Math.max(prev - 1, 0));
   };
 
   // Horizontal-only swipe detection (never interferes with vertical page scrolling)
@@ -742,8 +741,8 @@ const MobileHonorsDeck: React.FC = () => {
     const diffX = touchStartX.current - e.changedTouches[0].clientX;
     const diffY = touchStartY.current - e.changedTouches[0].clientY;
 
-    // Only swipe cards horizontally when user intentionally drags sideways
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+    // Only swipe cards horizontally when user intentionally drags sideways (> 35px, and horizontal > 1.3x vertical)
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY) * 1.3) {
       if (diffX > 0) {
         nextCard();
       } else {
@@ -756,152 +755,259 @@ const MobileHonorsDeck: React.FC = () => {
 
   return (
     <div
-      className="w-full flex flex-col gap-4 py-2"
+      className="w-full flex flex-col gap-3 py-2 select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Top HUD Controls: Badge, Step Pills & Next/Prev Arrows */}
-      <div className="flex items-center justify-between gap-2.5 pb-3 border-b border-white/[0.08] flex-wrap">
-        {/* Active Badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.70rem] font-bold uppercase tracking-wider shadow-[0_0_12px_rgba(249,115,22,0.15)]">
-          <Trophy size={13} className="text-accent-orange" />
-          <span>HONOR 0{activeIdx + 1} / 0{total}</span>
-        </div>
+      {/* Top HUD Controls: Matching Desktop Architecture */}
+      <div className="flex flex-col gap-2 pb-2.5 border-b border-white/[0.08]">
+        {/* Row 1: Active Badge, Category, and Percentage */}
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange font-mono text-[0.70rem] font-bold uppercase tracking-wider shadow-[0_0_12px_rgba(249,115,22,0.15)]">
+              <Trophy size={13} className="text-accent-orange" />
+              <span>HONOR 0{activeIdx + 1} / 0{total}</span>
+            </div>
 
-        {/* Navigation Step Pills & Arrows */}
-        <div className="flex items-center gap-1.5">
-          {/* Pills */}
-          <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/[0.08]">
-            {achievements.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setActiveIdx(i)}
-                className={`px-2.5 py-0.5 rounded-full font-mono text-[0.68rem] font-black transition-all duration-300 cursor-pointer ${
-                  i === activeIdx
-                    ? 'bg-gradient-to-r from-amber-400 to-accent-orange text-black shadow-[0_0_12px_rgba(251,191,36,0.6)] scale-105'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-                aria-label={`View honor 0${i + 1}`}
-              >
-                0{i + 1}
-              </button>
-            ))}
+            <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-wider truncate max-w-[140px] sm:max-w-[200px]">
+              {achievements[activeIdx].category}
+            </span>
           </div>
 
-          {/* Arrows */}
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={prevCard}
-              className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer shadow-md"
-              aria-label="Previous Honor"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              type="button"
-              onClick={nextCard}
-              className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/15 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer shadow-md"
-              aria-label="Next Honor"
-            >
-              <ChevronRight size={16} />
-            </button>
+          {/* Top Progress Percentage Badge */}
+          <div className="font-mono text-[0.72rem] text-amber-400 font-black px-2 py-0.5 rounded-md bg-amber-400/10 border border-amber-400/25 min-w-[38px] text-center shadow-[0_0_8px_rgba(251,191,36,0.15)]">
+            {progressPercent}%
+          </div>
+        </div>
+
+        {/* Row 2: Live Progress Track + Step Pills + Navigation Arrows */}
+        <div className="flex items-center justify-between gap-2">
+          {/* Progress Track */}
+          <div className="flex-1 max-w-[130px] sm:max-w-[200px] h-1.5 bg-white/[0.08] rounded-full overflow-hidden p-0.5 border border-white/[0.06]">
+            <div
+              className="h-full bg-gradient-to-r from-amber-400 via-accent-orange to-amber-500 rounded-full shadow-[0_0_8px_#fbbf24] transition-all duration-300"
+              style={{ width: `${Math.max(progressPercent, 12)}%` }}
+            />
+          </div>
+
+          {/* Right Controls: Pills & Arrows */}
+          <div className="flex items-center gap-1.5">
+            {/* Step Pills */}
+            <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/[0.08]">
+              {achievements.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setActiveIdx(i)}
+                  className={`px-2 py-0.5 rounded-full font-mono text-[0.66rem] font-black transition-all duration-300 cursor-pointer ${
+                    i === activeIdx
+                      ? 'bg-gradient-to-r from-amber-400 to-accent-orange text-black shadow-[0_0_12px_rgba(251,191,36,0.6)] scale-105'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                  aria-label={`View honor 0${i + 1}`}
+                >
+                  0{i + 1}
+                </button>
+              ))}
+            </div>
+
+            {/* Prev/Next Buttons */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={prevCard}
+                disabled={activeIdx === 0}
+                className={`w-7 h-7 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center transition-all duration-200 active:scale-90 shadow-md ${
+                  activeIdx === 0
+                    ? 'opacity-30 text-zinc-600 cursor-not-allowed'
+                    : 'text-zinc-300 hover:text-amber-400 hover:border-amber-400/50 hover:bg-amber-400/15 cursor-pointer'
+                }`}
+                aria-label="Previous Honor"
+              >
+                <ChevronLeft size={15} />
+              </button>
+              <button
+                type="button"
+                onClick={nextCard}
+                disabled={activeIdx === total - 1}
+                className={`w-7 h-7 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center transition-all duration-200 active:scale-90 shadow-md ${
+                  activeIdx === total - 1
+                    ? 'opacity-30 text-zinc-600 cursor-not-allowed'
+                    : 'text-zinc-300 hover:text-amber-400 hover:border-amber-400/50 hover:bg-amber-400/15 cursor-pointer'
+                }`}
+                aria-label="Next Honor"
+              >
+                <ChevronRight size={15} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Main Luxury Active Honor Card */}
+      {/* 3D Physical Stacking Cards Stage (All 5 Cards Rendered Concurrently with Depth) */}
       <div
-        key={current.id}
-        className="relative w-full rounded-2xl border border-amber-400/40 p-5 sm:p-6 bg-[#0c0d16]/95 backdrop-blur-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(245,158,11,0.1)] transition-all duration-300 animate-fade-in"
+        className="relative w-full min-h-[500px] sm:min-h-[460px] flex items-center justify-center mt-1"
+        style={{ perspective: 1200 }}
       >
-        {/* Top Active Sheen */}
-        <div
-          className="absolute -top-px left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none"
-          aria-hidden="true"
-        />
+        {achievements.map((item, idx) => {
+          const IconComponent = item.icon;
+          const delta = idx - activeIdx;
+          const isFront = delta === 0;
 
-        {/* Giant Watermark */}
-        <div
-          className="absolute top-2 right-4 font-display font-black text-[3.8rem] leading-none select-none pointer-events-none text-white/[0.03]"
-          aria-hidden="true"
-        >
-          0{activeIdx + 1}
-        </div>
+          let transform = '';
+          let opacity = 0;
+          let zIndex = 5;
 
-        {/* Header Tags */}
-        <div className="flex items-center gap-2 mb-3 flex-wrap relative z-10">
-          <span className="font-mono text-[0.68rem] font-black px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
-            <CheckCircle2 size={12} />
-            <span>{current.badge}</span>
-          </span>
-          <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
-            {current.category}
-          </span>
-        </div>
+          if (delta === 0) {
+            // Front active card: full prominence & crisp 3D elevation
+            transform = 'translate3d(0, 0px, 0px) scale(1) rotateX(0deg)';
+            opacity = 1;
+            zIndex = 30;
+          } else if (delta === 1) {
+            // Next card: peeking elegantly below and behind in 3D
+            transform = 'translate3d(0, 14px, -35px) scale(0.95) rotateX(3.5deg)';
+            opacity = 0.45;
+            zIndex = 20;
+          } else if (delta === 2) {
+            // Second next card: subtle deep stack contour
+            transform = 'translate3d(0, 26px, -70px) scale(0.90) rotateX(6.5deg)';
+            opacity = 0.18;
+            zIndex = 10;
+          } else if (delta === -1) {
+            // Previous card: smoothly receding upward into history
+            transform = 'translate3d(0, -14px, -35px) scale(0.95) rotateX(-3.5deg)';
+            opacity = 0.35;
+            zIndex = 20;
+          } else if (delta < -1) {
+            // Deep previous cards
+            transform = 'translate3d(0, -26px, -70px) scale(0.90) rotateX(-6.5deg)';
+            opacity = 0;
+            zIndex = 5;
+          } else {
+            // Far future cards
+            transform = 'translate3d(0, 36px, -100px) scale(0.85) rotateX(9deg)';
+            opacity = 0;
+            zIndex = 5;
+          }
 
-        {/* Card Title */}
-        <h4 className="font-display text-[1.22rem] sm:text-[1.4rem] font-black text-white leading-snug mb-1 tracking-[0.01em] relative z-10">
-          {current.title}
-        </h4>
-
-        {/* Subtitle */}
-        <div className="font-mono text-[0.76rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5 relative z-10">
-          <span className="text-accent-orange">▹</span>
-          <span>{current.subtitle}</span>
-        </div>
-
-        {/* Description */}
-        <p className="text-[0.88rem] text-zinc-300 leading-relaxed mb-4 font-normal relative z-10">
-          {current.description}
-        </p>
-
-        {/* Bullet Highlights */}
-        <div className="flex flex-col gap-2 pt-3 border-t border-white/[0.08] relative z-10 mb-4">
-          {current.highlights.map((highlight, hIdx) => (
+          return (
             <div
-              key={hIdx}
-              className="flex items-start gap-2.5 text-[0.82rem] text-zinc-300"
+              key={item.id}
+              onClick={() => {
+                if (!isFront) setActiveIdx(idx);
+              }}
+              className={`absolute top-0 left-0 w-full rounded-2xl border p-5 sm:p-6 bg-[#0c0d16]/95 backdrop-blur-xl overflow-hidden select-none transition-all duration-500 ease-out ${
+                isFront ? 'cursor-default' : 'cursor-pointer'
+              }`}
+              style={{
+                transform,
+                opacity,
+                zIndex,
+                borderColor: isFront ? 'rgba(245, 158, 11, 0.45)' : 'rgba(255, 255, 255, 0.08)',
+                boxShadow: isFront
+                  ? '0 20px 50px rgba(0,0,0,0.85), 0 0 30px rgba(245,158,11,0.18), inset 0 1px 0 rgba(255,255,255,0.15)'
+                  : '0 10px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
+                pointerEvents: isFront || Math.abs(delta) <= 1 ? 'auto' : 'none',
+                willChange: 'transform, opacity',
+              }}
             >
-              <span className="text-accent-orange text-xs mt-0.5 shrink-0">◆</span>
-              <span className="leading-snug">{highlight}</span>
-            </div>
-          ))}
-        </div>
+              {/* Top Golden Active Edge Sheen */}
+              <div
+                className={`absolute -top-px left-8 right-8 h-[2px] transition-opacity duration-500 pointer-events-none ${
+                  isFront
+                    ? 'bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-100'
+                    : 'opacity-0'
+                }`}
+                aria-hidden="true"
+              />
 
-        {/* Verified Badge / Emblem Banner */}
-        <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-amber-400/15 border border-amber-400/30 text-amber-400 flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.2)] shrink-0">
-              <IconComponent size={20} />
-            </div>
-            <div>
-              <div className="font-display text-[1.1rem] font-black text-white leading-tight">
-                {current.statNumber}
+              {/* Giant Watermark Index Number */}
+              <div
+                className="absolute top-2 right-4 font-display font-black text-[3.8rem] leading-none select-none pointer-events-none text-white/[0.03]"
+                aria-hidden="true"
+              >
+                0{idx + 1}
               </div>
-              <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase">
-                {current.statLabel}
+
+              {/* Header Tags */}
+              <div className="flex items-center gap-2 mb-3 flex-wrap relative z-10">
+                <span className="font-mono text-[0.68rem] font-black px-3 py-1 rounded-full bg-accent-orange/15 border border-accent-orange/35 text-accent-orange uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
+                  <CheckCircle2 size={12} />
+                  <span>{item.badge}</span>
+                </span>
+                <span className="font-mono text-[0.66rem] text-zinc-400 uppercase tracking-widest font-medium">
+                  {item.category}
+                </span>
+                <span className="text-white/20 text-xs">•</span>
+                <span className="font-mono text-[0.66rem] text-amber-400 font-bold uppercase tracking-wider">
+                  {item.yearTag}
+                </span>
+              </div>
+
+              {/* Card Title */}
+              <h4 className="font-display text-[1.22rem] sm:text-[1.4rem] font-black text-white leading-snug mb-1 tracking-[0.01em] relative z-10">
+                {item.title}
+              </h4>
+
+              {/* Subtitle */}
+              <div className="font-mono text-[0.76rem] font-bold text-amber-400 tracking-wide uppercase mb-3 flex items-center gap-1.5 relative z-10">
+                <span className="text-accent-orange">▹</span>
+                <span>{item.subtitle}</span>
+              </div>
+
+              {/* Description */}
+              <p className="text-[0.88rem] text-zinc-300 leading-relaxed mb-4 font-normal relative z-10">
+                {item.description}
+              </p>
+
+              {/* Bullet Highlights */}
+              <div className="flex flex-col gap-2 pt-3 border-t border-white/[0.08] relative z-10 mb-4">
+                {item.highlights.map((highlight, hIdx) => (
+                  <div
+                    key={hIdx}
+                    className="flex items-start gap-2.5 text-[0.82rem] text-zinc-300"
+                  >
+                    <span className="text-accent-orange text-xs mt-0.5 shrink-0">◆</span>
+                    <span className="leading-snug">{highlight}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Verified Badge / Emblem Banner */}
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between gap-3 relative z-10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-xl bg-amber-400/15 border border-amber-400/30 text-amber-400 flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.2)] shrink-0">
+                    <IconComponent size={20} />
+                  </div>
+                  <div>
+                    <div className="font-display text-[1.1rem] font-black text-white leading-tight">
+                      {item.statNumber}
+                    </div>
+                    <div className="font-mono text-[0.62rem] font-bold text-accent-orange tracking-wider uppercase">
+                      {item.statLabel}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="inline-flex items-center gap-1 text-[0.62rem] font-mono text-zinc-400 shrink-0">
+                  <Star size={11} className="text-amber-400" fill="currentColor" />
+                  <span>VERIFIED RECOGNITION</span>
+                </div>
+              </div>
+
+              {/* Card Footnote */}
+              <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.66rem] text-zinc-500 relative z-10">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles size={11} className="text-amber-400" />
+                  <span>SCHOLASTIC &amp; SPORTS RECOGNITION</span>
+                </div>
+                <div className="text-accent-orange font-bold">
+                  HONOR 0{idx + 1} OF 0{total}
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="inline-flex items-center gap-1 text-[0.62rem] font-mono text-zinc-400 shrink-0">
-            <Star size={11} className="text-amber-400" fill="currentColor" />
-            <span>VERIFIED RECOGNITION</span>
-          </div>
-        </div>
-
-        {/* Card Footnote */}
-        <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.66rem] text-zinc-500 relative z-10">
-          <div className="flex items-center gap-1.5">
-            <Sparkles size={11} className="text-amber-400" />
-            <span>SCHOLASTIC &amp; SPORTS RECOGNITION</span>
-          </div>
-          <div className="text-accent-orange font-bold">
-            HONOR 0{activeIdx + 1} OF 0{total}
-          </div>
-        </div>
+          );
+        })}
       </div>
 
       {/* Bottom Hint */}
@@ -911,7 +1017,7 @@ const MobileHonorsDeck: React.FC = () => {
           <span>SWIPE HORIZONTALLY OR TAP PILLS TO BROWSE</span>
         </div>
         <span className="text-amber-400 font-bold">
-          0{activeIdx + 1} / 0{total}
+          0{activeIdx + 1} / 0{total} COMPLETED
         </span>
       </div>
     </div>
